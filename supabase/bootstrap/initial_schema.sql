@@ -406,7 +406,7 @@ values
   ('game_credit_release_schedule', '{"provisional_percent":75,"deferred_percent":25}'::jsonb, false),
   ('cash_settlement_policy', '{"cash_available_only_after_provider_settlement":true}'::jsonb, false),
   ('minimum_withdrawal_usd_minor', '{"amount_minor":1000,"status":"proposed_not_active"}'::jsonb, false),
-  ('reserve_policy', '{"cash_liability_coverage_percent":100,"provisional_credit_fulfillment_coverage_percent":100,"provisional_credit_reversal_buffer_percent":25}'::jsonb, false)
+  ('reserve_policy', '{"required":true,"coverage_formula":"pending_finance_policy_review","reversal_buffer_percent":"not_set"}'::jsonb, false)
 on conflict (setting_key) do nothing;
 
 -- Private schema contains no client-readable or client-writable tables.
