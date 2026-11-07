@@ -79,3 +79,14 @@ All status labels and interface examples are illustrative.
 6. Obtain separate explicit approval before replacing the production domain.
 
 No production deployment is authorized by this document.
+
+
+## 9. Official game artwork supplied by owner
+
+The owner supplied artwork for the three featured games. The FRESH panel in the combined reference image is excluded. Preserve the Demonanic panel and Gauntlet's Survival panel as separate image assets, and use the separate Harvest//Zero image. The catalog references these files:
+
+- `assets/demonanic.jpg`
+- `assets/gauntlets-survival.jpg`
+- `assets/harvest-zero.jpg`
+
+Game display names: Demonanic, Gauntlet's Survival, and Harvest//Zero. Do not substitute generic placeholder game artwork once these supplied files are uploaded.
