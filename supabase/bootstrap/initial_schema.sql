@@ -22,7 +22,9 @@ create table if not exists public.profiles (
 );
 alter table public.profiles enable row level security;
 revoke all on public.profiles from anon;
-grant select, update on public.profiles to authenticated;
+grant select on public.profiles to authenticated;
+revoke update on public.profiles from authenticated;
+grant update (username, display_name, avatar_path) on public.profiles to authenticated;
 drop policy if exists "Users can view their own profile" on public.profiles;
 create policy "Users can view their own profile"
   on public.profiles for select to authenticated
@@ -80,6 +82,60 @@ create table private.ledger_accounts (
     (is_system and owner_user_id is null) or (not is_system and owner_user_id is not null)
   )
 );
+
+create unique index ledger_accounts_system_unique_idx
+  on private.ledger_accounts(account_code, wallet_kind)
+  where is_system;
+
+insert into private.ledger_accounts(owner_user_id, account_code, wallet_kind, currency_code, is_system)
+values
+  (null, 'platform_cash_clearing', 'cash_usd', 'USD', true),
+  (null, 'platform_game_credit_issuance', 'game_credits', 'LLC', true)
+on conflict do nothing;
+
+-- Every new player receives empty, separate ledger accounts; no balance is preloaded.
+create or replace function private.create_player_ledger_accounts(p_user_id uuid)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $
+begin
+  insert into private.ledger_accounts(owner_user_id, account_code, wallet_kind, currency_code, is_system)
+  values
+    (p_user_id, 'cash_pending', 'cash_usd', 'USD', false),
+    (p_user_id, 'cash_available', 'cash_usd', 'USD', false),
+    (p_user_id, 'cash_withdrawal_reserved', 'cash_usd', 'USD', false),
+    (p_user_id, 'cash_paid', 'cash_usd', 'USD', false),
+    (p_user_id, 'cash_held', 'cash_usd', 'USD', false),
+    (p_user_id, 'game_credits_available', 'game_credits', 'LLC', false),
+    (p_user_id, 'game_credits_provisional', 'game_credits', 'LLC', false),
+    (p_user_id, 'game_credits_deferred', 'game_credits', 'LLC', false)
+  on conflict (owner_user_id, account_code, wallet_kind) do nothing;
+end;
+$;
+revoke all on function private.create_player_ledger_accounts(uuid) from public, anon, authenticated;
+grant execute on function private.create_player_ledger_accounts(uuid) to service_role;
+
+-- Replace signup trigger body to initialize both profile and empty wallet accounts.
+create or replace function private.create_profile_for_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = ''
+as $
+begin
+  insert into public.profiles (id, display_name)
+  values (
+    new.id,
+    nullif(trim(coalesce(new.raw_user_meta_data ->> 'display_name', '')), '')
+  )
+  on conflict (id) do nothing;
+  perform private.create_player_ledger_accounts(new.id);
+  return new;
+end;
+$;
+revoke all on function private.create_profile_for_new_user() from public, anon, authenticated;
 
 create table private.journal_transactions (
   id uuid primary key default gen_random_uuid(),
@@ -219,6 +275,27 @@ end;
 $$;
 revoke all on function private.post_journal_transaction(text,text,text,text,text,jsonb,jsonb) from public, anon, authenticated;
 grant execute on function private.post_journal_transaction(text,text,text,text,text,jsonb,jsonb) to service_role;
+
+-- Financial journal rows are append-only. Corrections are new compensating entries.
+create or replace function private.reject_ledger_mutation()
+returns trigger
+language plpgsql
+set search_path = ''
+as $
+begin
+  raise exception 'Ledger records are immutable; post a compensating transaction';
+end;
+$;
+revoke all on function private.reject_ledger_mutation() from public, anon, authenticated;
+
+drop trigger if exists journal_transactions_immutable on private.journal_transactions;
+create trigger journal_transactions_immutable
+  before update or delete on private.journal_transactions
+  for each row execute function private.reject_ledger_mutation();
+drop trigger if exists journal_entries_immutable on private.journal_entries;
+create trigger journal_entries_immutable
+  before update or delete on private.journal_entries
+  for each row execute function private.reject_ledger_mutation();
 
 create table private.providers (
   id uuid primary key default gen_random_uuid(),
