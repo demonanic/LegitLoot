@@ -3,3 +3,5 @@
 .game-image{padding:0;display:block;min-height:220px;height:220px;background:#09090d}.game-image img{width:100%;height:100%;object-fit:cover;display:block}.game-image span{position:absolute;top:12px;right:14px;color:#fff;background:#09090dcc;padding:4px 7px;font:12px var(--mono)}
 
 .feature-art{position:relative;overflow:hidden}.feature-game-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.88}.feature-art-label{position:relative;z-index:1;text-shadow:0 2px 14px #000}
+
+/* LegitLoot preview refresh: 2026-11-07 */
