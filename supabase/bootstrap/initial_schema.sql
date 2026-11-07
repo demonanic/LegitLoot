@@ -40,7 +40,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $fn$
 begin
   insert into public.profiles (id, display_name)
   values (
@@ -50,7 +50,7 @@ begin
   on conflict (id) do nothing;
   return new;
 end;
-$$;
+$fn$;
 revoke all on function private.create_profile_for_new_user() from public, anon, authenticated;
 
 drop trigger if exists on_auth_user_created_create_profile on auth.users;
@@ -181,7 +181,7 @@ returns uuid
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $fn$
 declare
   v_transaction_id uuid;
   v_entry jsonb;
@@ -272,7 +272,7 @@ exception
     if v_transaction_id is not null then return v_transaction_id; end if;
     raise;
 end;
-$$;
+$fn$;
 revoke all on function private.post_journal_transaction(text,text,text,text,text,jsonb,jsonb) from public, anon, authenticated;
 grant execute on function private.post_journal_transaction(text,text,text,text,text,jsonb,jsonb) to service_role;
 
