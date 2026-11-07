@@ -40,7 +40,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $func$$
+as $
 begin
   insert into public.profiles (id, display_name)
   values (
@@ -181,7 +181,7 @@ returns uuid
 language plpgsql
 security definer
 set search_path = ''
-as $func$$
+as $
 declare
   v_transaction_id uuid;
   v_entry jsonb;
