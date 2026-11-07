@@ -26,18 +26,16 @@ Homepage direction: hybrid, with a slight visual priority toward games. Industri
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
 ### Offerwall allocation — proposed model, not a provider promise
-For each eligible settled net publisher revenue amount:
-- 20% platform allocation.
-- 80% player reward pool.
-- Player pool split: 50% cash allocation and 50% game-credit allocation.
+For each eligible provider-approved reward event:
+- Player reward pool split: 50% cash allocation and 50% game-credit allocation.
 - Of the game-credit allocation, 75% may be issued provisionally only after a validated provider confirmation; 25% is deferred until settlement/reconciliation.
 - Cash allocation remains pending until provider settlement and reconciliation.
+- The platform revenue share, eligible net-revenue basis, deductions, caps and any provider-specific adjustments must be taken from the approved business model and the provider's current written terms. Do not invent a universal platform percentage.
 - All rates remain configurable and disabled until the relevant provider approves the exact model in writing.
 
 ### Reserves and reversals
-- 100% coverage of player cash liabilities.
-- 100% coverage of fulfillment cost for outstanding provisional credits.
-- Additional initial reversal buffer: 25% of provisional-credit exposure.
+- Maintain reserves sufficient to cover player cash liabilities and outstanding provisional-credit fulfillment.
+- Maintain a separately defined reversal buffer based on measured provider reversal behavior and approved risk policy; do not hardcode an unapproved percentage.
 - Unsettled provider receivables never fund cash withdrawals.
 - A circuit breaker pauses new reward commitments when reserves fail, provider status is suspended, or material reconciliation discrepancies occur.
 - Ordinary reversals do not automatically create player debt; platform absorbs already-spent provisional-credit losses by default, subject to documented fraud exceptions and review.
