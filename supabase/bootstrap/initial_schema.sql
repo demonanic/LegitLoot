@@ -40,7 +40,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $$
+as $func$$
 begin
   insert into public.profiles (id, display_name)
   values (
@@ -99,7 +99,7 @@ returns void
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $func$
 begin
   insert into private.ledger_accounts(owner_user_id, account_code, wallet_kind, currency_code, is_system)
   values
@@ -113,7 +113,7 @@ begin
     (p_user_id, 'game_credits_deferred', 'game_credits', 'LLC', false)
   on conflict (owner_user_id, account_code, wallet_kind) do nothing;
 end;
-$;
+$func$;
 revoke all on function private.create_player_ledger_accounts(uuid) from public, anon, authenticated;
 grant execute on function private.create_player_ledger_accounts(uuid) to service_role;
 
@@ -123,7 +123,7 @@ returns trigger
 language plpgsql
 security definer
 set search_path = ''
-as $
+as $func$
 begin
   insert into public.profiles (id, display_name)
   values (
@@ -134,7 +134,7 @@ begin
   perform private.create_player_ledger_accounts(new.id);
   return new;
 end;
-$;
+$func$;
 revoke all on function private.create_profile_for_new_user() from public, anon, authenticated;
 
 create table private.journal_transactions (
@@ -181,7 +181,7 @@ returns uuid
 language plpgsql
 security definer
 set search_path = ''
-as $$
+as $func$$
 declare
   v_transaction_id uuid;
   v_entry jsonb;
@@ -281,11 +281,11 @@ create or replace function private.reject_ledger_mutation()
 returns trigger
 language plpgsql
 set search_path = ''
-as $
+as $func$
 begin
   raise exception 'Ledger records are immutable; post a compensating transaction';
 end;
-$;
+$func$;
 revoke all on function private.reject_ledger_mutation() from public, anon, authenticated;
 
 drop trigger if exists journal_transactions_immutable on private.journal_transactions;
