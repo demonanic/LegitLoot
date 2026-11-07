@@ -1,20 +1,36 @@
 # LegitLoot
 
-Independent gaming and rewards platform.
+Independent games and rewards platform.
 
-## Rebuild status
+## Active build
 
-This repository is being prepared for a mobile-first industrial cyberpunk redesign. The existing production website at https://legitloot.site/ remains separate and must not be replaced until the new site has been reviewed and explicitly approved.
+- Build branch: `build/legitloot-platform-foundation`
+- Governing business specification: [LegitLoot Master Business Model v1.3](docs/PLATFORM_BUILD_SPEC.md)
+- Visual design: industrial cyberpunk / street-punk comic-book style.
+- Homepage strategy: hybrid games + earning opportunities, with a slight visual priority toward games.
+- Initial games: Demonanic, Gauntlet's Survival, Harvest//Zero.
+- Brand mascot: charismatic comic-book badger antihero.
+- Supporting character: mysterious recurring punk woman, used selectively in promotions.
 
-## Design direction
+## Financial integrity rules
 
-- Games-first homepage
-- Minimal industrial cyberpunk visual identity
-- Void-black and graphite surfaces with electric violet and acid-lime accents
-- Recurring punk-rock character as supporting brand artwork, not the company logo
-- Games, Earn, Marketplace, and Account destinations
-- Cash and non-transferable game credits shown separately
+- Game credits and cash rewards are separate currencies and separate ledgers.
+- Game credits are non-transferable, have no cash value, and cannot be withdrawn or converted.
+- Cash is tracked in pending, available, withdrawal-reserved, and paid states.
+- Unsettled provider receivables cannot fund cash withdrawals.
+- All financial events are server-authoritative, idempotent, auditable, and reconciled.
+- No live reward issuance or payout until provider approval, legal review, reserves, and test gates are complete.
 
-## Important
+## Current repository status
 
-This is a front-end prototype. It does not process payments, issue rewards, authenticate users, connect offerwalls, or provide withdrawals. All sample balances and provider listings are illustrative.
+This repository began as a static HTML/CSS prototype. The owner has now authorized development on an isolated build branch. The current code must not be described as a working rewards backend until authentication, database, ledger, provider callbacks, payout controls, and tests are implemented and verified.
+
+## Production protection
+
+- Production domain: https://legitloot.site/
+- No merge to `main`.
+- No production deployment or domain cutover without separate explicit approval.
+- No paid service, subscription, integration, provider agreement, or account creation without separate explicit approval.
+- Never reuse Demonanic production secrets, accounts, databases, or user data without approval.
+
+See [Platform Build Specification](docs/PLATFORM_BUILD_SPEC.md) for the complete architecture, financial rules, security requirements, provider gates, and implementation sequence.
