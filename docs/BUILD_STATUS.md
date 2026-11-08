@@ -1,6 +1,6 @@
 # LegitLoot Platform Build — Status
 
-**Updated:** 2026-11-07  
+**Updated:** 2026-11-08  
 **Branch:** `build/legitloot-v2` (new isolated V2 work branch; based on `build/legitloot-platform-foundation`)  
 **Production:** Cloudflare currently points to `build/legitloot-platform-foundation`; V2 branch is not connected or deployed. No merge to `main`.
 
