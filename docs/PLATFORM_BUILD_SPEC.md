@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-11-07  
-**Build branch:** `build/legitloot-platform-foundation`  
+**Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — untouched; no production deployment authorized.  
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
 **Authorization:** Owner has now explicitly authorized development. This supersedes v1.3's earlier "no development authorized" status for work on the isolated build branch only. It does not authorize paid services, account creation, provider agreements, live money movement, or production deployment.
@@ -15,7 +15,7 @@ LegitLoot is a combined independent games and rewards platform with four public-
 3. Affiliate marketplace and promotional deals.
 4. A transparent player rewards experience with separate game-credit and cash ledgers.
 
-Homepage direction: hybrid, with a slight visual priority toward games. Industrial cyberpunk / street-punk comic-book art, minimal enough to preserve clarity. The badger antihero is the primary brand mascot; the mysterious punk woman is an unexplained recurring promotional character, not the company identity. The supplied official game artwork is authoritative.
+Homepage direction: mobile-first neon punk rewards arcade dashboard, with games as the visual priority. Use midnight violet/black foundations, hot magenta, electric cyan and radioactive lime accents, energetic comic-book textures, bold condensed display typography, neon-framed panels and a persistent mobile navigation dock. The badger antihero is the primary brand mascot; the mysterious punk woman is a recurring supporting promotional character, not the company identity. The supplied official game artwork is authoritative. Never use invented balances, streaks, leaderboards, task completion or payout claims to make the interface look populated; show real connected data or clearly label a preview/planned state.
 
 ## 2. Hard business rules (must be enforced in code and UX)
 
