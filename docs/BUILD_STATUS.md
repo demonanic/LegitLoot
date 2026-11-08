@@ -62,8 +62,9 @@
 - Added `how-it-works.html` explaining the separate cash/game-credit model and current feature status.
 - Added clearly marked draft `terms.html` and `privacy.html` placeholders. These are not launch-ready legal policies.
 - Connected the V2 site navigation and footer to the new guide and legal placeholder pages.
+- Added the password-reset completion step: reset links now switch to a new-password form and call Supabase `updateUser`.
 - Offerwall.GG verification meta tag remains present in the homepage head.
-- Supabase security hardening was applied in project `gkbqderyjcuxnjbsiffb`: RLS enabled on all 10 private-schema financial/provider tables, with no client policies. The matching migration exists in the parent foundation branch; V2 still needs the same migration file copied into its own migration history if it is to remain a self-contained branch.
+- Supabase security hardening was applied in project `gkbqderyjcuxnjbsiffb`: RLS enabled on all 10 private-schema financial/provider tables, with no client policies. The matching migration is inherited in V2 from the foundation branch.
 - No Offerwall.GG integration, reward issuance, cash payouts, withdrawal API, admin console, or production wallet summaries are active yet.
 
 ## V2 next implementation sequence
