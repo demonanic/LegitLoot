@@ -19,14 +19,15 @@ Use the hosted wall URL documented by Offerwall.GG:
 
 `https://offerwall.gg/wall/{PUBLIC_KEY}?userId={AUTHENTICATED_SUPABASE_USER_UUID}`
 
-The public placement key may be exposed in the URL. The Offerwall.GG secret key must never be included in browser code, HTML, query strings, APKs or repository files.
+The public placement key may be exposed in the URL. LegitLoot's configured public key is `2d6851696ece3bf3852b5ec542854ed1`. The Offerwall.GG secret key must never be included in browser code, HTML, query strings, APKs or repository files.
 
-The user ID must come from the authenticated server/session context. Do not accept a user ID supplied by an untrusted browser parameter as proof of ownership.
+The user ID must come from the authenticated server/session context. Do not accept a user ID supplied by an untrusted browser parameter as proof of ownership. The `offerwall-gg-wall-url` Edge Function validates the caller's Supabase access token, obtains the user ID from Supabase Auth, signs the sorted canonical query `appId=PUBLIC_KEY&userId=AUTHENTICATED_USER_UUID` with HMAC-SHA256, and returns the hosted wall URL. The browser never receives the secret.
 
 ## Conversion callback
 
-Edge Function:
-`https://gkbqderyjcuxnjbsiffb.supabase.co/functions/v1/offerwall-gg-postback`
+Edge Functions:
+- Signed wall URL: `https://gkbqderyjcuxnjbsiffb.supabase.co/functions/v1/offerwall-gg-wall-url` (requires Supabase user JWT).
+- Conversion postback: `https://gkbqderyjcuxnjbsiffb.supabase.co/functions/v1/offerwall-gg-postback` (public webhook; HMAC validation is mandatory).
 
 Configure the placement to send a form POST to that URL with all standard callback fields. Offerwall.GG documents these fields:
 - `userId`
@@ -61,6 +62,7 @@ A reversal must match the original user and amount. A reversal that arrives befo
 ## Required server secrets
 
 Set these in Supabase Edge Function Secrets (never in GitHub):
+- `OFFERWALL_GG_PUBLIC_KEY` — public placement key `2d6851696ece3bf3852b5ec542854ed1`.
 - `OFFERWALL_GG_SECRET` — private secret from the Offerwall.GG placement.
 - `SUPABASE_URL` — project URL.
 - `SUPABASE_SERVICE_ROLE_KEY` — service-role key.
