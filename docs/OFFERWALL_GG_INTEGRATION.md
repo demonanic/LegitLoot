@@ -47,7 +47,7 @@ The callback verifies HMAC-SHA256 over exactly:
 `userId:transactionId:currencyAmount`
 using the Offerwall.GG secret, with a constant-time comparison. The callback does not trust `payoutUsd` because the provider documentation says it is not covered by the signature.
 
-The endpoint:
+The endpoint accepts the exact callback macros shown in the Offerwall.GG dashboard; it does not require an extra `currencyName` parameter. The endpoint:
 1. Verifies the HMAC before processing.
 2. Rejects malformed user IDs, amounts, status and currency name.
 3. Ignores signed dashboard test callbacks without crediting LC.
