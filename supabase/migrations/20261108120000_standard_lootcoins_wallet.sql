@@ -5,14 +5,10 @@
 begin;
 
 alter table private.ledger_accounts drop constraint if exists ledger_account_currency;
-update private.ledger_accounts
-set currency_code = 'LC'
-where wallet_kind = 'game_credits' and currency_code = 'LLC';
-
 alter table private.ledger_accounts
   add constraint ledger_account_currency check (
     (wallet_kind = 'cash_usd' and currency_code = 'USD')
-    or (wallet_kind = 'game_credits' and currency_code = 'LC')
+    or (wallet_kind = 'game_credits' and currency_code in ('LLC','LC'))
   );
 
 -- Create one spendable LootCoins account for every existing player.
@@ -21,106 +17,9 @@ select u.id, 'lootcoins_available', 'game_credits', 'LC', false
 from auth.users u
 on conflict (owner_user_id, account_code, wallet_kind) do nothing;
 
--- Preserve historical entries and consolidate all legacy credit buckets through
--- balanced, append-only transactions. Abort rather than silently lose a negative bucket.
-do $$
-declare
-  v_user record;
-  v_target_account uuid;
-  v_entries jsonb;
-  v_total numeric;
-  v_idempotency text;
-begin
-  for v_user in
-    select distinct owner_user_id
-    from private.ledger_accounts
-    where owner_user_id is not null
-      and wallet_kind = 'game_credits'
-      and account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
-  loop
-    select id into v_target_account
-    from private.ledger_accounts
-    where owner_user_id = v_user.owner_user_id
-      and account_code = 'lootcoins_available'
-      and wallet_kind = 'game_credits';
-
-    if exists (
-      select 1
-      from private.ledger_accounts a
-      left join private.journal_entries e on e.account_id = a.id
-      left join private.journal_transactions t on t.id = e.transaction_id and t.status = 'posted'
-      where a.owner_user_id = v_user.owner_user_id
-        and a.wallet_kind = 'game_credits'
-        and a.account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
-      group by a.id
-      having coalesce(sum(case when e.id is null then 0 when e.direction = 'credit' then e.amount else -e.amount end),0) < 0
-    ) then
-      raise exception 'Cannot consolidate negative legacy LootCoins bucket for user %', v_user.owner_user_id;
-    end if;
-
-    select coalesce(sum(
-      case when e.id is null then 0 when e.direction = 'credit' then e.amount else -e.amount end
-    ),0)
-    into v_total
-    from private.ledger_accounts a
-    left join private.journal_entries e on e.account_id = a.id
-    left join private.journal_transactions t on t.id = e.transaction_id and t.status = 'posted'
-    where a.owner_user_id = v_user.owner_user_id
-      and a.wallet_kind = 'game_credits'
-      and a.account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
-      and (e.id is null or t.id is not null);
-
-    if v_total > 0 then
-      v_idempotency := 'lootcoins-consolidation:' || v_user.owner_user_id::text;
-
-      if not exists (
-        select 1 from private.journal_transactions where idempotency_key = v_idempotency
-      ) then
-        select jsonb_agg(jsonb_build_object(
-          'account_id', a.id,
-          'wallet_kind', 'game_credits',
-          'currency_code', 'LC',
-          'direction', 'debit',
-          'amount', b.balance::text
-        )) into v_entries
-        from (
-          select a.id,
-            coalesce(sum(case when e.id is null then 0 when e.direction = 'credit' then e.amount else -e.amount end),0) as balance
-          from private.ledger_accounts a
-          left join private.journal_entries e on e.account_id = a.id
-          left join private.journal_transactions t on t.id = e.transaction_id and t.status = 'posted'
-          where a.owner_user_id = v_user.owner_user_id
-            and a.wallet_kind = 'game_credits'
-            and a.account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
-            and (e.id is null or t.id is not null)
-          group by a.id
-          having coalesce(sum(case when e.id is null then 0 when e.direction = 'credit' then e.amount else -e.amount end),0) > 0
-        ) b
-        join private.ledger_accounts a on a.id = b.id;
-
-        v_entries := coalesce(v_entries, '[]'::jsonb)
-          || jsonb_build_array(jsonb_build_object(
-            'account_id', v_target_account,
-            'wallet_kind', 'game_credits',
-            'currency_code', 'LC',
-            'direction', 'credit',
-            'amount', v_total::text
-          ));
-
-        perform private.post_journal_transaction(
-          v_idempotency,
-          'lootcoins_legacy_consolidation',
-          'system_migration',
-          v_user.owner_user_id::text,
-          'Consolidate legacy game-credit buckets into LootCoins',
-          v_entries,
-          jsonb_build_object('migration','standard_lootcoins_wallet')
-        );
-      end if;
-    end if;
-  end loop;
-end;
-$$;
+-- Legacy LLC ledger accounts and entries remain untouched for audit continuity.
+-- A later precision migration converts any existing balance through balanced
+-- cross-currency entries rather than reinterpreting historical integer units.
 
 -- New accounts receive one LootCoins balance and retain separate future cash buckets.
 create or replace function private.create_player_ledger_accounts(p_user_id uuid)
