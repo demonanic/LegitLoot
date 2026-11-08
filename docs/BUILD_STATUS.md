@@ -25,12 +25,13 @@
 
 ## Not implemented or verified yet
 
-- Supabase project has not been created. The account exposes one organization; owner confirmation is required before project creation.
-- Bootstrap SQL has not been applied or executed against a live database.
-- Authentication UI is a preview only; signup, login, email verification and recovery are not wired.
+- Dedicated Supabase project `gkbqderyjcuxnjbsiffb` created in `us-east-1` at the quoted $0/month project cost.
+- Initial database migration applied successfully; profile `updated_at` trigger migration also applied.
+- Security/performance/health advisors were checked. The table inventory flags RLS disabled on 10 private-schema tables; direct privilege checks confirm `anon` and `authenticated` have no grants on those tables and no USAGE on the private schema. Owner decision is still required on defense-in-depth RLS enablement.
+- Supabase email/password signup, login, reset and sign-out UI is connected in the build branch using the project's publishable key. The full flow still needs allowed-redirect configuration and end-to-end testing.
 - No Edge Functions, provider postback handlers, Stripe integration, payout rail or offerwall is live.
 - No admin interface, provider reconciliation engine, reserve calculator or fraud review workflow is live.
-- No automated browser, accessibility, database or end-to-end tests have run.
+- No automated browser, accessibility, signup, database integration or end-to-end tests have run.
 - The badger mascot asset has not yet been integrated into the homepage; existing provisional woman illustration is still present and should be replaced by the approved badger artwork. The mysterious punk character should remain secondary promotional art.
 
 ## Business model guardrails
@@ -44,6 +45,10 @@
 - Offerwall.GG is a candidate only; its current publisher terms and approval for the exact model must be verified.
 - Stripe is not assumed to be an approved payout rail.
 
-## Next required action
+## Next required actions
 
-Owner confirms that the new Supabase project should be created in the only currently available organization, `fuxbuxcryptolux's Org`, in `us-east-1`. The current project quote is $0/month. After confirmation: create project, verify readiness, apply schema, run advisors and tests, then wire auth using only publishable client keys and server-only secrets.
+1. Owner decides whether to enable RLS on all 10 private tables as defense-in-depth. No client policies are required; trusted server-side `service_role` access bypasses RLS. See the remediation SQL surfaced in the build handoff.
+2. Configure allowed authentication redirect URLs in Supabase without changing the live production Site URL prematurely.
+3. Test signup, confirmation, login, reset and sign-out on the branch preview.
+4. Implement server-side wallet summary, ledger balance enforcement, provider callbacks, settlement and reconciliation tests.
+5. Keep production deployment, domain cutover and merge to `main` blocked pending separate approval.
