@@ -229,3 +229,113 @@ button:disabled{cursor:not-allowed;opacity:.55}
   body.dashboard-page{padding-bottom:calc(154px + env(safe-area-inset-bottom))}
   .mobile-dock{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
 }
+
+
+/* APPROVED LEGITLOOT ARCADE HOMEPAGE — visual implementation */
+.dash-header{position:relative;min-height:76px;gap:18px;background:linear-gradient(90deg,#09050f,#16091f 48%,#09050f);border-bottom:2px solid var(--dash-pink);box-shadow:0 4px 22px #ff35d233}
+.dash-brand{letter-spacing:-.045em;text-shadow:2px 2px 0 #271033,0 0 16px #ff35d233}
+.dash-brand>span{font-style:italic;font-weight:900}
+.dash-notifications{width:40px;height:40px;position:relative;display:grid;place-items:center;border:1.5px solid #ff35d2;border-radius:50%;color:#fff;font-size:23px}
+.dash-notifications span{position:absolute;width:9px;height:9px;right:5px;top:4px;border-radius:50%;background:#ff35d2;box-shadow:0 0 9px #ff35d2}
+.mobile-menu{display:none}
+.dash-hero{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);min-height:430px;padding:24px 28px;gap:20px;border:0;border-radius:0;background-image:linear-gradient(90deg,#09050c22,#09050c55),url("assets/underground-arcade-backdrop.svg");background-size:cover;background-position:center;box-shadow:none}
+.dash-hero:before{background:repeating-linear-gradient(130deg,transparent 0 14px,#ffffff0a 15px 16px),linear-gradient(0deg,#09050c66,transparent 40%)}
+.hero-mascot{height:410px;align-self:end}
+.hero-mascot img{object-fit:contain;object-position:center bottom;filter:contrast(1.18) saturate(1.25) drop-shadow(0 5px 22px #ff35d255)}
+.mascot-sticker{right:10%;bottom:20px;transform:rotate(-9deg) skew(-5deg)}
+.hero-message h1{font-size:clamp(42px,5vw,76px);line-height:.88;letter-spacing:-.035em;text-shadow:3px 4px 0 #16051f,0 0 18px #fff2}
+.hero-message h1 em{color:#fff}
+.hero-steps{gap:clamp(8px,1.6vw,24px);margin:22px 0}
+.hero-steps span{font-size:clamp(10px,.95vw,14px);text-shadow:0 2px 4px #000}
+.neon-cta{padding:13px 28px;border:3px solid #f2ff92;border-radius:10px;transform:skew(-5deg);font-size:clamp(18px,2vw,27px);box-shadow:0 0 22px #c8ff19aa,0 5px 0 #537900}
+.hero-disclaimer{font-size:11px;max-width:390px;color:#e3d6eb}
+.arcade-status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0;padding:14px 18px 8px;background:linear-gradient(180deg,#160b20,#100819)}
+.arcade-status{position:relative;min-width:0;min-height:142px;display:flex;align-items:center;gap:12px;padding:14px 15px;border:2px solid #ff35d2;border-radius:17px;background:linear-gradient(135deg,#24102f,#100a1c 70%);box-shadow:0 0 15px #ff35d222,inset 0 0 25px #a52aff18;color:#fff;text-decoration:none;overflow:hidden}
+.arcade-status .rank-badge{flex:0 0 54px;width:54px;height:54px}
+.arcade-status .status-copy{gap:5px}
+.arcade-status .status-copy small{font-size:clamp(8px,.8vw,12px);color:#25eaff}
+.arcade-status .status-copy strong{font-size:clamp(14px,1.55vw,22px);line-height:1.02}
+.arcade-status .status-copy span{font-size:clamp(9px,.85vw,12px);line-height:1.35;color:#cdbbd8}
+.arcade-status .empty-progress{width:100%;max-width:230px;height:8px}
+.arcade-status .status-icon{flex:0 0 42px;font-size:36px;color:var(--dash-lime)}
+.daily-status img{width:78px;height:78px;object-fit:contain;filter:drop-shadow(0 0 13px #a52affaa)}
+.arcade-explore{padding:10px 18px 18px;background:radial-gradient(ellipse at 50% 0%,#7c1a9a44,transparent 55%),#100819}
+.arcade-explore>h2{margin:4px 0 14px;text-align:center;font:italic 900 clamp(27px,3vw,43px)/1 "Barlow Condensed",Impact,sans-serif;letter-spacing:.015em;color:#ff35d2;text-shadow:0 0 16px #ff35d255,2px 3px 0 #100515}
+.arcade-explore>h2 span{color:var(--dash-lime)}
+.arcade-tiles{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.arcade-tile{min-height:150px;position:relative;isolation:isolate;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;border:2px solid #f33bdc;border-radius:17px;background:linear-gradient(135deg,#38134c,#090d20 65%,#1b1040);box-shadow:0 0 13px #ff35d233;color:white;text-decoration:none}
+.arcade-tile:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.8;background:repeating-linear-gradient(135deg,transparent 0 9px,#ff35d21c 10px 11px),linear-gradient(145deg,#a51b9a55,transparent 60%),radial-gradient(circle at 75% 30%,#1c9ec855,transparent 42%)}
+.arcade-tile:after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(0deg,#090510bb,transparent 65%)}
+.arcade-tile:hover{transform:translateY(-3px);box-shadow:0 0 22px #ff35d277;border-color:var(--dash-lime)}
+.arcade-tile .tile-icon{font-size:clamp(34px,4vw,52px);line-height:1;color:var(--dash-lime);filter:drop-shadow(0 0 9px #c8ff1988)}
+.arcade-tile strong{font:900 clamp(17px,2vw,25px)/1 "Barlow Condensed",sans-serif;font-style:italic;text-shadow:0 2px 5px #000}
+.tile-earn:before{background:repeating-linear-gradient(45deg,transparent 0 10px,#21dfff22 11px 12px),linear-gradient(145deg,#0a688155,#140d2c)}
+.tile-deals:before{background:repeating-linear-gradient(135deg,transparent 0 8px,#ff35d21c 9px 10px),linear-gradient(145deg,#ad185b66,#160d2b)}
+.tile-rewards:before{background:repeating-linear-gradient(45deg,transparent 0 9px,#c8ff1920 10px 11px),linear-gradient(145deg,#7023a866,#160d2b)}
+.tile-wallet:before{background:repeating-linear-gradient(135deg,transparent 0 9px,#1edcff22 10px 11px),linear-gradient(145deg,#075a7566,#160d2b)}
+@media(max-width:980px){
+ .dash-hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:350px}
+ .hero-mascot{height:330px}
+}
+@media(max-width:650px){
+ body.dashboard-page{padding-bottom:calc(92px + env(safe-area-inset-bottom));background:#100819}
+ .dash-header{height:66px;min-height:66px;padding:0 12px;display:flex;justify-content:flex-end;gap:9px}
+ .mobile-menu{display:block;position:relative;z-index:60;margin-right:auto}
+ .mobile-menu summary{width:37px;height:40px;display:flex;flex-direction:column;justify-content:center;gap:5px;list-style:none;cursor:pointer}
+ .mobile-menu summary::-webkit-details-marker{display:none}
+ .mobile-menu summary span{display:block;width:27px;height:3px;background:#fff;border-radius:4px;box-shadow:0 0 7px #fff8}
+ .mobile-menu nav{position:absolute;top:48px;left:-4px;width:210px;padding:9px;border:1.5px solid var(--dash-pink);border-radius:12px;background:#12091ff5;box-shadow:0 10px 30px #000c;display:grid;gap:2px}
+ .mobile-menu nav a{padding:11px;color:#fff;font:800 14px "Barlow Condensed";letter-spacing:.08em;border-bottom:1px solid #8c2c8c55}
+ .dash-brand{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font-size:28px;white-space:nowrap;gap:5px}
+ .dash-brand .crown-mark-image{width:31px;height:31px}
+ .dash-nav{display:none}
+ .dash-notifications{width:35px;height:35px;font-size:19px}
+ .dash-profile{width:35px;height:35px;flex:0 0 35px}
+ .dash-main{width:100%;padding:0}
+ .dash-hero{min-height:0;grid-template-columns:40% minmax(0,1fr);gap:3px;padding:13px 9px 15px;border:0;border-bottom:2px solid var(--dash-pink);border-radius:0;background-position:48% center}
+ .hero-mascot{height:245px;margin:0;align-self:center}
+ .hero-mascot img{object-fit:contain;object-position:center;filter:contrast(1.15) saturate(1.2) drop-shadow(0 0 13px #ff35d277)}
+ .mascot-sticker{right:0;bottom:8px;padding:5px 7px;font-size:10px}
+ .hero-message{min-width:0}
+ .dash-kicker{font-size:7px;line-height:1.35;letter-spacing:.04em;gap:5px}
+ .dash-kicker i{width:6px;height:6px;flex:0 0 6px}
+ .hero-message h1{font-size:clamp(27px,7.4vw,39px);line-height:.9;margin:12px 0 13px;letter-spacing:-.04em}
+ .hero-steps{display:grid;grid-template-columns:repeat(2,max-content);gap:5px 10px;margin:12px 0}
+ .hero-steps span{font-size:9px;gap:4px}
+ .hero-steps b{font-size:16px}
+ .neon-cta{display:flex;width:max-content;max-width:100%;padding:9px 12px;font-size:clamp(13px,3.7vw,17px);gap:7px;border-width:2px;white-space:nowrap}
+ .neon-cta span{font-size:19px}
+ .hero-disclaimer{font-size:8px;line-height:1.35;margin-top:8px}
+ .arcade-status-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;padding:9px 8px 7px}
+ .arcade-status{min-height:132px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:5px;padding:9px 7px;border-width:1.5px;border-radius:11px}
+ .arcade-status .rank-badge{width:30px;height:30px;flex:0 0 30px;font-size:12px}
+ .arcade-status .status-icon{font-size:23px;flex-basis:auto}
+ .arcade-status .status-copy{gap:4px}
+ .arcade-status .status-copy small{font-size:7px;letter-spacing:.05em}
+ .arcade-status .status-copy strong{font-size:clamp(11px,3vw,14px);line-height:1.05}
+ .arcade-status .status-copy span{font-size:8px;line-height:1.25}
+ .arcade-status .empty-progress{height:6px;margin-top:3px}
+ .daily-status img{position:absolute;right:2px;bottom:1px;width:42px;height:42px;opacity:.7}
+ .arcade-explore{padding:8px 8px 13px}
+ .arcade-explore>h2{font-size:clamp(22px,6vw,31px);margin:4px 0 10px}
+ .arcade-tiles{grid-template-columns:repeat(5,minmax(0,1fr));gap:5px}
+ .arcade-tile{min-height:95px;border-radius:10px;border-width:1.5px;gap:6px}
+ .arcade-tile .tile-icon{font-size:clamp(23px,7vw,34px)}
+ .arcade-tile strong{font-size:clamp(11px,3.2vw,15px)}
+ .dash-top-grid,.dash-bottom-grid{padding:0 8px}
+ .trust-strip{margin-left:8px;margin-right:8px}
+ .mobile-dock{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));left:8px;right:8px;bottom:calc(7px + env(safe-area-inset-bottom));padding:7px 4px calc(7px + env(safe-area-inset-bottom));border:1.5px solid var(--dash-pink);border-radius:17px;background:#160b2bf5;box-shadow:0 0 20px #ff35d255,0 8px 30px #000b;backdrop-filter:blur(16px)}
+ .mobile-dock a{min-width:0;min-height:48px;gap:3px}
+ .mobile-dock b{font-size:23px}
+ .mobile-dock span{font-size:7px;letter-spacing:0}
+ .dash-footer{display:none}
+}
+@media(max-width:370px){
+ .dash-brand{font-size:24px}
+ .hero-mascot{height:220px}
+ .hero-message h1{font-size:26px}
+ .arcade-status{min-height:140px;padding:7px 5px}
+ .arcade-status .status-copy strong{font-size:10px}
+ .arcade-status .status-copy span{font-size:7px}
+ .arcade-tile{min-height:84px}
+}
