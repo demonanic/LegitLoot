@@ -1,0 +1,41 @@
+name: Extract LegitLoot game artwork
+
+on:
+  push:
+    branches:
+      - design/industrial-cyberpunk-rebuild
+    paths:
+      - 'assets/legitloot-game-assets.zip'
+      - '.github/workflows/extract-game-artwork.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out working branch
+        uses: actions/checkout@v4
+        with:
+          ref: design/industrial-cyberpunk-rebuild
+      - name: Extract supplied JPG files
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          unzip -o assets/legitloot-game-assets.zip -d /tmp/legitloot-art
+          find /tmp/legitloot-art -type f -iname '*.jpg' -print
+          for name in demonanic.jpg gauntlets-survival.jpg harvest-zero.jpg; do
+            file="$(find /tmp/legitloot-art -type f -iname "$name" -print -quit)"
+            test -n "$file"
+            cp "$file" "assets/$name"
+          done
+      - name: Commit extracted artwork
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/demonanic.jpg assets/gauntlets-survival.jpg assets/harvest-zero.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "Add extracted official game artwork"
+            git push origin HEAD:design/industrial-cyberpunk-rebuild
+          fi
