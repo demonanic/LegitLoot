@@ -6,10 +6,10 @@ Independent games and rewards platform.
 
 - Build branch: `build/legitloot-neon-synthwave`
 - Governing business specification: [LegitLoot Master Business Model v1.3](docs/PLATFORM_BUILD_SPEC.md)
-- Visual design: neon punk arcade / synthwave comic-book identity — midnight violet, hot magenta, electric cyan and radioactive lime, with the original badger antihero mascot.
+- Approved brand direction: **LegitLoot — The Underground Arcade**. Hybrid punk outlaw + underground hacker + arcade boss personality; mixed raw comic-book, cinematic illustration and distressed punk-print treatment. See [Brand Art Direction](docs/BRAND_ART_DIRECTION.md).
 - Homepage strategy: mobile-first arcade dashboard with games first, plus transparent opportunity, quest, event and account panels. All unavailable systems must be labeled planned, preview or inactive; never show invented balances or activity.
 - Initial games: Demonanic, Gauntlet's Survival, Harvest//Zero.
-- Brand mascot: charismatic comic-book badger antihero.
+- Brand mascot: original, consistent badger character with punk-outlaw / underground-hacker / arcade-boss personality. Existing simple SVG is a temporary placeholder, not approved final artwork.
 - Supporting character: mysterious recurring punk woman, used selectively in promotions.
 
 ## Financial integrity rules
