@@ -133,7 +133,7 @@ body.dashboard-page{margin:0;min-height:100vh;color:var(--dash-white);font-famil
  .leaderboard-empty{min-height:90px}
 }
 @media(max-width:650px){
- body.dashboard-page{padding-bottom:82px}
+ body.dashboard-page{padding-bottom:calc(154px + env(safe-area-inset-bottom))}
  .dash-header{height:58px;padding:0 14px}
  .dash-brand{font-size:27px}.crown-mark{font-size:30px}
  .dash-nav{display:none}.dash-profile{width:35px;height:35px;flex-basis:35px}
@@ -221,3 +221,11 @@ body.dashboard-page{margin:0;min-height:100vh;color:var(--dash-white);font-famil
 a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #35e7ff;outline-offset:3px}
 button:disabled{cursor:not-allowed;opacity:.55}
 ::selection{background:#ff35d2;color:#10091e}
+
+
+/* S24 mobile viewport: reserve the full fixed-dock footprint */
+.dash-profile svg{width:23px;height:23px;display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:650px){
+  body.dashboard-page{padding-bottom:calc(154px + env(safe-area-inset-bottom))}
+  .mobile-dock{padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+}
