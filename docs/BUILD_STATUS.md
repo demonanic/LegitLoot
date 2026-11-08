@@ -89,3 +89,15 @@
 - The migration is committed to the isolated feature branch only. It has **not** been applied to Supabase.
 - Offerwall.GG provider remains disabled. No production wall launch, callback endpoint, reward issuance, or payout has been enabled.
 - Next: verify current Offerwall.GG publisher callback documentation; implement a server-side signed callback with event idempotency and reversal handling; add tests; apply the migration only after SQL review and a backup/rollback plan; then request publisher re-review.
+
+
+## Offerwall.GG callback implementation — 2026-11-08
+
+- Reviewed current official Offerwall.GG API and postback documentation.
+- Implemented a Supabase Edge Function scaffold at `supabase/functions/offerwall-gg-postback/index.ts`.
+- Callback verifies HMAC-SHA256 over the exact signed tuple `userId:transactionId:currencyAmount` and uses constant-time signature comparison.
+- Callback handles GET and form-POST delivery, rejects malformed callbacks, never credits dashboard test callbacks, ignores unsigned `payoutUsd` for ledger purposes, and stores fractional LC using 10,000 atoms per LC.
+- Added a database conversion lifecycle keyed by transaction ID and callback status, with distinct handling for `credited` and `reversed`; journal entries are balanced and immutable.
+- Duplicate credits and duplicate reversals are idempotent. Reversals must match the original player and exact amount; reversal-before-credit is rejected for provider retry.
+- Added `docs/OFFERWALL_GG_INTEGRATION.md` with the official callback contract, required secrets, hosted wall format and release checklist.
+- No migrations have been applied and no Edge Function has been deployed. Required publisher secret and public placement key have not been provided/configured. Provider remains disabled.
