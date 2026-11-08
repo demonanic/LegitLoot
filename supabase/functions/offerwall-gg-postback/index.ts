@@ -53,16 +53,17 @@ Deno.serve(async (request: Request) => {
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   if (!secret || !supabaseUrl || !serviceRoleKey) return response("SERVICE NOT CONFIGURED", 503);
 
-  let params: URLSearchParams;
-  let signedPayload: string;
-  if (request.method === "GET") {
-    const url = new URL(request.url);
-    params = url.searchParams;
-    signedPayload = url.search.slice(1);
-  } else {
+  const requestUrl = new URL(request.url);
+  // Offerwall.GG can place macros in the configured callback URL even when
+  // the selected delivery method is POST. Merge URL query parameters with
+  // form-body fields so neither delivery location is silently ignored.
+  const params = new URLSearchParams(requestUrl.search);
+  let signedPayload = requestUrl.search.slice(1);
+  if (request.method === "POST") {
     const raw = await request.text();
-    params = new URLSearchParams(raw);
-    signedPayload = raw;
+    const bodyParams = new URLSearchParams(raw);
+    for (const [key, value] of bodyParams.entries()) params.set(key, value);
+    signedPayload = [signedPayload, raw].filter(Boolean).join("&");
   }
 
   const userId = params.get("userId") ?? "";
