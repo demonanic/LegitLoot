@@ -19,19 +19,19 @@ Homepage direction: **LegitLoot — The Underground Arcade**. The approved perso
 
 ## 2. Hard business rules (must be enforced in code and UX)
 
-### Two separate balances
-- **Game credits:** non-transferable, no cash value, not withdrawable, not transferable to another player, and never convertible to cash.
-- **Cash rewards:** tracked in USD with distinct states: pending, available, withdrawal-reserved, and paid.
-- Never combine the two balances into a single total or imply game credits have a USD redemption value.
-- Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
+### LootCoins reward currency
+- **LootCoins (LC)** is the standard LegitLoot platform reward currency for Offerwall.GG activity.
+- Use one LootCoins balance; do not split offerwall rewards into cash and game-credit percentages.
+- Offerwall.GG completions credit LC according to its approved standard virtual-currency model and the publisher's configured conversion rate.
+- LC is a platform reward currency, not cash. It is not withdrawable and must not be represented as a cash equivalent.
+- Reversals and provider adjustments must create compensating ledger entries; never edit or delete posted journal history.
+- Any future cash-reward product is separate and requires its own provider, legal, ledger and launch approval.
+- Never invent balances or reward rates. Configure the provider's actual approved conversion rules; keep issuance disabled until approval and callback tests pass.
 
-### Offerwall allocation — proposed model, not a provider promise
-For each eligible provider-approved reward event:
-- Player reward pool split: 50% cash allocation and 50% game-credit allocation.
-- Of the game-credit allocation, 75% may be issued provisionally only after a validated provider confirmation; 25% is deferred until settlement/reconciliation.
-- Cash allocation remains pending until provider settlement and reconciliation.
-- The platform revenue share, eligible net-revenue basis, deductions, caps and any provider-specific adjustments must be taken from the approved business model and the provider's current written terms. Do not invent a universal platform percentage.
-- All rates remain configurable and disabled until the relevant provider approves the exact model in writing.
+### Cash rewards — future, separate feature
+- If introduced later, cash rewards are tracked in USD with distinct pending, available, withdrawal-reserved and paid states.
+- Do not combine cash and LC balances or imply LC has a USD redemption value.
+- Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
 ### Reserves and reversals
 - Maintain reserves sufficient to cover player cash liabilities and outstanding provisional-credit fulfillment.
@@ -88,7 +88,7 @@ All money uses integer cents. No floating-point arithmetic. Game credits use int
 ## 4. Provider integration rules
 
 ### Offerwall.GG
-Candidate only. Business model research notes mention publisher-controlled rewards, publisher liability, NET30 settlement, $30 minimum payout, reversals, and registered domain/app placement. These are research notes, not current verified approval. Before integration: obtain current official contract/docs, verify current terms, and obtain written approval for the exact dual-wallet / cash-reward structure.
+Candidate provider using its standard virtual-currency offerwall model. LegitLoot's configured reward currency is LootCoins (LC), with no 50/50 cash/credit split and no automatic cash conversion. Confirm current publisher documentation, placement requirements, callback authentication, event identifiers, reversal semantics, currency conversion settings, and written publisher approval before enabling production traffic. Provider credentials remain server-side only.
 
 ### RevU
 Secondary candidate. Do not infer that a virtual-currency integration permits cash rewards. Obtain written approval for the exact model before enabling.
