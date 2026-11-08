@@ -16,6 +16,7 @@
 <body class="dashboard-page">
   <div class="dash-noise" aria-hidden="true"></div>
   <header class="dash-header">
+    <details class="mobile-menu"><summary aria-label="Open navigation"><span></span><span></span><span></span></summary><nav aria-label="Mobile menu"><a href="index.html">HOME</a><a href="games.html">GAMES</a><a href="earn.html">EARN</a><a href="marketplace.html">DEALS</a><a href="rewards.html">REWARDS</a><a href="account.html">WALLET / ACCOUNT</a></nav></details>
     <a class="dash-brand" href="#home" aria-label="LegitLoot home"><img class="crown-mark-image" src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span>LOOT</span></span></a>
     <nav class="dash-nav" aria-label="Main navigation">
       <a class="selected" href="index.html"><b>⌂</b> Home</a>
@@ -25,6 +26,7 @@
       <a href="rewards.html"><b>✦</b> Rewards</a>
       <a href="account.html"><b>▣</b> Wallet</a>
     </nav>
+    <a class="dash-notifications" href="account.html" aria-label="Notifications"><span></span><b>♧</b></a>
     <a class="dash-profile" href="account.html" aria-label="Your wallet and account">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <circle cx="12" cy="8" r="3.5"></circle>
@@ -35,20 +37,31 @@
 
   <main id="home" class="dash-main">
     <section class="dash-hero">
-      <div class="hero-mascot"><img src="assets/badger-mascot.svg" alt="LegitLoot punk badger mascot"><span class="mascot-sticker">LL<br>CREW</span></div>
+      <div class="hero-mascot"><img src="assets/badger-mascot.svg" alt="LegitLoot's punk badger mascot"><span class="mascot-sticker">LL<br>CREW</span></div>
       <div class="hero-message">
         <p class="dash-kicker"><i></i> WELCOME TO THE UNDERGROUND ARCADE</p>
         <h1>PLAY GAMES.<br>COMPLETE OFFERS.<br><em>EARN <strong>REWARDS.</strong></em></h1>
         <div class="hero-steps"><span><b>♧</b> PLAY</span><span><b>✓</b> COMPLETE</span><span><b>▤</b> EARN</span><span><b>♢</b> REDEEM</span></div>
         <a class="neon-cta" href="games.html">ENTER THE ARCADE <span>»</span></a>
-        <p class="hero-disclaimer">Explore the platform. Provider rewards are not active until approved and connected.</p>
+        <p class="hero-disclaimer">Provider rewards are not active until approved and connected.</p>
       </div>
-      <div class="hero-side-art"><img src="assets/mascot.svg" alt="LegitLoot's punk crew character"><span>NO RULEBOOK.<br>JUST GOOD GAMES.</span></div>
     </section>
 
-    <section class="dash-status-grid" aria-label="Player status">
-      <article class="status-panel rank-panel"><div class="rank-badge">LL</div><div class="status-copy"><small>PLAYER STATUS</small><strong>YOUR LOOT RANK</strong><span>Progress tracking coming soon</span><div class="empty-progress"><i></i></div></div><b class="status-tag">PREVIEW</b></article>
-      <article class="status-panel wallet-status"><div class="status-icon">◈</div><div class="status-copy"><small>REWARDS WALLET</small><strong>NO LIVE BALANCE YET</strong><span>Wallet activates after backend and payout gates are complete</span></div><a href="account.html" class="mini-link">WALLET ↗</a></article>
+    <section class="arcade-status-grid" aria-label="Player overview">
+      <article class="arcade-status rank-panel"><div class="rank-badge">LL</div><div class="status-copy"><small>PLAYER STATUS</small><strong>YOUR LOOT RANK</strong><span>Progress tracking coming soon.</span><div class="empty-progress"><i></i></div></div></article>
+      <a class="arcade-status wallet-status" href="rewards.html"><div class="status-icon">◈</div><div class="status-copy"><small>REWARDS WALLET</small><strong>NO LIVE BALANCE YET</strong><span>Wallet activates after backend and payout gates are complete.</span></div></a>
+      <article class="arcade-status daily-status"><div class="status-icon">▦</div><div class="status-copy"><small>YOUR DAILY CHECK-IN</small><strong>DAILY LOOT</strong><span>Daily rewards are on the roadmap.</span></div><img src="assets/loot-crate.svg" alt="" aria-hidden="true"></article>
+    </section>
+
+    <section class="arcade-explore" aria-label="Explore the arcade">
+      <h2><span>EXPLORE</span> THE ARCADE</h2>
+      <div class="arcade-tiles">
+        <a class="arcade-tile tile-games" href="games.html"><span class="tile-icon">⌘</span><strong>GAMES</strong></a>
+        <a class="arcade-tile tile-earn" href="earn.html"><span class="tile-icon">▣</span><strong>EARN</strong></a>
+        <a class="arcade-tile tile-deals" href="marketplace.html"><span class="tile-icon">◇</span><strong>DEALS</strong></a>
+        <a class="arcade-tile tile-rewards" href="rewards.html"><span class="tile-icon">✧</span><strong>REWARDS</strong></a>
+        <a class="arcade-tile tile-wallet" href="account.html"><span class="tile-icon">▱</span><strong>WALLET</strong></a>
+      </div>
     </section>
 
     <section class="dash-top-grid">
