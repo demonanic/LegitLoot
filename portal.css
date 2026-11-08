@@ -36,3 +36,23 @@
 .auth-error{border-color:#ff6d91}
 .auth-error b{color:#ff91a8}
 .portal-hero .status-muted{color:#a99cbd}
+
+
+/* LegitLoot shared brand assets and platform polish */
+.brand-mark-image{display:block;width:38px;height:38px;object-fit:contain;border:0!important;background:transparent!important;box-shadow:none!important}
+.main-nav{gap:clamp(12px,1.7vw,25px)}
+.main-nav a{white-space:nowrap}
+.main-nav a.active{color:var(--acid);border-bottom:2px solid var(--acid)}
+.footer-links{flex-wrap:wrap}
+.inline-cta{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.faq-list{display:grid;gap:10px;margin:24px 0 36px}
+.faq-list details{padding:17px 19px;border:1px solid #49336f;border-radius:12px;background:linear-gradient(135deg,#201538,#110d22)}
+.faq-list summary{cursor:pointer;font:800 20px var(--display);color:#fff;list-style:none}
+.faq-list summary::-webkit-details-marker{display:none}
+.faq-list summary:after{content:'+';float:right;color:var(--acid);font:700 22px var(--mono)}
+.faq-list details[open] summary:after{content:'−'}
+.faq-list details p{margin:12px 0 0;color:var(--muted);font-size:13px;line-height:1.65}
+.faq-list details a{color:var(--cyan);text-decoration:underline}
+.how-grid .portal-card{display:flex;flex-direction:column}
+.how-grid .portal-symbol{width:100%;height:76px;justify-content:flex-start;padding:0 20px;font:900 38px var(--display);color:var(--acid);border-right:0;border-bottom:1px solid var(--line)}
+@media(max-width:760px){.brand-mark-image{width:34px;height:34px}.main-nav{max-height:calc(100dvh - 66px);overflow-y:auto}.footer-links{gap:12px}}
