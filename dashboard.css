@@ -215,3 +215,9 @@ body.dashboard-page{margin:0;min-height:100vh;color:var(--dash-white);font-famil
 .mobile-dock a{min-width:0}
 .mobile-dock span{font-size:7px}
 @media(max-width:650px){.crown-mark-image{width:34px;height:34px}.loot-crate{width:104px;height:92px}.dash-hero{background-position:55% center}}
+
+
+/* Keyboard and touch accessibility */
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #35e7ff;outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.55}
+::selection{background:#ff35d2;color:#10091e}
