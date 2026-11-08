@@ -56,3 +56,15 @@
 .how-grid .portal-card{display:flex;flex-direction:column}
 .how-grid .portal-symbol{width:100%;height:76px;justify-content:flex-start;padding:0 20px;font:900 38px var(--display);color:var(--acid);border-right:0;border-bottom:1px solid var(--line)}
 @media(max-width:760px){.brand-mark-image{width:34px;height:34px}.main-nav{max-height:calc(100dvh - 66px);overflow-y:auto}.footer-links{gap:12px}}
+
+
+/* Shared mobile arcade navigation — available on every portal route */
+.mobile-dock{display:none}
+@media(max-width:760px){
+  body{padding-bottom:calc(94px + env(safe-area-inset-bottom))}
+  .mobile-dock{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));position:fixed;z-index:100;left:8px;right:8px;bottom:calc(7px + env(safe-area-inset-bottom));padding:7px 4px calc(7px + env(safe-area-inset-bottom));border:1.5px solid #ff35d2;border-radius:17px;background:linear-gradient(145deg,#190c2bf5,#0b0715f7);box-shadow:0 0 22px #ff35d255,inset 0 0 20px #a52aff22;backdrop-filter:blur(12px)}
+  .mobile-dock a{min-width:0;min-height:48px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:#f5eaff;text-decoration:none}
+  .mobile-dock b{font-size:23px;line-height:1}
+  .mobile-dock span{font:800 7px "DM Mono",monospace;letter-spacing:0}
+  .mobile-dock a.active{color:#c8ff19;text-shadow:0 0 10px #c8ff1988}
+}
