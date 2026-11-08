@@ -200,3 +200,18 @@ body.dashboard-page{margin:0;min-height:100vh;color:var(--dash-white);font-famil
  .featured-game-title{font-size:22px}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+
+/* Underground Arcade finish pass */
+.crown-mark-image{display:block;width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 0 10px #c8ff1988)}
+.dash-hero{background-image:linear-gradient(90deg,#130821e8 0%,#130821bb 45%,#13082170 100%),url("assets/underground-arcade-backdrop.svg");background-size:cover;background-position:center}
+.hero-side-art{border:1px solid #ff35d277;box-shadow:0 0 20px #ff35d233}
+.loot-crate{border:0;background:none;box-shadow:none;width:170px;height:140px}
+.loot-crate:before,.loot-crate:after{display:none}
+.loot-crate img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 15px #a52aff77)}
+.event-crate{border:0;background:none;box-shadow:none}
+.event-crate img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 13px #a52aff88)}
+.mobile-dock{grid-template-columns:repeat(6,minmax(0,1fr))}
+.mobile-dock a{min-width:0}
+.mobile-dock span{font-size:7px}
+@media(max-width:650px){.crown-mark-image{width:34px;height:34px}.loot-crate{width:104px;height:92px}.dash-hero{background-position:55% center}}
