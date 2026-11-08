@@ -1,0 +1,202 @@
+/* LegitLoot neon punk arcade dashboard */
+:root{--dash-bg:#0d0719;--dash-panel:#160d29;--dash-panel2:#201038;--dash-line:#a52aff;--dash-pink:#ff35d2;--dash-lime:#c8ff19;--dash-cyan:#35e7ff;--dash-gold:#ffc857;--dash-white:#fff8ff;--dash-muted:#c5b5d4}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body.dashboard-page{margin:0;min-height:100vh;color:var(--dash-white);font-family:Inter,Arial,sans-serif;background-color:var(--dash-bg);background-image:radial-gradient(ellipse at 48% -15%,#7a1ac866,transparent 44%),radial-gradient(ellipse at 100% 42%,#ec19b51c,transparent 35%),linear-gradient(180deg,#130821 0%,#0c0718 70%,#090612 100%);padding-bottom:0}
+.dashboard-page:before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.19;background-image:linear-gradient(#a92aff33 1px,transparent 1px),linear-gradient(90deg,#a92aff33 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 80%,transparent)}
+.dash-noise{position:fixed;inset:0;z-index:20;pointer-events:none;opacity:.07;background:repeating-linear-gradient(0deg,transparent 0 3px,#fff 4px,transparent 5px)}
+.dash-header,.dash-main,.dash-footer{position:relative;z-index:1}
+.dash-header{height:72px;padding:0 clamp(16px,3vw,44px);display:flex;align-items:center;justify-content:space-between;gap:22px;background:#0a0615ed;border-bottom:2px solid var(--dash-pink);box-shadow:0 5px 25px #05020caa;position:sticky;top:0;z-index:30}
+.dash-brand{display:flex;align-items:center;gap:8px;white-space:nowrap;font:900 32px/.9 "Barlow Condensed",Impact,sans-serif;font-style:italic;letter-spacing:-.04em;color:#fff;text-shadow:2px 2px 0 #3b1a50,0 0 14px #ff35d255}
+.dash-brand>span:last-child>span{color:var(--dash-lime)}
+.crown-mark{font:900 38px/1 Arial;color:var(--dash-lime);text-shadow:0 0 13px #c8ff19aa}
+.dash-nav{height:100%;display:flex;align-items:center;gap:clamp(12px,2vw,28px)}
+.dash-nav a{height:100%;display:flex;align-items:center;gap:8px;padding:0 5px;color:#f3eafa;font-size:14px;font-weight:800;border-bottom:3px solid transparent}
+.dash-nav a b{font-size:21px}
+.dash-nav a:hover,.dash-nav a.selected{color:var(--dash-lime);border-color:var(--dash-lime);text-shadow:0 0 12px #c8ff1988}
+.dash-profile{width:42px;height:42px;flex:0 0 42px;border:2px solid var(--dash-pink);border-radius:50%;display:grid;place-items:center;font-size:25px;color:white;background:#28143e;box-shadow:0 0 15px #ff35d255}
+.dash-main{width:min(1500px,calc(100% - 34px));margin:0 auto;padding:16px 0 30px}
+.dash-hero{min-height:340px;display:grid;grid-template-columns:minmax(230px, .9fr) minmax(390px,1.4fr) minmax(150px,.55fr);gap:16px;align-items:center;overflow:hidden;position:relative;padding:20px 22px;border:2px solid var(--dash-pink);border-radius:20px;background:radial-gradient(ellipse at 15% 60%,#8a18d255,transparent 40%),radial-gradient(ellipse at 88% 20%,#ff35d244,transparent 36%),linear-gradient(110deg,#1b0a2c,#0d0819 60%,#291044);box-shadow:0 0 22px #ff35d233,inset 0 0 45px #a52aff1c}
+.dash-hero:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(130deg,transparent 0 17px,#ffffff08 18px 19px)}
+.hero-mascot{position:relative;z-index:1;height:310px;display:flex;align-items:center;justify-content:center;min-width:0}
+.hero-mascot img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 0 20px #b72cff88)}
+.mascot-sticker{position:absolute;right:7%;bottom:18px;padding:9px 12px;transform:rotate(-8deg);font:900 16px/.95 "Barlow Condensed",sans-serif;text-align:center;color:#1a0926;background:var(--dash-lime);border:2px solid white;box-shadow:0 0 17px #c8ff19aa}
+.hero-message{position:relative;z-index:2}
+.dash-kicker,.dash-card small,.status-copy small{font:700 10px "DM Mono",monospace;letter-spacing:.12em;color:var(--dash-cyan)}
+.dash-kicker{display:flex;align-items:center;gap:8px}
+.dash-kicker i{width:8px;height:8px;border-radius:50%;background:var(--dash-lime);box-shadow:0 0 12px var(--dash-lime)}
+.hero-message h1{margin:14px 0 15px;font:900 clamp(38px,5vw,72px)/.86 "Barlow Condensed",Impact,sans-serif;letter-spacing:-.025em;text-shadow:3px 4px 0 #35104b,0 0 18px #ff35d244}
+.hero-message h1 em{font-style:normal;color:#fff}
+.hero-message h1 strong{color:var(--dash-lime);font-style:italic;text-shadow:0 0 18px #c8ff1977}
+.hero-steps{display:flex;gap:clamp(10px,2vw,28px);margin:18px 0;flex-wrap:wrap}
+.hero-steps span{display:flex;align-items:center;gap:7px;font:800 11px "Barlow Condensed",sans-serif;letter-spacing:.08em}
+.hero-steps b{font-size:22px;color:var(--dash-lime)}
+.neon-cta{display:inline-flex;align-items:center;gap:18px;padding:11px 24px;border:2px solid #efffa1;border-radius:12px;background:linear-gradient(100deg,#d5ff22,#a4ed00);color:#170b20;font:900 20px "Barlow Condensed",sans-serif;box-shadow:0 0 14px #c8ff1988,0 5px 0 #547c00;transform:skew(-4deg)}
+.neon-cta span{font-size:28px}
+.neon-cta:hover{filter:brightness(1.12);transform:skew(-4deg) translateY(-2px)}
+.hero-disclaimer{font-size:10px;color:#c8b5d8;margin:12px 0 0;max-width:450px}
+.hero-side-art{height:280px;position:relative;z-index:1;overflow:hidden;border-radius:12px;opacity:.9}
+.hero-side-art img{width:100%;height:100%;object-fit:cover;object-position:center 25%;filter:saturate(1.25)}
+.hero-side-art:after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,#11071f)}
+.hero-side-art span{position:absolute;z-index:2;bottom:14px;left:12px;font:900 16px/1 "Barlow Condensed",sans-serif;color:#fff;text-shadow:0 2px 6px #000}
+.dash-status-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:12px;margin:12px 0}
+.status-panel{min-height:78px;display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid #a52aff;border-radius:14px;background:linear-gradient(105deg,#24103a,#120a20);box-shadow:0 0 14px #a52aff22}
+.rank-badge{width:52px;height:52px;display:grid;place-items:center;flex:0 0 52px;border:2px solid var(--dash-lime);transform:rotate(45deg);color:var(--dash-lime);font:900 19px "Barlow Condensed";text-shadow:0 0 9px var(--dash-lime)}
+.rank-badge:before{content:"";position:absolute;inset:5px;border:1px solid #c8ff1977}
+.status-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.status-copy strong{font:800 18px "Barlow Condensed",sans-serif}
+.status-copy span{font-size:10px;color:var(--dash-muted)}
+.empty-progress{height:7px;max-width:320px;border-radius:99px;background:#39274b;margin-top:4px;overflow:hidden}
+.empty-progress i{display:block;width:12%;height:100%;background:linear-gradient(90deg,var(--dash-pink),var(--dash-lime));opacity:.55}
+.status-tag,.mini-link{font:700 10px "DM Mono",monospace;color:var(--dash-lime);white-space:nowrap}
+.status-icon{font-size:34px;color:var(--dash-cyan)}
+.dash-top-grid{display:grid;grid-template-columns:minmax(190px,.78fr) minmax(400px,1.9fr) minmax(240px,1.05fr);gap:12px}
+.dash-bottom-grid{display:grid;grid-template-columns:1.1fr 1.15fr .95fr;gap:12px;margin-top:12px}
+.dash-card{min-width:0;position:relative;padding:15px;border:1.5px solid var(--dash-pink);border-radius:15px;background:linear-gradient(145deg,#1d1030,#10091e 78%);box-shadow:0 0 16px #ff35d21c,inset 0 0 25px #a52aff0d;overflow:hidden}
+.dash-card:before{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(130deg,#ffffff08,transparent 45%)}
+.card-heading{display:flex;align-items:center;gap:10px;position:relative;z-index:1;margin-bottom:12px}
+.heading-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;font-size:27px}
+.heading-icon.lime{color:var(--dash-lime)}.heading-icon.cyan{color:var(--dash-cyan)}.heading-icon.pink{color:var(--dash-pink)}.heading-icon.gold{color:var(--dash-gold)}
+.card-heading>div{min-width:0;flex:1}
+.card-heading small{display:block;font-size:8px}
+.card-heading h2{margin:2px 0 0;font:900 21px/.95 "Barlow Condensed",sans-serif;letter-spacing:.015em}
+.card-heading .mini-link{margin-left:auto}
+.daily-card{text-align:center}
+.daily-card .card-heading{text-align:left}
+.loot-crate{height:128px;width:150px;max-width:100%;margin:12px auto;position:relative;display:grid;place-items:center;border:4px solid #b85cff;border-radius:13px;background:repeating-linear-gradient(90deg,#35115b 0 20px,#59239a 21px 38px);box-shadow:0 0 22px #b32cff99,inset 0 0 25px #0a0416}
+.loot-crate:before,.loot-crate:after{content:"";position:absolute;background:#170a2a;border:3px solid #d48bff}
+.loot-crate:before{inset:10px 0 auto;height:13px}.loot-crate:after{inset:0 auto 0 50%;width:13px;transform:translateX(-50%)}
+.crate-crown{position:relative;z-index:1;color:var(--dash-lime);font-size:48px;text-shadow:0 0 14px var(--dash-lime)}
+.crate-label{position:absolute;z-index:2;bottom:8px;right:8px;padding:2px 5px;background:var(--dash-pink);color:#180922;font:900 12px "Barlow Condensed"}
+.daily-card>p{font-size:11px;line-height:1.45;color:var(--dash-muted);margin:8px 0}
+.coming-soon{display:inline-block;padding:6px 12px;border:1px solid var(--dash-lime);border-radius:5px;color:var(--dash-lime);font:800 10px "DM Mono";letter-spacing:.08em}
+.featured-games{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(130px,.75fr);grid-template-rows:auto 1fr;gap:0 10px}
+.featured-games>.card-heading{grid-column:1/-1}
+.featured-game-main{position:relative;display:block;min-height:220px;overflow:hidden;border:1px solid #a94cff;border-radius:10px;background:#160a28}
+.featured-game-main:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#0b0619eF)}
+.featured-game-main img{width:100%;height:100%;min-height:220px;position:absolute;inset:0;object-fit:cover;transition:transform .35s}
+.featured-game-main:hover img{transform:scale(1.04)}
+.feature-ribbon{position:absolute;z-index:2;top:10px;left:10px;padding:5px 9px;border-radius:4px;background:var(--dash-lime);color:#1a0b20;font:900 11px "Barlow Condensed"}
+.featured-game-title{position:absolute;z-index:2;left:14px;bottom:53px;font:italic 900 clamp(25px,3vw,42px)/.9 "Barlow Condensed";color:#fff;text-shadow:2px 3px #17051f,0 0 14px var(--dash-pink)}
+.featured-game-sub{position:absolute;z-index:2;left:14px;bottom:37px;font:8px "DM Mono";color:#fff}
+.game-action{position:absolute;z-index:2;bottom:8px;left:50%;transform:translateX(-50%);white-space:nowrap;padding:6px 14px;border-radius:99px;background:var(--dash-lime);color:#15091e;font:900 13px "Barlow Condensed"}
+.side-games{display:grid;grid-template-rows:1fr 1fr;gap:9px;min-height:220px}
+.side-games a{position:relative;min-height:0;overflow:hidden;border:1px solid #8f46dd;border-radius:9px;background:#120a22}
+.side-games img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover}
+.side-games a:after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,#0b0619)}
+.side-games span{position:absolute;z-index:1;bottom:8px;left:9px;font:900 16px/.9 "Barlow Condensed";text-shadow:0 2px 5px #000}
+.earning-card{padding-bottom:10px}
+.earning-card .card-heading{margin-bottom:9px}
+.earning-row{display:flex;align-items:center;gap:9px;padding:9px 2px;border-top:1px solid #743c8b;color:#fff;font-size:11px}
+.earning-row>b{width:23px;text-align:center;font-size:18px;color:var(--dash-lime)}
+.earning-row>span{flex:1}
+.earning-row small{font:700 8px "DM Mono";color:var(--dash-cyan);white-space:nowrap}
+.all-opportunities{display:block;text-align:center;padding:10px 0 2px;color:var(--dash-lime);font:800 11px "Barlow Condensed";letter-spacing:.04em}
+.quest-placeholder{display:flex;align-items:center;gap:9px;padding:10px 2px;border-top:1px solid #743c8b;font-size:11px}
+.quest-check{width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--dash-cyan);border-radius:5px;color:var(--dash-cyan);font-size:16px}
+.quest-placeholder>span:nth-child(2){flex:1}
+.quest-placeholder>b{font:700 8px "DM Mono";color:#bba4d1;white-space:nowrap}
+.panel-footnote{margin:10px 0 0;color:#a997bb;font-size:9px}
+.event-card{background:radial-gradient(ellipse at 15% 70%,#8a1be655,transparent 45%),linear-gradient(135deg,#281039,#10091e)}
+.event-status{margin-left:auto;color:var(--dash-gold);font:700 8px "DM Mono"}
+.event-art{display:grid;grid-template-columns:115px 1fr;align-items:center;gap:12px;min-height:130px}
+.event-crate{height:100px;display:grid;place-items:center;border:3px solid #b85cff;border-radius:12px;background:repeating-linear-gradient(90deg,#32105a 0 16px,#61219b 17px 31px);font-size:56px;color:var(--dash-lime);text-shadow:0 0 14px var(--dash-lime);box-shadow:0 0 20px #a52aff77}
+.event-art strong{font:900 19px/.98 "Barlow Condensed"}
+.event-art p{font-size:10px;line-height:1.5;color:var(--dash-muted)}
+.event-link{display:block;text-align:center;padding:8px;background:var(--dash-lime);color:#160b20;border-radius:6px;font:900 13px "Barlow Condensed"}
+.leaderboard-empty{min-height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.leaderboard-empty>span{font-size:32px;color:var(--dash-gold)}
+.leaderboard-empty strong{font:900 16px "Barlow Condensed"}
+.leaderboard-empty p{max-width:230px;margin:5px 0;color:var(--dash-muted);font-size:10px;line-height:1.45}
+.trust-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:12px 0 0;padding:16px;border:1.5px solid var(--dash-pink);border-radius:13px;background:linear-gradient(90deg,#24103b,#12091f);box-shadow:0 0 15px #ff35d222}
+.trust-strip>div{display:flex;align-items:center;gap:10px;padding:4px 10px;border-right:1px solid #a52aff}
+.trust-strip>div:last-child{border:0}
+.trust-strip b{font-size:27px;color:var(--dash-lime)}
+.trust-strip span{display:flex;flex-direction:column;gap:3px}
+.trust-strip strong{font:900 14px "Barlow Condensed"}
+.trust-strip small{font-size:9px;color:var(--dash-muted)}
+.mobile-dock{display:none}
+.dash-footer{display:flex;align-items:center;gap:20px;padding:24px clamp(18px,4vw,50px);border-top:1px solid #7337a0;background:#090513}
+.dash-footer .dash-brand{font-size:25px}
+.dash-footer>span,.dash-footer small{font:9px "DM Mono";color:#aa98bd}
+.dash-footer>div{display:flex;gap:16px;margin-left:auto}
+.dash-footer>div a{font:9px "DM Mono";color:#d9c9e8}
+.dash-footer small{margin-left:auto}
+@media(max-width:980px){
+ .dash-header{height:64px}.dash-main{width:calc(100% - 24px)}
+ .dash-hero{grid-template-columns:minmax(190px,.8fr) minmax(360px,1.4fr);min-height:310px}
+ .hero-mascot{height:270px}.hero-side-art{display:none}
+ .dash-top-grid{grid-template-columns:minmax(170px,.75fr) minmax(360px,1.8fr)}
+ .earning-card{grid-column:1/-1}
+ .earning-card .earning-row{display:inline-flex;width:49%;padding:10px 5px}
+ .dash-bottom-grid{grid-template-columns:1fr 1fr}.leaderboard-card{grid-column:1/-1}
+ .leaderboard-empty{min-height:90px}
+}
+@media(max-width:650px){
+ body.dashboard-page{padding-bottom:82px}
+ .dash-header{height:58px;padding:0 14px}
+ .dash-brand{font-size:27px}.crown-mark{font-size:30px}
+ .dash-nav{display:none}.dash-profile{width:35px;height:35px;flex-basis:35px}
+ .dash-main{width:calc(100% - 16px);padding-top:9px}
+ .dash-hero{grid-template-columns:112px minmax(0,1fr);gap:10px;min-height:0;padding:13px 10px;border-radius:13px}
+ .hero-mascot{height:205px;margin-left:-10px}
+ .mascot-sticker{right:0;bottom:8px;padding:6px;font-size:11px}
+ .dash-kicker{font-size:7px;letter-spacing:.05em;line-height:1.3}
+ .hero-message h1{font-size:clamp(31px,8vw,45px);margin:10px 0}
+ .hero-steps{gap:7px;margin:11px 0}
+ .hero-steps span{font-size:8px;gap:3px}.hero-steps b{font-size:15px}
+ .neon-cta{padding:8px 12px;font-size:15px;gap:7px}
+ .neon-cta span{font-size:19px}
+ .hero-disclaimer{font-size:8px;line-height:1.3;margin-top:8px}
+ .dash-status-grid{grid-template-columns:1fr;gap:7px;margin:8px 0}
+ .status-panel{min-height:65px;padding:9px 12px;gap:10px}
+ .rank-badge{width:40px;height:40px;flex-basis:40px;font-size:15px}
+ .status-copy strong{font-size:15px}.status-copy span{font-size:9px}
+ .status-tag,.mini-link{font-size:8px}
+ .dash-top-grid,.dash-bottom-grid{grid-template-columns:1fr;gap:8px}
+ .dash-card{padding:12px;border-radius:12px}
+ .daily-card{display:grid;grid-template-columns:1fr 112px;grid-template-rows:auto 1fr;align-items:center;text-align:left;min-height:150px}
+ .daily-card .card-heading{grid-column:1/-1;margin-bottom:5px}
+ .loot-crate{width:100px;height:88px;grid-column:2;grid-row:2;margin:0 auto}
+ .crate-crown{font-size:35px}
+ .daily-card>p{grid-column:1;grid-row:2;margin:0;font-size:10px}
+ .coming-soon{grid-column:1;grid-row:3;width:max-content;margin-top:7px;font-size:8px;padding:4px 7px}
+ .featured-games{grid-template-columns:minmax(0,1.5fr) minmax(105px,.8fr);gap:0 7px}
+ .featured-games>.card-heading{grid-column:1/-1}
+ .featured-game-main,.featured-game-main img,.side-games{min-height:190px}
+ .featured-game-title{font-size:27px;left:8px;bottom:50px}
+ .featured-game-sub{font-size:6px;left:8px;bottom:35px}
+ .feature-ribbon{font-size:9px;top:7px;left:7px}
+ .game-action{font-size:11px;padding:5px 10px}
+ .side-games span{font-size:13px;left:6px}
+ .earning-card{grid-column:auto}
+ .earning-card .earning-row{width:100%;display:flex;padding:9px 2px}
+ .card-heading h2{font-size:20px}
+ .event-art{grid-template-columns:90px 1fr;min-height:115px}
+ .event-crate{height:85px;font-size:45px}
+ .event-art strong{font-size:17px}
+ .trust-strip{grid-template-columns:1fr 1fr;padding:10px;gap:8px}
+ .trust-strip>div{padding:7px 4px;border-right:0;border-bottom:1px solid #743c8b}
+ .trust-strip>div:nth-child(odd){border-right:1px solid #743c8b}
+ .trust-strip>div:nth-last-child(-n+2){border-bottom:0}
+ .trust-strip b{font-size:22px}
+ .trust-strip strong{font-size:12px}
+ .trust-strip small{font-size:8px}
+ .mobile-dock{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;z-index:40;left:8px;right:8px;bottom:calc(7px + env(safe-area-inset-bottom));padding:7px 5px 6px;border:1.5px solid var(--dash-pink);border-radius:17px;background:#160b2bf2;box-shadow:0 0 20px #ff35d255,0 8px 30px #000b;backdrop-filter:blur(16px)}
+ .mobile-dock a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:#f5eaff;min-height:48px}
+ .mobile-dock b{font-size:23px;line-height:1}
+ .mobile-dock span{font:800 8px "DM Mono";letter-spacing:.04em}
+ .mobile-dock a.active{color:var(--dash-lime);text-shadow:0 0 10px #c8ff1988}
+ .dash-footer{display:none}
+}
+@media(max-width:370px){
+ .dash-hero{grid-template-columns:88px minmax(0,1fr);padding:10px 7px}
+ .hero-mascot{height:180px}
+ .hero-message h1{font-size:29px}
+ .hero-steps{gap:5px}
+ .hero-steps span{font-size:7px}
+ .neon-cta{font-size:13px;padding:7px 9px}
+ .featured-games{grid-template-columns:minmax(0,1.3fr) minmax(92px,.8fr)}
+ .featured-game-title{font-size:22px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
