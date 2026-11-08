@@ -1,0 +1,137 @@
+/* LegitLoot V2 identity system — industrial punk editorial */
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Barlow+Condensed:wght@600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--void:#e8e4d8;--panel:#f4f0e5;--panel2:#d9d3c5;--line:#282622;--white:#171714;--muted:#57544c;--violet:#b72b20;--acid:#d7f238;--pink:#b72b20;--cyan:#171714;--display:"Archivo Black","Barlow Condensed",Impact,sans-serif;--body:Inter,Arial,sans-serif;--mono:"IBM Plex Mono",monospace}
+html{scroll-padding-top:82px;background:var(--void)}
+body{background:var(--void);color:var(--white);font-family:var(--body);line-height:1.5}
+body:before{z-index:-1;background:repeating-linear-gradient(0deg,#17171408 0 1px,transparent 1px 5px),linear-gradient(90deg,transparent 0 49.8%,#1717140c 50%,transparent 50.2%);background-size:auto,44px 44px}
+.scanlines{opacity:.045;background:repeating-linear-gradient(0deg,transparent 0 3px,#171714 4px,transparent 5px)}
+a{color:inherit}
+.site-header{height:78px;background:#171714;color:#f4f0e5;border:0;border-bottom:5px solid #b72b20;padding-inline:clamp(18px,5vw,76px)}
+.brand{font:900 26px var(--display);letter-spacing:-.06em;color:#f4f0e5}
+.brand-mark{border:2px solid #d7f238;color:#d7f238;transform:none;font:800 15px var(--mono)}
+.brand-mark span{color:#e34a32}
+.acid{color:#b72b20}.violet{color:#b72b20}
+.main-nav{font:700 10px var(--mono);letter-spacing:.08em;color:#d8d3c7}
+.main-nav a:hover,.main-nav a.active{color:#d7f238}
+.nav-account{border:2px solid #d7f238;padding:10px 14px}
+.menu-toggle{color:#d7f238}
+.section-wrap{width:min(1200px,calc(100% - 44px))}
+.eyebrow,.card-kicker,.section-index,.hero-meta,.art-caption,.wallet-head,.soon-label{font:700 10px var(--mono);letter-spacing:.1em;color:#b72b20}
+.live-dot,.status i{background:#b72b20;box-shadow:none}
+.slash{color:#d7f238}
+.hero{min-height:660px;padding-top:72px;padding-bottom:74px;grid-template-columns:1fr 1fr;gap:52px}
+.hero h1,.section-heading h2,.manifesto h2,.account h2,.portal-hero h1{font:900 clamp(54px,8vw,104px)/.9 var(--display);letter-spacing:-.075em;text-transform:uppercase}
+.hero h1{margin:26px 0}
+.outline-text{-webkit-text-stroke:2px #b72b20;color:transparent}
+.hero-lede{font-size:18px;color:#4c4942;max-width:430px}
+.button{clip-path:none;border:2px solid #171714;min-height:48px;font:800 10px var(--mono);letter-spacing:.08em;box-shadow:4px 4px 0 #171714}
+.button-acid{background:#d7f238;color:#171714;border-color:#171714}
+.button-ghost{background:transparent;color:#171714;border-color:#171714}
+.hero-meta{color:#6d685e}
+.hero-game-stack{min-height:530px}
+.hero-art-backdrop{inset:5% 0 4% 8%;border:3px solid #171714;transform:rotate(3deg);background:#b72b20;box-shadow:12px 12px 0 #171714}
+.hero-art-main{width:84%;height:430px;border:4px solid #171714;box-shadow:12px 12px 0 #d7f238;transform:rotate(-3deg)}
+.hero-art-side{border:4px solid #171714;box-shadow:7px 7px 0 #b72b20}
+.hero-game-stack .art-stamp{background:#d7f238;color:#171714;border:2px solid #171714;box-shadow:4px 4px 0 #171714}
+.hero-art-main figcaption strong{font:900 40px var(--display);letter-spacing:-.06em}
+.art-caption{color:#171714;text-shadow:none;font-weight:800}
+.featured,.games,.earn,.market,.account{padding-top:74px;padding-bottom:74px;border-top:2px solid #171714}
+.featured:before,.games:before,.earn:before,.market:before{height:5px;background:#b72b20;opacity:1}
+.section-heading{align-items:end;margin-bottom:30px}
+.section-heading h2{font-size:clamp(38px,5.8vw,68px);margin:10px 0 0}
+.text-link{font:700 10px var(--mono);color:#b72b20}
+.feature-card,.game-card,.op-card,.market-panel,.wallet-preview{background:var(--panel);border:2px solid #171714;box-shadow:7px 7px 0 #171714}
+.feature-art{background:#171714}
+.feature-info{padding:34px}
+.feature-info h3,.card-body h3,.op-card h3,.market-panel h3{font:900 34px var(--display);letter-spacing:-.05em}
+.feature-info p:not(.eyebrow),.card-body p,.op-card p,.market-panel p,.account-copy>p:not(.eyebrow){color:#57544c}
+.feature-bottom{border-top:1px solid #bdb7a9;padding-top:18px}
+.status{font:700 9px var(--mono);color:#9b281f}
+.status i{background:#9b281f}
+.status-muted{color:#706b61}
+.card-grid{gap:20px}
+.game-card{transition:transform .18s,box-shadow .18s}
+.game-card:hover{border-color:#171714;transform:translate(-3px,-3px);box-shadow:10px 10px 0 #b72b20}
+.game-visual{height:220px}
+.card-body{padding:22px}
+.card-kicker{color:#b72b20}
+.manifesto{padding:78px 7%;margin-block:30px;background:#171714;color:#f4f0e5;border:0;border-left:10px solid #b72b20;box-shadow:10px 10px 0 #d7f238}
+.manifesto h2{font-size:clamp(48px,8vw,88px)}
+.manifesto>p:last-child{color:#d0cabe;max-width:600px}
+.manifesto .eyebrow{color:#d7f238}
+.manifesto .acid{color:#d7f238}
+.opportunity-grid{gap:20px}
+.op-card{grid-template-columns:64px 1fr;padding:25px}
+.op-icon{border:2px solid #171714;color:#b72b20;background:#e8e4d8;font-weight:900}
+.soon-label{color:#8e2a20}
+.market-panel{grid-template-columns:76px 1fr auto;padding:28px}
+.market-symbol{border:3px solid #171714;color:#b72b20}
+.category-strip{border-block:2px solid #171714;color:#34322d;font:700 10px var(--mono);margin-top:18px}
+.account{gap:60px}
+.account h2{font-size:clamp(44px,6vw,72px)}
+.wallet-preview{padding:24px;box-shadow:10px 10px 0 #b72b20}
+.wallet-head{color:#b72b20}
+.preview-tag{color:#8e2a20}
+.wallet-box{border:2px solid #171714!important;border-radius:0;padding:20px}
+.game-wallet{background:#d9d3c5;color:#171714}
+.game-wallet small{color:#8b251e}
+.cash-wallet{background:#d7f238;color:#171714}
+.cash-wallet small{color:#171714}
+.wallet-box span,.wallet-box p{color:#4c4942}
+.site-footer{background:#171714;color:#f4f0e5;border-top:6px solid #b72b20;padding:42px clamp(24px,5vw,76px) 24px}
+.site-footer>p{color:#d7f238}
+.footer-links{color:#d0cabe}
+.site-footer>small{border-color:#555148;color:#aaa497}
+.portal-main{background:transparent}
+.portal-hero{padding-top:68px;padding-bottom:76px}
+.portal-hero h1{font-size:clamp(52px,8vw,96px);margin:22px 0}
+.portal-lede{color:#57544c;font-size:17px;max-width:680px}
+.portal-card,.category-tile,.notice-panel,.status-grid article,.auth-panel,.history-panel{background:var(--panel);border:2px solid #171714;border-radius:0;box-shadow:6px 6px 0 #171714}
+.portal-card{overflow:hidden}
+.portal-card img{width:100%;display:block;object-fit:cover}
+.portal-card-body{padding:24px}
+.portal-card-body h2,.category-tile h2{font:900 29px var(--display);letter-spacing:-.05em}
+.category-tile{padding:26px}
+.category-tile>span,.portal-symbol{color:#b72b20;font:900 28px var(--display)}
+.category-tile small{font:700 9px var(--mono);color:#b72b20}
+.notice-panel{padding:22px 25px;margin:28px 0}
+.notice-panel>b{font:800 11px var(--mono);color:#9b281f}
+.notice-panel p{color:#57544c}
+.filter-chip,.primary-btn{border:2px solid #171714;border-radius:0;background:transparent;color:#171714;font:700 10px var(--mono);padding:12px 16px}
+.filter-chip.active,.primary-btn{background:#d7f238;color:#171714;box-shadow:4px 4px 0 #171714}
+.auth-panel{padding:24px}
+.auth-form input{background:#fffdf6;border:2px solid #171714;border-radius:0;color:#171714;padding:14px}
+.auth-form label{color:#8e2a20;font:700 10px var(--mono)}
+.wallet-grid{gap:18px}
+.wallet-box strong{font:900 42px var(--display)}
+.status-grid article{padding:20px}
+.status-grid article small{color:#9b281f;font:700 9px var(--mono)}
+.status-grid article b{font:900 28px var(--display);color:#171714}
+.history-panel{padding:25px;margin-top:30px}
+.history-panel p{color:#57544c}
+.fine-print{color:#716c61;font:10px/1.6 var(--mono)}
+@media(max-width:760px){
+ .site-header{height:66px}.main-nav{top:65px;background:#171714;border-bottom:5px solid #b72b20}
+ .hero{grid-template-columns:1fr;gap:18px;padding-top:48px;min-height:0}
+ .hero h1{font-size:clamp(53px,15vw,78px)}
+ .hero-game-stack{min-height:380px;margin-top:8px}
+ .hero-art-main{height:310px;width:84%}
+ .hero-art-side{height:108px;width:42%;right:0}
+ .hero-art-main figcaption strong{font-size:30px}
+ .section-heading h2{font-size:clamp(36px,10vw,52px)}
+ .feature-card,.account{grid-template-columns:1fr}
+ .feature-art{min-height:250px}
+ .card-grid,.opportunity-grid,.portal-grid,.status-grid{grid-template-columns:1fr}
+ .market-panel{grid-template-columns:60px 1fr;gap:14px}
+ .market-panel .button{grid-column:1/-1}
+ .manifesto{padding:52px 26px}
+ .manifesto h2{font-size:clamp(43px,12vw,65px)}
+ .site-footer{grid-template-columns:1fr}
+ .footer-links{grid-column:1;flex-wrap:wrap;gap:14px}
+ .site-footer>small{grid-column:1}
+ .site-footer>small span{float:none;display:block;margin-top:8px}
+ .portal-hero{padding-top:46px}
+ .portal-hero h1{font-size:clamp(48px,13vw,72px)}
+ .wallet-grid{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important;animation:none!important}}
