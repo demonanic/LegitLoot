@@ -5,3 +5,28 @@
 .feature-art{position:relative;overflow:hidden}.feature-game-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;opacity:.88}.feature-art-label{position:relative;z-index:1;text-shadow:0 2px 14px #000}
 
 /* LegitLoot preview refresh: 2026-11-07 */
+
+
+/* LegitLoot v2 visual system */
+.hero-game-stack{min-height:500px;display:grid;place-items:center;isolation:isolate}
+.hero-art-backdrop{position:absolute;inset:7% 2% 5% 12%;z-index:-1;border:1px solid #8e4eff66;transform:skewY(-5deg);background:linear-gradient(145deg,#22122f,#09090d 68%);box-shadow:0 0 80px #8e4eff18}
+.hero-art-main{position:relative;width:82%;height:410px;margin:0 0 0 0;overflow:hidden;border:1px solid #8f58d4;box-shadow:18px 18px 0 #2a1838;transform:rotate(-2deg)}
+.hero-art-main img,.hero-art-side img{width:100%;height:100%;object-fit:cover;display:block}
+.hero-art-main:after{content:"";position:absolute;inset:35% 0 0;background:linear-gradient(transparent,#08070deF)}
+.hero-art-main figcaption{position:absolute;z-index:1;left:20px;bottom:18px;display:grid;gap:4px}
+.hero-art-main figcaption span,.hero-art-side figcaption{font:9px var(--mono);letter-spacing:.13em;color:var(--acid)}
+.hero-art-main figcaption strong{font:900 42px/.9 var(--display);letter-spacing:.03em}
+.hero-art-side{position:absolute;right:-2%;bottom:9%;width:43%;height:155px;margin:0;border:2px solid var(--acid);transform:rotate(5deg);box-shadow:0 12px 30px #000}
+.hero-art-side:after{content:"";position:absolute;inset:50% 0 0;background:linear-gradient(transparent,#08070deF)}
+.hero-art-side figcaption{position:absolute;z-index:1;bottom:10px;left:10px;font-size:8px}
+.hero-game-stack .art-stamp{right:-4%;top:5%;z-index:2;transform:rotate(7deg);font-size:17px}
+.hero-game-stack .art-caption{bottom:0;left:4%}
+.featured{position:relative}
+.featured:before,.games:before,.earn:before,.market:before{content:"";display:block;height:1px;position:absolute;left:0;right:0;top:0;background:linear-gradient(90deg,transparent,var(--violet),var(--acid),transparent);opacity:.45}
+.featured,.games,.earn,.market{position:relative}
+.game-card,.op-card,.market-panel,.wallet-preview,.feature-card{box-shadow:0 16px 50px #0005}
+.game-card:focus-within,.op-card:hover,.category-tile:hover{border-color:var(--violet)}
+.op-card{transition:border-color .2s,transform .2s}
+.op-card:hover{transform:translateY(-2px)}
+.site-footer{margin-top:30px}
+@media(max-width:760px){.hero-game-stack{min-height:365px;margin-top:10px}.hero-art-main{height:315px;width:84%}.hero-art-side{height:110px;width:42%;right:0}.hero-art-main figcaption strong{font-size:32px}.hero-game-stack .art-stamp{right:0;top:0}}
