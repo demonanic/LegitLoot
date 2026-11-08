@@ -101,3 +101,13 @@
 - Duplicate credits and duplicate reversals are idempotent. Reversals must match the original player and exact amount; reversal-before-credit is rejected for provider retry.
 - Added `docs/OFFERWALL_GG_INTEGRATION.md` with the official callback contract, required secrets, hosted wall format and release checklist.
 - No migrations have been applied and no Edge Function has been deployed. Required publisher secret and public placement key have not been provided/configured. Provider remains disabled.
+
+
+## Signed Offerwall.GG wall entry — 2026-11-08
+
+- Owner supplied public placement key `2d6851696ece3bf3852b5ec542854ed1` (validated as 32 lowercase hex characters).
+- Implemented `supabase/functions/offerwall-gg-wall-url/index.ts`: requires an authenticated Supabase bearer token, validates it with Supabase Auth, derives the user ID server-side, and signs canonical sorted `appId` + `userId` parameters with HMAC-SHA256.
+- Added an authenticated launcher to the Earn page. It requests the signed URL from the Edge Function and navigates only to an `https://offerwall.gg/wall/` URL.
+- Official canonical signing rule verified against Offerwall.GG's current integration guide: sorted query parameters `appId` and `userId`; signature excluded from the signed string. Expiring-link timestamp is not added because expiry is not shown as enabled on the owner's placement.
+- No secret key was provided or exposed. Neither Edge Function has been deployed; Supabase secrets are not configured. The migrations remain unapplied and provider remains disabled.
+- Placement is still marked pending by Offerwall.GG; the hosted wall will not serve offers until approval.
