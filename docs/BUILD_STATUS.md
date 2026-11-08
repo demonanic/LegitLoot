@@ -76,3 +76,16 @@
 5. Implement payout eligibility, reserve checks, admin review and audit workflows; no live payouts until legal/provider gates pass.
 6. Add integration, security and mobile regression tests.
 7. Only after owner review, connect V2 branch to Cloudflare preview or production. No production deployment is authorized by this status update.
+
+
+## Standard LootCoins / Offerwall.GG work — 2026-11-08
+
+- Owner selected the standard Offerwall.GG virtual-currency model instead of the former 50/50 cash/game-credit allocation.
+- Official player reward currency: **LootCoins**; currency code/ticker: **LC**.
+- One LC balance is shown in the account wallet. Future cash rewards, if ever approved, remain a separate feature.
+- Updated account UI and wallet client to read the `lootCoins.available` field from the authenticated wallet-summary RPC.
+- Updated Earn and Rewards pages to explain standard LC rewards and clearly show that Offerwall.GG is not yet active.
+- Added migration `20261108120000_standard_lootcoins_wallet.sql` to change the internal currency code to LC, consolidate legacy credit balances into one LootCoins account through balanced immutable journal entries, remove old split settings, seed Offerwall.GG as disabled, and update the secure wallet-summary RPC.
+- The migration is committed to the isolated feature branch only. It has **not** been applied to Supabase.
+- Offerwall.GG provider remains disabled. No production wall launch, callback endpoint, reward issuance, or payout has been enabled.
+- Next: verify current Offerwall.GG publisher callback documentation; implement a server-side signed callback with event idempotency and reversal handling; add tests; apply the migration only after SQL review and a backup/rollback plan; then request publisher re-review.
