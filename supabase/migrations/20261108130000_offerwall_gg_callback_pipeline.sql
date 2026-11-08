@@ -15,6 +15,101 @@ insert into private.ledger_accounts(owner_user_id, account_code, wallet_kind, cu
 values (null, 'platform_lootcoins_issuance', 'game_credits', 'LC', true, 10000)
 on conflict do nothing;
 
+insert into private.ledger_accounts(owner_user_id, account_code, wallet_kind, currency_code, is_system, currency_scale)
+values (null, 'platform_legacy_llc_clearing', 'game_credits', 'LLC', true, 1)
+on conflict do nothing;
+
+-- Convert any legacy whole LLC balances into LC atoms at 1 LLC = 1 LC.
+-- Both currencies balance independently in the same journal transaction; old entries
+-- are never rewritten. Abort on negative legacy buckets or numeric overflow.
+do $
+declare
+  v_user record;
+  v_target uuid;
+  v_llc_clearing uuid;
+  v_lc_issuance uuid;
+  v_total numeric;
+  v_entries jsonb;
+begin
+  select id into v_llc_clearing from private.ledger_accounts
+  where is_system and account_code='platform_legacy_llc_clearing' and currency_code='LLC';
+  select id into v_lc_issuance from private.ledger_accounts
+  where is_system and account_code='platform_lootcoins_issuance' and currency_code='LC';
+
+  for v_user in
+    select distinct owner_user_id
+    from private.ledger_accounts
+    where owner_user_id is not null and wallet_kind='game_credits'
+      and currency_code='LLC'
+      and account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
+  loop
+    select id into v_target from private.ledger_accounts
+    where owner_user_id=v_user.owner_user_id and account_code='lootcoins_available'
+      and wallet_kind='game_credits' and currency_code='LC';
+
+    if exists (
+      select 1 from private.ledger_accounts a
+      left join private.journal_entries e on e.account_id=a.id
+      left join private.journal_transactions t on t.id=e.transaction_id and t.status='posted'
+      where a.owner_user_id=v_user.owner_user_id and a.currency_code='LLC'
+        and a.account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
+      group by a.id
+      having coalesce(sum(case when e.id is null then 0 when e.direction='credit' then e.amount else -e.amount end),0)<0
+    ) then
+      raise exception 'Negative legacy LLC balance requires manual review for user %',v_user.owner_user_id;
+    end if;
+
+    select coalesce(sum(case when e.id is null then 0 when e.direction='credit' then e.amount else -e.amount end),0)
+    into v_total
+    from private.ledger_accounts a
+    left join private.journal_entries e on e.account_id=a.id
+    left join private.journal_transactions t on t.id=e.transaction_id and t.status='posted'
+    where a.owner_user_id=v_user.owner_user_id and a.currency_code='LLC'
+      and a.account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
+      and (e.id is null or t.id is not null);
+
+    if v_total>0 then
+      if v_total>900000000000000 then
+        raise exception 'Legacy LLC balance exceeds safe LootCoins conversion range for user %',v_user.owner_user_id;
+      end if;
+
+      select jsonb_agg(jsonb_build_object(
+        'account_id',a.id,'wallet_kind','game_credits','currency_code','LLC',
+        'direction','debit','amount',b.balance::text
+      )) into v_entries
+      from (
+        select a.id,coalesce(sum(case when e.id is null then 0 when e.direction='credit' then e.amount else -e.amount end),0) balance
+        from private.ledger_accounts a
+        left join private.journal_entries e on e.account_id=a.id
+        left join private.journal_transactions t on t.id=e.transaction_id and t.status='posted'
+        where a.owner_user_id=v_user.owner_user_id and a.currency_code='LLC'
+          and a.account_code in ('game_credits_available','game_credits_provisional','game_credits_deferred')
+          and (e.id is null or t.id is not null)
+        group by a.id
+        having coalesce(sum(case when e.id is null then 0 when e.direction='credit' then e.amount else -e.amount end),0)>0
+      ) b join private.ledger_accounts a on a.id=b.id;
+
+      v_entries := coalesce(v_entries,'[]'::jsonb)
+        || jsonb_build_array(
+          jsonb_build_object('account_id',v_llc_clearing,'wallet_kind','game_credits','currency_code','LLC','direction','credit','amount',v_total::text),
+          jsonb_build_object('account_id',v_lc_issuance,'wallet_kind','game_credits','currency_code','LC','direction','debit','amount',(v_total*10000)::text),
+          jsonb_build_object('account_id',v_target,'wallet_kind','game_credits','currency_code','LC','direction','credit','amount',(v_total*10000)::text)
+        );
+
+      perform private.post_journal_transaction(
+        'lootcoins-legacy-conversion:'||v_user.owner_user_id::text,
+        'lootcoins_legacy_currency_conversion',
+        'system_migration',
+        v_user.owner_user_id::text,
+        'Convert legacy LLC balance to LootCoins at 1:1',
+        v_entries,
+        jsonb_build_object('migration','offerwall_gg_callback_pipeline','atoms_per_lc',10000)
+      );
+    end if;
+  end loop;
+end;
+$;
+
 create table if not exists private.offerwall_gg_conversions (
   transaction_id text primary key,
   user_id uuid not null references auth.users(id) on delete restrict,
