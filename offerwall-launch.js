@@ -17,7 +17,7 @@
   const refresh = async () => {
     const { data } = await client.auth.getUser();
     currentUser = data.user ?? null;
-    button.disabled = !currentUser;
+    button.disabled = false;
     message.textContent = currentUser
       ? "Signed in. Your wall link will be generated securely for this account."
       : "Sign in to your LegitLoot account to open your account-bound offerwall.";
@@ -47,7 +47,7 @@
 
   client.auth.onAuthStateChange((_event, session) => {
     currentUser = session?.user ?? null;
-    button.disabled = !currentUser;
+    button.disabled = false;
     message.textContent = currentUser
       ? "Signed in. Your wall link will be generated securely for this account."
       : "Sign in to your LegitLoot account to open your account-bound offerwall.";
