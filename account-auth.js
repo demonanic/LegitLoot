@@ -28,11 +28,33 @@
     });
   };
   document.querySelectorAll("[data-auth-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.authTab)));
+  const formatUsd = (cents) => {
+    const amount = Number(cents) / 100;
+    return Number.isFinite(amount) ? amount.toLocaleString("en-US", { style: "currency", currency: "USD" }) : "$—";
+  };
+  const loadWalletSummary = async () => {
+    const fields = ["wallet-game-available", "wallet-cash-available", "wallet-cash-pending", "wallet-cash-reserved", "wallet-cash-paid"];
+    fields.forEach((id) => { const el = $(id); if (el) el.textContent = "…"; });
+    const { data, error } = await client.functions.invoke("wallet-summary", { method: "GET" });
+    if (error || !data || data.error) {
+      showMessage("WALLET SUMMARY UNAVAILABLE", "Your account is signed in, but the secure wallet summary could not be loaded. No balances have been changed.", true);
+      fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
+      return;
+    }
+    $("wallet-game-available").textContent = Number(data.gameCredits.available).toLocaleString("en-US") + " LLC";
+    $("wallet-cash-available").textContent = formatUsd(data.cash.availableCents);
+    $("wallet-cash-pending").textContent = formatUsd(data.cash.pendingCents);
+    $("wallet-cash-reserved").textContent = formatUsd(data.cash.withdrawalReservedCents);
+    $("wallet-cash-paid").textContent = formatUsd(data.cash.paidCents);
+    $("wallet-game-detail").textContent = Number(data.gameCredits.provisional).toLocaleString("en-US") + " provisional · " + Number(data.gameCredits.deferred).toLocaleString("en-US") + " deferred. Credits are non-transferable and not withdrawable.";
+    $("wallet-cash-detail").textContent = formatUsd(data.cash.heldCents) + " held. Pending provider funds are not available for withdrawal.";
+  };
   const showSignedIn = async (user) => {
     authPanel.hidden = true;
     playerPanel.hidden = false;
     $("player-email").textContent = user.email || "Authenticated player";
-    showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances remain hidden until the trusted wallet summary API is implemented.");
+    showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
+    await loadWalletSummary();
     const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
     if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
   };
