@@ -41,7 +41,7 @@
       fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
       return;
     }
-    $("wallet-lootcoins-available").textContent = Number(data.lootCoins.available).toLocaleString("en-US") + " LC";
+    $("wallet-lootcoins-available").textContent = (Number(data.lootCoins.available) / 10000).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 4 }) + " LC";
     $("wallet-cash-available").textContent = formatUsd(data.cash.availableCents);
     $("wallet-cash-pending").textContent = formatUsd(data.cash.pendingCents);
     $("wallet-cash-reserved").textContent = formatUsd(data.cash.withdrawalReservedCents);
