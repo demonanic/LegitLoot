@@ -22,7 +22,7 @@
   };
   const switchTab = (tab) => {
     document.querySelectorAll("[data-auth-tab]").forEach((button) => button.classList.toggle("active", button.dataset.authTab === tab));
-    ["signin", "signup", "reset"].forEach((name) => {
+    ["signin", "signup", "reset", "recovery"].forEach((name) => {
       const form = $(name + "-form");
       form.hidden = name !== tab;
     });
@@ -76,6 +76,17 @@
     if (error) return showMessage("RESET REQUEST FAILED", error.message, true);
     showMessage("CHECK YOUR EMAIL", "If an account exists for that address, a password-reset link will be sent.");
   });
+  $("recovery-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector("button[type=submit]");
+    button.disabled = true;
+    const { error } = await client.auth.updateUser({ password: $("recovery-password").value });
+    button.disabled = false;
+    if (error) return showMessage("PASSWORD NOT UPDATED", error.message, true);
+    $("recovery-form").reset();
+    switchTab("signin");
+    showMessage("PASSWORD UPDATED", "Your password has been changed. Sign in with your new password.");
+  });
   $("signout-button").addEventListener("click", async () => {
     const { error } = await client.auth.signOut();
     if (error) return showMessage("SIGN OUT FAILED", error.message, true);
@@ -85,10 +96,18 @@
     showMessage("SIGNED OUT", "Your session has ended.");
   });
   client.auth.onAuthStateChange((event, session) => {
-    if (session?.user) showSignedIn(session.user);
+    if (event === "PASSWORD_RECOVERY") {
+      playerPanel.hidden = true;
+      authPanel.hidden = false;
+      switchTab("recovery");
+      showMessage("RESET LINK ACCEPTED", "Choose a new password to finish recovering your account.");
+      return;
+    }
+    if (session?.user && event === "SIGNED_IN") showSignedIn(session.user);
     else if (event === "SIGNED_OUT") {
       playerPanel.hidden = true;
       authPanel.hidden = false;
+      switchTab("signin");
     }
   });
   client.auth.getSession().then(({ data, error }) => {
