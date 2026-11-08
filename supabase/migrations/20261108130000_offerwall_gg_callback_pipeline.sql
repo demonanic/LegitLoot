@@ -284,6 +284,38 @@ $$;
 revoke all on function private.process_offerwall_gg_postback(uuid,text,text,bigint,text,text,text,text) from public, anon, authenticated;
 grant execute on function private.process_offerwall_gg_postback(uuid,text,text,bigint,text,text,text,text) to service_role;
 
+-- PostgREST exposes public RPCs by default. This service-role-only wrapper
+-- delegates to the private implementation without exposing private schema.
+create or replace function public.process_offerwall_gg_postback(
+  p_user_id uuid,
+  p_transaction_id text,
+  p_status text,
+  p_amount_atoms bigint,
+  p_offer_id text,
+  p_offer_name text,
+  p_goal_id text,
+  p_payload_digest text
+)
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $wrapper$
+begin
+  if auth.role() is distinct from 'service_role' then
+    raise exception 'Service role required' using errcode = '42501';
+  end if;
+
+  return private.process_offerwall_gg_postback(
+    p_user_id,p_transaction_id,p_status,p_amount_atoms,
+    p_offer_id,p_offer_name,p_goal_id,p_payload_digest
+  );
+end;
+$wrapper$;
+
+revoke all on function public.process_offerwall_gg_postback(uuid,text,text,bigint,text,text,text,text) from public, anon, authenticated;
+grant execute on function public.process_offerwall_gg_postback(uuid,text,text,bigint,text,text,text,text) to service_role;
+
 insert into private.platform_settings(setting_key,setting_value,is_enabled)
 values
   ('lootcoins_precision','{"decimals":4,"atoms_per_lc":10000}'::jsonb,false),
