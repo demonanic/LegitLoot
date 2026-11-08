@@ -70,13 +70,12 @@ Deno.serve(async (request: Request) => {
   const currencyAmount = params.get("currencyAmount") ?? "";
   const status = params.get("status") ?? "";
   const signature = (params.get("signature") ?? "").toLowerCase();
-  const currencyName = params.get("currencyName") ?? "";
   const test = params.get("test") ?? "0";
 
   if (!userId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)
       || transactionId.length < 8 || transactionId.length > 200
       || !["credited", "reversed"].includes(status)
-      || currencyName !== "Loot coins" || !currencyAmount || !signature) {
+      || !currencyAmount || !signature) {
     return response("INVALID CALLBACK", 400);
   }
 
