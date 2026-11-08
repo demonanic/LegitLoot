@@ -34,11 +34,9 @@ Homepage direction: **LegitLoot — The Underground Arcade**. The approved perso
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
 ### Reserves and reversals
-- Maintain reserves sufficient to cover player cash liabilities and outstanding provisional-credit fulfillment.
-- Maintain a separately defined reversal buffer based on measured provider reversal behavior and approved risk policy; do not hardcode an unapproved percentage.
-- Unsettled provider receivables never fund cash withdrawals.
-- A circuit breaker pauses new reward commitments when reserves fail, provider status is suspended, or material reconciliation discrepancies occur.
-- Ordinary reversals do not automatically create player debt; platform absorbs already-spent provisional-credit losses by default, subject to documented fraud exceptions and review.
+- LootCoins reversals must be posted as compensating entries linked to the original conversion.
+- A reversal may reduce the player's LC balance below zero if the credited LootCoins have already been spent; the negative balance is transparent and future LC credits offset it. Do not silently forgive or conceal reversals.
+- Any future cash-reward feature requires its own funded reserve, reversal buffer and circuit breaker before launch.
 
 ### Payout
 - Proposed minimum withdrawal: USD $10, not final until provider and legal review.
@@ -66,7 +64,7 @@ Use an append-only, double-entry-capable transaction ledger. No direct balance e
 - provider + provider event ID;
 - idempotency key;
 - player/account reference;
-- currency and integer minor-unit amount;
+- currency and integer amount in the currency's defined atomic unit (LC uses 10,000 atoms per LootCoin);
 - event type and state;
 - source/destination accounts;
 - created/confirmed/settled timestamps;
