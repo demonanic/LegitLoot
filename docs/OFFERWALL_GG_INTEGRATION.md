@@ -9,7 +9,7 @@
 - Offerwall.GG is configured to reward the publisher's own virtual currency.
 - LegitLoot calls that currency **LootCoins**, ticker/code **LC**.
 - No 50/50 allocation, no automatic cash conversion, and no cash wallet credit from an offerwall callback.
-- The placement's units-per-USD exchange rate must be selected in the Offerwall.GG dashboard. Do not guess or hardcode it.
+- The owner selected **1 LC per $1 USD earned**. Set the Offerwall.GG placement's `Units per USD earned` field to `1` and save it. Verify the placement overview also displays `1 Coin per USD earned` before enabling the wall. Do not configure 1,000 units per USD.
 - Provider callback amounts can have up to four decimal places. The ledger stores integer atoms: 1 LC = 10,000 atoms.
 - Display values may show up to four decimal places. Do not use floating-point arithmetic when posting rewards or reversals.
 
