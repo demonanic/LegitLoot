@@ -35,7 +35,7 @@ Homepage direction: **LegitLoot — The Underground Arcade**. The approved perso
 
 ### Reserves and reversals
 - LootCoins reversals must be posted as compensating entries linked to the original conversion.
-- A reversal may reduce the player's LC balance below zero if the credited LootCoins have already been spent; the negative balance is transparent and future LC credits offset it. Do not silently forgive or conceal reversals.
+- A reversal must be recorded even if the credited LootCoins have already been spent. Whether this creates a negative LC balance, a restricted account state or another recovery treatment is an owner policy decision that must be settled before production activation.
 - Any future cash-reward feature requires its own funded reserve, reversal buffer and circuit breaker before launch.
 
 ### Payout
