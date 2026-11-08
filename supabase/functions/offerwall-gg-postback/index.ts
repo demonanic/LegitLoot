@@ -76,7 +76,7 @@ Deno.serve(async (request: Request) => {
   if (!userId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)
       || transactionId.length < 8 || transactionId.length > 200
       || !["credited", "reversed"].includes(status)
-      || currencyName !== "LootCoins" || !currencyAmount || !signature) {
+      || currencyName !== "Loot coins" || !currencyAmount || !signature) {
     return response("INVALID CALLBACK", 400);
   }
 
