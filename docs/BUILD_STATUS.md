@@ -133,3 +133,12 @@
 - Postback Edge Function is ACTIVE at version 2; signed wall URL function is ACTIVE at version 1.
 - Verified after the test: 0 conversion records, 0 callback event records, 0 journal transactions and 0 journal entries. The test issued no LootCoins.
 - Callback transport and test acknowledgement are verified. A real signed conversion, reversal, and publisher approval remain unverified/pending.
+
+
+## Offerwall.GG macro checklist and POST query handling — 2026-11-08
+
+- Owner screenshot confirms all required Postback URL macro checks are green: HTTPS, `userId`, `transactionId`, `currencyAmount`, and `signature`.
+- Offerwall.GG dashboard test postback accepted with HTTP 200 / `OK` while POST remains selected.
+- Code review of the screenshot revealed that the configured macros are placed in the URL query string even with POST delivery. Updated the callback to merge URL query parameters with POST form-body fields, with form fields overriding same-named query fields.
+- Deployed callback Edge Function version 3. This prevents real POST callbacks from ignoring the signed query parameters.
+- Re-run the provider test against v3, then verify the placement checklist. No real conversion has been processed.
