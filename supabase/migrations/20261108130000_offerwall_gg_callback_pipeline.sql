@@ -159,6 +159,7 @@ declare
   v_user_account uuid;
   v_platform_account uuid;
   v_event_id bigint;
+  v_existing_event record;
   v_journal_id uuid;
   v_key text;
   v_entries jsonb;
@@ -184,7 +185,18 @@ begin
   returning id into v_event_id;
 
   if v_event_id is null then
-    return jsonb_build_object('result','duplicate');
+    select user_id, amount_atoms, payload_digest
+    into v_existing_event
+    from private.offerwall_gg_callback_events
+    where transaction_id = p_transaction_id and callback_status = p_status;
+
+    if v_existing_event.user_id = p_user_id
+       and v_existing_event.amount_atoms = p_amount_atoms
+       and v_existing_event.payload_digest = p_payload_digest then
+      return jsonb_build_object('result','duplicate');
+    end if;
+
+    raise exception 'Conflicting duplicate Offerwall.GG callback';
   end if;
 
   select id into v_user_account
