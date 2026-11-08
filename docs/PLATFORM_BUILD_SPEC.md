@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Date:** 2026-11-07  
-**Build branch:** `build/legitloot-platform-foundation`  
+**Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — untouched; no production deployment authorized.  
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
 **Authorization:** Owner has now explicitly authorized development. This supersedes v1.3's earlier "no development authorized" status for work on the isolated build branch only. It does not authorize paid services, account creation, provider agreements, live money movement, or production deployment.
@@ -15,7 +15,7 @@ LegitLoot is a combined independent games and rewards platform with four public-
 3. Affiliate marketplace and promotional deals.
 4. A transparent player rewards experience with separate game-credit and cash ledgers.
 
-Homepage direction: hybrid, with a slight visual priority toward games. Industrial cyberpunk / street-punk comic-book art, minimal enough to preserve clarity. The badger antihero is the primary brand mascot; the mysterious punk woman is an unexplained recurring promotional character, not the company identity. The supplied official game artwork is authoritative.
+Homepage direction: **LegitLoot — The Underground Arcade**. The approved personality is a hybrid of punk outlaw, underground hacker and arcade boss. The visual treatment deliberately mixes raw comic-book illustration, cinematic character/environment artwork and distressed punk screen-print aesthetics. Use the midnight black/deep violet, hot magenta, electric purple, radioactive lime, electric cyan and warm gold palette from the owner's reference. Preserve the reference's recognizable dashboard structure while improving responsive behavior, hierarchy, accessibility and functionality. Avoid generic AI dashboard tropes, generic mascot art, arbitrary neon effects and repetitive template cards. The badger is the primary brand character. Use the current working concept consistently; additional character-sheet development is not a prerequisite for completing the website. The mysterious punk woman may be used selectively as a supporting promotional character, not as the company identity. The supplied official game artwork is authoritative; generated supporting art must never masquerade as actual game screenshots. Keep important text and UI controls as real HTML, not baked into images. See [Brand Art Direction](BRAND_ART_DIRECTION.md) for the complete approved visual standard. Never use invented balances, streaks, leaderboards, task completion or payout claims to make the interface look populated; show real connected data or clearly label a preview/planned state.
 
 ## 2. Hard business rules (must be enforced in code and UX)
 
