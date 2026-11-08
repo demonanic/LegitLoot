@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 760" role="img" aria-labelledby="t d">
+<title id="t">LegitLoot punk badger mascot</title><desc id="d">A mischievous comic-book badger antihero in a studded jacket with a magenta mohawk, neon accents and a confident grin.</desc>
+<defs>
+ <linearGradient id="fur" x2="1" y2="1"><stop stop-color="#48435e"/><stop offset=".55" stop-color="#171525"/><stop offset="1" stop-color="#080812"/></linearGradient>
+ <linearGradient id="white" x2="1" y2="1"><stop stop-color="#fff"/><stop offset="1" stop-color="#b9b5ca"/></linearGradient>
+ <linearGradient id="pink" x2="1" y2="1"><stop stop-color="#ff83e7"/><stop offset=".5" stop-color="#ff35cf"/><stop offset="1" stop-color="#7b36ff"/></linearGradient>
+ <linearGradient id="coat" x2="1"><stop stop-color="#353044"/><stop offset="1" stop-color="#090811"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="760" height="760" rx="32" fill="#110b25"/>
+<circle cx="400" cy="330" r="270" fill="#8b2bff" opacity=".18" filter="url(#glow)"/>
+<path d="M20 610L740 180M0 690L760 230" stroke="#ff35cf" stroke-width="3" opacity=".25"/>
+<path d="M65 120L200 55L145 205M675 75L585 40L625 175" fill="none" stroke="#c8ff19" stroke-width="8"/>
+<!-- mohawk -->
+<path d="M210 230Q170 110 250 80L265 165Q300 45 355 25L365 160Q420 40 475 70L445 185Q520 100 565 150L495 255Z" fill="url(#pink)" stroke="#ffb6f1" stroke-width="7"/>
+<!-- ears and head -->
+<path d="M210 265Q110 140 65 210Q40 310 195 380Z" fill="#181525" stroke="#8b5cff" stroke-width="9"/>
+<path d="M550 270Q650 145 695 225Q710 325 570 385Z" fill="#181525" stroke="#8b5cff" stroke-width="9"/>
+<path d="M95 235Q140 225 175 310L125 315Z" fill="#ff72d9"/><path d="M665 250Q620 235 590 315L635 320Z" fill="#ff72d9"/>
+<path d="M185 210Q380 120 575 225Q635 345 565 485Q500 600 380 610Q250 600 180 485Q125 355 185 210Z" fill="url(#fur)" stroke="#a48aff" stroke-width="8"/>
+<!-- face blaze -->
+<path d="M335 190Q380 215 420 190Q430 305 485 390Q530 480 460 535Q415 570 380 560Q345 570 300 535Q230 480 275 390Q330 300 335 190Z" fill="url(#white)"/>
+<path d="M200 310Q270 240 335 255Q300 335 260 390Q220 425 175 400Z" fill="#10101b"/>
+<path d="M560 310Q490 240 425 255Q460 335 500 390Q540 425 585 400Z" fill="#10101b"/>
+<!-- eyes -->
+<path d="M245 340Q285 300 325 340Q290 375 245 340Z" fill="#c8ff19"/><path d="M435 340Q475 300 515 340Q470 375 435 340Z" fill="#c8ff19"/>
+<ellipse cx="287" cy="340" rx="10" ry="18" fill="#11101a"/><ellipse cx="475" cy="340" rx="10" ry="18" fill="#11101a"/>
+<path d="M235 305L325 318M435 318L525 305" stroke="#0a0911" stroke-width="15" stroke-linecap="round"/>
+<!-- muzzle -->
+<path d="M285 410Q380 360 475 410Q500 480 430 510Q380 535 330 510Q260 480 285 410Z" fill="#eceaf2" stroke="#b5b0c5" stroke-width="5"/>
+<path d="M340 425Q380 390 420 425Q410 458 380 458Q350 458 340 425Z" fill="#17121f"/>
+<path d="M320 480Q380 520 440 480" fill="none" stroke="#191421" stroke-width="9" stroke-linecap="round"/>
+<path d="M350 488L365 500L380 489L395 500L410 488" fill="none" stroke="#ff35cf" stroke-width="6"/>
+<!-- jacket -->
+<path d="M190 565Q250 525 310 540L380 635L450 540Q520 525 570 565L680 760H80Z" fill="url(#coat)" stroke="#8b5cff" stroke-width="8"/>
+<path d="M280 555L380 665L480 555L440 760H320Z" fill="#171322" stroke="#ff35cf" stroke-width="6"/>
+<path d="M155 630L260 600M605 630L500 600" stroke="#c8ff19" stroke-width="8"/>
+<path d="M225 665L280 640M535 665L480 640" stroke="#ff35cf" stroke-width="7"/>
+<!-- collar studs -->
+<path d="M245 555L300 600L270 620L215 575ZM515 555L460 600L490 620L545 575Z" fill="#343044" stroke="#c8ff19" stroke-width="5"/>
+<g fill="#f6eaff"><circle cx="248" cy="580" r="7"/><circle cx="273" cy="598" r="7"/><circle cx="512" cy="580" r="7"/><circle cx="487" cy="598" r="7"/></g>
+<path d="M330 620L380 685L430 620" fill="none" stroke="#ff35cf" stroke-width="8"/>
+<text x="380" y="725" text-anchor="middle" fill="#c8ff19" font-family="Arial,sans-serif" font-weight="900" font-size="28" letter-spacing="7">LL // CREW</text>
+</svg>
