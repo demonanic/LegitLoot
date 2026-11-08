@@ -1,8 +1,8 @@
 # LegitLoot Platform Build — Status
 
 **Updated:** 2026-11-07  
-**Branch:** `build/legitloot-platform-foundation`  
-**Production:** unchanged; no deployment or merge to `main`.
+**Branch:** `build/legitloot-v2` (new isolated V2 work branch; based on `build/legitloot-platform-foundation`)  
+**Production:** Cloudflare currently points to `build/legitloot-platform-foundation`; V2 branch is not connected or deployed. No merge to `main`.
 
 ## Completed in this build branch
 
@@ -52,3 +52,26 @@
 3. Test signup, confirmation, login, reset and sign-out on the branch preview.
 4. Implement server-side wallet summary, ledger balance enforcement, provider callbacks, settlement and reconciliation tests.
 5. Keep production deployment, domain cutover and merge to `main` blocked pending separate approval.
+
+
+## V2 build progress — 2026-11-07
+
+- Created isolated branch `build/legitloot-v2`; it is not connected to Cloudflare and has not been deployed.
+- Replaced the homepage's provisional punk-woman hero image with the supplied official Demonanic and Gauntlet's Survival game artwork.
+- Added a layered, responsive game-first hero visual system.
+- Added `how-it-works.html` explaining the separate cash/game-credit model and current feature status.
+- Added clearly marked draft `terms.html` and `privacy.html` placeholders. These are not launch-ready legal policies.
+- Connected the V2 site navigation and footer to the new guide and legal placeholder pages.
+- Offerwall.GG verification meta tag remains present in the homepage head.
+- Supabase security hardening was applied in project `gkbqderyjcuxnjbsiffb`: RLS enabled on all 10 private-schema financial/provider tables, with no client policies. The matching migration exists in the parent foundation branch; V2 still needs the same migration file copied into its own migration history if it is to remain a self-contained branch.
+- No Offerwall.GG integration, reward issuance, cash payouts, withdrawal API, admin console, or production wallet summaries are active yet.
+
+## V2 next implementation sequence
+
+1. Complete visual pass and verify mobile navigation/layout on actual preview.
+2. Inspect and test Supabase signup/login/reset/session handling; correct redirect configuration.
+3. Add server-side wallet summary and account activity API without exposing private ledger tables.
+4. Implement provider callback verification, idempotency, reversal handling and settlement reconciliation; keep provider disabled until written commercial approval for the exact model.
+5. Implement payout eligibility, reserve checks, admin review and audit workflows; no live payouts until legal/provider gates pass.
+6. Add integration, security and mobile regression tests.
+7. Only after owner review, connect V2 branch to Cloudflare preview or production. No production deployment is authorized by this status update.
