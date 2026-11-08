@@ -124,3 +124,12 @@
 - RLS is enabled on both Offerwall.GG callback tables. Security advisor now reports informational RLS-without-policy findings for private-schema tables; these tables have no client policies and remain intended for trusted service-role access only.
 - Existing `get_wallet_summary()` SECURITY DEFINER warning remains; the function is intentionally callable by authenticated users and derives the account identity from `auth.uid()`, returning only the caller's aggregate summary.
 - Offerwall.GG placement is still pending publisher approval. The callback URL has not yet been configured in the provider dashboard. The Earn-page launcher remains in the draft GitHub PR and has not been deployed to the public site.
+
+
+## Offerwall.GG dashboard test — 2026-11-08
+
+- Owner ran Offerwall.GG's built-in test postback using POST.
+- Provider dashboard confirmed: "Your endpoint accepted the test postback (HTTP 200)" and response body `OK`.
+- Postback Edge Function is ACTIVE at version 2; signed wall URL function is ACTIVE at version 1.
+- Verified after the test: 0 conversion records, 0 callback event records, 0 journal transactions and 0 journal entries. The test issued no LootCoins.
+- Callback transport and test acknowledgement are verified. A real signed conversion, reversal, and publisher approval remain unverified/pending.
