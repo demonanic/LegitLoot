@@ -72,6 +72,11 @@ Deno.serve(async (request: Request) => {
   const signature = (params.get("signature") ?? "").toLowerCase();
   const test = params.get("test") ?? "0";
 
+  // Offerwall.GG dashboard test requests may not include a real user, transaction,
+  // status, amount, or signature. A test marker can never issue rewards, so safely
+  // acknowledge it before validating production conversion fields.
+  if (test === "1") return response("OK", 200);
+
   if (!userId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)
       || transactionId.length < 8 || transactionId.length > 200
       || !["credited", "reversed"].includes(status)
@@ -94,8 +99,6 @@ Deno.serve(async (request: Request) => {
   const expected = await hmacSha256Hex(`${userId}:${transactionId}:${currencyAmount}`, secret);
   if (!equalHex(expected, signature)) return response("FORBIDDEN", 403);
 
-  // Provider dashboard test callbacks must never create player rewards.
-  if (test === "1") return response("OK", 200);
 
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
