@@ -35,7 +35,7 @@ Configure the placement to send a form POST to that URL with all standard callba
 - `offerName`
 - `goalId`
 - `currencyAmount`
-- `currencyName` — configure exactly as `LootCoins`
+- `currencyName` — configure exactly as `Loot coins`
 - `payoutUsd`
 - `status` — `credited` or `reversed`
 - `test`
