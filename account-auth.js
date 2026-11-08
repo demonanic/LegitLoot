@@ -33,7 +33,7 @@
     return Number.isFinite(amount) ? amount.toLocaleString("en-US", { style: "currency", currency: "USD" }) : "$—";
   };
   const loadWalletSummary = async () => {
-    const fields = ["wallet-game-available", "wallet-cash-available", "wallet-cash-pending", "wallet-cash-reserved", "wallet-cash-paid"];
+    const fields = ["wallet-lootcoins-available", "wallet-cash-available", "wallet-cash-pending", "wallet-cash-reserved", "wallet-cash-paid"];
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "…"; });
     const { data, error } = await client.rpc("get_wallet_summary");
     if (error || !data || data.error) {
@@ -41,12 +41,12 @@
       fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
       return;
     }
-    $("wallet-game-available").textContent = Number(data.gameCredits.available).toLocaleString("en-US") + " LLC";
+    $("wallet-lootcoins-available").textContent = Number(data.lootCoins.available).toLocaleString("en-US") + " LC";
     $("wallet-cash-available").textContent = formatUsd(data.cash.availableCents);
     $("wallet-cash-pending").textContent = formatUsd(data.cash.pendingCents);
     $("wallet-cash-reserved").textContent = formatUsd(data.cash.withdrawalReservedCents);
     $("wallet-cash-paid").textContent = formatUsd(data.cash.paidCents);
-    $("wallet-game-detail").textContent = Number(data.gameCredits.provisional).toLocaleString("en-US") + " provisional · " + Number(data.gameCredits.deferred).toLocaleString("en-US") + " deferred. Credits are non-transferable and not withdrawable.";
+    $("wallet-lootcoins-detail").textContent = "LootCoins earned through approved activities. LC is a platform reward currency, not cash and not withdrawable.";
     $("wallet-cash-detail").textContent = formatUsd(data.cash.heldCents) + " held. Pending provider funds are not available for withdrawal.";
   };
   const showSignedIn = async (user) => {
