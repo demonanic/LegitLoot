@@ -85,3 +85,9 @@ body:before{
   .button-acid{transition:transform .2s,box-shadow .2s,filter .2s}
   .button-acid:hover{box-shadow:0 5px 0 #39206b,0 0 34px #ff4fd899,0 0 58px #35e7ff33}
 }
+
+
+/* Keyboard and touch accessibility */
+a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #35e7ff;outline-offset:3px}
+button:disabled{cursor:not-allowed;opacity:.55}
+::selection{background:#ff35d2;color:#10091e}
