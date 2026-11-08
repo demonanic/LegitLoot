@@ -35,7 +35,7 @@
   const loadWalletSummary = async () => {
     const fields = ["wallet-game-available", "wallet-cash-available", "wallet-cash-pending", "wallet-cash-reserved", "wallet-cash-paid"];
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "…"; });
-    const { data, error } = await client.functions.invoke("wallet-summary", { method: "GET" });
+    const { data, error } = await client.rpc("get_wallet_summary");
     if (error || !data || data.error) {
       showMessage("WALLET SUMMARY UNAVAILABLE", "Your account is signed in, but the secure wallet summary could not be loaded. No balances have been changed.", true);
       fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
