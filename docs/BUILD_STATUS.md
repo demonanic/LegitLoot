@@ -111,3 +111,16 @@
 - Official canonical signing rule verified against Offerwall.GG's current integration guide: sorted query parameters `appId` and `userId`; signature excluded from the signed string. Expiring-link timestamp is not added because expiry is not shown as enabled on the owner's placement.
 - No secret key was provided or exposed. Neither Edge Function has been deployed; Supabase secrets are not configured. The migrations remain unapplied and provider remains disabled.
 - Placement is still marked pending by Offerwall.GG; the hosted wall will not serve offers until approval.
+
+
+## Supabase deployment — 2026-11-08
+
+- Owner authorized applying the LootCoins and Offerwall.GG migrations to the production LegitLoot Supabase project.
+- Applied `standard_lootcoins_wallet`, `offerwall_gg_callback_pipeline`, and `secure_offerwall_callback_tables` successfully.
+- Deployed Edge Function `offerwall-gg-postback` as ACTIVE with JWT verification disabled; the function performs its own HMAC-SHA256 validation.
+- Deployed Edge Function `offerwall-gg-wall-url` as ACTIVE with JWT verification enabled; it validates the Supabase user session before generating a signed wall URL.
+- Owner confirmed adding `OFFERWALL_GG_PUBLIC_KEY` and `OFFERWALL_GG_SECRET` in Supabase Edge Function secrets. Secret values are not recorded in GitHub.
+- Verified database state after migrations: 1 LootCoins account present; 0 journal transactions, 0 journal entries, 0 Offerwall.GG conversions and 0 callback events; provider status remains `disabled`.
+- RLS is enabled on both Offerwall.GG callback tables. Security advisor now reports informational RLS-without-policy findings for private-schema tables; these tables have no client policies and remain intended for trusted service-role access only.
+- Existing `get_wallet_summary()` SECURITY DEFINER warning remains; the function is intentionally callable by authenticated users and derives the account identity from `auth.uid()`, returning only the caller's aggregate summary.
+- Offerwall.GG placement is still pending publisher approval. The callback URL has not yet been configured in the provider dashboard. The Earn-page launcher remains in the draft GitHub PR and has not been deployed to the public site.
