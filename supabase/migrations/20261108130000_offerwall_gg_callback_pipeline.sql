@@ -22,7 +22,7 @@ on conflict do nothing;
 -- Convert any legacy whole LLC balances into LC atoms at 1 LLC = 1 LC.
 -- Both currencies balance independently in the same journal transaction; old entries
 -- are never rewritten. Abort on negative legacy buckets or numeric overflow.
-do $
+do $do$
 declare
   v_user record;
   v_target uuid;
@@ -108,7 +108,7 @@ begin
     end if;
   end loop;
 end;
-$;
+$do$;
 
 create table if not exists private.offerwall_gg_conversions (
   transaction_id text primary key,
