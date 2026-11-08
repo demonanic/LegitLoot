@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="identity.css">
 </head>
 <body>
   <div class="scanlines" aria-hidden="true"></div>
@@ -18,7 +18,7 @@
     <a class="brand" href="#home" aria-label="LegitLoot home"><span class="brand-mark">L<span> //</span></span><span>LEGIT<span class="acid">LOOT</span></span></a>
     <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
     <nav class="main-nav" aria-label="Main navigation">
-      <a class="active" href="index.html">Home</a><a href="games.html">Games</a><a href="earn.html">Earn</a><a href="marketplace.html">Marketplace</a>
+      <a class="active" href="index.html">Home</a><a href="games.html">Games</a><a href="earn.html">Earn</a><a href="marketplace.html">Marketplace</a><a href="how-it-works.html">How it works</a>
       <a class="nav-account" href="account.html">Account <span>↗</span></a>
     </nav>
   </header>
@@ -32,10 +32,12 @@
         <div class="hero-actions"><a class="button button-acid" href="#games">Explore games <span>↗</span></a><a class="button button-ghost" href="#earn">Discover earning</a></div>
         <div class="hero-meta"><span>NO PAY-TO-PLAY PROMISES</span><span>BUILT INDEPENDENTLY</span></div>
       </div>
-      <div class="hero-art">
-        <div class="art-frame"><img src="assets/mascot.svg" alt="LegitLoot's recurring punk-inspired cyberpunk character, with magenta hair and tattoos"></div>
-        <div class="art-stamp">LL<br><b>CREW</b><br><span>EST. 2026</span></div>
-        <p class="art-caption">/// YOUR WORLD. YOUR RULES.</p>
+      <div class="hero-art hero-game-stack" aria-label="Featured original game artwork">
+        <div class="hero-art-backdrop"></div>
+        <figure class="hero-art-main"><img src="assets/demonanic.jpg" alt="Official Demonanic game artwork"><figcaption><span>ORIGINAL GAME // 001</span><strong>DEMONANIC</strong></figcaption></figure>
+        <figure class="hero-art-side"><img src="assets/gauntlets-survival.jpg" alt="Official Gauntlet's Survival artwork"><figcaption>COMING TO THE ARCADE</figcaption></figure>
+        <div class="art-stamp">LL<br><b>ORIGINALS</b><br><span>INDEPENDENT</span></div>
+        <p class="art-caption">/// BUILT OUTSIDE THE LINES.</p>
       </div>
     </section>
 
@@ -80,7 +82,7 @@
     </section>
   </main>
 
-  <footer class="site-footer"><a class="brand" href="#home"><span class="brand-mark">L<span> //</span></span><span>LEGIT<span class="acid">LOOT</span></span></a><p>INDEPENDENT BY DESIGN.</p><div class="footer-links"><a href="mailto:hello@legitloot.site">Contact</a><a href="#market">Affiliate disclosure</a><a href="#home">Back to top ↑</a></div><small>© <span id="year"></span> LEGITLOOT. ALL RIGHTS RESERVED. <span>INDEPENDENT GAMES & OPPORTUNITIES.</span></small></footer>
+  <footer class="site-footer"><a class="brand" href="#home"><span class="brand-mark">L<span> //</span></span><span>LEGIT<span class="acid">LOOT</span></span></a><p>INDEPENDENT BY DESIGN.</p><div class="footer-links"><a href="mailto:hello@legitloot.site">Contact</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="how-it-works.html">How it works</a><a href="index.html">Home ↑</a></div><small>© <span id="year"></span> LEGITLOOT. ALL RIGHTS RESERVED. <span>INDEPENDENT GAMES & OPPORTUNITIES.</span></small></footer>
   <script src="app.js"></script>
 </body>
 </html>
