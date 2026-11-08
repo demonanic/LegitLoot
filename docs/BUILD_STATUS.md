@@ -142,3 +142,13 @@
 - Code review of the screenshot revealed that the configured macros are placed in the URL query string even with POST delivery. Updated the callback to merge URL query parameters with POST form-body fields, with form fields overriding same-named query fields.
 - Deployed callback Edge Function version 3. This prevents real POST callbacks from ignoring the signed query parameters.
 - Re-run the provider test against v3, then verify the placement checklist. No real conversion has been processed.
+
+
+## Website release preparation — 2026-11-08
+
+- Reviewed PR #5 against `build/legitloot-platform-foundation`: 38 commits ahead, 0 behind, 13 changed files.
+- Confirmed the Earn-page launcher calls the authenticated `offerwall-gg-wall-url` Edge Function; the provider secret is not exposed to browser code.
+- Fixed a UI bug found in review: signed-out visitors can now tap the Earn-page button to navigate to account sign-in instead of encountering a disabled button.
+- Updated PR #5 description to reflect the actual live Supabase deployment and successful Offerwall.GG dashboard checks; previous deployment notes were stale.
+- PR #5 remains open and draft. No website merge or Cloudflare production deployment was performed.
+- Remaining release gate: Offerwall.GG approval, then merge/deploy website and test signed-in launch from `https://legitloot.site/earn.html`.
