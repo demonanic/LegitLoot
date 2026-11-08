@@ -3,7 +3,7 @@
 **Version:** 1.0  
 **Approved:** 2026-11-07  
 **Applies to:** Website, game-discovery experience, rewards UI, promotional artwork, mascot and future brand assets.  
-**Status:** Approved creative direction; implementation must be reviewed against the owner's supplied dashboard reference.
+**Status:** Approved working direction. Mascot exploration is complete enough for the platform build; do not spend further cycles on character development unless a concrete asset problem blocks implementation.
 
 ## 1. Brand idea
 
@@ -21,10 +21,9 @@ The result is a distinct hybrid. It is not grimdark, childish, corporate, steril
 
 ## 2. Core mascot
 
-The badger is the primary brand character and the face of LegitLoot.
+The badger is the primary brand character and the face of LegitLoot. The approved working personality is a nonchalant, money-motivated, game-obsessed hustler: lazy by default, opportunistic, sarcastic, gamble-minded and largely unbothered. He cares about making money, playing games and chasing the next score. His attitude is dry and funny rather than aggressive or heroic.
 
-### Character personality
-A confident troublemaker with a sharp mind, a mischievous grin and an arcade boss's appetite for a challenge. He is rebellious without being hostile, technically clever without becoming a generic hooded hacker, and playful without looking like a children's cartoon.
+The existing concept is sufficient to support the website build. Treat the latest gritty comic-book concept as the visual direction; do not create additional mascot lore, elaborate character biographies, or repeated character-sheet variations as a separate workstream. Only produce the specific mascot poses or crops needed by the homepage and shared UI.
 
 ### Visual ingredients
 - Strong, recognizable badger anatomy and facial markings.
@@ -36,8 +35,7 @@ A confident troublemaker with a sharp mind, a mischievous grin and an arcade bos
 
 ### Consistency rules
 - Preserve the same face shape, markings, proportions, signature hair, clothing language and key accessories across all art.
-- Build a canonical character sheet before producing many poses: front, three-quarter, profile, full-body, facial expressions, color palette and accessory callouts.
-- Create reusable pose and expression references from the approved master character.
+- Use the existing approved concept as the working reference. A full production character bible or additional turnaround sheet is not a prerequisite for finishing the platform.
 - Do not casually change species, clothing, colors, age impression, anatomy or art style between pages.
 - Do not substitute a generic animal mascot, emoji, stock illustration or improvised placeholder.
 - The existing simple SVG badger is a temporary implementation placeholder, not approved final mascot artwork.
@@ -135,7 +133,7 @@ A proposed page or asset is not brand-approved until it passes these questions:
 
 1. Does it feel like the LegitLoot Underground Arcade rather than a generic rewards dashboard?
 2. Is the punk-outlaw / underground-hacker / arcade-boss personality recognizable?
-3. Is the badger consistent with the approved character sheet?
+3. Is the badger consistent with the approved working concept?
 4. Does the mixed-media treatment feel intentional rather than randomly AI-generated?
 5. Does the composition have a clear focal point and strong hierarchy?
 6. Is the typography readable and the mobile layout considered?
@@ -150,7 +148,8 @@ If the answer to any of these is no, revise before extending the design to more 
 
 - This document is the approved creative source of truth.
 - The supplied dashboard mockup remains the primary visual reference.
-- Create and approve a canonical badger character sheet and logo assets before proliferating mascot artwork.
-- Develop a reusable design system from the approved art direction, then apply it to Home, Games, Earn, Deals, Rewards and Wallet.
+- Do not continue mascot exploration unless a specific website asset requires it. Use the current concept as sufficient direction.
+- Prioritize the complete responsive website framework and the supporting artwork needed by actual pages: hero/environment art, section backgrounds, game presentation assets, loot/reward motifs, and a coherent logo/icon set.
+- Develop a reusable design system from the approved art direction, then apply it consistently to Home, Games, Earn, Deals, Rewards and Wallet.
 - Keep implementation on the isolated development branch until the owner approves the actual device preview.
 - Do not merge to production or change live reward, authentication or wallet behavior as part of a visual-only task.
