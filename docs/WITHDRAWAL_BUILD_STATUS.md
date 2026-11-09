@@ -55,6 +55,17 @@
 - The old `provision-initial-owner` Edge Function had still been deployed; replaced its handler with an unconditional HTTP 410 response (version 4). It cannot provision another administrator.
 - Latest frontend commits must deploy on the stable Cloudflare branch alias before browser testing.
 
+## Simulator player targeting — implemented in staging
+
+- Preserved the deployed `payout-simulator` Edge Function source in `supabase/functions/payout-simulator/index.ts` before extending it.
+- Added migration `20261109100000_simulator_player_targeting.sql` to staging. Existing simulator fund-issue and withdrawal rows retain their prior attribution through a backfill.
+- Simulator operations now separate the verified owner actor from the selected registered-player target. Server-side SQL checks active owner status and confirms the target exists in `public.profiles` for every state/mutation request.
+- Added an owner-only target-directory RPC returning profile ID, display name, username, and registration time. The simulator UI now has a player selector; balances, issue funds, withdrawal creation, queue decisions, provider simulations, and event history are scoped to that selected player.
+- Fund issuance and withdrawal rows now persist `actor_user_id`; event history continues to record both actor and target. The owner identity is derived from the verified bearer token, never from browser input.
+- Deployed staging `payout-simulator` Edge Function version 2 with JWT verification still enabled.
+- Verified the new RPC signatures exist in staging and are SECURITY DEFINER; all RPCs remain revoked from public/anon/authenticated and granted only to service_role. No production project or real financial tables were changed.
+- Cloudflare preview deployment and authenticated owner workflow testing of player switching and simulated actions are still pending. Do not create test funds or withdrawal records until that workflow is deliberately tested.
+
 ## Withdrawal foundation — prepared, not activated
 
 - PayPal and Venmo are the only proposed payout rails. Manual review only. No payout provider is connected and no money can move.
