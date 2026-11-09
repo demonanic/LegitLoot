@@ -89,7 +89,7 @@ declare
   v_issue_id uuid;
 begin
   if coalesce(nullif(current_setting('request.jwt.claim.role', true), ''),
-      nullif((nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'role'), '')) is distinct from 'service_role' then
+      nullif((nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role'), '')) is distinct from 'service_role' then
     raise exception 'Service role required' using errcode = '42501';
   end if;
   if not exists (select 1 from private.admin_users where user_id=p_actor_user_id and admin_role='owner' and is_active) then
@@ -157,7 +157,7 @@ declare
   v_request_id uuid;
 begin
   if coalesce(nullif(current_setting('request.jwt.claim.role', true), ''),
-      nullif((nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'role'), '')) is distinct from 'service_role' then
+      nullif((nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role'), '')) is distinct from 'service_role' then
     raise exception 'Service role required' using errcode = '42501';
   end if;
   if not exists (select 1 from private.admin_users where user_id=p_actor_user_id and admin_role='owner' and is_active) then
@@ -166,7 +166,7 @@ begin
   if p_amount_minor is null or p_amount_minor < 50 then
     raise exception 'Simulator minimum is $0.50' using errcode = '22023';
   end if;
-  if p_destination_type not in ('paypal','venmo') or p_destination_label is null
+  if p_destination_type is null or p_destination_type not in ('paypal','venmo') or p_destination_label is null
       or length(trim(p_destination_label)) not between 3 and 80 then
     raise exception 'Valid simulated destination required' using errcode = '22023';
   end if;
@@ -220,7 +220,7 @@ declare
   v_wallet private.payout_simulator_wallets%rowtype;
 begin
   if coalesce(nullif(current_setting('request.jwt.claim.role', true), ''),
-      nullif((nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'role'), '')) is distinct from 'service_role' then
+      nullif((nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role'), '')) is distinct from 'service_role' then
     raise exception 'Service role required' using errcode = '42501';
   end if;
   if not exists (select 1 from private.admin_users where user_id=p_actor_user_id and admin_role='owner' and is_active) then
@@ -273,7 +273,7 @@ declare
   v_new_status text;
 begin
   if coalesce(nullif(current_setting('request.jwt.claim.role', true), ''),
-      nullif((nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'role'), '')) is distinct from 'service_role' then
+      nullif((nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role'), '')) is distinct from 'service_role' then
     raise exception 'Service role required' using errcode = '42501';
   end if;
   if not exists (select 1 from private.admin_users where user_id=p_actor_user_id and admin_role='owner' and is_active) then
@@ -328,7 +328,7 @@ declare
   v_events jsonb;
 begin
   if coalesce(nullif(current_setting('request.jwt.claim.role', true), ''),
-      nullif((nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'role'), '')) is distinct from 'service_role' then
+      nullif((nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'role'), '')) is distinct from 'service_role' then
     raise exception 'Service role required' using errcode = '42501';
   end if;
   if not exists (select 1 from private.admin_users where user_id=p_actor_user_id and admin_role='owner' and is_active) then
