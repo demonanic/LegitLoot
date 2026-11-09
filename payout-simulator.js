@@ -69,6 +69,7 @@
     }catch(err){message(err.message);}
   });
   $("sim-refresh").addEventListener("click",()=>refresh().catch(e=>message(e.message)));
+  $("sim-signout").addEventListener("click",async()=>{await client.auth.signOut();app.hidden=true;message("SIGNED OUT · Simulator access has ended.");});
   const boot=async()=>{
     if(!config||config.environment!=="staging"||!window.supabase){message("Staging configuration missing. Access denied.");return;}
     client=window.supabase.createClient(config.url,config.publishableKey);
