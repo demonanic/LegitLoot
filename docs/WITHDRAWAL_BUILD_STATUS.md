@@ -32,6 +32,15 @@
 - Dashboard has no approve/reject, payout, user-edit, or admin-management controls. It is read-only.
 - Cloudflare Pages must successfully deploy the latest development branch commit before browser testing. No production deploy.
 
+## Owner account directory — deployed to staging
+
+- Added an owner-only `PLAYER ACCOUNTS` section to `admin.html` and `admin.js` on the development branch.
+- Extended `admin-dashboard` Edge Function to return registered profile records joined to Auth user email/confirmation/registration metadata. It supports a selected-account read-only profile view.
+- Account directory is available only to active owners, is fetched server-side with the service-role client, and does not expose passwords, tokens, or authentication secrets. Non-owner admin roles are denied.
+- Verified staging currently contains both confirmed accounts: `manicdemand@gmail.com` (owner) and `buzzfuzzbee333@gmail.com` (test player). Both have profile rows and should appear in the directory.
+- Newly registered accounts are listed once their normal signup flow creates the corresponding `public.profiles` row. The directory refreshes from live staging data; no manual account enrollment is required.
+- Browser end-to-end testing of the new directory/profile viewer remains outstanding.
+
 ## Isolated payout simulator — deployed to staging
 
 - Added migration `supabase/migrations/20261109070000_isolated_payout_simulator.sql` and applied it to the staging project only.
