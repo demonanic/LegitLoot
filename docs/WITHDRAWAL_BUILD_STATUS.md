@@ -32,6 +32,20 @@
 - Dashboard has no approve/reject, payout, user-edit, or admin-management controls. It is read-only.
 - Cloudflare Pages must successfully deploy the latest development branch commit before browser testing. No production deploy.
 
+## Isolated payout simulator — deployed to staging
+
+- Added migration `supabase/migrations/20261109070000_isolated_payout_simulator.sql` and applied it to the staging project only.
+- Simulator uses separate private tables for artificial test wallets, test-fund issuance, simulated withdrawals, and append-only simulator events. It does not write to `private.ledger_accounts`, `private.journal_transactions`, `private.journal_entries`, or real `private.payout_requests`.
+- Added staging Edge Function `payout-simulator` version 1. It verifies the signed-in user and invokes service-role-only database functions; each database function independently verifies the active owner role.
+- Added `payout-simulator.html` and `payout-simulator.js`; linked the tool from `admin.html`.
+- Simulator rules: $0.50 minimum simulated withdrawal; $0.01–$250 per test-fund issuance; $1,000 lifetime artificial-fund issuance cap per owner.
+- Test destinations are fixed labels such as `TEST: simulated paypal destination`; the UI does not collect real PayPal/Venmo recipient details.
+- Supported lifecycle: issue artificial funds, create a withdrawal and reserve test funds, approve/reject with reason, then simulate pending/success/failure provider outcomes. Rejections and failures return reserved artificial funds to the test available balance.
+- Simulator event history is append-only. Anonymous and authenticated database roles cannot execute simulator RPCs; only service_role can. Owner authorization is checked inside each RPC.
+- Initial state check passed: all simulator balances and histories are zero. No artificial funds have been issued yet. Browser end-to-end testing remains outstanding.
+- The old `provision-initial-owner` Edge Function had still been deployed; replaced its handler with an unconditional HTTP 410 response (version 4). It cannot provision another administrator.
+- Latest frontend commits must deploy on the stable Cloudflare branch alias before browser testing.
+
 ## Withdrawal foundation — prepared, not activated
 
 - PayPal and Venmo are the only proposed payout rails. Manual review only. No payout provider is connected and no money can move.
@@ -55,8 +69,8 @@
 2. Test role denial for an ordinary authenticated user and support-readonly; test payout-reviewer scope without granting extra privileges.
 3. Resolve security-advisor findings where appropriate; enable leaked-password protection before broader user testing.
 4. Reconcile remaining migrations and existing function source into staging's documented build plan.
-5. Implement JWT-authenticated withdrawal submission: server-derived user ID, PayPal/Venmo validation, AES-GCM encryption, idempotency, integer-cent validation, minimum/available balance checks, and atomic reservation.
-6. Implement admin queue/review mutations with server-side role checks, reviewer identity from verified auth, required reasons, audit events, and compensating journal entries for rejection/cancellation.
-7. Add user-facing withdrawal UI only after the server API contract is implemented.
-8. Test concurrency, insufficient balance, duplicate requests, malformed destinations, encryption failure, authorization bypass, rejection/cancellation, and payout reconciliation.
-9. Keep live payouts, provider activation, production deployment, and merging into `main` disabled until required approvals and explicit owner authorization.
+5. Complete browser tests of the isolated payout simulator, including issuance, idempotency, reservation, rejection, provider pending/success/failure, and balance reconciliation.\n6. Implement JWT-authenticated withdrawal submission: server-derived user ID, PayPal/Venmo validation, AES-GCM encryption, idempotency, integer-cent validation, minimum/available balance checks, and atomic reservation.
+7. Implement admin queue/review mutations with server-side role checks, reviewer identity from verified auth, required reasons, audit events, and compensating journal entries for rejection/cancellation.
+8. Add user-facing withdrawal UI only after the server API contract is implemented.
+9. Test concurrency, insufficient balance, duplicate requests, malformed destinations, encryption failure, authorization bypass, rejection/cancellation, and payout reconciliation.
+10. Keep live payouts, provider activation, production deployment, and merging into `main` disabled until required approvals and explicit owner authorization.
