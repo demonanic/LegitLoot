@@ -13,6 +13,7 @@
    document.getElementById("metric-users").textContent=d.overview?.registeredProfiles??"—";
    document.getElementById("metric-role").textContent=d.role||"—";
    document.getElementById("metric-payouts").textContent=d.payoutCount??"Open queue";
+   document.getElementById("payouts-tab").hidden=!d.capabilities?.canReviewPayouts;
    document.getElementById("audit-tab").hidden=!d.capabilities?.canViewAudit;
    document.getElementById("accounts-tab").hidden=!d.capabilities?.canManageAccounts;
    if(section==="overview")sectionContent.innerHTML='<p>Administrator identity verified server-side.</p><p>Role: <span class="status">'+esc(d.role)+'</span></p><p>Registered profiles: '+esc(d.overview?.registeredProfiles??0)+'</p><p class="muted">Real withdrawals and payout execution remain disabled. Use the isolated staging payout simulator for artificial funds and simulated outcomes.</p>';
@@ -34,7 +35,7 @@
   const {data,error:verifyError}=await client.auth.getUser();
   if(verifyError||!data.user){status.textContent="SESSION INVALID · Sign in again through Player Account.";return;}
   status.textContent="Signed in as "+(data.user.email||"verified user")+". Verifying administrator authorization with the server…";
-  try{const d=await invoke("overview");document.getElementById("metric-users").textContent=d.overview?.registeredProfiles??0;document.getElementById("metric-role").textContent=d.role;document.getElementById("audit-tab").hidden=!d.capabilities?.canViewAudit;document.getElementById("accounts-tab").hidden=!d.capabilities?.canManageAccounts;content.hidden=false;status.textContent="ADMINISTRATOR VERIFIED · "+d.role;await load("overview");}catch(e){status.textContent="ACCESS DENIED · "+e.message+" Sign in with the authorized staging owner account.";content.hidden=true;}
+  try{const d=await invoke("overview");document.getElementById("metric-users").textContent=d.overview?.registeredProfiles??0;document.getElementById("metric-role").textContent=d.role;document.getElementById("payouts-tab").hidden=!d.capabilities?.canReviewPayouts;document.getElementById("audit-tab").hidden=!d.capabilities?.canViewAudit;document.getElementById("accounts-tab").hidden=!d.capabilities?.canManageAccounts;content.hidden=false;status.textContent="ADMINISTRATOR VERIFIED · "+d.role;await load("overview");}catch(e){status.textContent="ACCESS DENIED · "+e.message+" Sign in with an authorized staging employee account.";content.hidden=true;}
  };
  document.querySelectorAll("[data-section]").forEach(b=>b.addEventListener("click",()=>{document.querySelectorAll("[data-section]").forEach(x=>x.classList.toggle("active",x===b));load(b.dataset.section);}));
  refresh.addEventListener("click",()=>load(currentSection));
