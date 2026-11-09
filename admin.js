@@ -28,7 +28,7 @@
       document.getElementById("metric-payouts").textContent = data.payoutCount ?? "Open queue";
       document.getElementById("audit-tab").hidden = !data.capabilities?.canViewAudit;
       if(section==="overview"){
-        sectionContent.innerHTML = '<p>Administrator identity verified server-side.</p><p>Role: <span class="status">'+esc(data.role)+'</span></p><p>Registered profiles: '+esc(data.overview?.registeredProfiles ?? 0)+'</p><p class="muted">Withdrawal submission and payout execution are not enabled. This console is read-only in this build.</p>';
+        sectionContent.innerHTML = '<p>Administrator identity verified server-side.</p><p>Role: <span class="status">'+esc(data.role)+'</span></p><p>Registered profiles: '+esc(data.overview?.registeredProfiles ?? 0)+'</p><p class="muted">Real withdrawals and payout execution remain disabled. Use the isolated staging payout simulator to test artificial funds and simulated provider outcomes.</p>';
       } else if(section==="payouts"){
         const rows = data.payouts || [];
         document.getElementById("metric-payouts").textContent = rows.length;
