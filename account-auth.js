@@ -17,6 +17,7 @@
   const status = $("auth-status");
   const authPanel = $("auth-panel");
   const playerPanel = $("player-panel");
+  const employeeAccessLink = $("employee-access-link");
   const showMessage = (heading, message, isError = false) => {
     status.innerHTML = "";
     const title = document.createElement("b");
@@ -55,12 +56,23 @@
     $("wallet-game-detail").textContent = Number(data.gameCredits.provisional).toLocaleString("en-US") + " provisional · " + Number(data.gameCredits.deferred).toLocaleString("en-US") + " deferred. Credits are non-transferable and not withdrawable.";
     $("wallet-cash-detail").textContent = formatUsd(data.cash.heldCents) + " held. Pending provider funds are not available for withdrawal.";
   };
+  const refreshEmployeeAccess = async () => {
+    if (!employeeAccessLink) return;
+    employeeAccessLink.hidden = true;
+    try {
+      const { data, error } = await client.functions.invoke("admin-dashboard", { body: { section: "overview" } });
+      const authorizedRoles = ["owner", "payout_reviewer", "support_readonly"];
+      employeeAccessLink.hidden = Boolean(error || !data?.success || !authorizedRoles.includes(data?.role));
+    } catch {
+      employeeAccessLink.hidden = true;
+    }
+  };
   const showSignedIn = async (user) => {
     authPanel.hidden = true;
     playerPanel.hidden = false;
     $("player-email").textContent = user.email || "Authenticated player";
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
-    await loadWalletSummary();
+    await Promise.all([loadWalletSummary(), refreshEmployeeAccess()]);
     const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
     if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
   };
@@ -120,6 +132,7 @@
     if (error) return showMessage("SIGN OUT FAILED", error.message, true);
     playerPanel.hidden = true;
     authPanel.hidden = false;
+    if (employeeAccessLink) employeeAccessLink.hidden = true;
     $("signin-form").reset();
     showMessage("SIGNED OUT", "Your session has ended.");
   });
@@ -127,6 +140,7 @@
     if (event === "PASSWORD_RECOVERY") {
       playerPanel.hidden = true;
       authPanel.hidden = false;
+      if (employeeAccessLink) employeeAccessLink.hidden = true;
       switchTab("recovery");
       showMessage("RESET LINK ACCEPTED", "Choose a new password to finish recovering your account.");
       return;
@@ -135,6 +149,7 @@
     else if (event === "SIGNED_OUT") {
       playerPanel.hidden = true;
       authPanel.hidden = false;
+      if (employeeAccessLink) employeeAccessLink.hidden = true;
       switchTab("signin");
     }
   });
