@@ -40,7 +40,7 @@
     }catch(err){message(err.message);}
   });
   $("withdraw-form").addEventListener("submit",async e=>{
-    e.preventDefault();try{const amountMinor=cents($("withdraw-amount").value);if(amountMinor<50)throw new Error("Simulator minimum withdrawal is $0.50.");
+    e.preventDefault();try{const amountMinor=cents($("withdraw-amount").value);if(amountMinor<1000)throw new Error("Simulator minimum withdrawal is $10.00.");
       const rail=$("withdraw-rail").value;if(!confirm("Create a simulated "+rail+" withdrawal for "+money(amountMinor)+" for "+targetName()+"? No real destination or payment will be used."))return;
       await call({action:"create_withdrawal",targetUserId:selectedTarget,amountMinor,destinationType:rail,destinationLabel:"TEST: simulated "+rail+" destination",idempotencyKey:crypto.randomUUID()});
       message("Test withdrawal created for "+targetName()+". No real payout was attempted.");await refresh();
