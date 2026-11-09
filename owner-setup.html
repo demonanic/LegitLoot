@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LegitLoot — Initial Owner Setup</title>
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body{min-height:100vh;display:grid;place-items:center;padding:24px;background:#10091c;color:#f7efff;font-family:Arial,sans-serif}
+    main{width:min(100%,560px);padding:28px;border:1px solid #e33bd1;border-radius:18px;background:#1a1028}
+    h1{color:#c4ff28}p{line-height:1.55}.notice{color:#65eaff}.danger{color:#ff9eae}
+    button{margin-top:18px;padding:14px 20px;border:0;border-radius:10px;background:#bfff25;color:#151020;font-weight:800}
+    button:disabled{opacity:.5}pre{white-space:pre-wrap;overflow-wrap:anywhere}
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/supabase-config.js"></script>
+</head>
+<body>
+<main>
+  <h1>Initial Staging Owner Setup</h1>
+  <p class="notice">One-time setup for the isolated LegitLoot staging project. Production is not affected.</p>
+  <p>This operation grants the signed-in staging account the owner administrator role. It does not enable payouts or move money.</p>
+  <p id="identity">Checking staging session…</p>
+  <button id="provision" disabled>Provision Initial Owner</button>
+  <pre id="result" aria-live="polite"></pre>
+</main>
+<script>
+(async () => {
+  const out = document.getElementById("result");
+  const identity = document.getElementById("identity");
+  const button = document.getElementById("provision");
+  const config = window.LEGITLOOT_SUPABASE_CONFIG;
+  if (!config || config.environment !== "staging" || !window.supabase) {
+    identity.textContent = "Staging configuration unavailable. No changes made.";
+    return;
+  }
+  const client = window.supabase.createClient(config.url, config.publishableKey);
+  const { data: { session }, error } = await client.auth.getSession();
+  if (error || !session) {
+    identity.textContent = "No active staging session. Sign in on the staging Account page first.";
+    return;
+  }
+  identity.textContent = "Signed in as " + (session.user.email || "staging user");
+  button.disabled = false;
+  button.addEventListener("click", async () => {
+    button.disabled = true;
+    out.textContent = "Verifying account and one-time owner state…";
+    const { data, error } = await client.functions.invoke("provision-initial-owner", { body: {} });
+    if (error) {
+      out.textContent = "Not completed: " + error.message;
+      button.disabled = false;
+      return;
+    }
+    out.textContent = data?.message || JSON.stringify(data);
+  });
+})();
+</script>
+</body>
+</html>
