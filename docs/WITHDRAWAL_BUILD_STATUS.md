@@ -4,23 +4,38 @@
 **Active development branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — no production deployment, merge, or live financial changes authorized.
 
+## Isolated Supabase staging
+
+- Dedicated development account: **Legitloot dev**.
+- Staging project: `legitloot-staging` (`scmnxcsggquwtuyyjnnj`, US East).
+- Original project `gkbqderyjcuxnjbsiffb` remains preserved and untouched.
+- Four foundation migrations have been applied and verified in staging: initial schema, private financial-table RLS, authenticated wallet-summary RPC, and PayPal/Venmo encrypted-destination fields.
+- Staging currently has no Edge Functions, no real users, no financial transactions, and no payout requests.
+- The original project contains later wallet/offerwall work not yet replicated to staging. Do not treat staging as production-equivalent.
+
 ## Withdrawal foundation — prepared, not activated
 
-- Confirmed the connected Supabase project `gkbqderyjcuxnjbsiffb` serves the live site. No database writes, migrations, or Edge Function deployments were performed.
-- Added a build-branch-only migration draft for PayPal/Venmo destination metadata and encrypted recipient storage.
-- The migration stores only ciphertext, key-version metadata, and a masked display hint; it explicitly does not add plaintext recipient fields.
-- Added reviewer identity/time/reason fields and a pending-review queue index.
-- PayPal/Venmo remain manual-review destinations. No payout API, automatic payout, provider connection, or money movement is enabled.
-- The migration is intentionally unapplied. A dedicated staging Supabase project and server-side encryption secret are prerequisites.
-- Existing payout status enum supports requested, under_review, approved, processing, paid, failed, and cancelled. The admin role/authorization source still needs to be defined before admin actions can be safely implemented.
-- The existing ledger posting function is available for balanced journal entries, but withdrawal reservation must be implemented as a single atomic server-side operation that locks the player's available account, checks sufficient funds, posts the reservation, and creates the payout request in one transaction. Do not split those steps across independent API calls.
+- PayPal and Venmo only; manual review only. No payout provider is connected and no money can move.
+- Destination storage is designed for authenticated-encryption ciphertext, key-version metadata, and a masked hint. Plaintext recipient data and encryption keys must never enter the database, browser, logs, audit metadata, or Git.
+- The minimum withdrawal remains $10 (1 LootCoin = $1 USD is the approved design conversion), but the platform setting remains disabled/proposed and must not be treated as active.
+- No withdrawal API or admin review API has been deployed.
+- Reservation and payout-request creation must be one atomic database transaction: lock the player's available cash ledger account, check the balance and minimum, post a balanced journal reservation, and insert the payout request with idempotency protection.
+- A payout may be marked paid only after trusted provider confirmation and reconciliation.
+
+## Administrator authorization — decision confirmed
+
+- Owner approved a single initial administrator: the owner's own LegitLoot account.
+- The authorization source is a private server-controlled table, never user-editable auth metadata.
+- Added migration `20261108200000_server_controlled_admin_authorization.sql` to the build branch. It creates private admin records, a service-role-only one-time owner bootstrap function, and append-only audit-log protection.
+- No user has been promoted yet. The owner must first create/sign in to a LegitLoot account so its Auth user UUID exists; bootstrap will then be performed server-side without asking the owner to send secrets.
+- Additional administrators can be provisioned later through a privileged server-side process with least-privilege roles and audit history.
 
 ## Remaining implementation gates
 
-1. Create a separate staging Supabase project and confirm its credentials are isolated from production.
-2. Define the authoritative admin authorization mechanism (never user-editable metadata).
-3. Add an authenticated withdrawal-request Edge Function with strict input validation, encrypted destination data, idempotency, and atomic reservation.
-4. Add an admin-only review API and queue; record every decision in the immutable audit log.
-5. Add account UI only after the API contract is implemented and tested.
-6. Test concurrent requests, insufficient balance, replay/idempotency, encryption failure, rejected review, cancellation, and confirmed payout transitions.
-7. Keep all live payout and production activation disabled until provider/legal approval and explicit owner authorization.
+1. Apply and verify the admin authorization migration in staging; run Supabase security/performance advisors.
+2. Reconcile the remaining original-project migrations and existing function source into staging's documented build plan without touching production.
+3. Implement a JWT-authenticated withdrawal Edge Function: server-derived user ID, PayPal/Venmo validation, AES-GCM encryption, idempotency, integer-cent validation, minimum/available balance checks, and atomic reservation.
+4. Implement admin queue/review actions with server-side role checks, reviewer identity derived from verified auth, required reason, audit events, and compensating journal entries for rejection/cancellation.
+5. Add user-facing withdrawal UI only after the server API contract is implemented.
+6. Test concurrency, insufficient balance, duplicate requests, malformed destinations, encryption failure, authorization bypass, rejection/cancellation, and payout reconciliation.
+7. Keep live payouts, provider activation, production deployment, and merging into `main` disabled until required approvals and explicit owner authorization.
