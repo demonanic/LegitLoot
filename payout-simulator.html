@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#100820">
+<title>Payout Simulator — LegitLoot</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="portal.css">
+<style>
+.sim-wrap{width:min(1080px,calc(100% - 28px));margin:32px auto 110px}
+.sim-warning{border:1px solid #e4a23a;background:rgba(100,60,10,.18);border-radius:14px;padding:16px;margin:18px 0}
+.sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin:18px 0}
+.sim-card,.sim-panel{border:1px solid #a43bcb;border-radius:15px;padding:17px;background:rgba(30,14,48,.88)}
+.sim-card small{display:block;color:#65eaff;font-family:monospace;letter-spacing:.1em}
+.sim-card strong{display:block;font-size:27px;color:#c4ff28;margin-top:9px}
+.sim-form{display:grid;gap:12px;max-width:560px}
+.sim-form label{display:grid;gap:6px;color:#cbbbd8}
+.sim-form input,.sim-form select,.sim-form textarea{width:100%;padding:12px;border:1px solid #80509b;border-radius:9px;background:#160d25;color:#fff}
+.sim-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.sim-actions button{cursor:pointer}
+.sim-table{width:100%;border-collapse:collapse;min-width:720px}
+.sim-table th,.sim-table td{padding:11px;border-bottom:1px solid #55366a;text-align:left;vertical-align:top;font-size:13px}
+.sim-table th{color:#65eaff}
+.sim-scroll{overflow-x:auto}
+.sim-status{font-family:monospace;color:#c4ff28;text-transform:uppercase}
+.sim-muted{color:#bcaecb}
+.sim-message{border:1px solid #65eaff;border-radius:10px;padding:12px;margin:14px 0}
+.sim-section{margin-top:20px}
+.sim-small{font-size:12px;color:#bcaecb}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+</head>
+<body>
+<div class="scanlines" aria-hidden="true"></div>
+<header class="site-header">
+<a class="brand" href="index.html"><img class="brand-mark brand-mark-image" src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span class="acid">LOOT</span></span></a>
+<nav class="main-nav"><a href="admin.html">Admin Command</a><a href="account.html">Player Account</a></nav>
+</header>
+<main class="sim-wrap">
+<p class="eyebrow">OWNER TOOL / STAGING SIMULATION ONLY</p>
+<h1>PAYOUT <span class="acid">SIMULATOR.</span></h1>
+<div class="sim-warning"><strong>SIMULATED FUNDS — NO CASH VALUE.</strong><p>Everything on this page is isolated from real cash wallets, real financial journals, and payment providers. The PayPal/Venmo destination is a fixed test label. No real payment can be sent from this tool.</p></div>
+<div id="sim-auth" class="sim-message" role="status">Verifying staging owner session…</div>
+<div id="sim-app" hidden>
+<div class="sim-grid">
+<article class="sim-card"><small>TEST AVAILABLE</small><strong id="sim-available">$0.00</strong></article>
+<article class="sim-card"><small>TEST RESERVED</small><strong id="sim-reserved">$0.00</strong></article>
+<article class="sim-card"><small>SIMULATED PAID</small><strong id="sim-paid">$0.00</strong></article>
+<article class="sim-card"><small>TEST FUNDS ISSUED</small><strong id="sim-issued">$0.00</strong></article>
+</div>
+<div class="sim-grid">
+<section class="sim-panel">
+<h2>Issue test funds</h2>
+<p class="sim-muted">Minimum $0.01 · Maximum $250 per issue · $1,000 lifetime issuance cap.</p>
+<form id="issue-form" class="sim-form">
+<label>Artificial amount (USD)<input id="issue-amount" type="number" min="0.01" max="250" step="0.01" value="25.00" required></label>
+<label>Reason for test issuance<textarea id="issue-reason" minlength="5" maxlength="300" required>Staging withdrawal workflow test</textarea></label>
+<button class="primary-btn" type="submit">ISSUE SIMULATED FUNDS</button>
+</form>
+</section>
+<section class="sim-panel">
+<h2>Create test withdrawal</h2>
+<p class="sim-muted">Minimum $0.50. Destination details are never collected; a fixed test label is used.</p>
+<form id="withdraw-form" class="sim-form">
+<label>Withdrawal amount (USD)<input id="withdraw-amount" type="number" min="0.50" step="0.01" value="5.00" required></label>
+<label>Simulated payout rail<select id="withdraw-rail"><option value="paypal">PayPal (simulation)</option><option value="venmo">Venmo (simulation)</option></select></label>
+<button class="primary-btn" type="submit">CREATE TEST WITHDRAWAL</button>
+</form>
+</section>
+</div>
+<section class="sim-panel sim-section">
+<div class="sim-actions"><h2 style="margin:0">Test withdrawal queue</h2><button id="sim-refresh" type="button" class="filter-chip">REFRESH</button></div>
+<div id="sim-queue" class="sim-scroll sim-muted">Loading simulator data…</div>
+</section>
+<section class="sim-panel sim-section">
+<h2>Immutable test event history</h2>
+<div id="sim-events" class="sim-scroll sim-muted">Loading events…</div>
+</section>
+</div>
+</main>
+<script src="payout-simulator.js"></script>
+</body>
+</html>
