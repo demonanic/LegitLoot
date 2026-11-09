@@ -76,3 +76,11 @@
 5. Implement payout eligibility, reserve checks, admin review and audit workflows; no live payouts until legal/provider gates pass.
 6. Add integration, security and mobile regression tests.
 7. Only after owner review, connect V2 branch to Cloudflare preview or production. No production deployment is authorized by this status update.
+
+## Employee access menu — 2026-11-09
+
+- Added an `EMPLOYEE ACCESS` link to the signed-in account panel. It remains hidden unless the authenticated session successfully calls the staging `admin-dashboard` Edge Function and the server confirms an active `owner`, `payout_reviewer`, or `support_readonly` role.
+- The browser does not infer authorization from email addresses, user-editable metadata, or local storage. The existing server-side `private.admin_users` registry and `admin_dashboard_payload` RPC remain authoritative.
+- The admin console now hides the withdrawal queue from roles without `canReviewPayouts`; account management and audit visibility remain owner-only.
+- Current staging authorization registry has one active owner and no employee accounts yet. Employee role provisioning remains an owner-controlled operation; no role assignments were created by this change.
+- Changes are limited to `build/legitloot-neon-synthwave`. No production merge or domain cutover was performed.
