@@ -24,9 +24,11 @@
 ## Admin dashboard — first read-only pass
 
 - Added `admin.html` and `admin.js` to the development branch.
-- Deployed staging Edge Function `admin-dashboard` (version 1). It validates the bearer session with Supabase Auth, reads the role from `private.admin_users`, and uses a server-only service key for private data access.
-- Role boundaries: owner can view overview, withdrawal queue, and audit history; payout reviewer can view overview and withdrawal queue; support-readonly is limited to overview.
+- Deployed staging Edge Function `admin-dashboard` version 2. It validates the bearer session with Supabase Auth, then calls the service-role-only `public.admin_dashboard_payload` RPC. The RPC reads private data without exposing the private schema through PostgREST.
+- Migration source is tracked at `supabase/migrations/20261109054000_admin_dashboard_payload.sql`; it has been applied to staging.
+- Role boundaries are enforced in SQL: owner can view overview, withdrawal queue, and audit history; payout reviewer can view overview and withdrawal queue; support-readonly is limited to overview.
 - Queue output deliberately excludes recipient ciphertext and encryption key metadata; only the masked destination hint is returned.
+- Verified staging RPC results for owner overview, empty payout queue, and empty audit history. Verified anon and authenticated roles cannot execute the dashboard RPC; service_role can.
 - Dashboard has no approve/reject, payout, user-edit, or admin-management controls. It is read-only.
 - Cloudflare Pages must successfully deploy the latest development branch commit before browser testing. No production deploy.
 
@@ -36,13 +38,15 @@
 - Destination storage fields support authenticated-encryption ciphertext, key-version metadata, and a masked hint. Plaintext recipient data and encryption keys must never enter the database, browser, logs, audit metadata, or Git.
 - The $10 minimum remains proposed/disabled. LootCoins are a separate non-cash game currency and are never withdrawable.
 - No withdrawal submission API or payout-review mutation API has been deployed.
-- Withdrawal request and balance reservation must be one atomic database transaction: lock the player's available cash ledger account, check balance and minimum, post a balanced journal reservation, and insert the request with idempotency protection.
+- Withdrawal request and balance reservation must be one atomic database transaction: lock the player's available cash ledger account, check the balance and minimum, post a balanced journal reservation, and insert the request with idempotency protection.
 - Reject/cancel must release the reservation using compensating journal entries. A payout may be marked paid only after trusted provider confirmation and reconciliation.
 
 ## Known staging review items
 
-- Run and review Supabase security/performance advisors. Current security advisor output flags private tables with RLS enabled and no direct policies (intentional private-schema/service-role access model; verify schema exposure and grants), a SECURITY DEFINER wallet-summary RPC (intentional authenticated summary; verify auth.uid enforcement), and leaked-password protection disabled (enable before broader testing).
-- The admin dashboard Edge Function and frontend need end-to-end testing with owner, non-admin, and least-privilege role sessions. In particular, verify unauthenticated and non-admin calls are rejected and that support-readonly cannot fetch payout or audit data.
+- Supabase security advisors flag private tables with RLS enabled and no direct policies. This matches the current unexposed private-schema/service-role access model, but verify grants and schema exposure after changes.
+- The advisor flags `public.get_wallet_summary()` as SECURITY DEFINER and callable by authenticated users. This is intentional for the authenticated wallet summary only; retain the explicit `auth.uid()` check and verify it in security tests.
+- Leaked-password protection is disabled; enable it before broader user testing.
+- The admin dashboard Edge Function and frontend still need end-to-end browser testing with owner, non-admin, and least-privilege role sessions. In particular, verify unauthenticated and non-admin calls are rejected and support-readonly cannot fetch payout or audit data.
 - Do not treat staging as production-equivalent. Reconcile remaining historical migrations before provider integrations.
 
 ## Remaining implementation gates
