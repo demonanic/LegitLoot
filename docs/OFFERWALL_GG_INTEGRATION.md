@@ -1,6 +1,17 @@
 # Offerwall.GG — LegitLoot LootCoins Integration
 
-**Status:** staged for development-branch integration; provider disabled; staging secrets and callback validation pending.
+**Status:** staging schema and Edge Functions deployed; provider remains disabled. Publisher approval and staging secrets are still pending.
+
+## Verified staging deployment (2026-11-09)
+
+- Callback ledger tables and service-role-only posting RPC are deployed to the isolated staging project.
+- LootCoins precision is stored as 10,000 integer atoms per LC. Existing staging LC balances were verified as zero before applying the precision migration.
+- offerwall-gg-wall-url is deployed with JWT verification enabled.
+- offerwall-gg-postback is deployed with JWT verification disabled; its HMAC validation is performed in the function.
+- The Earn page is available on the staging preview and its scripts loaded successfully with no browser console errors.
+- The provider record remains disabled. No conversion has been credited.
+- Staging secrets are not configured through this workflow; set them directly in Supabase Edge Function Secrets. Never send the Offerwall secret in chat or commit it to GitHub.
+
 **Reward currency:** LootCoins (LC).
 **Source of truth:** https://offerwall.gg/developers and https://offerwall.gg/developers/postbacks
 
