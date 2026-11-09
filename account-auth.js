@@ -1,11 +1,17 @@
 (() => {
-  const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
-  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const config = window.LEGITLOOT_SUPABASE_CONFIG;
+  const client = config?.url && config?.publishableKey
+    ? window.supabase?.createClient(config.url, config.publishableKey)
+    : null;
   const $ = (id) => document.getElementById(id);
   if (!client) {
     const status = $("auth-status");
-    if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
+    if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The staging authentication configuration could not load. No account changes were made.</p>";
+    return;
+  }
+  if (config.environment !== "staging") {
+    const status = $("auth-status");
+    if (status) status.innerHTML = "<b>ENVIRONMENT CHECK FAILED</b><p>This build is not configured for the isolated staging environment. Registration is disabled.</p>";
     return;
   }
   const status = $("auth-status");
