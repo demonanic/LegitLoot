@@ -9,7 +9,7 @@
 - Dedicated development account: **Legitloot dev**.
 - Staging project: `legitloot-staging` (`scmnxcsggquwtuyyjnnj`, US East).
 - Original project `gkbqderyjcuxnjbsiffb` remains preserved and untouched.
-- Four foundation migrations have been applied and verified in staging: initial schema, private financial-table RLS, authenticated wallet-summary RPC, and PayPal/Venmo encrypted-destination fields.
+- Five foundation migrations have been applied and verified in staging: initial schema, private financial-table RLS, authenticated wallet-summary RPC, PayPal/Venmo encrypted-destination fields, and the standard LootCoins wallet model (LC stored as integer atoms).
 - Staging currently has no Edge Functions, no real users, no financial transactions, and no payout requests.
 - The original project contains later wallet/offerwall work not yet replicated to staging. Do not treat staging as production-equivalent.
 
@@ -17,7 +17,7 @@
 
 - PayPal and Venmo only; manual review only. No payout provider is connected and no money can move.
 - Destination storage is designed for authenticated-encryption ciphertext, key-version metadata, and a masked hint. Plaintext recipient data and encryption keys must never enter the database, browser, logs, audit metadata, or Git.
-- The minimum withdrawal remains $10 (1 LootCoin = $1 USD is the approved design conversion), but the platform setting remains disabled/proposed and must not be treated as active.
+- The minimum withdrawal remains $10 (1 LootCoin = $1 USD is the approved design conversion). LootCoins are a separate non-cash game/reward currency and are not withdrawable. The cash withdrawal minimum is still disabled/proposed and must not be treated as active.
 - No withdrawal API or admin review API has been deployed.
 - Reservation and payout-request creation must be one atomic database transaction: lock the player's available cash ledger account, check the balance and minimum, post a balanced journal reservation, and insert the payout request with idempotency protection.
 - A payout may be marked paid only after trusted provider confirmation and reconciliation.
