@@ -202,3 +202,17 @@ Requires explicit owner approval of the exact commit, production deployment, dom
 - No cash competitions or sweepstakes.
 - No merging into `main`, changing Cloudflare production configuration, or deploying to `legitloot.site`.
 - No reuse of Demonanic production credentials or user data.
+
+
+## 13. Withdrawal implementation constraints (2026-11-08)
+
+- Player payout destinations are limited initially to PayPal and Venmo, with manual review only.
+- Never persist plaintext recipient identifiers. Store authenticated-encryption ciphertext, a key-version identifier, and a deliberately masked hint only.
+- Encryption keys must exist only in server-side secret storage. No key, decrypted recipient, or raw destination value may enter browser code, logs, audit metadata, or Git.
+- A withdrawal request must authenticate the user, derive the user ID from the verified session, validate an integer USD-cent amount, enforce the configured minimum and available balance, and use a server-generated or validated idempotency key.
+- Reservation and payout-request creation must be atomic. Lock the player's available ledger account, post a balanced journal transaction moving cash from available to withdrawal-reserved, and insert the request in the same database transaction. Concurrent requests must not overspend.
+- The client may not choose status, user ID, payout provider ID, reviewer, paid timestamp, or ledger account IDs.
+- Admin authorization must come from a server-controlled role/authorization source, not user-editable metadata. Every review decision must record reviewer, timestamp, reason, and an immutable audit event.
+- Rejected/cancelled requests release reserved funds through a compensating journal transaction; they must never edit or delete prior journal entries.
+- Mark a request paid only after a reconciled, trusted payout confirmation. Admin approval alone is not payment.
+- No payout function may be deployed to the production Supabase project until an isolated staging project exists and all required tests pass.
