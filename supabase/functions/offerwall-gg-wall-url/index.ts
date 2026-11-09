@@ -1,7 +1,7 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": request.headers.get("origin") && ["https://legitloot.site","https://build-legitloot-neon-synthwa.legitloot.pages.dev"].includes(request.headers.get("origin")!) ? request.headers.get("origin")! : "https://legitloot.site",
+  "Access-Control-Allow-Origin": "https://build-legitloot-neon-synthwa.legitloot.pages.dev",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Vary": "Origin",
@@ -39,7 +39,7 @@ Deno.serve(async (request: Request) => {
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   const origin = request.headers.get("origin");
-  if (origin && origin !== "https://legitloot.site") return json({ error: "Origin not allowed" }, 403);
+  if (origin && !["https://legitloot.site", "https://build-legitloot-neon-synthwa.legitloot.pages.dev"].includes(origin)) return json({ error: "Origin not allowed" }, 403);
 
   const authHeader = request.headers.get("authorization") ?? "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
