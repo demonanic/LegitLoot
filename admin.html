@@ -1,56 +1,13 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#100820">
-  <title>Admin Command — LegitLoot</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="portal.css">
-  <style>
-    .admin-wrap{width:min(1120px,calc(100% - 32px));margin:40px auto 100px}
-    .admin-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
-    .admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:24px 0}
-    .admin-card,.admin-panel{border:1px solid #a43bcb;border-radius:16px;padding:20px;background:rgba(30,14,48,.86)}
-    .admin-card small,.admin-panel small{color:#65eaff;font-family:monospace;letter-spacing:.12em}
-    .admin-card strong{display:block;font-size:30px;margin-top:10px;color:#c4ff28}
-    .admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}
-    .admin-tabs button{cursor:pointer}
-    .admin-table{width:100%;border-collapse:collapse;min-width:680px}
-    .admin-table th,.admin-table td{text-align:left;padding:12px;border-bottom:1px solid #58346b;font-size:14px;vertical-align:top}
-    .admin-table th{color:#65eaff}
-    .table-scroll{overflow-x:auto}
-    .admin-message{padding:14px;border:1px solid #65eaff;border-radius:10px;margin:16px 0}
-    .muted{color:#bcaecb}.status{color:#c4ff28;text-transform:uppercase;font-family:monospace}
-  </style>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="supabase-config.js"></script>
-</head>
-<body>
-<div class="scanlines" aria-hidden="true"></div>
-<header class="site-header">
-  <a class="brand" href="index.html"><img class="brand-mark brand-mark-image" src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span class="acid">LOOT</span></span></a>
-  <nav class="main-nav"><a href="index.html">Home</a><a href="account.html">Player Account</a><a href="payout-simulator.html">Payout Simulator</a></nav>
-</header>
-<main class="admin-wrap">
-  <p class="eyebrow">SECURE OPERATIONS / STAGING ONLY</p>
-  <div class="admin-top"><div><h1>ADMIN <span class="acid">COMMAND.</span></h1><p class="muted">Restricted console. Every request is re-authorized by the server.</p></div><button id="admin-refresh" class="primary-btn" type="button">REFRESH DATA</button></div>
-  <div id="admin-identity" class="admin-message" role="status">Checking authenticated administrator session…</div>
-  <div id="admin-content" hidden>
-    <div class="admin-grid">
-      <article class="admin-card"><small>REGISTERED PROFILES</small><strong id="metric-users">—</strong></article>
-      <article class="admin-card"><small>ACCESS ROLE</small><strong id="metric-role">—</strong></article>
-      <article class="admin-card"><small>WITHDRAWAL QUEUE</small><strong id="metric-payouts">—</strong></article>
-    </div>
-    <div class="admin-tabs">
-      <button class="filter-chip active" data-section="overview" type="button">OVERVIEW</button>
-      <button class="filter-chip" data-section="payouts" type="button">WITHDRAWAL QUEUE</button>
-      <button class="filter-chip" data-section="accounts" type="button" id="accounts-tab" hidden>PLAYER ACCOUNTS</button>
-      <button class="filter-chip" data-section="audit" type="button" id="audit-tab" hidden>AUDIT LOG</button>
-    </div>
-    <section class="admin-panel"><div id="section-heading"><h2>OPERATIONS OVERVIEW</h2></div><div id="section-content" class="muted">Loading…</div></section>
-  </div>
-</main>
-<script src="admin.js"></script>
-</body>
-</html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#100820"><title>Admin Command — LegitLoot</title><link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="portal.css"><style>
+.admin-wrap{width:min(1120px,calc(100% - 32px));margin:40px auto 100px}.admin-top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}.admin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:24px 0}.admin-card,.admin-panel{border:1px solid #a43bcb;border-radius:16px;padding:20px;background:rgba(30,14,48,.86)}.admin-card small,.admin-panel small{color:#65eaff;font-family:monospace;letter-spacing:.12em}.admin-card strong{display:block;font-size:30px;margin-top:10px;color:#c4ff28}.admin-tabs{display:flex;gap:10px;flex-wrap:wrap;margin:24px 0}.admin-tabs button{cursor:pointer}.admin-table{width:100%;border-collapse:collapse;min-width:680px}.admin-table th,.admin-table td{text-align:left;padding:12px;border-bottom:1px solid #58346b;font-size:14px;vertical-align:top}.admin-table th{color:#65eaff}.table-scroll{overflow-x:auto}.admin-message{padding:14px;border:1px solid #65eaff;border-radius:10px;margin:16px 0}.muted{color:#bcaecb}.status{color:#c4ff28;text-transform:uppercase;font-family:monospace}.admin-shortcuts{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}.admin-shortcuts a{color:#65eaff;border:1px solid #80509b;border-radius:9px;padding:10px 13px;text-decoration:none}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script></head>
+<body><div class="scanlines" aria-hidden="true"></div>
+<header class="site-header"><a class="brand" href="index.html"><img class="brand-mark brand-mark-image" src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span class="acid">LOOT</span></span></a><button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button><nav class="main-nav" aria-label="Website navigation"><a href="index.html">Home</a><a href="games.html">Games</a><a href="earn.html">Earn</a><a href="marketplace.html">Deals</a><a href="rewards.html">Rewards</a><a href="account.html">Wallet / Sign in</a></nav></header>
+<main class="admin-wrap"><p class="eyebrow">SECURE OPERATIONS / STAGING ONLY</p><div class="admin-top"><div><h1>ADMIN <span class="acid">COMMAND.</span></h1><p class="muted">Restricted console. Every request is re-authorized by the server.</p></div><button id="admin-refresh" class="primary-btn" type="button">REFRESH DATA</button></div>
+<div id="admin-identity" class="admin-message" role="status">Checking staging sign-in and administrator permissions…</div>
+<div id="admin-content" hidden><div class="admin-shortcuts"><a href="index.html">← Main website</a><a href="payout-simulator.html">Open payout simulator →</a><button id="admin-signout" class="filter-chip" type="button">SIGN OUT</button></div>
+<div class="admin-grid"><article class="admin-card"><small>REGISTERED PROFILES</small><strong id="metric-users">—</strong></article><article class="admin-card"><small>ACCESS ROLE</small><strong id="metric-role">—</strong></article><article class="admin-card"><small>WITHDRAWAL QUEUE</small><strong id="metric-payouts">—</strong></article></div>
+<div class="admin-tabs"><button class="filter-chip active" data-section="overview" type="button">OVERVIEW</button><button class="filter-chip" data-section="payouts" type="button">WITHDRAWAL QUEUE</button><button class="filter-chip" data-section="accounts" type="button" id="accounts-tab" hidden>PLAYER ACCOUNTS</button><button class="filter-chip" data-section="audit" type="button" id="audit-tab" hidden>AUDIT LOG</button></div>
+<section class="admin-panel"><div id="section-heading"><h2>OPERATIONS OVERVIEW</h2></div><div id="section-content" class="muted">Loading…</div></section></div></main>
+<script src="app.js"></script><script src="admin.js"></script></body></html>
