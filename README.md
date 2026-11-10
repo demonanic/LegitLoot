@@ -4,6 +4,8 @@ Independent games and rewards platform.
 
 ## Active build
 
+- **Codex operating law:** [CODEX_EXECUTION_CONSTITUTION.md](docs/CODEX_EXECUTION_CONSTITUTION.md) — mandatory project vision, scope controls, workflow, acceptance criteria and handoff rules. Codex must read this before every work session.
+
 - Build branch: `build/legitloot-neon-synthwave`
 - Governing business specification: [LegitLoot Master Business Model v1.3](docs/PLATFORM_BUILD_SPEC.md)
 - Approved brand direction: **LegitLoot — The Underground Arcade**. Hybrid punk outlaw + underground hacker + arcade boss personality; mixed raw comic-book, cinematic illustration and distressed punk-print treatment. See [Brand Art Direction](docs/BRAND_ART_DIRECTION.md).
