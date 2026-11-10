@@ -2,12 +2,12 @@
 
 **Updated:** 2026-11-10
 **Branch:** `build/legitloot-neon-synthwave`
-**Active milestone:** Owner-authorized visual rebuild
+**Active milestone:** Complete LegitLoot product design handoff; website rendered QA remains pending
 **Baseline:** Stage 0 accepted by owner; rendered desktop/mobile capture deferred until browser access is available.
 
 ## Owner authorization and restrictions
 
-The owner authorized the visual redesign from the Creative Bible through public-page implementation. This supersedes older creative directions and the Stage 0 stop boundary. Scope remains frontend presentation and original visual assets only. No backend, authentication, database, wallet, financial logic, production domain, production deployment, merge, paid service, or agreement changes are authorized.
+The owner authorized public website visual design and the platform model/specification work on the isolated build branch. The 2026-11-10 owner-locked model is authoritative: LC is game-only; cash rewards are deferred; all supported earning-channel categories are in the long-term architecture, with provider/campaign activation gated by verified terms and approval. This does not authorize production deployment, paid services, provider agreements, live reward issuance, or money movement.
 
 ## Completed
 
@@ -58,6 +58,17 @@ The owner authorized the visual redesign from the Creative Bible through public-
 
 See `git show --stat` for the coherent implementation commit; the Creative Bible and Stage 1 blueprint are in the preceding documentation commit.
 
-## Next authorized task
+## Platform model completion — 2026-11-10
 
-When browser access is available, run rendered desktop/mobile review of all public routes, navigation, account states, filter interactions, focus/contrast, and hero crops. Make any visual corrections, then prepare the release review; production deployment still requires owner approval.
+- Published `docs/PLATFORM_BUILD_SPEC.md` v1.1 with the owner-locked LC-only/game-only reward model, deferred cash-rewards phase, supported earning-channel categories, channel-specific reward rules, canonical user journeys, logical data model, ledger invariants, provider adapter contract, and CPAGrip status/gates.
+- Reconciled the specification's older cash-allocation and withdrawal language so it is explicitly superseded/deferred and cannot be treated as current implementation scope.
+- Updated README and Codex operating rules to point to the owner-locked model.
+- No source-code, database, provider, production, or financial configuration changes were made as part of this documentation update.
+
+## Remaining gates / next tasks
+
+1. Rendered desktop/mobile review of all public routes, navigation, account states, filters, focus/contrast, and hero crops remains DEFERRED until browser access is available. Do not call the website visually QA-approved until performed.
+2. Reconcile the current frontend UI against the v1.1 model. In particular, ensure any old cash-reward wording or withdrawal UI is not presented as a current player feature; preserve restricted staging-only payout simulator as a separate internal tool.
+3. Inspect actual Supabase schema, Edge Functions, RLS policies, and CPAGrip staging code before declaring backend or provider readiness.
+4. Continue with CPAGrip adapter verification only after current official terms/macros and incentive eligibility for game-only LC are confirmed. Keep live reward posting disabled until all gates pass.
+5. Production deployment, merging, paid services, provider agreements, live rewards, and money movement remain outside this authorization.
