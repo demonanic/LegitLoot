@@ -74,7 +74,8 @@ Before implementation, inspect the current repository and read these documents i
 1. `docs/CODEX_EXECUTION_CONSTITUTION.md` — this document; operating rules and workflow.
 2. `docs/PLATFORM_BUILD_SPEC.md` — business model, product scope, architecture, financial rules, security and release gates.
 3. `docs/BRAND_ART_DIRECTION.md` — approved visual identity, art direction, layout and design quality.
-4. `README.md` — repository status, active branch and current project entry point.
+4. `docs/WEBSITE_CREATIVE_WORKFLOW.md` — owner-selected comic-book/rich visual direction, asset production pipeline, page design rules and creative acceptance gates.
+5. `README.md` — repository status, active branch and current project entry point.
 
 Also inspect relevant source code, tests, assets, configuration, package manifests, deployment configuration and Git history before modifying anything.
 
