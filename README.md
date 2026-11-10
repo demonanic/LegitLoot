@@ -5,6 +5,7 @@ Independent games and rewards platform.
 ## Active build
 
 - **Codex operating law:** [CODEX_EXECUTION_CONSTITUTION.md](docs/CODEX_EXECUTION_CONSTITUTION.md) — mandatory project vision, scope controls, workflow, acceptance criteria and handoff rules. Codex must read this before every work session.
+- **Website creative workflow:** [WEBSITE_CREATIVE_WORKFLOW.md](docs/WEBSITE_CREATIVE_WORKFLOW.md) — owner-selected comic-book chaos direction with rich detail, art production pipeline, page-by-page design rules and visual acceptance gates.
 
 - Build branch: `build/legitloot-neon-synthwave`
 - Governing business specification: [LegitLoot Master Business Model v1.3](docs/PLATFORM_BUILD_SPEC.md)
