@@ -1,7 +1,7 @@
 # LegitLoot — Platform Build Specification
 
-**Version:** 1.0  
-**Date:** 2026-11-07  
+**Version:** 1.1  
+**Date:** 2026-11-10  
 **Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — untouched; no production deployment authorized.  
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
@@ -19,19 +19,19 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 
 ## 2. Hard business rules (must be enforced in code and UX)
 
+**Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. Cash rewards are deferred to a separately approved future phase. The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
+
 ### Two separate balances
 - **Game credits:** non-transferable, no cash value, not withdrawable, not transferable to another player, and never convertible to cash.
 - **Cash rewards:** tracked in USD with distinct states: pending, available, withdrawal-reserved, and paid.
 - Never combine the two balances into a single total or imply game credits have a USD redemption value.
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
-### Offerwall allocation — proposed model, not a provider promise
-For each eligible provider-approved reward event:
-- Player reward pool split: 50% cash allocation and 50% game-credit allocation.
-- Of the game-credit allocation, 75% may be issued provisionally only after a validated provider confirmation; 25% is deferred until settlement/reconciliation.
-- Cash allocation remains pending until provider settlement and reconciliation.
-- The platform revenue share, eligible net-revenue basis, deductions, caps and any provider-specific adjustments must be taken from the approved business model and the provider's current written terms. Do not invent a universal platform percentage.
-- All rates remain configurable and disabled until the relevant provider approves the exact model in writing.
+### Reward calculation — campaign-specific, LC only
+- No universal reward-per-dollar rate is approved.
+- Each eligible campaign must have a documented, versioned LC reward rule, eligibility, caps, status lifecycle, and provider approval for incentivized traffic and game-only redemption.
+- The former proposed 50% cash / 50% game-credit split and 75%/25% provisional/deferred split are superseded and must not be implemented.
+- Provider revenue shares, deductions, caps, and settlement are business accounting data, not player cash allocations.
 
 ### Reserves and reversals
 - Maintain reserves sufficient to cover player cash liabilities and outstanding provisional-credit fulfillment.
@@ -46,6 +46,126 @@ For each eligible provider-approved reward event:
 - Reserve cash before initiating a payout; release reservation only on a confirmed failure/cancellation or final settlement.
 - A dashboard balance is not proof of payment; only a reconciled provider confirmation marks paid.
 - Never initiate a payout without verified identity/eligibility, explicit user request, risk checks, sufficient reserves, and an approved payout rail.
+
+
+
+## 2A. Owner-locked platform model decisions (2026-11-10)
+
+These decisions are binding for product design and implementation and supersede any conflicting earlier proposal in this document.
+
+### LootCoins: games only
+- LC may be spent only on eligible in-game purchases, upgrades, cosmetics, game content, and game-related perks in the approved LegitLoot game ecosystem.
+- LC cannot be withdrawn, transferred, exchanged for cash, converted into another currency, or redeemed for general marketplace goods, gift cards, or cash-equivalent items.
+- LC has no cash value. Never display a dollar conversion rate.
+- Each catalog item must state whether it is game-specific or platform-wide. No cross-game entitlement is implied.
+- The approved initial games are Demonanic, Gauntlet's Survival, and Harvest//Zero.
+
+### Cash rewards: later phase
+- Cash rewards are not part of the initial player reward promise or current earning model.
+- Do not allocate any current offerwall, survey, task, referral, affiliate, mission, or advertising reward to a player cash balance.
+- Do not implement active player cash balances, cash withdrawals, payout requests, or cash reward commitments in the current phase.
+- Preserve architectural separation for a possible future cash product. It requires a separate owner-approved specification and approvals for provider terms, legal review, eligibility, tax treatment, identity verification, reserves, reconciliation, payout provider, support, and production release.
+- The previously proposed $10 minimum withdrawal and PayPal/Venmo manual payout workflow are deferred, not current commitments.
+
+### Earning channels: all supported categories
+The long-term earning catalog must be designed to support:
+1. Third-party offerwalls and incentivized offers.
+2. Surveys and research panels.
+3. Approved standalone tasks and activities.
+4. Affiliate deals and shopping referrals.
+5. Rewarded advertising, only where the provider explicitly permits the incentive.
+6. Internal missions, quests, achievements, events, streaks, and challenges.
+7. Referrals and invitations, subject to partner terms and anti-abuse controls.
+
+These are product categories, not claims that providers or offers are approved or live. Each provider, campaign, and channel stays disabled until its terms and technical integration are verified.
+
+### Reward destination rules
+- Internal missions, achievements, events, and game activity may grant LC after server-side validation, published rules, and abuse controls.
+- Offerwalls, surveys, and tasks may grant LC only where the specific provider and advertiser permit incentivized traffic and the exact game-only reward model.
+- Affiliate commissions are initially business revenue, tracked separately. Do not promise or issue LC for an affiliate click, purchase, or referral unless the specific program expressly permits incentivized referrals and the owner approves a campaign rule.
+- Rewarded ads may grant only the non-cash in-game benefit permitted by the ad network. Never reward ad views/clicks with cash.
+- Referrals may grant LC only after a defined qualifying event, server-side verification, fraud checks, and partner permission.
+- A browser redirect, client event, screenshot, or user assertion alone can never credit LC.
+
+### Current financial model
+- Player reward liability is denominated only in LC.
+- Provider commissions, affiliate income, operating costs, receivables, and settlement amounts are business accounting data in their actual currencies, not player cash balances.
+- Reward amounts are campaign-specific, configurable, disclosed before participation, and disabled until provider terms and economics are verified.
+- The prior 50% cash / 50% game-credit split and 75%/25% provisional/deferred split are explicitly retired.
+- Future cash rewards cannot be funded by, converted from, or represented as LC.
+
+## 2B. Product surfaces and canonical user journeys
+
+### Public website
+Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affiliate Disclosure; Support/Contact; and a branded 404 page.
+
+### Signed-in player portal
+- Dashboard: account status, approved games, LC balance from the ledger, real recent activity, missions, and notices. Never seed fake activity.
+- Games: launch only verified destinations; show game-specific LC rules/catalogs where implemented.
+- Earn: browse eligible offers, read material terms before starting, track attribution/completion, and see verified LC reward states.
+- Deals: curated affiliate offers with adjacent disclosures. This is not an LC redemption store.
+- Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. No cash balance or withdrawal action in the current phase.
+- Account: profile, authentication/security, linked game identities, preferences, privacy controls, export/deletion request.
+- Support: account, attribution, missing reward, and safety/reporting paths.
+
+### Offer-to-LC journey
+1. Player signs in and meets provider/campaign eligibility.
+2. Offer detail shows material terms, required actions, time limits, exclusions, incentive disclosure, and verified reward units.
+3. Server creates a tracked click/session and provider-approved parameters.
+4. Player completes the advertiser requirements.
+5. Provider sends a server-to-server event/report.
+6. Server authenticates, validates, maps, deduplicates, and stores evidence.
+7. Event follows the provider-defined pending/confirmed/reversed lifecycle.
+8. LC posts only at the approved event state under the campaign's documented rule. Any approved provisional credit is explicitly identified and reversible through compensating entries.
+9. Player sees a transaction and plain-language status.
+10. Reconciliation compares provider events and settlement/reporting data; discrepancies enter an operations queue.
+
+### Affiliate journey
+A disclosed deal click creates a privacy-conscious attribution record. A merchant/network conversion is tracked as business commission revenue. No player LC is issued unless the program permits incentivized referrals and an approved campaign rule defines the reward.
+
+### Internal mission journey
+Publish rules, eligibility, dates, limits, and LC reward first. Track progress from trusted game/platform events. Verify completion server-side, evaluate each unique completion once, and post LC with idempotency and audit history.
+
+## 2C. Logical data model
+
+This is the required logical model, not a claim that these tables already exist. Final physical schema must be reconciled with the selected Supabase/PostgreSQL project and existing code.
+
+- Identity/catalog: `profiles`, `linked_game_accounts`, `games`, `game_catalog_items`, `providers`, `campaigns`, `earning_categories`.
+- Attribution/conversions: `tracking_sessions`, `provider_events`, `conversions`, `affiliate_clicks`, `affiliate_commissions`.
+- LC economy: `lc_accounts`, `lc_journal_transactions`, `lc_journal_entries`, `lc_reward_rules`, `missions`, `mission_progress`, `reward_claims`, `game_spend_events`.
+- Operations: `fraud_cases`, `provider_reconciliations`, `admin_roles`, `admin_permissions`, `audit_events`, `support_tickets`, `consent_records`, `deletion_requests`.
+
+### Schema invariants
+- User IDs derive from verified server-side authentication, never client-supplied ownership fields.
+- LC uses integer units and a dedicated currency/type code. Business accounting uses integer minor units and ISO currency codes.
+- LC journal entries cannot post to cash accounts. Business commissions cannot post directly to player LC without an approved reward rule.
+- Unique constraints enforce provider event IDs, conversion IDs, idempotency keys, mission completion keys, and external affiliate event IDs within their correct scopes.
+- Reward rule versions are immutable once used; changes create new versions.
+- RLS protects user-owned rows. Privileged posting and provider processing run only through trusted server-side functions with narrow grants.
+- Ledger rows are append-only; corrections use compensating entries, never destructive balance edits.
+- Raw provider payloads are untrusted, access-controlled evidence with justified retention limits.
+
+## 2D. Provider adapter contract and channel controls
+
+Every provider adapter must expose equivalent internal operations for capabilities, tracking-session creation, event authentication, event normalization, event processing, reconciliation, and health. Provider-specific semantics and source evidence must be preserved.
+
+Track these states independently: configured, credentials present, sandbox/production, provider approval, incentive permission, event verification, reward-posting switch, and reconciliation health. Unknown states default to disabled. A successful callback is not business approval; account approval does not mean every campaign permits incentives.
+
+Channel-specific controls:
+- Offerwalls: written permission for incentivized traffic, game-only LC redemption, traffic sources, and campaign terms.
+- Surveys: disclose screening, qualification, completion rules, privacy, and disqualification/no-reward cases. Never imply every attempt earns LC.
+- Tasks: classify task type, evidence, completion criteria, prohibited actions, and provider policy.
+- Affiliate deals: commissions are business revenue; no user reward unless the program expressly permits it.
+- Rewarded ads: grant only permitted non-cash in-game benefits and follow current network rules.
+- Missions/events/achievements: trusted server events, published rules, windows, caps, and abuse checks.
+- Referrals: qualifying new-user event, anti-self-referral controls, delayed issuance where needed, and partner permission.
+
+### CPAGrip initial adapter status
+- Publisher account exists; that does not establish approval for every campaign or for the current LC model.
+- Existing staging work includes an attribution token table, RPC, and an Edge Function named `cpagrip-attribution`.
+- End-to-end completion is not established. Callback receiver/authentication, final macro mapping, secret configuration, duplicate/replay tests, reversals, reconciliation, and a verified test conversion remain outstanding unless later repository inspection proves otherwise.
+- Verify current official CPAGrip documentation and account terms for incentivized traffic, domain, game-only LC redemption, macros, callback authentication, statuses, reversals, and settlement.
+- CPAGrip remains disabled for live player rewards until those checks and tests pass.
 
 ## 3. System architecture — proposed, no vendor is presumed approved
 
