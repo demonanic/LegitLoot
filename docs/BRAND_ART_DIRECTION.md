@@ -63,7 +63,7 @@ Skuz is the face and spokesperson of LegitLoot. Use the supplied reference plus 
 
 - Keep navigation, labels, controls, disclosures, statuses, balances, and all critical copy as real semantic UI.
 - Never use art to suggest an inactive offer, live reward, user activity, payment, or payout.
-- Keep game credits and cash rewards visually and semantically separate.
+- Current player rewards are game-only LootCoins (LC), usable only for eligible in-game purchases and perks. Cash rewards are deferred; if introduced later, they must be a separately approved product and ledger.
 - Ensure keyboard focus, contrast, touch targets, reduced motion, safe-area spacing, and mobile-dock clearance.
 - Make menus and forms work at narrow widths. Decorative treatment must not obscure controls or status meaning.
 
