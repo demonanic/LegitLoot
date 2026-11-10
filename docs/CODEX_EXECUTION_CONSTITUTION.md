@@ -104,8 +104,9 @@ Do not silently alter the business specification to make implementation easier.
 - Initial games: Demonanic, Gauntlet's Survival, Harvest//Zero.
 - Character and spokesperson: Skuz, using the supplied reference and maintaining the approved reference sheet and expression library.
 - Core earning/reward currency: LootCoins (LC).
-- LC is a non-cash platform currency. It is not withdrawable and must not be represented as having a USD redemption value.
-- Any future cash-reward feature is separate, denominated in USD, separately accounted for and requires its own approvals.
+- LC is a non-cash game currency, usable only for eligible in-game purchases and game-related perks. It is non-transferable, non-withdrawable, and has no USD redemption value.
+- Cash rewards are deferred and excluded from the current player reward model. Any future cash feature requires a separate owner-approved specification, provider/legal approval, and release gate.
+- The platform architecture must support all approved earning-channel categories: offerwalls, surveys, tasks, affiliate deals, policy-compliant rewarded ads, internal missions/events/achievements, and referrals. Each provider/campaign remains individually disabled until its terms and integration are verified.
 - Game credits and cash rewards must never be merged into one balance or one ledger.
 - Provider approval, legal review, security review, reserves and release gates are required before live financial activity.
 - Existing website framework is a static HTML/CSS/JavaScript implementation. Existing sign-in/sign-up UI does not prove production-ready authentication or rewards infrastructure.
