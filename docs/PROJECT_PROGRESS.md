@@ -2,54 +2,49 @@
 
 **Updated:** 2026-11-09
 **Branch:** `build/legitloot-neon-synthwave`
-**Active milestone:** Website creative workflow — Stage 0 baseline and reference lock
-**Starting commit:** `43ba8b059ea694ece0ccf01de13d9ae5ecaf262e`
+**Active milestone:** Owner-authorized visual rebuild
+**Baseline:** Stage 0 accepted by owner; rendered desktop/mobile capture deferred until browser access is available.
 
-## Completed in this session
+## Owner authorization and restrictions
 
-- Added the root `AGENTS.md` as the permanent repository instruction file, as directed by the owner.
-- Read the mandatory project documents, verified the development branch and working tree, and reviewed the page, shared-style, page-script, and asset inventory.
-- Documented current assets, page/component structure, existing approved/temporary states, source-level responsive rules, reference availability, and the proposed homepage composition in `docs/ASSET_MANIFEST.md`, `docs/WEBSITE_STAGE0_AUDIT.md`, and `docs/DESIGN_BLUEPRINT.md`.
-- Replaced the stale design blueprint that referenced a different branch and industrial/cream/red visual direction. The current handoff follows the approved comic-book-chaos direction and identifies itself as a proposal, not an implementation.
-- Kept the inspection read-only with respect to product code, artwork, and backend systems.
+The owner authorized the visual redesign from the Creative Bible through public-page implementation. This supersedes older creative directions and the Stage 0 stop boundary. Scope remains frontend presentation and original visual assets only. No backend, authentication, database, wallet, financial logic, production domain, production deployment, merge, paid service, or agreement changes are authorized.
 
-## Stage 0 acceptance record
+## Completed
 
-| Requirement | Result |
-|---|---|
-| Confirm active branch and Git state | PASS — authorized build branch; starting tracked working tree was clean; root `AGENTS.md` was untracked |
-| Inspect current website pages, assets, components, and responsive source | PASS — documented in `docs/WEBSITE_STAGE0_AUDIT.md` and `docs/ASSET_MANIFEST.md` |
-| Locate approved dashboard/reference images | PASS — no approved dashboard/reference screenshot found in the repository inventory; only the game-art archive and standalone game art were found |
-| Capture desktop and mobile baseline screenshots | BLOCKED — browser capture service returned `ERR_CONNECTION_REFUSED` for workspace localhost; no local browser executable is installed |
-| Record approved, temporary, and broken/inconsistent areas | PASS — see visual/content findings in the Stage 0 audit |
-| Create/update the asset inventory | PASS — `docs/ASSET_MANIFEST.md` |
-| Produce grounded findings and homepage blueprint | PASS — see `docs/WEBSITE_STAGE0_AUDIT.md` and `docs/DESIGN_BLUEPRINT.md` |
+- Stage 0 source audit, page/asset inventory, and source-level responsive review documented in `docs/WEBSITE_STAGE0_AUDIT.md` and `docs/ASSET_MANIFEST.md`.
+- Owner accepted Stage 0 as substantially complete and deferred screenshots; they are not a blocker to visual design implementation.
+- Added `docs/LEGITLOOT_CREATIVE_BIBLE.md` with owner-approved brand, visual, tone, Skuz, and product-truth rules.
+- Reconciled `AGENTS.md`, `README.md`, `docs/CODEX_EXECUTION_CONSTITUTION.md`, `docs/PLATFORM_BUILD_SPEC.md`, `docs/BRAND_ART_DIRECTION.md`, and `docs/WEBSITE_CREATIVE_WORKFLOW.md` with the current creative decisions while retaining business and financial restrictions.
+- Completed the Stage 1 visual blueprint in `docs/DESIGN_BLUEPRINT.md`, mapped to the existing static HTML/CSS system and the current site inventory.
 
-**Stage 0 status:** source audit and documentation are complete, but the workflow's rendered desktop/mobile screenshot step remains blocked. The visual baseline is therefore not fully closed; no rendered-layout or viewport QA claim is made.
+## Active sequence
 
-## Verification
+1. Establish reusable semantic tokens and shared public-site patterns.
+2. Implement the homepage composition as the visual proving ground.
+3. Prepare artwork briefs and asset requirements; create the Skuz reference sheet/expression library from the supplied reference and use existing assets where they fit.
+4. Extend the visual language across all public routes while preserving existing interactions and truthful status copy.
+5. Run source checks now; defer rendered mobile/desktop, browser accessibility, crop, and interaction checks until browser access is available.
+6. Complete asset/performance documentation and commit each coherent visual milestone.
 
-- `git branch --show-current`, `git status --short`, `git rev-parse HEAD`: inspected before changes.
-- Source-level inventory of all root HTML pages, shared CSS breakpoints, page-local scripts, and assets: completed.
-- `file assets/*`, ZIP listing, image metadata, and visual inspection of the three game images and LootBadger WebP: completed.
-- Local static server/browser capture attempt: BLOCKED (`http://127.0.0.1:8765/` refused by the remote capture service); no screenshots created.
-- Automated tests, build, lint, accessibility, and device/browser checks: NOT RUN. This documentation-only Stage 0 task does not change runtime code, and rendered-browser verification was unavailable.
+## Current findings / limitations
 
-## Files changed
+- `assets/lootbadger.webp` is the supplied Skuz reference candidate (192×244). It may guide identity but is too small for a high-density hero asset without replacement-quality artwork.
+- Official game artwork is available for all three approved games; no new game imagery is needed.
+- No approved dashboard reference was found. Screenshots are explicitly deferred by the owner.
+- Two public explainer routes currently overlap (`trust.html` and `how-it-works.html`). Keep both working and align their visuals; do not delete either route or invent content.
+- Existing `app.js` is empty; page behavior lives in `portal.js`, `account-auth.js`, `offerwall-launch.js`, and other specific scripts. Preserve all existing functional IDs and behaviors.
+- Admin and payout simulator tools are out of the public visual-redesign scope.
 
-- `AGENTS.md`
-- `docs/ASSET_MANIFEST.md`
-- `docs/DESIGN_BLUEPRINT.md`
-- `docs/PROJECT_PROGRESS.md`
-- `docs/WEBSITE_STAGE0_AUDIT.md`
+## Verification record
 
-## Remaining blockers and next authorized task
+- Stage 0 source/asset inspection is recorded in `docs/WEBSITE_STAGE0_AUDIT.md`.
+- Browser screenshot/capture remains DEFERRED by owner acceptance, not a blocker to implementation. Do not claim rendered QA until it is actually performed.
+- Required checks for changed frontend code will be recorded with exact commands and PASS/FAIL/BLOCKED/NOT RUN results.
 
-1. Make a browser available that can load the local build and capture the homepage at 1440×1000 and 390×844; add the screenshots/observations to the Stage 0 record. Then mark the baseline gate complete only after reviewing those captures.
-2. Continue with the next smallest authorized creative step: reconcile the source-level blueprint against the rendered site and available approved references, then define the reviewable homepage concept before implementation or asset generation.
+## Files changed in current visual milestone
 
-Do not generate artwork, redesign pages, alter backend/auth/payout systems, merge to `main`, or deploy as part of this milestone. Production/domain, provider, financial, privacy, and external-service approval gates remain in effect.
+Documentation foundation first; implementation follows in coherent commits. See Git history and subsequent progress entries for milestone commits.
 
-## Commit
+## Next authorized task
 
-Committed on the authorized build branch with message `Document website Stage 0 baseline audit`..
+Implement the reusable visual design system described by `docs/DESIGN_BLUEPRINT.md`, then use it to build the homepage composition. Keep all changes within public frontend presentation and preserve existing functionality.

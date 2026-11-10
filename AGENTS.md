@@ -8,9 +8,10 @@ Before performing any work, read and follow these documents:
 2. docs/CODEX_EXECUTION_CONSTITUTION.md
 3. docs/PLATFORM_BUILD_SPEC.md
 4. docs/BRAND_ART_DIRECTION.md
-5. docs/WEBSITE_CREATIVE_WORKFLOW.md
+5. docs/LEGITLOOT_CREATIVE_BIBLE.md
+6. docs/WEBSITE_CREATIVE_WORKFLOW.md
 
-These documents define the product vision, business rules, technical requirements, creative direction, execution process, and approval boundaries.
+These documents define the product vision, business rules, technical requirements, current owner-approved creative direction, execution process, and approval boundaries. The Creative Bible captures current owner decisions and supersedes conflicting older visual guidance; it does not change business, financial, security, privacy, or release rules.
 
 ## AUTONOMOUS EXECUTION
 
@@ -49,6 +50,8 @@ Do not stop for routine implementation choices already covered by project docume
 Work on one milestone at a time. Do not jump ahead, redesign unrelated systems, invent features, or silently change established decisions.
 
 Never fabricate users, balances, transactions, partnerships, approvals, or capabilities.
+
+Follow `docs/LEGITLOOT_CREATIVE_BIBLE.md` for brand, visual, dialogue, and Skuz continuity. The current owner has authorized the Skuz reference sheet and expression library; this supersedes older instructions that disallowed character-sheet work.
 
 Preserve existing work and inspect before modifying.
 

@@ -74,8 +74,9 @@ Before implementation, inspect the current repository and read these documents i
 1. `docs/CODEX_EXECUTION_CONSTITUTION.md` — this document; operating rules and workflow.
 2. `docs/PLATFORM_BUILD_SPEC.md` — business model, product scope, architecture, financial rules, security and release gates.
 3. `docs/BRAND_ART_DIRECTION.md` — approved visual identity, art direction, layout and design quality.
-4. `docs/WEBSITE_CREATIVE_WORKFLOW.md` — owner-selected comic-book/rich visual direction, asset production pipeline, page design rules and creative acceptance gates.
-5. `README.md` — repository status, active branch and current project entry point.
+4. `docs/LEGITLOOT_CREATIVE_BIBLE.md` — current owner-approved brand, character, artistic, color, and voice decisions.
+5. `docs/WEBSITE_CREATIVE_WORKFLOW.md` — art production pipeline, page design rules and creative acceptance gates.
+6. `README.md` — repository status, active branch and current project entry point.
 
 Also inspect relevant source code, tests, assets, configuration, package manifests, deployment configuration and Git history before modifying anything.
 
@@ -99,10 +100,9 @@ Do not silently alter the business specification to make implementation easier.
 ## 6. Established product facts that must be preserved
 
 - Brand: **LegitLoot — The Underground Arcade**.
-- Personality: punk outlaw + underground hacker + arcade boss.
+- Brand identity: an underground organization operating a chaotic digital arcade; see the current owner-approved Creative Bible.
 - Initial games: Demonanic, Gauntlet's Survival, Harvest//Zero.
-- Primary mascot: LootBadger, using the existing approved working concept.
-- Supporting character: mysterious punk woman, used selectively in promotional material.
+- Character and spokesperson: Skuz, using the supplied reference and maintaining the approved reference sheet and expression library.
 - Core earning/reward currency: LootCoins (LC).
 - LC is a non-cash platform currency. It is not withdrawable and must not be represented as having a USD redemption value.
 - Any future cash-reward feature is separate, denominated in USD, separately accounted for and requires its own approvals.
@@ -143,7 +143,7 @@ The following are prohibited:
 - redesigning the business model;
 - building a second version of a system that already exists;
 - replacing working code merely because a different approach is preferred;
-- expanding mascot lore or character-sheet work;
+- expanding character lore or creating character assets unrelated to a real page/component need;
 - polishing decorative details while required functionality is incomplete;
 - adding mock functionality that looks real;
 - starting a new workstream before the current milestone passes.
@@ -735,22 +735,13 @@ Production deployment and configuration remain owner-controlled.
 
 ## 24. Approved visual identity
 
-The complete visual source of truth is `docs/BRAND_ART_DIRECTION.md`. Follow it exactly.
+The current owner-approved visual source of truth is `docs/LEGITLOOT_CREATIVE_BIBLE.md`, supplemented by `docs/BRAND_ART_DIRECTION.md` and this Constitution. Follow the Creative Bible for brand, Skuz, tone, and visual direction. It supersedes older conflicting visual decisions. It does not modify product, business, financial, privacy, security, or release requirements.
 
-LegitLoot must feel like an original underground arcade run by punk outsiders, hackers and obsessive gamers — not a generic fintech dashboard, survey site, AI template or generic cyberpunk clone.
+LegitLoot is an underground organization operating a chaotic digital arcade. The visual language uses mature western comic-book illustration, heavy ink, expressive anatomy, crosshatching, painterly shadows, gritty underground environments, and original artwork. Core colors are near-black, charcoal, blood red, acid green, bone white, and industrial grey; magenta and cyan may be used as limited arcade accents.
 
-Visual ingredients:
-- midnight black and deep violet foundations;
-- hot magenta, electric purple, radioactive lime, electric cyan and warm gold accents;
-- bold condensed display typography;
-- highly legible sans-serif interface typography;
-- restrained monospace technical labels;
-- raw comic-book illustration;
-- cinematic environmental artwork;
-- distressed punk-print textures used selectively;
-- intentional asymmetry, layered compositions and varied panel proportions.
+Punk influence must feel authentic and lived-in, not decorative or performative. Do not use anime styling or imitate/reproduce existing copyrighted characters or artwork. The characters may be misfits and antiheroes; the platform must remain welcoming, honest, accessible, and respectful.
 
-The brand is not "put neon glow on every component." Glow, texture, motion and illustration must have purpose.
+Skuz is the embodiment and spokesperson of LegitLoot. Preserve the supplied character reference and approved reference sheet/expression library. Use humor naturally and sparingly; do not force slogans, profanity, marketing dialogue, or catchphrases.
 
 ## 25. Avoid generic AI design
 
@@ -790,7 +781,7 @@ Before applying a page design across the whole site:
 6. Verify that status labels and product claims are truthful.
 7. Reuse the approved design system rather than inventing a new style on every page.
 
-Do not spend time generating more mascot concepts. The existing LootBadger direction is sufficient. Create only the specific assets required by real page layouts.
+Create or maintain Skuz continuity material as explicitly authorized by the owner. Generate only assets required by real page layouts. Do not create unrelated character concepts or lore.
 
 ---
 

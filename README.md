@@ -5,16 +5,16 @@ Independent games and rewards platform.
 ## Active build
 
 - **Codex operating law:** [CODEX_EXECUTION_CONSTITUTION.md](docs/CODEX_EXECUTION_CONSTITUTION.md) — mandatory project vision, scope controls, workflow, acceptance criteria and handoff rules. Codex must read this before every work session.
-- **Website creative workflow:** [WEBSITE_CREATIVE_WORKFLOW.md](docs/WEBSITE_CREATIVE_WORKFLOW.md) — owner-selected comic-book chaos direction with rich detail, art production pipeline, page-by-page design rules and visual acceptance gates.
+- **Current creative source of truth:** [LEGITLOOT_CREATIVE_BIBLE.md](docs/LEGITLOOT_CREATIVE_BIBLE.md) — underground organization, visual identity, personality, and Skuz continuity.
+- **Website creative workflow:** [WEBSITE_CREATIVE_WORKFLOW.md](docs/WEBSITE_CREATIVE_WORKFLOW.md) — visual blueprint, homepage-first production gates, art briefs, page design rules and acceptance criteria.
 
 - Build branch: `build/legitloot-neon-synthwave`
 - Governing business specification: [LegitLoot Master Business Model v1.3](docs/PLATFORM_BUILD_SPEC.md)
-- Approved brand direction: **LegitLoot — The Underground Arcade**. Hybrid punk outlaw + underground hacker + arcade boss personality; mixed raw comic-book, cinematic illustration and distressed punk-print treatment. See [Brand Art Direction](docs/BRAND_ART_DIRECTION.md).
+- Approved brand direction: **LegitLoot — an underground organization operating a chaotic digital arcade**. See the Creative Bible and [Brand Art Direction](docs/BRAND_ART_DIRECTION.md).
 - Website framework: Home, Games, Earn, Deals/Marketplace, Rewards, Wallet/Account, How It Works, Terms, Privacy, and a custom 404 page. Shared portal navigation and mobile menu are used across the secondary pages.
-- Homepage strategy: mobile-first arcade dashboard with games first, plus transparent opportunity, quest, event and account panels. All unavailable systems must be labeled planned, preview or inactive; never show invented balances or activity.
+- Homepage strategy: mobile-first games-first arcade entrance with a strong original character/art focal point, verified game art, and transparent opportunity/status panels. All unavailable systems must be labeled planned, preview or inactive; never show invented balances or activity.
 - Initial games: Demonanic, Gauntlet's Survival, Harvest//Zero.
-- Brand mascot: LootBadger's current concept is sufficient for the website framework; do not expand mascot lore or character-sheet work. Use only as much mascot art as the site needs. Supporting assets include an original crown mark, loot-crate illustration and underground arcade backdrop.
-- Supporting character: mysterious recurring punk woman, used selectively in promotions.
+- Brand character and spokesperson: Skuz. Use the supplied reference and the approved reference sheet/expression library to preserve his appearance. Do not make him a generic advertising mascot or force catchphrases.
 
 ## Financial integrity rules
 
