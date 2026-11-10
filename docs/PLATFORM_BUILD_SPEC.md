@@ -21,10 +21,11 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 
 **Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. Cash rewards are deferred to a separately approved future phase. The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
 
-### Two separate balances
-- **Game credits:** non-transferable, no cash value, not withdrawable, not transferable to another player, and never convertible to cash.
-- **Cash rewards:** tracked in USD with distinct states: pending, available, withdrawal-reserved, and paid.
-- Never combine the two balances into a single total or imply game credits have a USD redemption value.
+### Current player reward account
+- The current player-facing reward account is LootCoins (LC) only.
+- LC is non-transferable, has no cash value, is not withdrawable, and is usable only for eligible in-game purchases and game-related perks.
+- There is no active player cash balance in the current phase.
+- Any future cash rewards must use a separately approved USD ledger and must never be combined with, funded by, or converted from LC.
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
 ### Reward calculation — campaign-specific, LC only
@@ -33,19 +34,17 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 - The former proposed 50% cash / 50% game-credit split and 75%/25% provisional/deferred split are superseded and must not be implemented.
 - Provider revenue shares, deductions, caps, and settlement are business accounting data, not player cash allocations.
 
-### Reserves and reversals
-- Maintain reserves sufficient to cover player cash liabilities and outstanding provisional-credit fulfillment.
-- Maintain a separately defined reversal buffer based on measured provider reversal behavior and approved risk policy; do not hardcode an unapproved percentage.
-- Unsettled provider receivables never fund cash withdrawals.
-- A circuit breaker pauses new reward commitments when reserves fail, provider status is suspended, or material reconciliation discrepancies occur.
-- Ordinary reversals do not automatically create player debt; platform absorbs already-spent provisional-credit losses by default, subject to documented fraud exceptions and review.
+### Current LC reversals and future cash reserves
+- LC reversals must use compensating ledger entries, preserve the original event, and follow the provider/campaign's verified reversal lifecycle.
+- Ordinary provider reversals do not automatically create player debt. Any recovery of already-spent LC requires a documented fraud exception, review, and approved policy.
+- Cash-liability reserves, reversal buffers for cash, and withdrawal funding controls apply only if a future cash product is separately approved. They are not current player-facing features.
+- Unsettled provider receivables must never be treated as available player cash in any future cash phase.
+- A circuit breaker pauses new reward commitments when provider status is suspended, validation fails, or material reconciliation discrepancies occur.
 
-### Payout
-- Proposed minimum withdrawal: USD $10, not final until provider and legal review.
-- No payout request may exceed available cash.
-- Reserve cash before initiating a payout; release reservation only on a confirmed failure/cancellation or final settlement.
-- A dashboard balance is not proof of payment; only a reconciled provider confirmation marks paid.
-- Never initiate a payout without verified identity/eligibility, explicit user request, risk checks, sufficient reserves, and an approved payout rail.
+### Future cash payout phase — deferred
+- No player payout or withdrawal flow is active or in current scope.
+- The previously proposed USD $10 minimum and PayPal/Venmo manual payout workflow are deferred and are not current promises.
+- If separately approved later, no payout may exceed available cash; funds must be reserved atomically; only reconciled provider confirmation marks paid; identity/eligibility, risk, reserves, provider approval, and legal review are mandatory.
 
 
 
@@ -324,7 +323,9 @@ Requires explicit owner approval of the exact commit, production deployment, dom
 - No reuse of Demonanic production credentials or user data.
 
 
-## 13. Withdrawal implementation constraints (2026-11-08)
+## 13. Future withdrawal implementation constraints (deferred; 2026-11-08)
+
+**Status:** Retained as historical design guidance only. This entire withdrawal workflow is out of current scope under the owner-locked 2026-11-10 decision to defer cash rewards. Do not implement or expose it unless a separate future cash-rewards specification is approved.
 
 - Player payout destinations are limited initially to PayPal and Venmo, with manual review only.
 - Never persist plaintext recipient identifiers. Store authenticated-encryption ciphertext, a key-version identifier, and a deliberately masked hint only.
