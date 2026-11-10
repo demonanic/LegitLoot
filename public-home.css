@@ -1,0 +1,27 @@
+.home-main { width: 100%; }
+.home-hero { position: relative; isolation: isolate; display: flex; min-height: min(680px, calc(100svh - 74px)); align-items: center; overflow: hidden; background: var(--charcoal); }
+.home-hero::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, #101110 0%, #101110ed 29%, #101110b3 48%, #10111012 78%), linear-gradient(0deg, #10111055, transparent 35%); }
+.home-hero__art { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 44%; }
+.home-hero__content { width: min(var(--page-width), calc(100% - 2 * var(--gutter))); margin-inline: auto; padding-block: clamp(44px, 8vw, 92px); }
+.home-hero__content > * { max-width: 600px; }
+.home-hero__content .eyebrow { display: flex; align-items: center; gap: 10px; }
+.home-hero__content .eyebrow::before { content: ""; width: 25px; height: 3px; background: var(--blood-bright); }
+.home-hero h1 { margin-block: 20px; font-size: clamp(54px, 7.4vw, 96px); }
+.home-hero__lede { margin: 0 0 22px; color: var(--bone); font-size: clamp(16px, 1.8vw, 19px); }
+.home-hero__actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0 18px; }
+.home-hero__disclosure { max-width: 450px; margin: 0; color: var(--bone-muted); font: 11px/1.5 var(--mono); }
+.home-hero__disclosure strong { color: var(--acid); }
+.home-main .home-section:first-of-type { border-top: 0; }
+
+@media (max-width: 760px) {
+  .home-hero { min-height: 0; align-items: stretch; flex-direction: column; }
+  .home-hero::before { z-index: 1; background: linear-gradient(180deg, #101110 0%, #101110 52%, #1011106e 72%, #1011101c 100%); }
+  .home-hero__art { position: relative; z-index: 0; inset: auto; order: 2; width: 100%; height: auto; max-height: 360px; aspect-ratio: 1.5 / 1; object-fit: cover; object-position: 78% 35%; }
+  .home-hero__content { position: relative; z-index: 2; order: 1; padding-block: 42px 24px; }
+  .home-hero h1 { font-size: clamp(48px, 11vw, 70px); }
+}
+
+@media (max-width: 420px) {
+  .home-hero__actions { flex-direction: column; align-items: stretch; }
+  .home-hero__actions .button { width: 100%; }
+}

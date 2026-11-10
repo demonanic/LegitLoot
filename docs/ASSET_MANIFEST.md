@@ -1,6 +1,6 @@
 # LegitLoot asset inventory
 
-Inventory reviewed for the Stage 0 baseline on 2026-11-09. Paths and file sizes are repository-relative. Raster dimensions come from file metadata; SVG dimensions are viewBox dimensions. Provenance is stated only where existing repository documentation establishes it. “Current use” describes the checked-in implementation, not approval of a future redesign.
+Inventory updated for the visual rebuild on 2026-11-10. Paths and file sizes are repository-relative. Raster dimensions come from file metadata; SVG dimensions are viewBox dimensions. Provenance is stated only where existing repository documentation establishes it. “Current use” describes the checked-in implementation, not approval of a future redesign.
 
 ## Shipped visual assets
 
@@ -8,7 +8,8 @@ Inventory reviewed for the Stage 0 baseline on 2026-11-09. Paths and file sizes 
 |---|---:|---|---|---|
 | `assets/legitloot-mark.svg` | 96×96 viewBox · SVG · 477 B | Shared crown mark in site and dashboard headers/footers; favicon | Existing brand mark; approved identity asset | CSS-sized; no separate crops |
 | `assets/underground-arcade-backdrop.svg` | 1600×700 viewBox · SVG · 1,733 B | CSS background for the homepage hero | Existing hand-authored SVG; current environment asset | `background-size: cover`; mobile uses adjusted background position |
-| `assets/lootbadger.webp` | 192×244 · WebP · 13,048 B | Homepage hero character | Existing LootBadger working concept; README says the concept is sufficient | Contained in hero; mobile sizing/position differs through CSS |
+| `assets/lootbadger.webp` | 192×244 · WebP · 13,048 B | Supplied Skuz identity reference (legacy file name) | Owner-supplied character reference; use for identity continuity, not large hero display | Reference only; no separate crops |
+| `assets/skuz-arcade-hero.webp` | 1672×941 · WebP · 395,708 B | Public homepage hero scene | Original ImageGen illustration using the Skuz reference sheet; visually reviewed | Wide image with quiet left side for HTML copy and Skuz on right; responsive CSS crop |
 | `assets/loot-crate.svg` | 320×260 viewBox · SVG · 1,582 B | Homepage daily-status illustration | Existing hand-authored reward illustration; does not establish reward availability | Contained and resized via CSS |
 | `assets/demonanic.jpg` | 921×1536 · JPEG · 278,101 B | Games catalog official game art | Owner-supplied, as recorded by the existing asset manifest and design blueprint | `object-fit: cover`; catalog fixes image height |
 | `assets/gauntlets-survival.jpg` | 935×1536 · JPEG · 274,893 B | Games catalog official game art | Owner-supplied, as recorded by the existing asset manifest and design blueprint | `object-fit: cover`; catalog fixes image height |
@@ -18,19 +19,22 @@ Inventory reviewed for the Stage 0 baseline on 2026-11-09. Paths and file sizes 
 
 | Asset | Dimensions / format / size | Current use and role | Source / status | Responsive treatment |
 |---|---:|---|---|---|
-| `assets/badger-mascot.svg` | 760×760 viewBox · SVG · 4,070 B | No current HTML/CSS reference found | Existing working badger concept; no new mascot exploration is needed | None |
+| `assets/badger-mascot.svg` | 760×760 viewBox · SVG · 4,070 B | No current HTML/CSS reference found | Existing alternate badger concept; superseded for Skuz continuity by the supplied reference and sheet | None |
 | `assets/mascot.svg` | 640×820 viewBox · SVG · 3,798 B | No current HTML/CSS reference found | Existing supporting punk-character concept; use selectively if a real page need is established | None |
+| `assets/skuz-reference-sheet.png` | 1536×1024 · PNG · 4,071,091 B | Internal Skuz continuity sheet and expression library; not linked as public page art | Original ImageGen artwork based on `assets/lootbadger.webp`; generated and visually reviewed on 2026-11-09 | 3 bust angles and 6 expressions; continuity reference only |
 
 ## Source archive
 
 | Asset | Format / size | Contents / role | Status |
 |---|---:|---|---|
 | `assets/legitloot-game-assets.zip` | ZIP · 824,491 B | Duplicate copies of the three owner-supplied game-art JPEGs | Source archive retained; the site references the standalone files |
+| `assets/skuz-arcade-hero.png` | PNG · 3,162,726 B | Original master for `assets/skuz-arcade-hero.webp` | Original ImageGen output using `assets/skuz-reference-sheet.png` | Desktop master; compressed WebP is used by the site |
 
 ## Implementation notes
 
 - The Stage 0 HTML/CSS inspection found no references to the FRESH game image or any other item inside the archive.
-- The main page uses the crown mark, LootBadger WebP, arcade backdrop and crate illustration. The Games page uses the three corresponding standalone official art files.
+- The redesigned home page uses the crown mark and optimized Skuz hero WebP. The public routes load the dedicated `public.css` and `public-pages.css` system; the homepage also loads `public-home.css`. Internal admin and payout tools retain the original shared CSS files. The earlier low-resolution badger, backdrop SVG, and crate remain in the repository for traceability; they are not used as the new hero. The Games page uses the three corresponding official art files.
 - There are no separate desktop/mobile image crops. The site currently relies on CSS sizing, `cover`/`contain`, and object/background positioning.
 - `assets/loot-crate.svg` contains a small “LL” label as part of the illustration. Critical interface text and reward values remain HTML content.
+- The Skuz sheet contains no public copy or UI and serves as a continuity reference. The wide hero has no baked-in text, logo, or controls.
 - This inventory records the current repository state only. New assets require a concrete page/component placement, source, approval state, dimensions, format, size, and crop notes before they are treated as production-ready.

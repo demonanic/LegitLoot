@@ -110,7 +110,7 @@ Use a consistent spacing scale (4/8/12/16/24/32/48/64px), page gutters clamped t
 
 ## 8. Illustration placement and asset requirements
 
-- Use `assets/lootbadger.webp` as the supplied Skuz identity reference only; its 192×244 size is too small for large high-density hero display without replacement/upscale quality loss.
+- Use `assets/lootbadger.webp` as the identity reference; use `assets/skuz-reference-sheet.png` for continuity and the original `assets/skuz-arcade-hero.webp` for the homepage scene.
 - Produce a Skuz reference sheet and compact expression library before making additional character poses. Preserve markings, facial structure, mohawk, green eyes, cigar, jacket/spikes, and expression identity.
 - Homepage hero needs an original wide 16:9 environment/character composition with text-safe negative space; desktop and mobile crop planning are required.
 - Retain the three existing official game images and do not generate substitutes. Use them only next to their correct game titles.
@@ -127,7 +127,7 @@ Use a consistent spacing scale (4/8/12/16/24/32/48/64px), page gutters clamped t
 
 ## 10. Implementation mapping and acceptance
 
-- Existing framework: static HTML/CSS/JavaScript. Shared styles: `styles.css`, `portal.css`; home: `dashboard.css`; account visual controls: `identity.css`.
+- Existing framework: static HTML/CSS/JavaScript. Public visual system: `public.css`, `public-pages.css`; home: `public-home.css`. Legacy `styles.css`, `portal.css`, and `dashboard.css` remain for internal admin and payout tools. Public routes no longer load `identity.css`.
 - Public pages are duplicated static markup; update deliberately and preserve route-specific IDs/hooks.
 - Stage0 screenshots remain deferred. Before browser return, use source checks and static route/link/CSS review. Do not claim rendered QA.
 - Acceptance requires a coherent homepage, reusable shared system, all public pages aligned, no backend/auth/accounting changes, truthful labels, accessible structure, responsive source rules, and complete progress/asset documentation. Rendered desktop/mobile checks remain a release blocker until browser access exists.

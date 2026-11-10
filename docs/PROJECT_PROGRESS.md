@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-09
+**Updated:** 2026-11-10
 **Branch:** `build/legitloot-neon-synthwave`
 **Active milestone:** Owner-authorized visual rebuild
 **Baseline:** Stage 0 accepted by owner; rendered desktop/mobile capture deferred until browser access is available.
@@ -19,32 +19,45 @@ The owner authorized the visual redesign from the Creative Bible through public-
 
 ## Active sequence
 
-1. Establish reusable semantic tokens and shared public-site patterns.
-2. Implement the homepage composition as the visual proving ground.
-3. Prepare artwork briefs and asset requirements; create the Skuz reference sheet/expression library from the supplied reference and use existing assets where they fit.
-4. Extend the visual language across all public routes while preserving existing interactions and truthful status copy.
-5. Run source checks now; defer rendered mobile/desktop, browser accessibility, crop, and interaction checks until browser access is available.
-6. Complete asset/performance documentation and commit each coherent visual milestone.
+- Public visual system, homepage composition, original artwork briefs/continuity sheet, and visual treatment of all public routes are implemented.
+- Source checks are complete and recorded below. Rendered desktop/mobile, browser accessibility, hero crop, and interactive-state checks remain deferred until browser access is available.
+- The remaining authorized task is rendered review and any resulting visual corrections. Stop for owner approval at production release; no production action is included here.
 
 ## Current findings / limitations
 
-- `assets/lootbadger.webp` is the supplied Skuz reference candidate (192×244). It may guide identity but is too small for a high-density hero asset without replacement-quality artwork.
+- `assets/lootbadger.webp` is the supplied Skuz reference candidate (192×244). The new continuity sheet and homepage hero are original illustrations based on it.
 - Official game artwork is available for all three approved games; no new game imagery is needed.
 - No approved dashboard reference was found. Screenshots are explicitly deferred by the owner.
 - Two public explainer routes currently overlap (`trust.html` and `how-it-works.html`). Keep both working and align their visuals; do not delete either route or invent content.
-- Existing `app.js` is empty; page behavior lives in `portal.js`, `account-auth.js`, `offerwall-launch.js`, and other specific scripts. Preserve all existing functional IDs and behaviors.
+- Page behavior lives in `app.js` for shared navigation/year, `portal.js` for filters, `account-auth.js` for account state, `offerwall-launch.js` for the disabled provider placement, and other page-specific scripts. Functional IDs and backend integrations were preserved.
 - Admin and payout simulator tools are out of the public visual-redesign scope.
 
 ## Verification record
 
 - Stage 0 source/asset inspection is recorded in `docs/WEBSITE_STAGE0_AUDIT.md`.
 - Browser screenshot/capture remains DEFERRED by owner acceptance, not a blocker to implementation. Do not claim rendered QA until it is actually performed.
-- Required checks for changed frontend code will be recorded with exact commands and PASS/FAIL/BLOCKED/NOT RUN results.
+
+## Visual rebuild implementation
+
+- Added a dedicated public-site visual system (`public.css`, `public-pages.css`, and `public-home.css`) while restoring the shared legacy stylesheets used by internal admin and payout tools.
+- Rebuilt the homepage composition with original Skuz hero artwork, existing official game artwork, clear opportunity status, and separate game-credit/cash-reward explanations. No balances, offers, provider approval, or earnings claims were invented.
+- Applied the shared header, mobile navigation, page hierarchy, forms, cards, notices, and footer patterns across Home, Games, Earn, Deals, Rewards, Account, How It Works, Trust & Status, Terms, Privacy, and 404.
+- Preserved existing account form IDs and authentication scripts, game filter behavior, existing routes, and legal/status content. Added keyboard-operable responsive navigation and visible focus treatment.
+- Created `docs/ARTWORK_BRIEFS.md`, the Skuz reference/expression sheet, and optimized homepage hero WebP plus retained PNG master. No production deployment or paid external service used.
+
+## Verification record
+
+- `python3` stdlib `HTMLParser` route audit: PASS for one main landmark, unique IDs, public stylesheet scope, and all local links/assets across 11 public HTML routes.
+- `node --check app.js`, `portal.js`, `account-auth.js`, and `offerwall-launch.js`: PASS.
+- `git diff --check`: PASS.
+- Repository has no configured package test/build runner; no framework test suite was available to run.
+- Browser executable/capture access is unavailable in this environment; rendered layout/accessibility testing is DEFERRED per owner direction.
+- Release remains blocked on a later browser review and the normal production-release approval boundary; provider, legal, and operational launch requirements remain governed by the project specs.
 
 ## Files changed in current visual milestone
 
-Documentation foundation first; implementation follows in coherent commits. See Git history and subsequent progress entries for milestone commits.
+See `git show --stat` for the coherent implementation commit; the Creative Bible and Stage 1 blueprint are in the preceding documentation commit.
 
 ## Next authorized task
 
-Implement the reusable visual design system described by `docs/DESIGN_BLUEPRINT.md`, then use it to build the homepage composition. Keep all changes within public frontend presentation and preserve existing functionality.
+When browser access is available, run rendered desktop/mobile review of all public routes, navigation, account states, filter interactions, focus/contrast, and hero crops. Make any visual corrections, then prepare the release review; production deployment still requires owner approval.
