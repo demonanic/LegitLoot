@@ -43,7 +43,7 @@ Editorial deal-wall layout with categories and an affiliate disclosure near the 
 
 ### Rewards and Account
 
-Quiet accounting surfaces, clearly separate game credits and USD states, keep actual authenticated wallet summary behavior/forms intact, retain empty/loading/error states, and do not add numbers or placeholder transactions.
+Quiet accounting surfaces, show the current LC-only wallet; any future USD cash-reward system is deferred and separately accounted for, keep actual authenticated wallet summary behavior/forms intact, retain empty/loading/error states, and do not add numbers or placeholder transactions.
 
 ### How It Works / Trust, Terms, Privacy, 404
 
