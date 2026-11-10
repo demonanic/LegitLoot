@@ -13,7 +13,7 @@ LegitLoot is a combined independent games and rewards platform with four public-
 1. Original games: Demonanic, Gauntlet's Survival, Harvest//Zero.
 2. Approved third-party offerwalls and activities.
 3. Affiliate marketplace and promotional deals.
-4. A transparent player rewards experience with separate game-credit and cash ledgers.
+4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval.
 
 Homepage direction: **LegitLoot — an underground organization operating a chaotic digital arcade**. Follow [LEGITLOOT_CREATIVE_BIBLE.md](LEGITLOOT_CREATIVE_BIBLE.md) for the mature western comic visual direction, near-black/charcoal/blood-red/acid-green/bone/industrial-grey identity, character tone, and Skuz continuity. Skuz is the embodiment and spokesperson of LegitLoot; maintain his supplied reference, reference sheet, and expression library. The current owner explicitly authorizes this visual redesign and character-reference work, superseding older character-sheet restrictions. Keep the public interface welcoming, truthful, accessible, and respectful. Official game art remains authoritative; generated art must never masquerade as a game screenshot. Keep important text and UI controls as real HTML, not baked into images. Never use invented balances, streaks, leaderboards, task completion or payout claims to make the interface look populated; show real connected data or clearly label a preview/planned state. No business or financial rules are changed by the visual direction.
 
@@ -180,7 +180,7 @@ Channel-specific controls:
 No existing Demonanic database, auth project, secrets, or provider accounts may be reused without explicit owner approval.
 
 ### Ledger
-Use an append-only, double-entry-capable transaction ledger. No direct balance edits. Every financial event has:
+Use an append-only, double-entry-capable transaction ledger. In the current phase, implement the player-facing LC ledger only. Business accounting records for provider and affiliate revenue are separate from player rewards. A player cash ledger is deferred until a separately approved future cash-rewards phase. No direct balance edits. Every financial event has:
 - immutable internal transaction ID;
 - provider + provider event ID;
 - idempotency key;
