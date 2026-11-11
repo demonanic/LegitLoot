@@ -88,3 +88,179 @@
   .lootcoin-mark { width: 90px; }
   .lootcoin-side { grid-column: auto; }
 }
+
+
+/* === HOMEPAGE: NEON COMIC ARCADE === */
+.home-hero { padding-inline: var(--gutter); background: #08070b; }
+.home-hero__frame {
+  min-height: clamp(560px, 67vw, 760px);
+  border: 2px solid #6b4d6c;
+  border-top: 5px solid var(--magenta);
+  box-shadow: 0 0 0 5px #0a080e, 0 0 34px #ff2f9b22;
+  background:
+    radial-gradient(ellipse at 78% 35%, #c7ff2438 0, transparent 32%),
+    radial-gradient(ellipse at 86% 75%, #26e6e62b 0, transparent 28%),
+    linear-gradient(120deg, #100d17, #211327 58%, #09080d);
+}
+.home-hero__art {
+  object-position: 72% 42%;
+  filter: saturate(1.35) contrast(1.06);
+}
+.home-hero__frame::before {
+  background:
+    radial-gradient(circle, #ff2f9b 1.1px, transparent 1.6px) 0 0 / 10px 10px,
+    linear-gradient(90deg, #09070df7 0%, #09070ddf 34%, #09070d85 53%, #09070d10 86%),
+    linear-gradient(0deg, #09070d99, transparent 40%);
+  mix-blend-mode: normal;
+}
+.home-hero__frame::after {
+  inset: 12px;
+  border: 2px solid #c7ff2455;
+  clip-path: polygon(0 0, 100% 0, 100% 94%, 97% 100%, 0 100%);
+}
+.home-hero__content { padding-block: clamp(70px, 10vw, 130px); }
+.home-hero__content .eyebrow { color: var(--acid); }
+.home-hero__content .eyebrow::before { background: var(--magenta); }
+.home-hero h1 {
+  font-size: clamp(70px, 9.5vw, 128px);
+  line-height: .78;
+  text-shadow: 4px 4px 0 #ff2f9b, 7px 7px 0 #08070b;
+}
+.home-hero h1 span { color: var(--acid); }
+.home-hero__lede { max-width: 460px; color: #fff8ff; text-shadow: 1px 2px 4px #000; }
+.home-hero__disclosure {
+  display: inline-block;
+  padding: 9px 12px;
+  border-left: 4px solid var(--cyan);
+  background: #09070dd9;
+}
+.home-hero__disclosure strong { color: var(--acid); }
+.home-hero__actions .button-acid { transform: skew(-4deg); }
+.hero-stamp {
+  border: 3px solid var(--acid);
+  border-radius: 0;
+  transform: rotate(8deg);
+  color: var(--acid);
+  background: #100b18e8;
+  box-shadow: 5px 5px 0 var(--magenta);
+}
+.hero-stamp::before {
+  content: "";
+  position: absolute; inset: 5px;
+  border: 1px dashed var(--acid);
+}
+.hero-bottomline {
+  border-bottom: 2px solid var(--magenta);
+  color: #e8dce9;
+}
+.home-section { border-top: 2px solid #65445f; }
+.home-section__head h2, .lootcoin-copy h2 {
+  text-shadow: 3px 3px 0 #ff2f9b35;
+}
+.home-section__head h2 span, .lootcoin-copy h2 span { color: var(--magenta); }
+.home-game-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.home-game, .home-game--wide {
+  display: flex;
+  flex-direction: column;
+  grid-column: auto;
+  border: 2px solid #5a4a60;
+  border-top: 5px solid var(--magenta);
+  background: #17111c;
+  box-shadow: 5px 5px 0 #ff2f9b35;
+  transform: rotate(-.4deg);
+}
+.home-game:nth-child(2) {
+  border-top-color: var(--orange);
+  box-shadow: 5px 5px 0 #ff8a2438;
+  transform: rotate(.35deg);
+}
+.home-game:nth-child(3) {
+  border-top-color: var(--cyan);
+  box-shadow: 5px 5px 0 #26e6e638;
+  transform: rotate(-.2deg);
+}
+.home-game__art { min-height: 0; height: clamp(205px, 20vw, 285px); background: #09070d; }
+.home-game__art img {
+  width: 100%; height: 100%; min-height: 0;
+  object-fit: cover;
+  filter: saturate(1.28) contrast(1.05);
+}
+.home-game--portrait .home-game__art img { object-fit: cover; }
+.home-game__body { flex: 1; min-height: 210px; padding: 22px; }
+.home-game h3 { font-size: clamp(29px, 3.2vw, 42px); }
+.home-game:nth-child(1) .card-kicker, .home-game:nth-child(1) .status { color: var(--magenta); }
+.home-game:nth-child(2) .card-kicker, .home-game:nth-child(2) .status { color: var(--orange); }
+.home-game:nth-child(3) .card-kicker, .home-game:nth-child(3) .status { color: var(--cyan); }
+.art-index { border: 1px solid currentColor; background: #0b0811e8; color: var(--acid); }
+.section-tail { border-top: 2px solid #65445f; }
+.section-tail a { color: var(--acid); }
+.noticeboard-section {
+  background:
+    radial-gradient(ellipse at 12% 50%, #ff2f9b18, transparent 35%),
+    radial-gradient(ellipse at 92% 20%, #26e6e614, transparent 35%),
+    #100c15;
+  border-block: 3px solid var(--magenta);
+}
+.home-board { gap: 22px; }
+.home-board__panel {
+  border: 2px solid #69526c;
+  background: #1b1421;
+  box-shadow: 5px 5px 0 #26e6e633;
+}
+.home-board__panel:first-child { border-top: 5px solid var(--magenta); }
+.home-board__panel:last-child { border-top: 5px solid var(--cyan); }
+.home-board__panel h3 { font-size: clamp(34px, 4vw, 46px); }
+.board-state { color: #ff7c91; }
+.board-state--quiet { color: var(--cyan); }
+.home-board__panel a { color: var(--acid); text-decoration-color: var(--magenta); }
+.lootcoin-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 8% 48%, #c7ff2424, transparent 24%),
+    radial-gradient(circle at 94% 10%, #ff2f9b18, transparent 30%);
+}
+.lootcoin-mark {
+  border-color: var(--acid);
+  border-radius: 8px;
+  color: var(--acid);
+  box-shadow: 7px 7px 0 var(--magenta), 0 0 26px #c7ff2433;
+}
+.lootcoin-side {
+  border: 2px solid var(--acid);
+  border-left: 5px solid var(--magenta);
+  background: #120e19;
+  box-shadow: 5px 5px 0 #26e6e644;
+}
+.lootcoin-side span { color: var(--acid); }
+@media (max-width: 900px) {
+  .home-game-grid { grid-template-columns: 1fr 1fr; }
+  .home-game:nth-child(3) { grid-column: 1 / -1; }
+  .home-game:nth-child(3) .home-game__art { height: 260px; }
+}
+@media (max-width: 760px) {
+  .home-hero { padding-inline: 0; }
+  .home-hero__frame { border-inline: 0; min-height: 0; }
+  .home-hero__frame::before {
+    background:
+      linear-gradient(180deg, #09070d00 0%, #09070d10 40%, #09070df5 100%);
+  }
+  .home-hero__art {
+    object-position: 70% 38%;
+    max-height: 360px;
+    aspect-ratio: 1.1 / 1;
+  }
+  .home-hero__content { padding: 28px var(--gutter) 38px; }
+  .home-hero h1 { font-size: clamp(64px, 14vw, 88px); }
+  .hero-stamp { top: 215px; right: 24px; }
+  .home-game-grid, .home-board { grid-template-columns: 1fr; }
+  .home-game:nth-child(3) { grid-column: auto; }
+  .home-game:nth-child(3) .home-game__art { height: 230px; }
+  .home-game__body { min-height: 180px; }
+}
+@media (max-width: 420px) {
+  .home-hero h1 { font-size: clamp(58px, 14vw, 76px); }
+  .home-game, .home-game--wide { transform: none; }
+  .home-game__art, .home-game__art img { max-height: 260px; aspect-ratio: 1.35 / 1; }
+  .lootcoin-section { grid-template-columns: 1fr; }
+}
