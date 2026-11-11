@@ -72,3 +72,14 @@ See `git show --stat` for the coherent implementation commit; the Creative Bible
 3. Inspect actual Supabase schema, Edge Functions, RLS policies, and CPAGrip staging code before declaring backend or provider readiness.
 4. Continue with CPAGrip adapter verification only after current official terms/macros and incentive eligibility for game-only LC are confirmed. Keep live reward posting disabled until all gates pass.
 5. Production deployment, merging, paid services, provider agreements, live rewards, and money movement remain outside this authorization.
+
+
+## Owner-approved neon comic arcade translation — 2026-11-11
+
+- Owner selected the supplied Skuz comic reference as the definitive visual target: high-energy western comic-book illustration, vivid green/magenta/cyan accents, halftone and bold ink, lively arcade atmosphere rather than uniformly bleak dystopia.
+- Created isolated branch `design/neon-comic-arcade` from the existing build branch; no production branch or deployment was touched.
+- Updated the shared public visual system with brighter comic-arcade semantic accents, printed panel treatments, bolder action controls, and responsive navigation/panel styling.
+- Recomposed homepage styling into a three-column image-led game wall, comic-poster hero treatment, vivid noticeboard and LootCoin feature surface. Existing official game artwork remains assigned to its correct game.
+- Preserved real HTML controls and product disclosures. No cash-out promise, cash balance, payout CTA, fabricated rewards or partner approvals were added.
+- Current hero source remains the existing repository Skuz arcade hero asset; the newly uploaded owner reference image has not yet been installed as a production asset. New reference-based artwork is a separate follow-up asset task.
+- Static rendered/browser QA remains deferred; no claim of visual approval. No merge, production deployment, paid service, provider activation, or live reward behavior changed.
