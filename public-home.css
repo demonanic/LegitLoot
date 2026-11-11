@@ -1,266 +1,85 @@
-.home-main { width: 100%; }
-.home-hero { padding: 0 var(--gutter); background: #0b0c0b; }
-.home-hero__frame { position: relative; isolation: isolate; width: min(1500px, 100%); min-height: min(690px, calc(100svh - 110px)); margin-inline: auto; overflow: hidden; border-inline: 1px solid #777b7555; background: #171918; }
-.home-hero__art { position: absolute; z-index: -2; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 42%; }
-.home-hero__frame::before { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg, #101110f5 0%, #101110dc 31%, #10111070 53%, #10111008 82%), linear-gradient(0deg, #101110a8 0%, transparent 42%); }
-.home-hero__frame::after { content: ""; position: absolute; inset: 14px; border: 1px solid #f1eee326; pointer-events: none; }
-.home-hero__content { position: relative; z-index: 2; width: min(var(--page-width), calc(100% - 2 * var(--gutter))); padding-block: clamp(65px, 10vw, 120px); margin-inline: auto; }
-.home-hero__content > * { max-width: 590px; }
-.home-hero__content .eyebrow { display: flex; align-items: center; gap: 10px; color: var(--acid); }
-.home-hero__content .eyebrow::before { content: ""; width: 26px; height: 3px; background: var(--blood-bright); }
-.home-hero h1 { margin: 22px 0 20px; font: 900 clamp(64px, 9vw, 116px)/.78 var(--display); letter-spacing: -.035em; }
-.home-hero h1 span { color: var(--acid); }
-.home-hero__lede { max-width: 470px; margin: 0 0 24px; color: var(--bone); font-size: clamp(16px, 1.7vw, 19px); }
-.home-hero__actions { display: flex; flex-wrap: wrap; gap: 10px; margin: 25px 0 20px; }
-.home-hero__disclosure { max-width: 470px; margin: 0; color: var(--bone-muted); font: 10px/1.6 var(--mono); letter-spacing: .025em; }
-.home-hero__disclosure strong { color: var(--acid); }
-.hero-stamp { position: absolute; right: 5%; bottom: 9%; z-index: 2; display: flex; width: 108px; height: 108px; align-items: center; justify-content: center; gap: 7px; border: 2px solid var(--acid); border-radius: 50%; transform: rotate(-12deg); color: var(--acid); background: #101110a8; }
-.hero-stamp span { font: 900 36px/.8 var(--display); }
-.hero-stamp small { font: 700 8px/1.15 var(--mono); }
-.hero-bottomline { display: flex; justify-content: space-between; gap: 12px; padding: 12px 3px; border-bottom: 1px solid #777b7580; color: var(--industrial); font: 9px var(--mono); letter-spacing: .09em; }
-.header-world-tag { margin-left: auto; color: var(--industrial); font: 9px var(--mono); letter-spacing: .08em; white-space: nowrap; }
-.home-main .home-section:first-of-type { border-top: 0; }
-.home-section { padding-block: clamp(58px, 8vw, 100px); border-top: 1px solid #777b7566; }
-.home-section__head { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 30px; }
-.home-section__head h2, .lootcoin-copy h2 { margin: 0; font: 900 clamp(48px, 7vw, 82px)/.82 var(--display); letter-spacing: -.025em; }
-.home-section__head h2 span, .lootcoin-copy h2 span { color: var(--blood-bright); }
-.home-section__head > p { max-width: 390px; margin: 0 0 4px; color: var(--bone-muted); font-size: 14px; }
-.home-game-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-items: stretch; }
-.home-game { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(190px, .95fr); min-width: 0; overflow: hidden; border: 1px solid #777b758a; border-left: 4px solid var(--blood); background: var(--charcoal); }
-.home-game:nth-child(2) { border-left-color: var(--acid); }
-.home-game:nth-child(3) { border-left-color: var(--magenta); }
-.home-game--wide { grid-column: 1 / -1; grid-template-columns: 1.5fr 1fr; }
-.home-game__art { position: relative; min-width: 0; min-height: 250px; background: #171918; }
-.home-game__art img { display: block; width: 100%; height: 100%; min-height: 250px; object-fit: cover; }
-.home-game--portrait .home-game__art img { object-fit: contain; }
-.art-index { position: absolute; top: 12px; left: 12px; z-index: 1; padding: 6px 8px; background: var(--ink); color: var(--acid); font: 9px var(--mono); letter-spacing: .08em; }
-.home-game__body { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: clamp(17px, 2.4vw, 28px); }
-.home-game h3 { margin: 9px 0; font: 900 clamp(27px, 3vw, 38px)/.9 var(--display); text-transform: uppercase; }
-.home-game__body > p:not(.card-kicker) { margin: 5px 0 18px; color: var(--bone-muted); font-size: 13px; }
-.home-game .status { margin-top: auto; }
-.section-tail { display: flex; justify-content: space-between; gap: 15px; margin-top: 22px; padding-top: 14px; border-top: 1px solid #777b7555; color: var(--industrial); font: 9px var(--mono); letter-spacing: .08em; }
-.section-tail a { color: var(--acid); text-decoration: none; }
-.noticeboard-section { background: #171918; border-block: 1px solid #777b7580; }
-.home-board { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.home-board__panel { position: relative; min-height: 245px; padding: 26px; border: 1px solid #777b758a; background: #202221; }
-.home-board__panel:first-child { border-top: 4px solid var(--blood); }
-.home-board__panel:last-child { border-top: 4px solid var(--acid); }
-.home-board__panel h3 { margin: 8px 0 12px; font: 900 38px/.9 var(--display); text-transform: uppercase; }
-.home-board__panel p:not(.card-kicker) { max-width: 540px; color: var(--bone-muted); font-size: 14px; }
-.board-state { display: block; margin: 18px 0 10px; color: var(--blood-bright); font: 700 9px var(--mono); letter-spacing: .08em; }
-.board-state--quiet { color: var(--acid); }
-.home-board__panel a { color: var(--bone); font: 700 10px var(--mono); text-decoration-color: var(--blood-bright); text-underline-offset: 5px; text-transform: uppercase; }
-.lootcoin-section { display: grid; grid-template-columns: .55fr 1.5fr .8fr; align-items: center; gap: clamp(20px, 5vw, 70px); }
-.lootcoin-mark { display: grid; width: clamp(110px, 16vw, 190px); aspect-ratio: 1; place-items: center; border: 5px double var(--acid); border-radius: 50%; color: var(--acid); font: 900 clamp(48px, 7vw, 82px)/1 var(--display); transform: rotate(-12deg); box-shadow: 8px 8px 0 #a9252b55; }
-.lootcoin-copy > p:not(.eyebrow) { max-width: 620px; margin: 20px 0; color: var(--bone-muted); font-size: 15px; }
-.lootcoin-side { display: grid; gap: 10px; padding: 18px; border-left: 2px solid var(--acid); background: var(--charcoal); }
-.lootcoin-side span { color: var(--bone); font: 700 10px var(--mono); letter-spacing: .07em; }
-.lootcoin-side small { margin-top: 8px; color: var(--bone-muted); font-size: 11px; line-height: 1.5; }
-@media (max-width: 760px) {
-  .header-world-tag { display: none; }
-  .home-hero { padding-inline: 0; }
-  .home-hero__frame { min-height: 0; display: flex; flex-direction: column; border-inline: 0; }
-  .home-hero__frame::before { z-index: 1; background: linear-gradient(180deg, #10111008 0%, #10111020 30%, #101110 100%); }
-  .home-hero__frame::after { inset: 9px; }
-  .home-hero__art { position: relative; z-index: 0; order: 1; width: 100%; height: auto; min-height: 0; max-height: 330px; aspect-ratio: 1.5 / 1; object-fit: cover; object-position: 72% 38%; }
-  .home-hero__content { order: 2; width: 100%; padding: 30px var(--gutter) 34px; }
-  .home-hero h1 { font-size: clamp(58px, 13vw, 82px); }
-  .hero-stamp { top: 205px; right: 22px; bottom: auto; width: 75px; height: 75px; }
-  .hero-stamp span { font-size: 27px; }
-  .hero-stamp small { font-size: 6px; }
-  .hero-bottomline span:nth-child(2) { display: none; }
-  .home-section__head { align-items: flex-start; flex-direction: column; }
-  .home-game-grid, .home-board { grid-template-columns: 1fr; }
-  .home-game, .home-game--wide { grid-column: auto; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); }
-  .home-game__art, .home-game__art img { min-height: 210px; }
-  .lootcoin-section { grid-template-columns: 90px 1fr; gap: 20px; }
-  .lootcoin-mark { width: 85px; font-size: 40px; }
-  .lootcoin-side { grid-column: 1 / -1; }
+/* LegitLoot homepage — rebuilt as one coherent neon comic arcade system. */
+.home-main{overflow:hidden;background:#09070d;color:#fff8ff}
+.home-hero{padding:24px clamp(12px,3vw,42px) 0;background:#09070d}
+.home-hero__frame{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;min-height:650px;max-width:1500px;margin:auto;overflow:hidden;border:3px solid #ff3da8;background:radial-gradient(ellipse at 75% 40%,#a6ed2533,transparent 34%),radial-gradient(ellipse at 20% 90%,#ff3da833,transparent 38%),linear-gradient(125deg,#120c1c,#25102d 58%,#08070c);box-shadow:0 0 0 5px #08070c,0 0 36px #ff3da833}
+.home-hero__art{position:absolute;z-index:-1;inset:0 42% 0 0;width:58%;height:100%;object-fit:cover;object-position:62% center;filter:saturate(1.5) contrast(1.12)}
+.home-hero__frame:before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:radial-gradient(#ff3da8 1px,transparent 1.6px) 0 0/11px 11px,linear-gradient(90deg,transparent 25%,#09070d30 43%,#09070de8 59%,#09070d 100%);mix-blend-mode:screen;opacity:.42}
+.home-hero__frame:after{content:"";position:absolute;inset:12px;border:2px solid #c7ff2470;clip-path:polygon(0 0,100% 0,100% 95%,96% 100%,0 100%);pointer-events:none}
+.home-hero__content{position:relative;z-index:2;grid-column:2;padding:70px clamp(22px,4vw,64px) 65px 10px;width:100%;margin:0}
+.home-hero__content>*{max-width:620px}
+.home-hero__content .eyebrow{color:#c7ff24;font:700 12px/1.4 var(--mono);letter-spacing:.15em;text-transform:uppercase}
+.home-hero__content .eyebrow:before{content:"★ ";color:#ff3da8}
+.home-hero h1{margin:18px 0 22px;font:900 clamp(64px,8vw,118px)/.78 var(--display);letter-spacing:-.035em;text-transform:uppercase;color:#fff;text-shadow:4px 4px 0 #ff329d,8px 8px 0 #09070d}
+.home-hero h1 span{color:#c7ff24}
+.home-hero__lede{max-width:480px;color:#fff;font-size:clamp(16px,1.5vw,20px);font-weight:700;text-shadow:1px 2px 4px #000}
+.home-hero__actions{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0}
+.home-hero__actions .button{min-height:52px;padding:14px 20px;border:2px solid #fff;font:900 12px var(--mono);box-shadow:4px 4px 0 #08070d;transform:skew(-4deg)}
+.home-hero__actions .button-acid{border-color:#c7ff24;background:#c7ff24;color:#100b16}
+.home-hero__actions .button-ghost{background:#171020;color:#fff}
+.home-hero__disclosure{padding:10px 13px;border-left:4px solid #26e6e6;background:#09070de8;color:#e9ddec;font:10px/1.6 var(--mono)}
+.home-hero__disclosure strong{color:#c7ff24}
+.hero-stamp{position:absolute;z-index:3;right:4%;bottom:7%;display:grid;place-content:center;width:110px;height:110px;border:3px solid #c7ff24;border-radius:0;background:#100b18;color:#c7ff24;text-align:center;transform:rotate(8deg);box-shadow:6px 6px 0 #ff329d}
+.hero-stamp span{font:900 38px var(--display)}.hero-stamp small{font:800 9px/1.1 var(--mono)}
+.hero-bottomline{display:flex;justify-content:space-between;gap:12px;padding:13px 4px;border-bottom:2px solid #ff329d;color:#e9ddec;font:700 10px var(--mono);letter-spacing:.1em}
+.home-section{padding:clamp(52px,7vw,92px) clamp(16px,4vw,56px);border-top:2px solid #53304f;background:#0d0913}
+.home-section__head{display:flex;align-items:end;justify-content:space-between;gap:24px;max-width:1300px;margin:0 auto 30px}
+.home-section__head .eyebrow{color:#26e6e6}
+.home-section__head h2,.lootcoin-copy h2{margin:0;color:#fff;font:900 clamp(48px,6vw,82px)/.82 var(--display);letter-spacing:-.025em;text-shadow:4px 4px 0 #ff329d;text-transform:uppercase}
+.home-section__head h2 span,.lootcoin-copy h2 span{color:#c7ff24}
+.home-section__head>p{max-width:390px;color:#e3d8e8;font-size:14px}
+.home-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:1300px;margin:auto}
+.home-game,.home-game--wide{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:3px solid #ff329d;border-top-width:8px;background:#191020;box-shadow:7px 7px 0 #ff329d45;transform:rotate(-.5deg)}
+.home-game:nth-child(2){border-color:#ff8a24;box-shadow:7px 7px 0 #ff8a2445;transform:rotate(.45deg)}
+.home-game:nth-child(3){border-color:#26e6e6;box-shadow:7px 7px 0 #26e6e645;transform:rotate(-.25deg)}
+.home-game__art{position:relative;height:clamp(220px,25vw,340px);min-height:0;background:#08070d}
+.home-game__art img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(1.35) contrast(1.08)}
+.home-game--portrait .home-game__art img{object-fit:cover}
+.art-index{position:absolute;top:12px;left:12px;z-index:2;padding:7px 10px;background:#09070d;color:#c7ff24;font:800 10px var(--mono)}
+.home-game__body{display:flex;flex:1;min-height:205px;flex-direction:column;align-items:flex-start;padding:22px}
+.home-game .card-kicker,.home-game:nth-child(1) .status{color:#ff65b7}
+.home-game:nth-child(2) .card-kicker,.home-game:nth-child(2) .status{color:#ffad59}
+.home-game:nth-child(3) .card-kicker,.home-game:nth-child(3) .status{color:#55f4ff}
+.home-game h3{margin:9px 0;font:900 clamp(30px,3.4vw,44px)/.9 var(--display);text-transform:uppercase}
+.home-game__body>p:not(.card-kicker){color:#e3d8e8;font-size:14px}
+.home-game .status{margin-top:auto}
+.section-tail{display:flex;justify-content:space-between;gap:16px;max-width:1300px;margin:26px auto 0;padding-top:16px;border-top:1px solid #67415f;color:#d8c8dd;font:700 10px var(--mono)}
+.section-tail a{color:#c7ff24}
+.noticeboard-section{background:linear-gradient(120deg,#160d20,#0b0910)}
+.home-board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:1300px;margin:auto}
+.home-board__panel{min-height:230px;padding:26px;border:2px solid #ff329d;background:#191020;box-shadow:6px 6px 0 #ff329d38}
+.home-board__panel:last-child{border-color:#c7ff24;box-shadow:6px 6px 0 #c7ff2438}
+.home-board__panel h3{font:900 36px/.95 var(--display);text-transform:uppercase}
+.home-board__panel p:not(.card-kicker){color:#e3d8e8}
+.home-board__panel a{color:#c7ff24;font:800 11px var(--mono)}
+.board-state{color:#ff65b7;font:800 10px var(--mono)}.board-state--quiet{color:#c7ff24}
+.lootcoin-section{display:grid;grid-template-columns:.55fr 1.5fr .85fr;align-items:center;gap:clamp(20px,4vw,60px);max-width:1450px;margin:auto;background:#100b18}
+.lootcoin-mark{display:grid;width:clamp(110px,15vw,190px);aspect-ratio:1;place-items:center;border:7px double #c7ff24;border-radius:50%;color:#c7ff24;font:900 clamp(48px,7vw,82px) var(--display);transform:rotate(-12deg);box-shadow:9px 9px 0 #ff329d}
+.lootcoin-copy>p:not(.eyebrow){color:#e3d8e8}
+.lootcoin-side{display:grid;gap:12px;padding:20px;border:2px solid #26e6e6;background:#191020}
+.lootcoin-side span{color:#fff;font:800 11px var(--mono)}.lootcoin-side small{color:#d8c8dd}
+@media(max-width:760px){
+ .home-hero{padding:12px 10px 0}
+ .home-hero__frame{display:flex;min-height:0;flex-direction:column}
+ .home-hero__art{position:relative;inset:auto;order:0;width:100%;height:auto;max-height:390px;aspect-ratio:1.18/1;object-fit:cover;object-position:60% 35%}
+ .home-hero__frame:before{background:linear-gradient(180deg,transparent 5%,#09070d22 55%,#09070d 100%);mix-blend-mode:normal;opacity:1}
+ .home-hero__content{order:1;padding:28px 22px 32px}
+ .home-hero h1{font-size:clamp(58px,12vw,88px)}
+ .hero-stamp{top:300px;right:22px;bottom:auto;width:76px;height:76px}
+ .hero-stamp span{font-size:27px}.hero-stamp small{font-size:6px}
+ .hero-bottomline span:nth-child(2){display:none}
+ .home-section__head{align-items:flex-start;flex-direction:column}
+ .home-game-grid,.home-board{grid-template-columns:1fr}
+ .home-game,.home-game--wide{transform:none}
+ .home-game__art{height:300px}
+ .lootcoin-section{grid-template-columns:90px 1fr;gap:20px}
+ .lootcoin-mark{width:82px;font-size:38px}
+ .lootcoin-side{grid-column:1/-1}
 }
-@media (max-width: 420px) {
-  .home-hero__actions { flex-direction: column; align-items: stretch; }
-  .home-hero__actions .button { width: 100%; }
-  .home-game, .home-game--wide { grid-template-columns: 1fr; }
-  .home-game__art, .home-game__art img { min-height: 0; max-height: 260px; aspect-ratio: 1.35 / 1; }
-  .home-game__body { min-height: 180px; }
-  .section-tail { flex-direction: column; }
-  .lootcoin-section { grid-template-columns: 1fr; }
-  .lootcoin-mark { width: 90px; }
-  .lootcoin-side { grid-column: auto; }
-}
-
-
-/* === HOMEPAGE: NEON COMIC ARCADE === */
-.home-hero { padding-inline: var(--gutter); background: #08070b; }
-.home-hero__frame {
-  min-height: clamp(560px, 67vw, 760px);
-  border: 2px solid #6b4d6c;
-  border-top: 5px solid var(--magenta);
-  box-shadow: 0 0 0 5px #0a080e, 0 0 34px #ff2f9b22;
-  background:
-    radial-gradient(ellipse at 78% 35%, #c7ff2438 0, transparent 32%),
-    radial-gradient(ellipse at 86% 75%, #26e6e62b 0, transparent 28%),
-    linear-gradient(120deg, #100d17, #211327 58%, #09080d);
-}
-.home-hero__art {
-  object-position: 72% 42%;
-  filter: saturate(1.35) contrast(1.06);
-}
-.home-hero__frame::before {
-  background:
-    radial-gradient(circle, #ff2f9b 1.1px, transparent 1.6px) 0 0 / 10px 10px,
-    linear-gradient(90deg, #09070df7 0%, #09070ddf 34%, #09070d85 53%, #09070d10 86%),
-    linear-gradient(0deg, #09070d99, transparent 40%);
-  mix-blend-mode: normal;
-}
-.home-hero__frame::after {
-  inset: 12px;
-  border: 2px solid #c7ff2455;
-  clip-path: polygon(0 0, 100% 0, 100% 94%, 97% 100%, 0 100%);
-}
-.home-hero__content { padding-block: clamp(70px, 10vw, 130px); }
-.home-hero__content .eyebrow { color: var(--acid); }
-.home-hero__content .eyebrow::before { background: var(--magenta); }
-.home-hero h1 {
-  font-size: clamp(70px, 9.5vw, 128px);
-  line-height: .78;
-  text-shadow: 4px 4px 0 #ff2f9b, 7px 7px 0 #08070b;
-}
-.home-hero h1 span { color: var(--acid); }
-.home-hero__lede { max-width: 460px; color: #fff8ff; text-shadow: 1px 2px 4px #000; }
-.home-hero__disclosure {
-  display: inline-block;
-  padding: 9px 12px;
-  border-left: 4px solid var(--cyan);
-  background: #09070dd9;
-}
-.home-hero__disclosure strong { color: var(--acid); }
-.home-hero__actions .button-acid { transform: skew(-4deg); }
-.hero-stamp {
-  border: 3px solid var(--acid);
-  border-radius: 0;
-  transform: rotate(8deg);
-  color: var(--acid);
-  background: #100b18e8;
-  box-shadow: 5px 5px 0 var(--magenta);
-}
-.hero-stamp::before {
-  content: "";
-  position: absolute; inset: 5px;
-  border: 1px dashed var(--acid);
-}
-.hero-bottomline {
-  border-bottom: 2px solid var(--magenta);
-  color: #e8dce9;
-}
-.home-section { border-top: 2px solid #65445f; }
-.home-section__head h2, .lootcoin-copy h2 {
-  text-shadow: 3px 3px 0 #ff2f9b35;
-}
-.home-section__head h2 span, .lootcoin-copy h2 span { color: var(--magenta); }
-.home-game-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-.home-game, .home-game--wide {
-  display: flex;
-  flex-direction: column;
-  grid-column: auto;
-  border: 2px solid #5a4a60;
-  border-top: 5px solid var(--magenta);
-  background: #17111c;
-  box-shadow: 5px 5px 0 #ff2f9b35;
-  transform: rotate(-.4deg);
-}
-.home-game:nth-child(2) {
-  border-top-color: var(--orange);
-  box-shadow: 5px 5px 0 #ff8a2438;
-  transform: rotate(.35deg);
-}
-.home-game:nth-child(3) {
-  border-top-color: var(--cyan);
-  box-shadow: 5px 5px 0 #26e6e638;
-  transform: rotate(-.2deg);
-}
-.home-game__art { min-height: 0; height: clamp(205px, 20vw, 285px); background: #09070d; }
-.home-game__art img {
-  width: 100%; height: 100%; min-height: 0;
-  object-fit: cover;
-  filter: saturate(1.28) contrast(1.05);
-}
-.home-game--portrait .home-game__art img { object-fit: cover; }
-.home-game__body { flex: 1; min-height: 210px; padding: 22px; }
-.home-game h3 { font-size: clamp(29px, 3.2vw, 42px); }
-.home-game:nth-child(1) .card-kicker, .home-game:nth-child(1) .status { color: var(--magenta); }
-.home-game:nth-child(2) .card-kicker, .home-game:nth-child(2) .status { color: var(--orange); }
-.home-game:nth-child(3) .card-kicker, .home-game:nth-child(3) .status { color: var(--cyan); }
-.art-index { border: 1px solid currentColor; background: #0b0811e8; color: var(--acid); }
-.section-tail { border-top: 2px solid #65445f; }
-.section-tail a { color: var(--acid); }
-.noticeboard-section {
-  background:
-    radial-gradient(ellipse at 12% 50%, #ff2f9b18, transparent 35%),
-    radial-gradient(ellipse at 92% 20%, #26e6e614, transparent 35%),
-    #100c15;
-  border-block: 3px solid var(--magenta);
-}
-.home-board { gap: 22px; }
-.home-board__panel {
-  border: 2px solid #69526c;
-  background: #1b1421;
-  box-shadow: 5px 5px 0 #26e6e633;
-}
-.home-board__panel:first-child { border-top: 5px solid var(--magenta); }
-.home-board__panel:last-child { border-top: 5px solid var(--cyan); }
-.home-board__panel h3 { font-size: clamp(34px, 4vw, 46px); }
-.board-state { color: #ff7c91; }
-.board-state--quiet { color: var(--cyan); }
-.home-board__panel a { color: var(--acid); text-decoration-color: var(--magenta); }
-.lootcoin-section {
-  position: relative;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 8% 48%, #c7ff2424, transparent 24%),
-    radial-gradient(circle at 94% 10%, #ff2f9b18, transparent 30%);
-}
-.lootcoin-mark {
-  border-color: var(--acid);
-  border-radius: 8px;
-  color: var(--acid);
-  box-shadow: 7px 7px 0 var(--magenta), 0 0 26px #c7ff2433;
-}
-.lootcoin-side {
-  border: 2px solid var(--acid);
-  border-left: 5px solid var(--magenta);
-  background: #120e19;
-  box-shadow: 5px 5px 0 #26e6e644;
-}
-.lootcoin-side span { color: var(--acid); }
-@media (max-width: 900px) {
-  .home-game-grid { grid-template-columns: 1fr 1fr; }
-  .home-game:nth-child(3) { grid-column: 1 / -1; }
-  .home-game:nth-child(3) .home-game__art { height: 260px; }
-}
-@media (max-width: 760px) {
-  .home-hero { padding-inline: 0; }
-  .home-hero__frame { border-inline: 0; min-height: 0; }
-  .home-hero__frame::before {
-    background:
-      linear-gradient(180deg, #09070d00 0%, #09070d10 40%, #09070df5 100%);
-  }
-  .home-hero__art {
-    object-position: 70% 38%;
-    max-height: 360px;
-    aspect-ratio: 1.1 / 1;
-  }
-  .home-hero__content { padding: 28px var(--gutter) 38px; }
-  .home-hero h1 { font-size: clamp(64px, 14vw, 88px); }
-  .hero-stamp { top: 215px; right: 24px; }
-  .home-game-grid, .home-board { grid-template-columns: 1fr; }
-  .home-game:nth-child(3) { grid-column: auto; }
-  .home-game:nth-child(3) .home-game__art { height: 230px; }
-  .home-game__body { min-height: 180px; }
-}
-@media (max-width: 420px) {
-  .home-hero h1 { font-size: clamp(58px, 14vw, 76px); }
-  .home-game, .home-game--wide { transform: none; }
-  .home-game__art, .home-game__art img { max-height: 260px; aspect-ratio: 1.35 / 1; }
-  .lootcoin-section { grid-template-columns: 1fr; }
+@media(max-width:420px){
+ .home-hero__actions{flex-direction:column;align-items:stretch}
+ .home-hero__actions .button{width:100%}
+ .home-game__art{height:250px}
+ .lootcoin-section{grid-template-columns:1fr}
+ .lootcoin-side{grid-column:auto}
+ .section-tail{flex-direction:column}
 }
