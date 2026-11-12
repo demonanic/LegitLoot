@@ -22,6 +22,7 @@ async def main():
             page.on("console", lambda m: m.type == "error" and errors.append(m.text))
             page.on("request", lambda r: "/functions/v1/" in r.url and fn_calls.append(r.url))
             await page.goto(f"{BASE}/earn.html", wait_until="networkidle")
+            start_url = page.url
             cards = page.locator("#provider-hub .provider-card")
             check(await cards.count() == 4, f"[{vp_name}] four hub cards render")
             for pid, label in [("offerwall-gg", "Pending approval"), ("cpagrip", "Testing · not open"),
@@ -33,7 +34,7 @@ async def main():
                 check(await btn.count() == 1 and await btn.is_disabled(), f"[{vp_name}] {pid} has its own entry button and it is disabled")
                 await btn.click(force=True)
             await page.wait_for_timeout(500)
-            check(page.url.endswith("/earn.html"), f"[{vp_name}] clicking disabled buttons navigates nowhere")
+            check(page.url == start_url, f"[{vp_name}] clicking disabled buttons navigates nowhere")
             check(not fn_calls, f"[{vp_name}] no server function calls made ({fn_calls})")
             summary = await page.locator("#earn-hub-summary").inner_text()
             check("No earning provider is open" in summary, f"[{vp_name}] summary says no provider is open")
