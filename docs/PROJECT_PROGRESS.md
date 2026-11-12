@@ -72,3 +72,32 @@ See `git show --stat` for the coherent implementation commit; the Creative Bible
 3. Inspect actual Supabase schema, Edge Functions, RLS policies, and CPAGrip staging code before declaring backend or provider readiness.
 4. Continue with CPAGrip adapter verification only after current official terms/macros and incentive eligibility for game-only LC are confirmed. Keep live reward posting disabled until all gates pass.
 5. Production deployment, merging, paid services, provider agreements, live rewards, and money movement remain outside this authorization.
+
+
+## Owner-approved neon comic arcade translation — 2026-11-11
+
+- Owner selected the supplied Skuz comic reference as the definitive visual target: high-energy western comic-book illustration, vivid green/magenta/cyan accents, halftone and bold ink, lively arcade atmosphere rather than uniformly bleak dystopia.
+- Created isolated branch `design/neon-comic-arcade` from the existing build branch; no production branch or deployment was touched.
+- Updated the shared public visual system with brighter comic-arcade semantic accents, printed panel treatments, bolder action controls, and responsive navigation/panel styling.
+- Recomposed homepage styling into a three-column image-led game wall, comic-poster hero treatment, vivid noticeboard and LootCoin feature surface. Existing official game artwork remains assigned to its correct game.
+- Preserved real HTML controls and product disclosures. No cash-out promise, cash balance, payout CTA, fabricated rewards or partner approvals were added.
+- Current hero source remains the existing repository Skuz arcade hero asset; the newly uploaded owner reference image has not yet been installed as a production asset. New reference-based artwork is a separate follow-up asset task.
+- Static rendered/browser QA remains deferred; no claim of visual approval. No merge, production deployment, paid service, provider activation, or live reward behavior changed.
+
+## Provider-neutral earning hub — 2026-11-11
+
+- `earn.html` now renders its provider cards from a registry (`earn-providers.js`) through one shared renderer (`earn-hub.js`). New offerwalls, survey networks, CPA networks or direct offers are added as registry entries, not new markup.
+- Provider states: `active`, `testing`, `pending_approval`, `suspended`, `unavailable`. Unknown states render as unavailable. Only `active` providers with a server `launch` function can be opened; status is shown by text label and mark, not colour alone.
+- Offerwall.GG: `pending_approval`, button disabled. CPAGrip: added as its own provider card and entry button, state `testing`, no launch endpoint (callback receiver still in development on Supabase staging). Surveys and Direct offers: `unavailable` category slots.
+- Removed `offerwall-launch.js`. On 486705f it enabled the Offerwall.GG button and requested a live wall link for signed-in players, despite the pending status.
+- Frontend makes no ledger, RPC or table writes; tracking, attribution, callbacks and LootCoin issuance stay server-side. No offers, amounts, approvals or integration status were invented.
+- Tests: `node --test tests/*.test.mjs` (registry rules, 7 pass) and `python3 tests/earn-hub.browser.py <base-url>` (Playwright, desktop + phone; 39 checks pass locally). The active-provider launch guard was exercised with stubbed auth: only an exact `https` URL on the allowed origin and path opens.
+- Pushed to `design/neon-comic-arcade` only. No merge, production deployment, provider activation or reward issuance.
+
+## Homepage rebuilt from the owner's neon comic arcade mockup — 2026-11-12
+
+- `index.html` and `public-home.css` rebuilt to the mockup's composition: tilted logo slab and nav over the artwork, Skuz left, "Not built for the mainstream." slab right with two buttons, "Choose your world." tag, angled game panels, one-row LootCoins strip. Phone: headline and buttons sit directly under Skuz; panels stack.
+- New `assets/skuz-arcade-neon.webp`: the mockup's hero art with all baked-in text painted out and the coin's crypto-style mark replaced by a plain crown. All words and buttons are real HTML.
+- Owner rules applied over the mockup's wording: no "real payouts", "real rewards" or "cash out"; tagline is "Games • LootCoins • No shortcuts"; the fourth LootCoins step is "Spend in-game". The three older games are removed; panels show Zombie Invasion Defense (working title, in development, no art) and one unannounced slot.
+- Homepage loads no Supabase script and makes no backend calls. Offerwall.GG verification meta tag restored from `main`.
+- Tests: `python3 tests/home.browser.py <base-url>` (desktop, laptop, phone). Pushed to `design/neon-comic-arcade` only.

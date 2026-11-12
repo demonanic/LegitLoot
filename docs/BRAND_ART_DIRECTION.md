@@ -78,3 +78,8 @@ Skuz is the face and spokesperson of LegitLoot. Use the supplied reference plus 
 ## Acceptance check
 
 Before applying a design across pages, verify originality, western comic style, character continuity, authentic punk expression, product truth, hierarchy, text contrast, mobile readability, accessibility, and performance. A beautiful visual that misleads users or impairs a task fails acceptance.
+
+
+## Owner visual direction update — 2026-11-11
+
+The owner-approved website target is the uploaded high-energy Skuz comic reference: vivid acid-green lighting, strong black ink contours, expressive character drawing, halftone texture, and punchy magenta/cyan/orange arcade accents. The LegitLoot brand environment should feel like a lively, chaotic underground arcade rather than a uniformly bleak dystopia. Keep the darker dystopian treatment specific to game worlds that call for it. Match Skuz to the supplied reference; do not redesign him. Keep interface text and controls in HTML, and never use concept artwork with baked-in claims or UI as production content.

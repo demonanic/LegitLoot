@@ -94,3 +94,16 @@ Use asymmetry, inked dividers, hand-made texture, expressive image crops, and va
 10. Does the design respect reduced motion, keyboard use, touch use, and safe areas?
 
 Any failure involving character continuity, product truth, contrast, or usability blocks acceptance.
+
+
+## Owner visual direction update — 2026-11-11
+
+The owner selected the uploaded Skuz portrait as the definitive visual target for the website's comic-book energy. This direction supersedes any interpretation that makes the brand uniformly bleak, monochrome, or post-apocalyptic.
+
+- Match the supplied reference's bold, high-energy western comic illustration: expressive character proportions, heavy clean ink contours, halftone texture, punchy highlights, and dynamic graphic framing.
+- Keep Skuz's reference identity intact. Do not exaggerate his animal anatomy beyond the supplied design or redesign his face, mohawk, green eyes, cigar, jacket, or silhouette.
+- The atmosphere is a lively underground arcade, not a dead wasteland. Use active arcade cabinets, colorful practical lighting, improvised details, graffiti-like crown motifs, and a sense of mischief and movement.
+- Use vivid acid green as the strongest accent, with magenta, cyan, and occasional orange for arcade energy. Keep near-black as a grounding color, not as an excuse to make every scene dark.
+- Reserve dystopian bleakness for a specific game world such as Harvest//Zero; do not impose it on the LegitLoot brand environment or every game.
+- Website sections may use comic-panel framing, angled borders, halftone fields, and vivid color-coded game art. Critical interface text, controls, status and product terms remain real HTML and accessible.
+- Use the uploaded reference as the visual authority when creating new Skuz artwork. Generated concept images containing baked-in interface text or unsupported product claims are inspiration only and must not be used as website assets.
