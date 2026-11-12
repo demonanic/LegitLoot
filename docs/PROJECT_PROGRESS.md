@@ -93,3 +93,11 @@ See `git show --stat` for the coherent implementation commit; the Creative Bible
 - Frontend makes no ledger, RPC or table writes; tracking, attribution, callbacks and LootCoin issuance stay server-side. No offers, amounts, approvals or integration status were invented.
 - Tests: `node --test tests/*.test.mjs` (registry rules, 7 pass) and `python3 tests/earn-hub.browser.py <base-url>` (Playwright, desktop + phone; 39 checks pass locally). The active-provider launch guard was exercised with stubbed auth: only an exact `https` URL on the allowed origin and path opens.
 - Pushed to `design/neon-comic-arcade` only. No merge, production deployment, provider activation or reward issuance.
+
+## Homepage rebuilt from the owner's neon comic arcade mockup — 2026-11-12
+
+- `index.html` and `public-home.css` rebuilt to the mockup's composition: tilted logo slab and nav over the artwork, Skuz left, "Not built for the mainstream." slab right with two buttons, "Choose your world." tag, angled game panels, one-row LootCoins strip. Phone: headline and buttons sit directly under Skuz; panels stack.
+- New `assets/skuz-arcade-neon.webp`: the mockup's hero art with all baked-in text painted out and the coin's crypto-style mark replaced by a plain crown. All words and buttons are real HTML.
+- Owner rules applied over the mockup's wording: no "real payouts", "real rewards" or "cash out"; tagline is "Games • LootCoins • No shortcuts"; the fourth LootCoins step is "Spend in-game". The three older games are removed; panels show Zombie Invasion Defense (working title, in development, no art) and one unannounced slot.
+- Homepage loads no Supabase script and makes no backend calls. Offerwall.GG verification meta tag restored from `main`.
+- Tests: `python3 tests/home.browser.py <base-url>` (desktop, laptop, phone). Pushed to `design/neon-comic-arcade` only.

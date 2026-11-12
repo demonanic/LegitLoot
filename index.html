@@ -4,12 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101110">
-  <meta name="description" content="LegitLoot is an underground arcade for independent games and transparent opportunities.">
+  <meta name="description" content="LegitLoot is an underground arcade for original games. LootCoins are game credits with no cash value.">
+  <meta name="offerwall-verification" content="ow-decc1febbb799f89f1c7">
   <title>LegitLoot — The Underground Arcade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;0,900;1,800;1,900&display=swap">
   <link rel="stylesheet" href="public.css">
-  <link rel="stylesheet" href="public-home.css">
+  <link rel="stylesheet" href="public-home.css?v=20261112a">
   <link rel="stylesheet" href="public-pages.css">
   <link rel="icon" href="assets/legitloot-mark.svg" type="image/svg+xml">
 </head>
@@ -17,94 +19,78 @@
   <a class="skip-link" href="#main-content">Skip to content</a>
   <header class="site-header">
     <a class="brand" href="index.html" aria-label="LegitLoot home">
-      <img class="brand-mark-image" src="assets/legitloot-mark.svg" alt="">
-      <span>LEGIT<span class="acid">LOOT</span></span>
+      <span class="brand-crown" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M13 29L29 42L43 12L52 42L78 22L73 67H23Z" fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/><path d="M22 80H75" stroke="currentColor" stroke-width="7" stroke-linecap="round"/></svg></span>
+      <span class="brand-word">LEGIT<span class="acid">LOOT</span></span>
+      <span class="brand-tag">Games <i>•</i> LootCoins <i>•</i> No shortcuts</span>
     </a>
-    <span class="header-world-tag" aria-hidden="true">INDEPENDENT BY DESIGN / EST. IN THE STATIC</span>
     <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="main-navigation">☰</button>
     <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
-      <a class="active" href="index.html" aria-current="page">Home</a>
       <a href="games.html">Games</a>
       <a href="earn.html">Earn</a>
-      <a href="marketplace.html">Deals</a>
       <a href="rewards.html">Rewards</a>
-      <a class="nav-account" href="account.html">Account</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="marketplace.html">The Board</a>
+      <a class="nav-login" href="account.html">Login</a>
+      <a class="nav-signup" href="account.html">Sign up</a>
     </nav>
   </header>
 
   <main id="main-content" class="home-main">
-    <section class="home-hero" aria-labelledby="home-title">
-      <div class="home-hero__frame">
-        <img class="home-hero__art" src="assets/skuz-arcade-hero.webp" width="1672" height="941" alt="Skuz repairs an arcade cabinet in a worn underground game room." fetchpriority="high">
-        <div class="home-hero__content">
-          <p class="eyebrow">The underground arcade / entrance 001</p>
-          <h1 id="home-title">NOT BUILT<br>FOR THE<br><span>MAINSTREAM.</span></h1>
-          <p class="home-hero__lede">Independent games. Strange characters. A place for people who'd rather build their own thing.</p>
-          <div class="home-hero__actions">
-            <a class="button button-acid" href="games.html">Enter the game room <span aria-hidden="true">↗</span></a>
-            <a class="button button-ghost" href="earn.html">Check the noticeboard</a>
+    <section class="ll-hero" aria-labelledby="home-title">
+      <div class="ll-hero__art" role="img" aria-label="Skuz, a punk badger in a spiked leather jacket, points at you and holds up a LootCoin inside a neon arcade."></div>
+      <div class="ll-hero__copy">
+        <div class="ll-hero__slab">
+          <h1 id="home-title">Not built<br>for the<br><span>mainstream.</span></h1>
+          <i class="ll-hero__swipe" aria-hidden="true"></i>
+        </div>
+        <p class="ll-hero__lede">Original games.<br>A community that makes its own rules.</p>
+        <div class="ll-hero__actions">
+          <a class="ll-btn ll-btn--acid" href="games.html">Find your way in <span aria-hidden="true">→</span></a>
+          <a class="ll-btn ll-btn--ghost" href="how-it-works.html">How it works</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="ll-worlds" aria-labelledby="worlds-title">
+      <h2 id="worlds-title" class="ll-tag">Choose your world.</h2>
+      <div class="ll-worlds__grid">
+        <article class="ll-world ll-world--lead">
+          <div class="ll-world__inner">
+            <p class="ll-world__kicker">Zombie · Defense · Working title</p>
+            <h3>Zombie Invasion Defense</h3>
+            <p class="ll-world__line">The first game in the new lineup.</p>
+            <div class="ll-world__foot">
+              <a class="ll-world__btn" href="games.html">See the game room <span aria-hidden="true">→</span></a>
+              <span class="ll-world__status">Status: In development</span>
+            </div>
           </div>
-          <p class="home-hero__disclosure"><strong>ARCADE STATUS /</strong> Preview build. Provider rewards are inactive. Cash rewards are not available.</p>
-        </div>
-        <div class="hero-stamp" aria-hidden="true"><span>LL</span><small>NO<br>SHORTCUTS</small></div>
-      </div>
-      <div class="hero-bottomline"><span>DIY SPIRIT / ORIGINAL WORLDS</span><span>SCROLL TO EXPLORE ↓</span><span>STATUS: PREVIEW</span></div>
-    </section>
-
-    <section class="home-section section-wrap game-wall-section" aria-labelledby="game-wall-title">
-      <div class="home-section__head">
-        <div><p class="eyebrow">01 / Worlds under construction</p><h2 id="game-wall-title">PICK YOUR<br>POISON<span>.</span></h2></div>
-        <p>Three original worlds. Different rules. No pretend player counts, fake launch dates, or borrowed gameplay.</p>
-      </div>
-      <div class="home-game-grid">
-        <article class="home-game home-game--portrait">
-          <div class="home-game__art"><span class="art-index">01 / DEFEND</span><img src="assets/demonanic.jpg" width="921" height="1536" alt="Demonanic official game artwork" loading="lazy"></div>
-          <div class="home-game__body"><p class="card-kicker">RPG · Tower defense</p><h3>Demonanic</h3><p>Build your defenses. Hold the line. Survive the horde.</p><span class="status"><i aria-hidden="true"></i> In development</span></div>
         </article>
-        <article class="home-game home-game--portrait">
-          <div class="home-game__art"><span class="art-index">02 / ENDURE</span><img src="assets/gauntlets-survival.jpg" width="935" height="1536" alt="Gauntlet's Survival official game artwork" loading="lazy"></div>
-          <div class="home-game__body"><p class="card-kicker">Action · Survival</p><h3>Gauntlet's Survival</h3><p>Push through escalating encounters. Find out what holds.</p><span class="status status-muted"><i aria-hidden="true"></i> Planned</span></div>
+        <article class="ll-world ll-world--slot">
+          <div class="ll-world__inner">
+            <p class="ll-world__kicker">Slot open</p>
+            <h3>More worlds later.</h3>
+            <p class="ll-world__line">Nothing else is announced. New games show up here when they're real.</p>
+            <div class="ll-world__foot"><span class="ll-world__status">Status: Not announced</span></div>
+          </div>
         </article>
-        <article class="home-game home-game--wide">
-          <div class="home-game__art"><span class="art-index">03 / ADAPT</span><img src="assets/harvest-zero.jpg" width="1536" height="839" alt="Harvest//Zero official game artwork" loading="lazy"></div>
-          <div class="home-game__body"><p class="card-kicker">Survival · Crafting</p><h3>Harvest//Zero</h3><p>Scavenge a hostile world. Make something that lasts.</p><span class="status status-muted"><i aria-hidden="true"></i> Planned</span></div>
-        </article>
-      </div>
-      <div class="section-tail"><span>THESE WORLDS ARE OURS TO BUILD.</span><a href="games.html">View the game directory ↗</a></div>
-    </section>
-
-    <section class="home-section noticeboard-section" aria-labelledby="opportunities-title">
-      <div class="section-wrap">
-        <div class="home-section__head">
-          <div><p class="eyebrow">02 / Pinned to the wall</p><h2 id="opportunities-title">THE NOTICEBOARD<span>.</span></h2></div>
-          <p>Opportunities appear here only when their terms, permissions, and integrations are verified.</p>
-        </div>
-        <div class="home-board">
-          <article class="home-board__panel">
-            <p class="card-kicker">01 / Candidate provider</p><h3>Offerwall.GG</h3>
-            <p>Not active. Publisher approval, staging configuration, callback verification, and reward-ledger checks remain outstanding.</p>
-            <span class="board-state">STATUS: DISABLED</span>
-            <a href="earn.html">Inspect earning channels ↗</a>
-          </article>
-          <article class="home-board__panel">
-            <p class="card-kicker">02 / Future categories</p><h3>More ways to participate</h3>
-            <p>Surveys, approved tasks, affiliate deals, permitted rewarded ads, missions, events, and referrals are planned categories—not live offers.</p>
-            <span class="board-state board-state--quiet">STATUS: PLANNED / VERIFY FIRST</span>
-            <a href="how-it-works.html">How the system works ↗</a>
-          </article>
-        </div>
       </div>
     </section>
 
-    <section class="home-section section-wrap lootcoin-section" aria-labelledby="truth-title">
-      <div class="lootcoin-mark" aria-hidden="true">LC</div>
-      <div class="lootcoin-copy">
-        <p class="eyebrow">03 / Keep it in the game</p>
-        <h2 id="truth-title">LOOTCOINS.<br>GAME ONLY<span>.</span></h2>
-        <p>LootCoins are non-cash game credits. Use them for eligible in-game purchases and perks. They cannot be transferred, withdrawn, or converted into money.</p>
-        <a class="button button-ghost" href="rewards.html">Read the reward rules ↗</a>
+    <section class="ll-coins" aria-labelledby="coins-title">
+      <div class="ll-coins__row">
+        <div class="ll-coins__head">
+          <svg class="ll-coins__icon" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3"><ellipse cx="24" cy="12" rx="15" ry="6"/><path d="M9 12v8c0 3.3 6.7 6 15 6s15-2.7 15-6v-8M9 20v8c0 3.3 6.7 6 15 6s15-2.7 15-6v-8M9 28v8c0 3.3 6.7 6 15 6s15-2.7 15-6v-8"/></g></svg>
+          <h2 id="coins-title">LootCoins.</h2>
+          <p>Game only. Always clear.</p>
+        </div>
+        <ul class="ll-coins__steps">
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="26" height="16" rx="5"/><path d="M10 13v6M7 16h6"/><circle cx="21" cy="14" r="1.4"/><circle cx="24" cy="18" r="1.4"/></g></svg><span>Play games</span></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="20" height="23" rx="2"/><path d="M12 5V3h8v2M11 14l3 3 6-6M11 23h10"/></g></svg><span>Complete offers <em>Planned</em></span></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="16" cy="9" rx="10" ry="4"/><path d="M6 9v7c0 2 4.5 4 10 4s10-1.8 10-4V9M6 16v7c0 2 4.5 4 10 4s10-1.8 10-4v-7"/></g></svg><span>Earn LootCoins</span></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h22l-2 15H7zM11 12V9a5 5 0 0 1 10 0v3M13 19l2.5 2.5L20 17"/></g></svg><span>Spend in-game</span></li>
+        </ul>
       </div>
-      <aside class="lootcoin-side"><span>NO CASH VALUE</span><span>NON-TRANSFERABLE</span><span>NO WITHDRAWALS</span><small>Cash rewards are a separate future phase and are not available in this preview.</small></aside>
+      <p class="ll-coins__fine">Preview build. LootCoins are game credits: no cash value, non-transferable, no withdrawals. Offers are not active yet. <a href="rewards.html">Read the reward rules</a></p>
     </section>
   </main>
 

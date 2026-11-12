@@ -1,85 +1,110 @@
-/* LegitLoot homepage — rebuilt as one coherent neon comic arcade system. */
-.home-main{overflow:hidden;background:#09070d;color:#fff8ff}
-.home-hero{padding:24px clamp(12px,3vw,42px) 0;background:#09070d}
-.home-hero__frame{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;min-height:650px;max-width:1500px;margin:auto;overflow:hidden;border:3px solid #ff3da8;background:radial-gradient(ellipse at 75% 40%,#a6ed2533,transparent 34%),radial-gradient(ellipse at 20% 90%,#ff3da833,transparent 38%),linear-gradient(125deg,#120c1c,#25102d 58%,#08070c);box-shadow:0 0 0 5px #08070c,0 0 36px #ff3da833}
-.home-hero__art{position:absolute;z-index:-1;inset:0 42% 0 0;width:58%;height:100%;object-fit:cover;object-position:62% center;filter:saturate(1.5) contrast(1.12)}
-.home-hero__frame:before{content:"";position:absolute;z-index:0;inset:0;pointer-events:none;background:radial-gradient(#ff3da8 1px,transparent 1.6px) 0 0/11px 11px,linear-gradient(90deg,transparent 25%,#09070d30 43%,#09070de8 59%,#09070d 100%);mix-blend-mode:screen;opacity:.42}
-.home-hero__frame:after{content:"";position:absolute;inset:12px;border:2px solid #c7ff2470;clip-path:polygon(0 0,100% 0,100% 95%,96% 100%,0 100%);pointer-events:none}
-.home-hero__content{position:relative;z-index:2;grid-column:2;padding:70px clamp(22px,4vw,64px) 65px 10px;width:100%;margin:0}
-.home-hero__content>*{max-width:620px}
-.home-hero__content .eyebrow{color:#c7ff24;font:700 12px/1.4 var(--mono);letter-spacing:.15em;text-transform:uppercase}
-.home-hero__content .eyebrow:before{content:"★ ";color:#ff3da8}
-.home-hero h1{margin:18px 0 22px;font:900 clamp(64px,8vw,118px)/.78 var(--display);letter-spacing:-.035em;text-transform:uppercase;color:#fff;text-shadow:4px 4px 0 #ff329d,8px 8px 0 #09070d}
-.home-hero h1 span{color:#c7ff24}
-.home-hero__lede{max-width:480px;color:#fff;font-size:clamp(16px,1.5vw,20px);font-weight:700;text-shadow:1px 2px 4px #000}
-.home-hero__actions{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0}
-.home-hero__actions .button{min-height:52px;padding:14px 20px;border:2px solid #fff;font:900 12px var(--mono);box-shadow:4px 4px 0 #08070d;transform:skew(-4deg)}
-.home-hero__actions .button-acid{border-color:#c7ff24;background:#c7ff24;color:#100b16}
-.home-hero__actions .button-ghost{background:#171020;color:#fff}
-.home-hero__disclosure{padding:10px 13px;border-left:4px solid #26e6e6;background:#09070de8;color:#e9ddec;font:10px/1.6 var(--mono)}
-.home-hero__disclosure strong{color:#c7ff24}
-.hero-stamp{position:absolute;z-index:3;right:4%;bottom:7%;display:grid;place-content:center;width:110px;height:110px;border:3px solid #c7ff24;border-radius:0;background:#100b18;color:#c7ff24;text-align:center;transform:rotate(8deg);box-shadow:6px 6px 0 #ff329d}
-.hero-stamp span{font:900 38px var(--display)}.hero-stamp small{font:800 9px/1.1 var(--mono)}
-.hero-bottomline{display:flex;justify-content:space-between;gap:12px;padding:13px 4px;border-bottom:2px solid #ff329d;color:#e9ddec;font:700 10px var(--mono);letter-spacing:.1em}
-.home-section{padding:clamp(52px,7vw,92px) clamp(16px,4vw,56px);border-top:2px solid #53304f;background:#0d0913}
-.home-section__head{display:flex;align-items:end;justify-content:space-between;gap:24px;max-width:1300px;margin:0 auto 30px}
-.home-section__head .eyebrow{color:#26e6e6}
-.home-section__head h2,.lootcoin-copy h2{margin:0;color:#fff;font:900 clamp(48px,6vw,82px)/.82 var(--display);letter-spacing:-.025em;text-shadow:4px 4px 0 #ff329d;text-transform:uppercase}
-.home-section__head h2 span,.lootcoin-copy h2 span{color:#c7ff24}
-.home-section__head>p{max-width:390px;color:#e3d8e8;font-size:14px}
-.home-game-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;max-width:1300px;margin:auto}
-.home-game,.home-game--wide{display:flex;min-width:0;flex-direction:column;overflow:hidden;border:3px solid #ff329d;border-top-width:8px;background:#191020;box-shadow:7px 7px 0 #ff329d45;transform:rotate(-.5deg)}
-.home-game:nth-child(2){border-color:#ff8a24;box-shadow:7px 7px 0 #ff8a2445;transform:rotate(.45deg)}
-.home-game:nth-child(3){border-color:#26e6e6;box-shadow:7px 7px 0 #26e6e645;transform:rotate(-.25deg)}
-.home-game__art{position:relative;height:clamp(220px,25vw,340px);min-height:0;background:#08070d}
-.home-game__art img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(1.35) contrast(1.08)}
-.home-game--portrait .home-game__art img{object-fit:cover}
-.art-index{position:absolute;top:12px;left:12px;z-index:2;padding:7px 10px;background:#09070d;color:#c7ff24;font:800 10px var(--mono)}
-.home-game__body{display:flex;flex:1;min-height:205px;flex-direction:column;align-items:flex-start;padding:22px}
-.home-game .card-kicker,.home-game:nth-child(1) .status{color:#ff65b7}
-.home-game:nth-child(2) .card-kicker,.home-game:nth-child(2) .status{color:#ffad59}
-.home-game:nth-child(3) .card-kicker,.home-game:nth-child(3) .status{color:#55f4ff}
-.home-game h3{margin:9px 0;font:900 clamp(30px,3.4vw,44px)/.9 var(--display);text-transform:uppercase}
-.home-game__body>p:not(.card-kicker){color:#e3d8e8;font-size:14px}
-.home-game .status{margin-top:auto}
-.section-tail{display:flex;justify-content:space-between;gap:16px;max-width:1300px;margin:26px auto 0;padding-top:16px;border-top:1px solid #67415f;color:#d8c8dd;font:700 10px var(--mono)}
-.section-tail a{color:#c7ff24}
-.noticeboard-section{background:linear-gradient(120deg,#160d20,#0b0910)}
-.home-board{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;max-width:1300px;margin:auto}
-.home-board__panel{min-height:230px;padding:26px;border:2px solid #ff329d;background:#191020;box-shadow:6px 6px 0 #ff329d38}
-.home-board__panel:last-child{border-color:#c7ff24;box-shadow:6px 6px 0 #c7ff2438}
-.home-board__panel h3{font:900 36px/.95 var(--display);text-transform:uppercase}
-.home-board__panel p:not(.card-kicker){color:#e3d8e8}
-.home-board__panel a{color:#c7ff24;font:800 11px var(--mono)}
-.board-state{color:#ff65b7;font:800 10px var(--mono)}.board-state--quiet{color:#c7ff24}
-.lootcoin-section{display:grid;grid-template-columns:.55fr 1.5fr .85fr;align-items:center;gap:clamp(20px,4vw,60px);max-width:1450px;margin:auto;background:#100b18}
-.lootcoin-mark{display:grid;width:clamp(110px,15vw,190px);aspect-ratio:1;place-items:center;border:7px double #c7ff24;border-radius:50%;color:#c7ff24;font:900 clamp(48px,7vw,82px) var(--display);transform:rotate(-12deg);box-shadow:9px 9px 0 #ff329d}
-.lootcoin-copy>p:not(.eyebrow){color:#e3d8e8}
-.lootcoin-side{display:grid;gap:12px;padding:20px;border:2px solid #26e6e6;background:#191020}
-.lootcoin-side span{color:#fff;font:800 11px var(--mono)}.lootcoin-side small{color:#d8c8dd}
-@media(max-width:760px){
- .home-hero{padding:12px 10px 0}
- .home-hero__frame{display:flex;min-height:0;flex-direction:column}
- .home-hero__art{position:relative;inset:auto;order:0;width:100%;height:auto;max-height:390px;aspect-ratio:1.18/1;object-fit:cover;object-position:60% 35%}
- .home-hero__frame:before{background:linear-gradient(180deg,transparent 5%,#09070d22 55%,#09070d 100%);mix-blend-mode:normal;opacity:1}
- .home-hero__content{order:1;padding:28px 22px 32px}
- .home-hero h1{font-size:clamp(58px,12vw,88px)}
- .hero-stamp{top:300px;right:22px;bottom:auto;width:76px;height:76px}
- .hero-stamp span{font-size:27px}.hero-stamp small{font-size:6px}
- .hero-bottomline span:nth-child(2){display:none}
- .home-section__head{align-items:flex-start;flex-direction:column}
- .home-game-grid,.home-board{grid-template-columns:1fr}
- .home-game,.home-game--wide{transform:none}
- .home-game__art{height:300px}
- .lootcoin-section{grid-template-columns:90px 1fr;gap:20px}
- .lootcoin-mark{width:82px;font-size:38px}
- .lootcoin-side{grid-column:1/-1}
+/* LegitLoot homepage: built from Sam's neon comic arcade mockup.
+   Hero art is text-free (assets/skuz-arcade-neon.webp); every word and button is real HTML.
+   Sizes use cqw so the hero composition scales as one piece with the artwork. */
+.page-home{--ll-ink:#0a090d;--ll-acid:#b9ff1f;--ll-pink:#ff2f9b;--ll-cyan:#22e0e6;--ll-orange:#ff9a1f;--ll-bone:#f6f2ea;--ll-display:"Barlow Condensed",Impact,sans-serif;background:var(--ll-ink)}
+.page-home .home-main{overflow:hidden;background:var(--ll-ink);color:var(--ll-bone)}
+
+/* Header sits on the artwork: tilted logo slab left, nav strip right */
+.page-home .site-header{position:absolute;inset:0 0 auto 0;z-index:20;display:block;min-height:0;padding:0;border:0;background:none;backdrop-filter:none;container-type:inline-size}
+.page-home .site-header .brand{position:absolute;left:7.1cqw;top:1.5cqw;display:block;transform:rotate(-4deg);transform-origin:left top;color:var(--ll-bone);font:italic 900 6.1cqw/.86 var(--ll-display);letter-spacing:-.01em;text-shadow:.22cqw .22cqw 0 #000}
+.page-home .site-header .brand-word{display:block;white-space:nowrap}
+.page-home .site-header .brand .acid{color:var(--ll-acid)}
+.page-home .site-header .brand-crown{position:absolute;left:3.4cqw;top:-1.5cqw;width:2.9cqw;color:var(--ll-acid);transform:rotate(-6deg)}
+.page-home .site-header .brand-crown svg{display:block;width:100%}
+.page-home .site-header .brand-tag{display:block;margin:.75cqw 0 0 1.5cqw;font:italic 800 1.5cqw/1 var(--ll-display);letter-spacing:.05em;text-transform:uppercase;text-shadow:none;white-space:nowrap}
+.page-home .site-header .brand-tag i{color:var(--ll-pink);font-style:normal}
+.page-home .main-nav{position:absolute;top:0;right:0;height:max(4.15cqw,50px);gap:clamp(12px,2.1cqw,36px);padding:0 1.6cqw 0 2cqw;background:var(--ll-ink)}
+.page-home .main-nav a{padding:8px 0;color:var(--ll-bone);font:800 clamp(14px,1.3cqw,22px)/1 var(--ll-display);letter-spacing:.03em}
+.page-home .main-nav a:hover{color:var(--ll-acid)}
+.page-home .main-nav a.nav-login,.page-home .main-nav a.nav-signup{display:inline-flex;align-items:center;min-height:max(2.5cqw,36px);padding:0 1.3cqw;border:2px solid var(--ll-bone);border-radius:4px}
+.page-home .main-nav a.nav-signup{margin-left:-.9cqw;border-color:var(--ll-acid);background:var(--ll-acid);color:var(--ll-ink)}
+.page-home .main-nav a.nav-signup:hover{background:#d4ff6a;color:var(--ll-ink)}
+
+/* Hero */
+.ll-hero{position:relative;container-type:inline-size;background:var(--ll-ink);border-bottom:4px solid var(--ll-acid)}
+.ll-hero__art{aspect-ratio:1672/570;background:var(--ll-ink) url(assets/skuz-arcade-neon.webp) center/100% 100% no-repeat}
+.ll-hero__copy{position:absolute;inset:0}
+.ll-hero__slab{position:absolute;left:57.4cqw;top:7.2cqw;transform:rotate(-4deg);transform-origin:left top}
+.ll-hero h1{margin:0;max-width:none;color:var(--ll-bone);font:italic 900 6.15cqw/.86 var(--ll-display);letter-spacing:-.012em;text-transform:uppercase;white-space:nowrap;text-shadow:.25cqw .25cqw 0 #000}
+.ll-hero h1 span{color:var(--ll-acid)}
+.ll-hero__swipe{position:absolute;left:1cqw;right:-2.5cqw;bottom:-1.25cqw;height:.95cqw;background:var(--ll-pink);clip-path:polygon(0 40%,18% 5%,52% 30%,100% 0,98% 70%,61% 100%,27% 72%,1% 100%)}
+.ll-hero__lede{position:absolute;left:58.5cqw;top:23.3cqw;width:34cqw;margin:0;color:var(--ll-bone);font:800 1.72cqw/1.18 var(--ll-display);letter-spacing:.02em;text-align:center;text-transform:uppercase}
+.ll-hero__actions{position:absolute;left:60.3cqw;top:28.2cqw;display:flex;gap:2cqw}
+.ll-btn{display:inline-flex;align-items:center;justify-content:center;gap:.5em;min-height:3.75cqw;padding:0 1.9cqw;font:italic 900 1.62cqw/1 var(--ll-display);letter-spacing:.02em;text-decoration:none;text-transform:uppercase;white-space:nowrap}
+.ll-btn--acid{background:var(--ll-acid);color:var(--ll-ink);clip-path:polygon(1% 8%,30% 0,64% 5%,100% 0,99% 55%,100% 96%,66% 100%,31% 95%,0 100%,2% 50%)}
+.ll-btn--acid:hover{background:#d4ff6a}
+.ll-btn--ghost{border:2px solid var(--ll-bone);border-radius:5px;background:var(--ll-ink);color:var(--ll-bone);font-style:normal}
+.ll-btn--ghost:hover{border-color:var(--ll-acid);color:var(--ll-acid)}
+.page-home a:focus-visible,.page-home button:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+
+/* Choose your world */
+.ll-worlds{position:relative;container-type:inline-size;padding:0 clamp(12px,1.5vw,28px) clamp(18px,1.6vw,30px);background:var(--ll-ink)}
+.ll-tag{position:relative;z-index:3;display:inline-block;margin:-2.5cqw 0 .7cqw;padding:.35em .6em .28em .55em;background:var(--ll-acid);color:var(--ll-ink);font:italic 900 clamp(30px,3.15cqw,56px)/1 var(--ll-display);text-transform:uppercase;transform:rotate(-2.2deg);clip-path:polygon(0 12%,100% 0,98.5% 100%,1.5% 90%)}
+.ll-worlds__grid{display:grid;grid-template-columns:2fr 1fr;gap:clamp(12px,1.4cqw,24px)}
+.ll-world{--c:var(--ll-pink);position:relative;min-height:clamp(230px,15.4cqw,290px);padding:3px;background:var(--c);clip-path:polygon(1.6% 0,100% 0,98.4% 100%,0 100%)}
+.ll-world--slot{--c:var(--ll-cyan);clip-path:polygon(3% 0,100% 0,97% 100%,0 100%)}
+.ll-world__inner{display:flex;height:100%;min-height:inherit;flex-direction:column;align-items:flex-start;gap:8px;padding:clamp(16px,1.6cqw,28px) clamp(26px,3cqw,54px);clip-path:inherit;background:radial-gradient(#ff2f9b40 1.5px,transparent 2px) 0 0/11px 11px,linear-gradient(105deg,#12060f 0%,#2c0a2e 45%,#6d1168 82%,#b01a86 100%)}
+.ll-world--slot .ll-world__inner{background:radial-gradient(#22e0e62e 1.5px,transparent 2px) 0 0/11px 11px,linear-gradient(105deg,#06100f 0%,#07282b 60%,#0c5257 100%)}
+.ll-world__kicker{margin:0;color:var(--ll-bone);font:500 11px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+.ll-world h3{margin:0;color:var(--c);font:italic 900 clamp(40px,4.5cqw,78px)/.88 var(--ll-display);letter-spacing:-.005em;text-transform:uppercase;text-shadow:3px 3px 0 #000}
+.ll-world--slot h3{color:var(--ll-bone);font-size:clamp(34px,3.2cqw,54px)}
+.ll-world__line{max-width:34em;margin:0;color:var(--ll-bone);font:800 clamp(15px,1.2cqw,20px)/1.2 var(--ll-display);letter-spacing:.03em;text-transform:uppercase}
+.ll-world__foot{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:auto;padding-top:8px}
+.ll-world__btn{display:inline-flex;align-items:center;gap:.5em;min-height:44px;padding:0 16px;border:2px solid var(--c);border-radius:4px;background:#0a090dcc;color:var(--c);font:italic 900 19px/1 var(--ll-display);letter-spacing:.03em;text-decoration:none;text-transform:uppercase}
+.ll-world__btn:hover{background:var(--c);color:var(--ll-ink)}
+.ll-world__status{padding:5px 9px;border:1px solid var(--ll-bone);background:#0a090dcc;color:var(--ll-bone);font:500 10.5px/1.3 var(--mono);letter-spacing:.1em;text-transform:uppercase}
+
+/* LootCoins strip */
+.ll-coins{container-type:inline-size;padding:clamp(14px,1.4vw,24px) clamp(16px,1.9vw,34px) clamp(16px,1.5vw,26px);background:var(--ll-ink)}
+.ll-coins__row{display:flex;align-items:center;justify-content:space-between;gap:20px 28px}
+.ll-coins__head{display:flex;align-items:center;gap:clamp(10px,1.2cqw,20px)}
+.ll-coins__icon{width:clamp(40px,3.2cqw,56px);color:var(--ll-acid)}
+.ll-coins h2{position:relative;margin:0;color:var(--ll-bone);font:italic 900 clamp(38px,3.4cqw,60px)/.9 var(--ll-display);text-transform:uppercase}
+.ll-coins h2::after{content:"";position:absolute;left:0;right:0;bottom:-.14em;height:.1em;background:var(--ll-acid);clip-path:polygon(0 30%,40% 0,100% 20%,98% 100%,45% 70%,2% 100%)}
+.ll-coins__head p{margin:0 0 0 .4cqw;color:var(--ll-bone);font:800 clamp(17px,1.5cqw,26px)/1 var(--ll-display);letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.ll-coins__steps{display:flex;align-items:center;margin:0;padding:0;list-style:none}
+.ll-coins__steps li{display:flex;align-items:center;gap:10px;padding:4px clamp(14px,2cqw,36px);border-left:2px solid var(--ll-acid);color:var(--ll-bone);font:800 clamp(15px,1.2cqw,20px)/1.1 var(--ll-display);letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.ll-coins__steps li:last-child{padding-right:0}
+.ll-coins__steps svg{flex:0 0 auto;width:clamp(28px,2.3cqw,40px);color:var(--ll-acid)}
+.ll-coins__steps em{margin-left:6px;padding:2px 6px;border:1px solid var(--ll-bone);font:500 9.5px/1.3 var(--mono);font-style:normal;letter-spacing:.08em;vertical-align:middle}
+.ll-coins__fine{margin:16px 0 0;color:#d7d2c8;font:400 12px/1.6 var(--mono)}
+.ll-coins__fine a{color:var(--ll-acid)}
+
+@media (max-width:1100px){
+  .ll-coins__row{flex-direction:column;align-items:flex-start}
+  .ll-coins__steps{flex-wrap:wrap;gap:12px 0}
+  .ll-coins__steps li:first-child{padding-left:0;border-left:0}
 }
-@media(max-width:420px){
- .home-hero__actions{flex-direction:column;align-items:stretch}
- .home-hero__actions .button{width:100%}
- .home-game__art{height:250px}
- .lootcoin-section{grid-template-columns:1fr}
- .lootcoin-side{grid-column:auto}
- .section-tail{flex-direction:column}
+
+/* Phone: logo slab and Skuz on top, headline and buttons directly under him, panels stack */
+@media (max-width:760px){
+  .page-home .site-header .brand{left:2.6cqw;top:3.4cqw;font-size:10.9cqw;text-shadow:.4cqw .4cqw 0 #000}
+  .page-home .site-header .brand-crown{left:6cqw;top:-2.7cqw;width:5.2cqw}
+  .page-home .site-header .brand-tag{margin:1.4cqw 0 0 2.4cqw;font-size:2.75cqw}
+  .page-home .menu-toggle{position:absolute;top:8px;right:8px;border:2px solid var(--ll-bone);background:var(--ll-ink);color:var(--ll-bone)}
+  .page-home .main-nav{top:62px;right:0;left:0;height:auto;padding:8px 16px 14px;border-bottom:3px solid var(--ll-pink);background:var(--ll-ink)}
+  .page-home .main-nav a{min-height:46px;font-size:19px}
+  .page-home .main-nav a.nav-login,.page-home .main-nav a.nav-signup{justify-content:center;min-height:46px;margin:8px 0 0}
+  .ll-hero__art{aspect-ratio:870/570;background-size:192.2% 100%;background-position:11.85% 0}
+  .ll-hero__copy{position:static;display:flex;flex-direction:column;align-items:flex-start;gap:20px;padding:22px 18px 30px}
+  .ll-hero__slab,.ll-hero__lede,.ll-hero__actions{position:relative;left:auto;top:auto;width:auto}
+  .ll-hero__slab{transform:rotate(-3deg);margin:4px 0 8px 4px}
+  .ll-hero h1{font-size:17.2cqw;text-shadow:.6cqw .6cqw 0 #000}
+  .ll-hero__swipe{bottom:-3cqw;height:2.2cqw;right:-1cqw}
+  .ll-hero__lede{font-size:max(19px,5.4cqw);text-align:left}
+  .ll-hero__actions{flex-direction:column;gap:12px;width:100%}
+  .ll-btn{min-height:54px;font-size:23px}
+  .ll-worlds{padding:0 12px 22px}
+  .ll-tag{margin:-14px 0 14px;font-size:34px}
+  .ll-worlds__grid{grid-template-columns:1fr;gap:14px}
+  .ll-world,.ll-world--slot{min-height:0;clip-path:polygon(2.5% 0,100% 0,97.5% 100%,0 100%)}
+  .ll-world__inner{padding:18px 24px 18px 28px}
+  .ll-world h3{font-size:44px}.ll-world--slot h3{font-size:34px}
+  .ll-world__line{font-size:16px}
+  .ll-coins{padding:22px 18px 24px}
+  .ll-coins__head{flex-wrap:wrap}
+  .ll-coins__head p{flex-basis:100%;margin:0}
+  .ll-coins__steps{flex-direction:column;align-items:flex-start;gap:12px}
+  .ll-coins__steps li{padding:0;border-left:0;font-size:19px}
 }
+@media (prefers-reduced-motion:reduce){.page-home *{transition:none}}
