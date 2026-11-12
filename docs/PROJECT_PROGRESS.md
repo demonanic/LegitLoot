@@ -83,3 +83,13 @@ See `git show --stat` for the coherent implementation commit; the Creative Bible
 - Preserved real HTML controls and product disclosures. No cash-out promise, cash balance, payout CTA, fabricated rewards or partner approvals were added.
 - Current hero source remains the existing repository Skuz arcade hero asset; the newly uploaded owner reference image has not yet been installed as a production asset. New reference-based artwork is a separate follow-up asset task.
 - Static rendered/browser QA remains deferred; no claim of visual approval. No merge, production deployment, paid service, provider activation, or live reward behavior changed.
+
+## Provider-neutral earning hub — 2026-11-11
+
+- `earn.html` now renders its provider cards from a registry (`earn-providers.js`) through one shared renderer (`earn-hub.js`). New offerwalls, survey networks, CPA networks or direct offers are added as registry entries, not new markup.
+- Provider states: `active`, `testing`, `pending_approval`, `suspended`, `unavailable`. Unknown states render as unavailable. Only `active` providers with a server `launch` function can be opened; status is shown by text label and mark, not colour alone.
+- Offerwall.GG: `pending_approval`, button disabled. CPAGrip: added as its own provider card and entry button, state `testing`, no launch endpoint (callback receiver still in development on Supabase staging). Surveys and Direct offers: `unavailable` category slots.
+- Removed `offerwall-launch.js`. On 486705f it enabled the Offerwall.GG button and requested a live wall link for signed-in players, despite the pending status.
+- Frontend makes no ledger, RPC or table writes; tracking, attribution, callbacks and LootCoin issuance stay server-side. No offers, amounts, approvals or integration status were invented.
+- Tests: `node --test tests/*.test.mjs` (registry rules, 7 pass) and `python3 tests/earn-hub.browser.py <base-url>` (Playwright, desktop + phone; 39 checks pass locally). The active-provider launch guard was exercised with stubbed auth: only an exact `https` URL on the allowed origin and path opens.
+- Pushed to `design/neon-comic-arcade` only. No merge, production deployment, provider activation or reward issuance.
