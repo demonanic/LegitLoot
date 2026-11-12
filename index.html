@@ -3,79 +3,103 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#100820">
-  <meta name="description" content="LegitLoot — independent games, curated opportunities and a transparent rewards experience.">
+  <meta name="theme-color" content="#101110">
+  <meta name="description" content="LegitLoot is an underground arcade for original games. LootCoins are game credits with no cash value.">
   <meta name="offerwall-verification" content="ow-decc1febbb799f89f1c7">
-  <title>LegitLoot — Play. Complete. Earn.</title>
+  <title>LegitLoot — The Underground Arcade</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="dashboard.css">
-<link rel="icon" href="assets/legitloot-mark.svg" type="image/svg+xml"></head>
-<body class="dashboard-page">
-  <div class="dash-noise" aria-hidden="true"></div>
-  <header class="dash-header">
-    <details class="mobile-menu"><summary aria-label="Open navigation"><span></span><span></span><span></span></summary><nav aria-label="Mobile menu"><a href="index.html">HOME</a><a href="games.html">GAMES</a><a href="earn.html">EARN</a><a href="marketplace.html">DEALS</a><a href="rewards.html">REWARDS</a><a href="account.html">WALLET / ACCOUNT</a></nav></details>
-    <a class="dash-brand" href="#home" aria-label="LegitLoot home"><img class="crown-mark-image" src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span>LOOT</span></span></a>
-    <nav class="dash-nav" aria-label="Main navigation">
-      <a class="selected" href="index.html"><b>⌂</b> Home</a>
-      <a href="games.html"><b>⚔</b> Games</a>
-      <a href="earn.html"><b>▤</b> Earn</a>
-      <a href="marketplace.html"><b>◇</b> Deals</a>
-      <a href="rewards.html"><b>✦</b> Rewards</a>
-      <a href="account.html"><b>▣</b> Wallet</a>
-    </nav>
-    <a class="dash-notifications" href="account.html" aria-label="Notifications"><span></span><b>♧</b></a>
-    <a class="dash-profile" href="account.html" aria-label="Your wallet and account">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <circle cx="12" cy="8" r="3.5"></circle>
-        <path d="M5 20c.5-3.4 3.1-5.5 7-5.5s6.5 2.1 7 5.5"></path>
-      </svg>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,800;0,900;1,800;1,900&display=swap">
+  <link rel="stylesheet" href="public.css">
+  <link rel="stylesheet" href="public-home.css?v=20261112a">
+  <link rel="stylesheet" href="public-pages.css">
+  <link rel="icon" href="assets/legitloot-mark.svg" type="image/svg+xml">
+</head>
+<body class="public-site page-home">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="LegitLoot home">
+      <span class="brand-crown" aria-hidden="true"><svg viewBox="0 0 96 96"><path d="M13 29L29 42L43 12L52 42L78 22L73 67H23Z" fill="none" stroke="currentColor" stroke-width="8" stroke-linejoin="round"/><path d="M22 80H75" stroke="currentColor" stroke-width="7" stroke-linecap="round"/></svg></span>
+      <span class="brand-word">LEGIT<span class="acid">LOOT</span></span>
+      <span class="brand-tag">Games <i>•</i> LootCoins <i>•</i> No shortcuts</span>
     </a>
+    <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="main-navigation">☰</button>
+    <nav id="main-navigation" class="main-nav" aria-label="Main navigation">
+      <a href="games.html">Games</a>
+      <a href="earn.html">Earn</a>
+      <a href="rewards.html">Rewards</a>
+      <a href="how-it-works.html">How it works</a>
+      <a href="marketplace.html">The Board</a>
+      <a class="nav-login" href="account.html">Login</a>
+      <a class="nav-signup" href="account.html">Sign up</a>
+    </nav>
   </header>
 
-  <main id="home" class="dash-main">
-    <section class="dash-hero">
-      <div class="hero-mascot"><img src="assets/lootbadger.webp" alt="LootBadger, LegitLoot comic-book arcade boss mascot"><span class="mascot-sticker">LL<br>CREW</span></div>
-      <div class="hero-message">
-        <p class="dash-kicker"><i></i> WELCOME TO THE UNDERGROUND ARCADE</p>
-        <h1>PLAY GAMES.<br>COMPLETE OFFERS.<br><em>EARN <strong>REWARDS.</strong></em></h1>
-        <div class="hero-steps"><span><b>♧</b> PLAY</span><span><b>✓</b> COMPLETE</span><span><b>▤</b> EARN</span><span><b>♢</b> REDEEM</span></div>
-        <a class="neon-cta" href="games.html">ENTER THE ARCADE <span>»</span></a>
-        <p class="hero-disclaimer">Provider rewards are not active until approved and connected.</p>
+  <main id="main-content" class="home-main">
+    <section class="ll-hero" aria-labelledby="home-title">
+      <div class="ll-hero__art" role="img" aria-label="Skuz, a punk badger in a spiked leather jacket, points at you and holds up a LootCoin inside a neon arcade."></div>
+      <div class="ll-hero__copy">
+        <div class="ll-hero__slab">
+          <h1 id="home-title">Not built<br>for the<br><span>mainstream.</span></h1>
+          <i class="ll-hero__swipe" aria-hidden="true"></i>
+        </div>
+        <p class="ll-hero__lede">Original games.<br>A community that makes its own rules.</p>
+        <div class="ll-hero__actions">
+          <a class="ll-btn ll-btn--acid" href="games.html">Find your way in <span aria-hidden="true">→</span></a>
+          <a class="ll-btn ll-btn--ghost" href="how-it-works.html">How it works</a>
+        </div>
       </div>
     </section>
 
-    <section class="arcade-status-grid" aria-label="Player overview">
-      <article class="arcade-status rank-panel"><div class="rank-badge">LL</div><div class="status-copy"><small>PLAYER STATUS</small><strong>YOUR LOOT RANK</strong><span>Progress tracking coming soon.</span><div class="empty-progress"><i></i></div></div></article>
-      <a class="arcade-status wallet-status" href="rewards.html"><div class="status-icon">◈</div><div class="status-copy"><small>REWARDS WALLET</small><strong>NO LIVE BALANCE YET</strong><span>Wallet activates after backend and payout gates are complete.</span></div></a>
-      <article class="arcade-status daily-status"><div class="status-icon">▦</div><div class="status-copy"><small>YOUR DAILY CHECK-IN</small><strong>DAILY LOOT</strong><span>Daily rewards are on the roadmap.</span></div><img src="assets/loot-crate.svg" alt="" aria-hidden="true"></article>
-    </section>
-
-    <section class="arcade-explore" aria-label="Explore the arcade">
-      <h2><span>EXPLORE</span> THE ARCADE</h2>
-      <div class="arcade-tiles">
-        <a class="arcade-tile tile-games" href="games.html"><span class="tile-icon">⌘</span><strong>GAMES</strong></a>
-        <a class="arcade-tile tile-earn" href="earn.html"><span class="tile-icon">▣</span><strong>EARN</strong></a>
-        <a class="arcade-tile tile-deals" href="marketplace.html"><span class="tile-icon">◇</span><strong>DEALS</strong></a>
-        <a class="arcade-tile tile-rewards" href="rewards.html"><span class="tile-icon">✧</span><strong>REWARDS</strong></a>
-        <a class="arcade-tile tile-wallet" href="account.html"><span class="tile-icon">▱</span><strong>WALLET</strong></a>
+    <section class="ll-worlds" aria-labelledby="worlds-title">
+      <h2 id="worlds-title" class="ll-tag">Choose your world.</h2>
+      <div class="ll-worlds__grid">
+        <article class="ll-world ll-world--lead">
+          <div class="ll-world__inner">
+            <p class="ll-world__kicker">Zombie · Defense · Working title</p>
+            <h3>Zombie Invasion Defense</h3>
+            <p class="ll-world__line">The first game in the new lineup.</p>
+            <div class="ll-world__foot">
+              <a class="ll-world__btn" href="games.html">See the game room <span aria-hidden="true">→</span></a>
+              <span class="ll-world__status">Status: In development</span>
+            </div>
+          </div>
+        </article>
+        <article class="ll-world ll-world--slot">
+          <div class="ll-world__inner">
+            <p class="ll-world__kicker">Slot open</p>
+            <h3>More worlds later.</h3>
+            <p class="ll-world__line">Nothing else is announced. New games show up here when they're real.</p>
+            <div class="ll-world__foot"><span class="ll-world__status">Status: Not announced</span></div>
+          </div>
+        </article>
       </div>
     </section>
 
+    <section class="ll-coins" aria-labelledby="coins-title">
+      <div class="ll-coins__row">
+        <div class="ll-coins__head">
+          <svg class="ll-coins__icon" viewBox="0 0 48 48" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="3"><ellipse cx="24" cy="12" rx="15" ry="6"/><path d="M9 12v8c0 3.3 6.7 6 15 6s15-2.7 15-6v-8M9 20v8c0 3.3 6.7 6 15 6s15-2.7 15-6v-8M9 28v8c0 3.3 6.7 6 15 6s15-2.7 15-6v-8"/></g></svg>
+          <h2 id="coins-title">LootCoins.</h2>
+          <p>Game only. Always clear.</p>
+        </div>
+        <ul class="ll-coins__steps">
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="26" height="16" rx="5"/><path d="M10 13v6M7 16h6"/><circle cx="21" cy="14" r="1.4"/><circle cx="24" cy="18" r="1.4"/></g></svg><span>Play games</span></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="5" width="20" height="23" rx="2"/><path d="M12 5V3h8v2M11 14l3 3 6-6M11 23h10"/></g></svg><span>Complete offers <em>Planned</em></span></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="16" cy="9" rx="10" ry="4"/><path d="M6 9v7c0 2 4.5 4 10 4s10-1.8 10-4V9M6 16v7c0 2 4.5 4 10 4s10-1.8 10-4v-7"/></g></svg><span>Earn LootCoins</span></li>
+          <li><svg viewBox="0 0 32 32" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h22l-2 15H7zM11 12V9a5 5 0 0 1 10 0v3M13 19l2.5 2.5L20 17"/></g></svg><span>Spend in-game</span></li>
+        </ul>
+      </div>
+      <p class="ll-coins__fine">Preview build. LootCoins are game credits: no cash value, non-transferable, no withdrawals. Offers are not active yet. <a href="rewards.html">Read the reward rules</a></p>
+    </section>
   </main>
 
-  <nav class="mobile-dock" aria-label="Quick navigation">
-    <a class="active" href="index.html"><b>⌂</b><span>HOME</span></a>
-    <a href="games.html"><b>⚔</b><span>GAMES</span></a>
-    <a href="earn.html"><b>▤</b><span>EARN</span></a>
-    <a href="marketplace.html"><b>◇</b><span>DEALS</span></a>
-    <a href="rewards.html"><b>✦</b><span>REWARDS</span></a>
-    <a href="account.html"><b>▣</b><span>WALLET</span></a>
-  </nav>
-
-  <footer class="dash-footer"><a class="dash-brand" href="#home"><img class="crown-mark-image" src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span>LOOT</span></span></a><span>INDEPENDENT BY DESIGN.</span><div><a href="mailto:hello@legitloot.site">CONTACT</a><a href="trust.html">HOW IT WORKS</a><a href="terms.html">TERMS</a><a href="privacy.html">PRIVACY</a></div><small>© <span id="year"></span> LEGITLOOT. ALL RIGHTS RESERVED.</small></footer>
-  <script src="app.js"></script>
+  <footer class="site-footer">
+    <a class="brand" href="index.html"><img class="brand-mark-image" src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span class="acid">LOOT</span></span></a>
+    <p>An underground arcade for independent games.</p>
+    <nav class="footer-links" aria-label="Footer navigation"><a href="trust.html">Trust & status</a><a href="rewards.html">Rewards</a><a href="terms.html">Terms</a><a href="privacy.html">Privacy</a><a href="mailto:hello@legitloot.site">Contact</a></nav>
+    <small>© <span id="year"></span> LEGITLOOT. Independent games and opportunities.</small>
+  </footer>
+  <script src="site-nav.js"></script>
 </body>
 </html>

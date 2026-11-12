@@ -1,0 +1,43 @@
+/* Page-specific patterns layered over the shared design system in styles.css. */
+.portal-main { min-height: 65vh; }
+.portal-hero { padding-top: clamp(42px, 7vw, 82px); }
+.portal-hero > .eyebrow::before { content: "// "; color: var(--acid); }
+.portal-hero h1 span { color: var(--acid); }
+.portal-hero h1 .violet { color: var(--blood-bright); }
+
+.hero-rule { display: flex; align-items: center; gap: 12px; color: var(--industrial); font: 700 10px var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.hero-rule::after { content: ""; width: min(180px, 25vw); height: 1px; background: var(--blood); }
+
+.notice-panel[role="status"] { scroll-margin-top: 90px; }
+.notice-panel[aria-live="polite"] { border-left-color: var(--cyan); }
+.category-tile p:last-child { margin-bottom: 10px; }
+.category-tile strong { color: var(--bone); }
+
+.how-grid .portal-card { display: flex; flex-direction: column; }
+.how-grid .portal-symbol { width: 100%; min-height: 55px; justify-content: start; padding-inline: 18px; border-right: 0; border-bottom: 1px solid var(--industrial); color: var(--acid); font: 800 17px var(--mono); }
+.how-grid .portal-card-body { flex: 1; }
+
+.game-card__status { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 16px; padding-top: 12px; border-top: 1px solid #777b7566; }
+.game-art--portrait { background: #171918; }
+.game-art--landscape { background: #171918; }
+.game-art--portrait img { object-fit: contain !important; }
+.game-art--landscape img { object-fit: cover !important; }
+
+
+/* Earning hub: provider cards rendered from earn-providers.js. Status is shown by
+   label and mark, never by colour alone. */
+.provider-hub { grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.provider-card .portal-card-body { display: flex; flex-direction: column; gap: 10px; }
+.provider-card .portal-card-body > * { margin: 0; }
+.provider-card p.provider-state { display: inline-flex; align-items: center; gap: 8px; width: fit-content; padding: 5px 9px; border: 1px solid currentColor; background: #101110; font: 700 11px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.provider-state__mark { font-size: 12px; }
+.provider-card p.provider-state--active { color: var(--acid); }
+.provider-card p.provider-state--testing { color: var(--orange); }
+.provider-card p.provider-state--pending-approval { color: var(--cyan); }
+.provider-card p.provider-state--suspended { color: var(--blood-bright); }
+.provider-card p.provider-state--unavailable { color: var(--bone-muted); }
+.provider-card .provider-state-detail { color: var(--bone); font-size: 13px; }
+.provider-launch { align-self: flex-start; margin-top: auto; }
+.provider-launch:disabled { border-color: var(--industrial); background: transparent; color: var(--bone-muted); opacity: 1; }
+.provider-launch-status:empty { display: none; }
+.provider-launch-status { color: var(--bone-muted); font-size: 13px; }
