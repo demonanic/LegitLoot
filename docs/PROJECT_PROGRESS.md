@@ -101,3 +101,4 @@ See `git show --stat` for the coherent implementation commit; the Creative Bible
 - Owner rules applied over the mockup's wording: no "real payouts", "real rewards" or "cash out"; tagline is "Games • LootCoins • No shortcuts"; the fourth LootCoins step is "Spend in-game". The three older games are removed; panels show Zombie Invasion Defense (working title, in development, no art) and one unannounced slot.
 - Homepage loads no Supabase script and makes no backend calls. Offerwall.GG verification meta tag restored from `main`.
 - Tests: `python3 tests/home.browser.py <base-url>` (desktop, laptop, phone). Pushed to `design/neon-comic-arcade` only.
+- 2026-11-12: `games.html` no longer lists Demonanic, Gauntlet's Survival or Harvest//Zero (owner: no longer part of this project). It lists Zombie Invasion Defense (working title, in development) and one unannounced slot; category filters removed. The old game art files remain in `assets/` but no page uses them.

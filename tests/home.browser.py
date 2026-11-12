@@ -35,6 +35,12 @@ async def main():
                 small = await page.evaluate("[...document.querySelectorAll('.ll-btn,.ll-world__btn,.menu-toggle,.main-nav a')].filter(e => e.getBoundingClientRect().height < 44).length")
                 check(small == 0, f"[phone] touch targets are at least 44px ({small} too small)")
                 await page.click(".menu-toggle")
+            gp = await ctx.new_page(); await gp.goto(f"{BASE}/games.html", wait_until="networkidle")
+            gtext = await gp.inner_text("body") + await gp.content()
+            check(not re.search(r"demonanic|gauntlet|harvest", gtext, re.I), f"[{name}] games page no longer lists the older games")
+            check("ZOMBIE INVASION DEFENSE" in gtext.upper(), f"[{name}] games page lists Zombie Invasion Defense")
+            check(not await gp.evaluate("document.documentElement.scrollWidth > window.innerWidth"), f"[{name}] games page has no horizontal overflow")
+            await gp.close()
             for sel, dest in [(".nav-signup", "account"), (".ll-btn--acid", "games"), (".ll-btn--ghost", "how-it-works")]:
                 href = await page.locator(sel).first.get_attribute("href")
                 check(dest in href, f"[{name}] {sel} links to {href}")
