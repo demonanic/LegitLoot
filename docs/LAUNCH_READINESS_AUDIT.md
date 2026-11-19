@@ -868,3 +868,29 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 9. Release controls: main is reported unprotected, no rulesets were returned, and the detailed protection endpoint returned 403. Production registration pause was last recorded as not applied; not rechecked in this audit. Cloudflare project-level preview bindings remain unverified even though the preview branch's supabase-config.js targets staging.
 
 No production release is ready. No production deployment, merge, provider activation, callback, payment, terms acceptance, schema/data change, or settings/secret change occurred in this review.
+
+
+## 2026-11-19 14:42 ET — Launch-readiness reassessment after PR #20
+
+### Improvements verified
+- PR #16 (staging guards), #17 (CI workflow), and #18 (MIG-02 canonical source/tests) have been merged into the integration branch only. PR #19 combined test candidate was closed unmerged.
+- Integration CI run 44590656627: 50/50 Node tests, no failures/skips, npm ci and whitespace check passed.
+- Claude's PR #20 public-copy candidate updates navigation/title/description/accessible labels to Hustle, removes “Complete offers” from homepage LC steps, replaces Zombie Invasion Defense homepage feature with Zombies vs Heavy Metal and Rocket 2 Nowhere, and adds four Node tests. PR #20 CI run 44591660747: 54/54 Node tests, no failures/skips, whitespace check passed.
+- PR #20 Cloudflare bot comments report successful branch previews in both Pages projects; PR source config explicitly targets staging.
+
+### Remaining PR #20 review items
+- `earn-hub.js` still renders “No earning provider is open…”; `tests/earn-hub.browser.py` asserts the obsolete wording. Current CI runs only `node --test tests/*.test.mjs`, so this browser test is not executed. Add Node coverage or include the browser suite in CI.
+- Homepage LC step 3 says “Uses announced later” rather than a clear weekly-challenge/seasonal-event source.
+- Hustle fine print says “Advertised rewards are not guaranteed earnings” and mentions provider “settlement”; clarify that provider activity never credits LC or creates a LegitLoot cash payout/wallet credit.
+- PR #20 is 2 commits ahead / 2 behind integration. Review comment 7020270626 requests these corrections, branch sync, and rerun. Not yet ready for owner approval.
+
+### Launch blockers reconfirmed
+1. **Critical production policy violation:** production Offerwall.GG v3 is ACTIVE, `verify_jwt=false`; SECURITY DEFINER database routine still locks LC ledger accounts and calls `post_journal_transaction`. Production provider-to-LC issuance remains possible.
+2. Staging Offerwall.GG v8 is record-only and deployed source exactly matches integration; no ledger/journal path. Staging provider row remains disabled but retains stale LC/LootCoins reward-model metadata and null terms/approval evidence.
+3. Taplayad is selected but absent from staging provider records and Edge Functions. Current provider callback contract still lacks signed transaction-field integrity and unique reversal identity; account-specific incentivized-traffic permission is unverified.
+4. Games are named in the homepage candidate but have no verified playable routes/repos. Game registry/playable route readiness remains unproven.
+5. At least five launch challenges and the server-verified game-event → authoritative website wallet flow remain unverified.
+6. `payouts@legitloot.site` remains unverified; public copy still uses `hello@legitloot.site`.
+7. All 21 Git branches report unprotected; main branch protection remains a release gate. Cloudflare project-level preview bindings remain unverified.
+
+No production merge/deploy, settings/secrets, schema/data, callback, publisher dashboard, money, or provider agreement was changed. No PR was merged during this check.
