@@ -4,8 +4,7 @@ Project ref: `scmnxcsggquwtuyyjnnj`
 
 Source: read-only Supabase `list_migrations` inventory. This is the database's applied version/name ledger, not the original migration SQL.
 
-```json
-[
+```json[
   {
     "version": "20261109020116",
     "name": "initial_legitloot_platform_schema"
@@ -85,6 +84,10 @@ Source: read-only Supabase `list_migrations` inventory. This is the database's a
   {
     "version": "20261118080655",
     "name": "game_platform_foundation"
+  },
+  {
+    "version": "20261119145340",
+    "name": "offerwall_gg_record_only"
   }
 ]
 ```
