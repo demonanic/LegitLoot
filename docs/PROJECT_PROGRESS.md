@@ -164,3 +164,10 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 
 - PR #11 and PR #12 descriptions now reflect the latest review state and evidence. PR #11 distinguishes 26/26 tests reported by Claude from earlier preview checks; no CI status or preview deployment for cfc370a was returned. PR #12 records production source/history exports and remaining backup/PITR and Pages binding checks.
 - Both PRs remain open and non-mergeable pending branch refresh from the current authorized build branch. No merge or deployment.
+### M2-T3 — Offerwall.GG record-only callback review — 2026-11-19
+
+- PR #13 is open for independent review on `build/m2-t3-offerwall-record-only`. It changes the staging-lineage `private.process_offerwall_gg_postback` routine to record callback/conversion data only and never post a journal transaction. The Edge Function rejects the old `posted` result, failing closed if the record-only migration is not present.
+- ChatGPT independently inspected the migration, function, test and live staging catalog. The new SQL contains no ledger/journal write path; the public wrapper delegates to the private routine; staging service-role grants and relevant table constraints are present. The PR's function source matches deployed staging v7 except for the accepted-result change.
+- Claude reports 7/7 PGlite tests pass after `npm install`; no GitHub Actions status/workflow run was returned. Cloudflare preview succeeded for the static branch only. No migration/function has been deployed and no callback invoked.
+- One low-severity result-label mismatch remains: duplicate reversal retries currently return `duplicate`, while comments/allow-list also describe `duplicate_reversal`. Claude has been asked to align semantics and tests.
+- PR #13 branch is 10 commits behind the current authorized build branch and reports non-mergeable. Refresh and rerun tests before merge consideration. Staging deployment remains a separate approval gate; production is out of scope.
