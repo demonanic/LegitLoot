@@ -512,3 +512,50 @@ ChatGPT approves the proposed conflict-resolution strategy for an isolated revie
 - Keep production and staging migration histories separate; do not combine incompatible histories into a replayable migration directory.
 - Treat browser render checks as NOT VERIFIED if no real browser is available.
 - Keep the PR open for review; no merge to `main` or production deployment is authorized.
+
+
+## 16. M2 launch-readiness refresh — 2026-11-19 (12:14 UTC)
+
+This update records the current build/review state; it does not replace the deployed-state evidence in §§15.1–15.6.
+
+| Finding | Current status | New evidence / disposition |
+|---|---|---|
+| REPO-01 — branch reconciliation | **RESOLVED on integration branch only** | PR #11 merged into `build/legitloot-neon-synthwave` at `2824563`. The build branch now contains the 2026-11-12 public pages, staging-only client guards, wallet response parser, owner-locked LC copy, and regression tests. Production `main` is unchanged. |
+| M2-T3 / PROV-07 — provider callback minting | **DEFECT — still deployed** | PR #13's record-only migration and matching Edge Function are merged into the build branch at `1faf854`, but not deployed. The last verified inventory still showed production v3 and staging v7 able to post LC. The source-only fix does not contain the deployed risk. |
+| ENV-03 — staging origin allow-list | **FIX PROPOSED, NOT DEPLOYED** | PR #14 adds canonical CPAGrip source with the production origin removed and a regression test. Independent source review found no new blocker; PR remains open and must refresh from the current base. |
+| AUTH-03 — account deletion | **DESIGN DRAFT / DEFECT remains** | PR #15 proposes close-and-pseudonymise with no ledger mutation or LC movement. Its interim procedure incorrectly assumes no accounts are open while production sign-up remains enabled; correction requested. D1–D4 require owner/legal decisions before implementation choices are finalized. |
+| OPS-03 / M2-T6 — release runbook | **DRAFT / REVIEW** | PR #12 includes production Pages-binding uncertainty, source snapshots, migration-history limitation, rollback and monitoring. Review note asks it to require verification of the already-approved production sign-up pause before public account onboarding. |
+| AUTH-02 — production registration | **BLOCKED / NOT APPLIED** | Last environment probe: `disable_signup:false`; email sign-in remains enabled. The owner-approved pause is not complete until applied and verified. |
+| LEGAL-01 — Terms / Privacy | **DEFECT / OWNER PUBLICATION GATE** | Public legal pages remain placeholders per the existing audit; accurate final text and publication approval remain required. |
+| GAME-02 — playable game / early access | **UNVERIFIED / LAUNCH SCOPE DECISION** | No evidence in this review that a playable game is integrated into the current build. The first release must either include a verified playable game or be labelled accurately as an early-access portal. |
+| OPS-01 — monitoring / backup | **DEFECT / PARTLY DOCUMENTED** | Runbook draft exists; production backup/PITR tier and a free/paid uptime monitoring choice remain unverified. |
+
+### Verification notes
+- Claude reports 34/34 tests on integration base `ab61c6e`, 11/11 root JavaScript syntax checks, and clean non-Markdown diff checks. Claude reports 37/37 tests on PR #14 head `3bb1226`. These results were not independently rerun by ChatGPT.
+- GitHub combined statuses and workflow-run queries returned no CI checks for the inspected heads. Cloudflare preview comments confirm successful static previews only; they do not prove backend deployment.
+- No PR review submissions or inline review threads were present for PRs #12, #14, or #15. ChatGPT posted actionable review comments on all three.
+- No production/staging settings, secrets, functions, schema, data, callbacks, or financial records were changed during this check.
+
+### Next owner-independent actions
+1. Claude refreshes PRs #12, #14, and #15 from the latest integration base and addresses the review notes.
+2. Claude updates permanent agent instructions to reflect standing authorization for integration merges and staging deployments.
+3. Run the integrated test suite and syntax/diff checks on the current integration head; record exact commit and results.
+4. After independent review, merge verified source/documentation PRs into the integration branch and proceed with staging-only record-only callback migration/function deployment under the standing owner authorization.
+5. Keep production Offerwall containment, production release, legal publication, paid commitments, live financial activity, and irreversible business choices owner-gated.
+
+
+## 17. PROV-07 live-state recheck — 2026-11-19 (12:14 UTC)
+
+**Status: DEFECT — VERIFIED in both deployed environments.**
+
+Read-only Supabase checks reconfirmed:
+- Production `offerwall-gg-postback` v3 ACTIVE, `verify_jwt=false`; staging v7 ACTIVE, `verify_jwt=false`.
+- Production has 7 applied migrations; staging has 20, latest `20261118080655 game_platform_foundation`. The build-branch record-only migration `20261119120000_offerwall_gg_record_only` is not applied to staging.
+- Both live `private.process_offerwall_gg_postback` definitions still select/lock LC ledger accounts, build journal entries, and call `private.post_journal_transaction`. Their public wrappers delegate to the private routine and require `service_role`.
+- Callback events and conversions are 0/0 in production and 0/0 in staging. No callback was invoked.
+
+**Action / owner boundary:**
+- The staging record-only source is already merged to the integration branch. After independent review, Claude may apply the staging migration first, deploy the matching staging Edge Function second, and verify the live routine contains no ledger/journal write path. The owner has authorized staging changes without per-action approval.
+- Production remains separate: no production migration/function deployment, secret change, callback, reward issuance, or money movement is authorized by this staging task. The owner must choose the production containment approach.
+
+This check changed no settings, secrets, functions, migrations, schema, data, callbacks, or financial records.
