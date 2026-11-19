@@ -824,3 +824,41 @@ No authorization here permits production merge/deploy or production configuratio
 - The four documentation updates for this check advanced integration from `1a8be57` to `150d7a4`. This final batched documentation correction is being committed now; PR branches must be refreshed from the live integration branch tip when Claude resumes, not from either historical SHA.
 - Immediately before this closeout correction, PR #12/#14/#15 were 11 commits behind integration (11/6/7 commits ahead respectively). The earlier branch-refresh instruction is superseded: use the current integration branch head at pickup and report exact compare counts after refresh.
 - No PR merge, deployment, callback, provider activation, Supabase mutation, production action or financial activity occurred.
+
+
+---
+
+## 2026-11-19 09:40 America/New_York — Owner-supplied Taplayad publisher evidence and Hustle integration contract
+
+The owner supplied screenshots from the authenticated Taplayad dashboard and documentation for Legitloot app/property ID **10066**, plus the offerwall URL template `https://offerwall.tplayad.com/10066/{user_id}`. The dashboard visibly labels the publisher as **Active**. This is evidence of the dashboard status, not independent proof of account approval, contractual permission for incentivized traffic, settlement eligibility, or successful end-to-end integration.
+
+### Evidence captured from screenshots (not independently queried)
+- Property name: Legitloot; app ID: `10066`; platform: Web; site category: Rewarding.
+- Reward label shown: “Legit loot”; multiplier shown: `$1 = 1 points`. This is publisher-side configuration only. It must not be mapped to LegitCoins, a USD peg, user cash value, wallet balance, withdrawal, or redemption.
+- Offerwall URL template: `https://offerwall.tplayad.com/10066/{user_id}`. Replace the placeholder server-side with the authenticated LegitLoot user's stable opaque identifier. Never accept a user ID supplied by an untrusted client as authority for another account.
+- Dashboard offers view shows Web device and Worldwide country filters, 2,899 total entries, 30 entries per page. Visible examples include Ipsos - iSay Survey (CPA, offer 227048, Italy), Hot Adventure Slots (CPI, 227047, US), Crossword Jam: Fun Word Search (CPA, 227046, US), Word Search Explorer (CPA, 227045, US), and Free Score Fast (CPI, 227044, US). This is a screenshot snapshot, not a guarantee of current availability or suitability.
+- Publisher documentation screenshot describes server-to-server postbacks and exposes macros: `{user_id}`, `{payout}`, `{reward}`, `{offer_id}`, `{country}`, `{user_ip}`, `{status}`, and `{sig}`. It describes `{sig}` as an MD5 security signature and instructs publishers to validate it and accept postbacks only from the documented source IP `176.97.212.58`.
+- The screenshot also shows a publisher dashboard earnings/withdrawal panel with a $15 publisher minimum. This concerns the publisher's own account/revenue interface; it does not authorize or imply user withdrawals from LegitLoot.
+- Taplayad documentation screenshot advertises a server-to-server postback, Offers API and embeddable offerwall. The selected integration method must be justified against launch scope and verified using current provider documentation.
+
+### Security and policy requirements
+- Taplayad is the owner-selected initial Hustle publisher. Treat it as selected for implementation/research; do not describe it as fully approved, live in LegitLoot, or launch-ready until provider terms/traffic eligibility and technical tests are evidenced.
+- Build the offerwall as a separate Hustle task/discovery experience. Publisher offer completion, `{reward}`, `{payout}`, callbacks, and reversals must never create, credit, debit, or otherwise modify LC or the authoritative website wallet.
+- Record publisher task events separately with provider transaction identity, offer ID, authenticated internal user mapping, status, timestamps, payout/reward metadata, signature-verification result, source-IP result, and reversal/chargeback history. Minimize/secure IP data and apply retention controls.
+- Verify the exact signature construction, canonicalization, secret handling, status semantics, transaction-ID availability, retry behavior, and reversal protocol from the current Taplayad docs/provider support. The screenshots identify an MD5 signature macro but do not show the full signing formula. Do not guess the formula or treat MD5 alone as sufficient authentication.
+- Verify source IP against current provider documentation; use the displayed `176.97.212.58` as a lead requiring confirmation, not a sole security boundary. Add replay/duplicate protection and fail closed on missing/invalid signature, unknown user, unknown offer, invalid status, or mismatched app ID.
+- Use the exact authenticated user's stable opaque ID in the offerwall URL. Do not leak email, credentials, sequential database IDs, or another user's identifier.
+- Any test postback must be performed only in a provider-approved test/sandbox mode with synthetic staging users and no LC issuance. Do not press “Send Test Postback” or change the publisher dashboard in this workstream without confirming its destination and effects.
+- No provider account activation, terms acceptance, incentivized-traffic agreement, payment, paid commitment, or live activation is authorized by these screenshots or the owner's selection. Those remain owner-gated.
+- Do not copy the publisher's `$1 = 1 points` multiplier into product copy as an LC exchange rate. Avoid displaying publisher payout/revenue as a user reward or promise.
+
+### Next implementation actions
+1. Claude: add Taplayad as the selected provider in Hustle's architecture/registry and document the adapter contract; do not change publisher dashboard settings.
+2. Claude: inspect current Taplayad documentation for the full signature formula and transaction/reversal semantics. If unavailable, request written clarification from provider support and flag it as a provider dependency.
+3. Implement staging-only offerwall URL generation, authenticated opaque user attribution, task catalogue/offer listing strategy (embedded wall first is preferred for smallest launch, subject to provider terms), event recording, idempotency, chargeback tracking, and administrative visibility.
+4. Add tests for bad/missing signatures, wrong app ID, spoofed user ID, replayed callbacks, duplicate transaction IDs, unknown offers, status transitions, reversals, and the invariant that no provider event touches LC tables or wallet APIs.
+5. Confirm provider allows this site's task/reward/advertising model and incentivized traffic before live use. Until then, use only permitted sandbox/test facilities.
+6. ChatGPT independently reviews source, tests, staging isolation, and LC separation before any staging deployment.
+
+### Owner boundary
+This evidence does not authorize saving dashboard changes, sending test postbacks, activating live offers, accepting provider terms, changing secrets, deploying to production, or issuing rewards. Existing production, legal, financial, provider-agreement and final-release gates remain unchanged.
