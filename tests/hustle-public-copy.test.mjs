@@ -52,3 +52,12 @@ test("homepage LC steps name challenges and seasonal events, not a placeholder",
   assert.ok(html.includes("Weekly challenges &amp; seasonal events"));
   assert.ok(html.includes("What LC can be used for has not been announced."));
 });
+
+test("homepage LC steps list only the approved sources, in order", () => {
+  const html = read("index.html");
+  const block = html.match(/<ul class="ll-coins__steps">([\s\S]*?)<\/ul>/);
+  assert.ok(block, "LC steps list not found");
+  const steps = [...block[1].matchAll(/<li>[\s\S]*?<span>([\s\S]*?)<\/span>[\s\S]*?<\/li>/g)]
+    .map((m) => m[1].replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").trim());
+  assert.deepEqual(steps, ["Play games", "Earn Legit Coins", "Weekly challenges & seasonal events"]);
+});
