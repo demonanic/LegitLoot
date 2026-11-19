@@ -491,3 +491,14 @@ No live callback was invoked; no project setting/secret, schema/data, publisher 
 - Production function inventory includes Offerwall.GG postback v3 (`verify_jwt=false`), Offerwall.GG wall URL v1 (`verify_jwt=true`), wallet summary v4 (`verify_jwt=false`). Staging inventory includes Offerwall.GG postback v8, CPAGrip attribution v5, owner provisioning v7, admin dashboard v7, Offerwall.GG wall URL v5, and payout simulator v6; Taplayad absent.
 
 No callbacks, data changes, schema changes, settings/secrets changes, provider activation, or deployment were performed.
+
+## 2026-11-19 15:23 America/New_York — Environment verification
+
+- Integration branch HEAD: 04ff43e3b9691e3acbdd9e6c9356530b9d61ec69; main HEAD: 3fa7ca58992f786f7b59f22b8fb758149a873d6b. GitHub reports main and integration as protected=false.
+- PR #20 base 3fa518ee, head 20a8203; current integration and PR each advanced five commits from merge base. PR requires sync.
+- PR #20 supabase-config.js and integration copy share blob SHA 8504420e; both explicitly use https://scmnxcsggquwtuyyjnnj.supabase.co and environment staging. Cloudflare bot reported a preview in both Pages projects; project-level environment overrides remain unverified.
+- Production Supabase gkbqderyjcuxnjbsiffb: Offerwall.GG postback Edge Function v3 ACTIVE, verify_jwt=false; private.process_offerwall_gg_postback calls private.post_journal_transaction and issues LC.
+- Staging Supabase scmnxcsggquwtuyyjnnj: Offerwall.GG postback v8 ACTIVE, verify_jwt=false; database routine is record-only with no journal/ledger operation.
+- Staging private.providers: CPAGrip disabled; Offerwall.GG disabled but stale reward metadata names LC/LootCoins and terms/approval references are null. No Taplayad provider record or function.
+- Staging Edge Function supabase/functions/offerwall-gg-postback/index.ts line 82 requires currencyName “Loot Coins”; docs/OFFERWALL_GG_INTEGRATION.md says “Loot coins”. Exact provider value is unverified; no callback sent.
+- No project settings, secrets, schema, rows, functions, provider state or financial records were changed.
