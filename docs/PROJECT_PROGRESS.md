@@ -319,3 +319,19 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - Corrected rollback triggers for the record-only callback model; updated the staging migration version to `20261119145340`; dated the last verified production signup probe; added GOV-01 branch-protection verification to the release freeze.
 - Production branch protection remains unverified (last API evidence: `protected:false`, no rulesets, detailed endpoint inaccessible). Production backup/PITR tier remains unverified. Neither was changed.
 - Current active milestone remains M2-T4: game integration verification. Exact source repositories/playable URLs for Zombies vs Heavy Metal and Rocket 2 Nowhere remain the missing dependency.
+
+
+## 2026-11-19 10:20 ET — Independent Sync Watch: current M2 state and handoff
+
+- **Integration head at start:** `7cf82eea2a313bde49fcc1e304729ae3a7dab957`; 349 ahead of main, 0 behind. Sixteen branches; all report `protected:false`.
+- **PRs:** #9 is the only open PR (old draft design, last updated Nov 12, no formal reviews). #12 closed unmerged/superseded by integration runbook commit `53ba77a`; #14 merged into integration; #15 closed unmerged/superseded by `docs/ACCOUNT_DELETION_DESIGN.md`. No open PR for current launch feature work.
+- **Claude evidence:** latest Claude-authored commit found is `5ab48bd` (docs debrief, 11:41Z); latest verifiable Claude handoff is PR #12 comment `7009082911` at 12:27Z. No newer Claude commit/handoff found. Do not attribute later owner-authored commits to Claude.
+- **CI/tests:** no GitHub status checks or workflow runs on current head. Only workflow is artwork extraction; no test workflow. Prior Claude local reports (34/34, 37/37, 34/34) are on older PR heads. Current-head suite was not run in this audit.
+- **PROV-07:** read-only staging verification confirms migration `20261119145340_offerwall_gg_record_only` applied, postback v8 active and SQL routine record-only/service_role-only. Production postback v3 remains active and its SQL routine still calls `private.post_journal_transaction`; this is a critical LC-policy violation and remains owner-gated.
+- **New MIG-02:** staging records applied migration `20261118080655_game_platform_foundation`, but no corresponding migration file exists in the integration Git tree. Recover authoritative migration source before further schema changes.
+- **M2-T4 game evidence:** staging `public.game_registry` contains only `zombie-invasion-defense`, `development`, unlisted, no launch URL; `private.game_events` is empty. No game Edge Function or challenge catalogue exists. Connected repos searched include Aegis Rogue, Demonanic, Zombie Invasion Defense, Gauntlet's Survival and Harvest//Zero; no exact source/URL for either official launch title found.
+- **Hustle/Taplayad:** current site registry has Offerwall.GG pending, CPAGrip testing, no Taplayad. Staging provider registry has only Offerwall.GG and CPAGrip, both disabled and without terms/approval references; no Taplayad function. Public page/nav still says Earn rather than Hustle.
+- **Support:** public pages still link to `hello@legitloot.site`; owner-selected `payouts@legitloot.site` remains unverified.
+- **ENV-06:** `admin.js:boot()` line 31 and `payout-simulator.js:boot()` line 62 only check the environment label, not exact staging URL; current test file does not runtime-test these two clients.
+- **Next:** Claude fixes ENV-06, recovers migration source, implements Taplayad test-only adapter after provider protocol verification, renames public section to Hustle, and prepares challenge definitions using only approved LC economics. ChatGPT independently reviews. Game integration cannot proceed until exact source URLs/repos are supplied.
+- **No changes to code, schema/data, settings, secrets, provider dashboard, callbacks, production or finances were made.** Only read-only checks and this coordination documentation update were performed.
