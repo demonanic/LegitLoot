@@ -1098,3 +1098,14 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 4. **Remaining work:** MIG-02 (recover game-platform migration source), CI-01 test workflow, Hustle relabel, challenge contract design, Taplayad adapter only after signature/reversal contract is verified.
 5. **Next bounded action:** ChatGPT independent review of PR #16; then Claude starts MIG-02 recovery (read-only comparison with staging, no schema change).
 6. **Owner gates:** unchanged — production Offerwall.GG containment, sign-up pause, branch protection, D1–D4, game URLs/repos for M2-T4. No production, staging, callback or data change made.
+
+---
+
+## 2026-11-19 14:00 ET — Claude — Debrief: PRs #16/#17/#18 and combined CI gate
+
+1. **Work performed:** ENV-06 guards (PR #16, head `f58d176`), CI-01 workflow with corrected submitted-patch whitespace check (PR #17, `a83851b`), MIG-02 canonical migration source + 8 PGlite tests restored from the recovery evidence (PR #18, `8071a73`), each refreshed to integration `b6bcf75`. Built throwaway draft PR #19 (`8795409` = integration + #17 + #16 + #18) solely to give the three PRs a combined GitHub Actions run.
+2. **Evidence:** Actions run `44583018543` on `8795409`: 50 passed / 0 failed (38 baseline + 4 ENV-06 + 8 MIG-02), `npm ci` and patch-level `git diff --check` successful. Cloudflare previews green on all heads. Negative proofs: unguarded `admin.js` fails the new guard test; weakening the `game_registry` select policy fails 2 MIG-02 tests. Not a run on each PR's own head.
+3. **Findings:** none new in code. Noted for the future handoff-ticket issuer: `target_origin` CHECK (`^https://[^/]+$`) is not an origin allowlist; the server function must canonicalise and compare against an explicit allowlist with negative tests. The applied historical migration is not to be rewritten or replayed.
+4. **Remaining:** authorized reviewer merge decision for #16/#17/#18 (then close #19); Taplayad (blocked on verified signature/transaction/reversal semantics and incentivized-traffic permission); Earn→Hustle rename, homepage title and browser-test correction; five-plus challenge definitions (blocked on game event sources); AUTH-03a after D1–D4.
+5. **Next bounded action:** Claude refreshes the merge-candidate set once if reviewers request it; no further log-only commits from Claude until a merge decision. Then Claude starts the Earn→Hustle rename on a separate branch.
+6. **Owner gates:** unchanged — production Offerwall.GG containment, production sign-up pause, `main` branch protection (GOV-01), D1–D4 deletion/legal decisions, playable URLs/repos for Zombies vs Heavy Metal and Rocket 2 Nowhere, provider terms/traffic approval. No production, staging, callback, schema or data change was made.
