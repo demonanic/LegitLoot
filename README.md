@@ -4,7 +4,9 @@ Independent games and rewards platform.
 
 ## Active build
 
-- **Codex operating law:** [CODEX_EXECUTION_CONSTITUTION.md](docs/CODEX_EXECUTION_CONSTITUTION.md) — mandatory project vision, scope controls, workflow, acceptance criteria and handoff rules. Codex must read this before every work session.
+- **Shared execution control and current milestone:** [MASTER_EXECUTION_CONTROL.md](docs/MASTER_EXECUTION_CONTROL.md) — mandatory for Claude and ChatGPT; defines launch priority, active task, autonomous coordination, critical escalation boundaries, and the shared agent log.
+- **Claude entrypoint:** [CLAUDE.md](CLAUDE.md).
+- **Codex/agent operating law:** [CODEX_EXECUTION_CONSTITUTION.md](docs/CODEX_EXECUTION_CONSTITUTION.md) — mandatory project vision, scope controls, workflow, acceptance criteria and handoff rules.
 - **Current creative source of truth:** [LEGITLOOT_CREATIVE_BIBLE.md](docs/LEGITLOOT_CREATIVE_BIBLE.md) — underground organization, visual identity, personality, and Skuz continuity.
 - **Website creative workflow:** [WEBSITE_CREATIVE_WORKFLOW.md](docs/WEBSITE_CREATIVE_WORKFLOW.md) — visual blueprint, homepage-first production gates, art briefs, page design rules and acceptance criteria.
 
