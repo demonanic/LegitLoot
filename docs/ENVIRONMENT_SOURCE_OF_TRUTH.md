@@ -511,7 +511,7 @@ No callbacks, data changes, schema changes, settings/secrets changes, provider a
 - 21 branches; every branch reports protected=false. Open PR #20 and stale draft #9.
 - PR #20 head ad21bbecd0fd6e020925464132b637fd83bc2327, base 3db61c0; mergeable, synchronized, 0 behind. Actions run 44609090382 completed successfully through npm ci, npm test, and patch whitespace check. Formal independent COMMENT review ID 5984053898 found no blocking defect in the scoped copy diff. No merge.
 - PR #20 and integration supabase-config.js have identical blob SHA 8504420e...; the checked-in config explicitly targets staging project scmnxcsggquwtuyyjnnj. Cloudflare bot reports successful branch previews in legitloot-preview and legitloot projects; these are not production deployments. Dashboard-level bindings remain unverified.
-- This debrief advances integration; PR #20 must take a docs-only sync and rerun CI before final owner review.
+- The coordination-document updates advance integration; PR #20 must sync to the latest integration HEAD and rerun CI before final owner review.
 
 ### Supabase
 - Production project gkbqderyjcuxnjbsiffb: postback v3 ACTIVE, verify_jwt=false; 7 migrations. Read-only SQL confirms live SECURITY DEFINER private.process_offerwall_gg_postback still calls private.post_journal_transaction and operates LC ledger accounts.

@@ -259,7 +259,7 @@ Read the latest Master Execution Control entry and all four working records befo
 ### Current active task
 - M2-T4 is active: identify and integrate the exact playable/source builds for Zombies vs Heavy Metal and Rocket 2 Nowhere. ChatGPT is acting lead per Master Execution Control. Exact-title GitHub repository searches returned no matches; do not substitute unrelated projects or invent URLs. The owner must provide the exact source repo/playable URL for each title if no connected source reveals them.
 - M2-T5 public Earn-to-Hustle copy reconciliation is now a supporting PR candidate, not the active milestone. PR #20 is open at head ad21bbe, base integration 3db61c0, mergeable and synchronized at audit time. Its 15-file diff is limited to public labels/copy and tests. Actions run 44609090382 passed the workflow's install, Node test and patch-whitespace steps. Claude reports 58/58 local; the exact Actions test count was not independently retrieved. Python/Playwright remains outside CI.
-- ChatGPT's formal PR COMMENT review is ID 5984053898: no blocking defect in the scoped diff. It is not an APPROVE review. No merge occurred. The latest documentation commit will make PR #20 one commit behind; sync and rerun CI before final owner review.
+- ChatGPT's formal PR COMMENT review is ID 5984053898: no blocking defect in the scoped diff. It is not an APPROVE review. No merge occurred. The coordination-document updates advance integration; PR #20 must sync to the latest integration HEAD and rerun CI before final owner review.
 
 ### New Taplayad integration finding — do not guess the account protocol
 The official public docs now expose two separate systems:

@@ -924,7 +924,7 @@ Governance:
 - Current integration before this debrief: 3db61c0545c95ab28e525e070f3d66f58ab9fa63; main: 3fa7ca58992f786f7b59f22b8fb758149a873d6b. 21 branches, all protected=false; two open PRs (#20 and stale draft #9).
 - PR #20 head ad21bbecd0fd6e020925464132b637fd83bc2327, base integration 3db61c0, mergeable and 0 commits behind. 15-file diff is limited to public navigation/page labels, homepage LC source wording, Hustle status/disclaimer copy and copy tests. It does not change provider integration, wallet, database or LC issuance.
 - Actions run 44609090382 succeeded: install, npm test, submitted-patch whitespace check. Claude's comment reports 58/58 local; exact Actions test count not independently retrieved. Python/Playwright is not part of CI.
-- Independent formal review COMMENT 5984053898: no blocking defect in this limited diff. Not an APPROVE review; no merge. This debrief advances integration, so PR #20 needs a documentation-only sync and rerun before final owner review.
+- Independent formal review COMMENT 5984053898: no blocking defect in this limited diff. Not an APPROVE review; no merge. The coordination-document updates advance integration; PR #20 must sync to the latest integration HEAD and rerun CI before final owner review.
 - PR #20 preview bot comments report successful branch previews in both Pages projects. Its supabase-config.js matches integration and targets staging; Cloudflare dashboard-level environment overrides/custom-domain bindings remain unverified.
 
 ### M2-T4 remains active — game source dependency
