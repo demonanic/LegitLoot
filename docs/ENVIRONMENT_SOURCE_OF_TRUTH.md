@@ -133,3 +133,25 @@ Secrets by name only (inferred from code paths and probe responses, values never
 ## 6. Source and confidence
 
 This file's project IDs, names, status, region, applied migration versions, deployed function names/versions/JWT settings, and listed table names/RLS flags were retrieved from the connected Supabase project tools on 2026-11-19. This was a read-only inventory. It did not inspect secret values, execute account flows, invoke reward callbacks, or change project settings. Counts and function versions may change; refresh this inventory before deployment.
+
+## 11. Independent review and exported staging source — 2026-11-19
+
+ChatGPT independently retrieved the deployed source for production `offerwall-gg-postback` v3 and `offerwall-gg-wall-url` v1, and staging `offerwall-gg-postback` v7 plus the other five deployed staging functions.
+
+- Exact deployed staging Edge Function source files and a version/hash manifest are committed under `supabase/environments/staging/functions/` and `DEPLOYED_FUNCTIONS_MANIFEST.json`.
+- Six staging functions were exported: `offerwall-gg-postback`, `offerwall-gg-wall-url`, `cpagrip-attribution`, `provision-initial-owner`, `admin-dashboard`, `payout-simulator`.
+- Sixteen current deployed PostgreSQL routine definitions are recorded in `supabase/environments/staging/schema-snapshot/routines.sql`.
+- The 20 applied staging migration version/name records are in `supabase/environments/staging/MIGRATION_HISTORY.md`.
+- These are environment snapshots, not original migration source. In particular, the original `game_platform_foundation` SQL remains unavailable. Do not replay the snapshot or pretend it is the missing migration.
+
+### PROV-07 — Offerwall.GG can mint LC (VERIFIED)
+
+Both deployed postback functions read `OFFERWALL_GG_SECRET`, verify the HMAC, and call `process_offerwall_gg_postback`. The deployed staging database routine writes balanced journal entries to the LC ledger. The production postback calls the corresponding public RPC wrapper. This conflicts with the owner-locked LC rule prohibiting provider callbacks from minting LC.
+
+**Containment nuance:** Production `offerwall-gg-wall-url` v1 also requires `OFFERWALL_GG_SECRET` to sign wall URLs. Removing the project-level secret disables both postback processing and wall URL generation. It is therefore a temporary full integration shutdown, not a postback-only kill switch. No secret was changed; owner decision pending.
+
+The observed callback/conversion row counts were zero at the last inventory. No callback was invoked during verification.
+
+### M2-T1 reconciliation
+
+ChatGPT approved the conflict-resolution rules with amendments recorded in `docs/MASTER_EXECUTION_CONTROL.md`: staging origin allow-list must not include the production site; preview Supabase configuration must fail closed to staging; production and staging migration histories remain separate; browser rendering is NOT VERIFIED if unavailable; the review PR must target the authorized build branch only, never `main`.
