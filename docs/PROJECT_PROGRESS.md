@@ -154,3 +154,9 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - Claude reports 26/26 Node tests pass. GitHub Actions status/workflow queries returned no checks/runs for this head; no new Cloudflare preview deployment was visible for cfc370a.
 - PR #11 remains open and non-mergeable; the review branch is 16 commits behind the current build branch. PR #12 remains open, unchanged, and 13 commits behind. Both require base synchronization before merge consideration.
 - Next: Claude refreshes both review branches, updates PR #12's factual runbook items, and continues the separate staging-only record-only postback task. PROV-07 production containment remains owner-gated.
+### PR #12 runbook correction and latest synchronization — 2026-11-19
+
+- ChatGPT corrected PR #12's runbook in commit 0e826a2: Cloudflare production binding is marked unverified pending dashboard inspection; production function and migration metadata exports are complete; migration metadata is not original/replayable SQL; both staging client guards are documented.
+- PR #11's follow-up guard and copy fixes in cfc370a were independently inspected and appear correct. Claude reports 26/26 tests pass; no GitHub Actions statuses/workflow runs or new preview deployment were returned for that head.
+- Current GitHub compare: PR #11 branch 18 commits behind the authorized build branch; PR #12 branch 15 commits behind. Both open and non-mergeable. Claude must refresh branches and rerun checks before final review.
+- Next: separate staging-only record-only Offerwall.GG postback implementation (source/tests only; no deployment). Production containment remains owner-gated.
