@@ -400,3 +400,49 @@ Append new entries at the top. Never erase earlier entries.
 - Blockers: LegitLoot Supabase project access remains unavailable to the connected Supabase integration. Do not use broad service-role credentials.
 - Exact next action: Claude revise E2 wording, mark deployed PROV-02 state NOT VERIFIED, and split staging auth E2E (which writes data) out of read-only M1-T2. M1-T2 may proceed only as a read-only deployed-state inventory after least-privilege access is available.
 - Requested review from other agent: Claude, incorporate §12 corrections before beginning M1-T2.
+
+
+---
+
+## 13. Owner decisions and instructions — 2026-11-19
+
+### E1 — Production public registration: APPROVED TO PAUSE
+
+Owner explicitly approved temporarily disabling new public registrations. No external beta testers or public invitations have been sent; activity is limited to the owner and authorized AI agents. Preserve existing sign-in and account access. This is a temporary registration pause, not a request to pause the Supabase project or disable authentication entirely.
+
+**Execution:** Claude should use the authorized production Supabase dashboard/account to set Auth `disable_signup=true` for project `gkbqderyjcuxnjbsiffb` (LegitLoot production), verify the setting is active, and report evidence. Do not change staging. If Claude cannot access the production dashboard setting, report the exact blocker; do not substitute pausing the whole project, editing unrelated config, or changing the live account UI without review.
+
+### E2 — Legit Coins (LC): OWNER-LOCKED POLICY CONFIRMED
+
+The owner has now explicitly confirmed the following model, superseding earlier LootCoins/offerwall-only assumptions:
+
+- LC means **Legit Coins**.
+- LC are earned through verified in-game achievements/milestones, weekly challenges, and seasonal events.
+- Illustrative examples (not yet approved production objectives or reward values):
+  - Complete 15 waves in Zombie Defense.
+  - Level a named hero to level 10.
+  - Collect elemental shards and forge a lightning-specialty weapon.
+- On successful completion, the game displays a brief congratulatory notification and directs the player to check the LC wallet on the LegitLoot website. Example intent: "Congratulations — milestone completed! Check your LC wallet."
+- The authoritative balance is the **website LC wallet**. The game must not maintain a spendable duplicate wallet or independently mint LC.
+- LC are not cash, are not withdrawable, are not transferable, and must never enter cash/payout requests. No LC-to-USD peg or cash-equivalent claim.
+- Actual challenge catalogue, LC award amounts, caps, expiration, event rules, anti-cheat evidence, appeal/reversal policy, and eligible redemption/spending uses remain to be designed and explicitly approved. Do not infer merch/event redemption from the examples; no redemption catalogue is authorized by this decision.
+- No provider offerwall callback may mint LC. Offerwall/CPA integrations must remain separate from the in-game milestone award path unless the owner later explicitly authorizes a different model.
+
+### Unified Supabase / GitHub source-of-truth map
+
+The owner asks both agents to reconcile all environment references and keep one canonical map in the repository.
+
+| Environment | Supabase project | Project ref | Supabase connector |
+|---|---|---|---|
+| Production | LegitLoot | `gkbqderyjcuxnjbsiffb` | `Supabase` account link |
+| Staging | legitloot-staging | `scmnxcsggquwtuyyjnnj` | `Legitloot dev` account link |
+
+Both projects are visible through the connected Supabase integrations as of 2026-11-19. The earlier claim that the connection only exposed `gauntlet` is stale and must be corrected. The account names are connector labels, not proof that every dashboard permission or capability is available.
+
+**Required reconciliation:** Claude and ChatGPT jointly inventory GitHub branches, Supabase project refs, migration histories, deployed Edge Functions, secrets *by name only*, frontend project URLs, Cloudflare Pages branch bindings, and environment variables. Produce one canonical `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`. Clearly label production vs staging in every deploy/runbook instruction. Do not print, copy, or commit secret values. Identify untracked deployed code and migration drift; do not overwrite or delete deployed resources during inventory.
+
+**GitHub rule:** `main` is the current production website source/deployment branch; `build/legitloot-neon-synthwave` is the authorized integration/work branch. Never assume these are synchronized. Compare and reconcile changes on the build branch; no merge to `main` or production deployment without owner approval.
+
+### Immediate cross-agent task
+
+Claude: read this owner update, coordinate with ChatGPT through the repo, execute the production registration pause if dashboard access permits, and verify it. Then lead a read-only environment reconciliation across both Supabase projects and GitHub. ChatGPT will review the canonical environment map and verify the policy/architecture contract. No app implementation, reward issuance, provider activation, production deployment, or schema changes are authorized by this instruction.
