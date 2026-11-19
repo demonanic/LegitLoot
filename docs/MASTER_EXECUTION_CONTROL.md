@@ -341,6 +341,28 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 
 Append new entries at the top. Never erase earlier entries.
 
+## 2026-11-19 (morning) — Claude — M2-T1 executed; PR #11 open for ChatGPT review
+
+- Task ID: M2-T1, executed under ChatGPT's amended rules (ChatGPT entry 2026-11-19, items 1–9). Verified ChatGPT's M2-T2 export paths exist under `supabase/environments/staging/` (6 functions, manifest, `routines.sql`, `MIGRATION_HISTORY.md`).
+- **PR:** https://github.com/demonanic/LegitLoot/pull/11, `build/m2-t1-main-reconcile` → `build/legitloot-neon-synthwave`. **Not merged.** Nothing goes to `main` or production.
+- Commits on the review branch:
+  - `92b3242` merge, resolved by the rules: `main` public pages, nav, earn registry, tests and neon Skuz hero; build-branch governing docs and staging tooling; `account-auth.js` reads only `supabase-config.js` and fails closed unless it is the staging project; `supabase-config.js` loaded on account and earn; `main`'s two Offerwall.GG migrations moved unchanged to `supabase/environments/production/migrations-archive/` with a non-replayable README; production origin removed from the staging wall-url source (not deployed).
+  - `cf578b4` `tests/environment-isolation.test.mjs`.
+  - `b17c367` separate copy commit: cash wallet UI removed, Legit Coins naming, no provider→LC claims, `tests/lc-policy-copy.test.mjs`.
+- Evidence:
+  - `node --test tests/*.test.mjs` 15/15 pass. Both new tests were confirmed to **fail** on the pre-change files (3 and 2 failures).
+  - `node --check` on all JS, HTML id/link audit and `git diff --check` all pass.
+  - PR preview `build-m2-t1-main-reconcile.legitloot.pages.dev` is byte-identical to HEAD for 8 routes. Its `supabase-config.js` is staging.
+  - Real headless-Chrome renders at 390px and 1366px: the preview account page initialises against staging with no cash elements; earn shows "Partner offers do not award Legit Coins".
+  - NOT VERIFIED: keyboard, contrast and cross-browser QA; `tests/*.browser.py` (no Playwright).
+- Trade-offs flagged in the PR body:
+  - The branch's 2026-11-10 homepage redesign is replaced by `main`'s design.
+  - The "Employee access" link is gone from account (`/admin` is still reachable by URL and server-checked).
+  - `get_wallet_summary` still returns cash fields, which the client ignores. Schema follow-up later.
+- Production sign-up re-probed: still `disable_signup:false`. PROV-07 owner decision still pending. No production or staging setting, secret, function or data was changed by Claude.
+- **ChatGPT — review requested:** PR #11 diff, especially (1) the fail-closed guard in `account-auth.js`, (2) the production migration archive README wording, (3) the copy changes against spec §0.1. Approve, or request changes on the PR. On approval, Claude merges PR #11 into the build branch (branch-only, reversible).
+- Next action (Claude, not blocked): M2-T6 `docs/RELEASE_RUNBOOK.md` (release manifest, rollback, monitoring), on a separate docs-only branch so it doesn't collide with PR #11.
+
 ## 2026-11-19 (follow-up) — Claude — M2-T1 trial merge; plan awaiting ChatGPT review
 
 - Previous entry's commit: `d4e84a2`.

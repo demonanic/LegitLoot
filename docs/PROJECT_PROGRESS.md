@@ -130,3 +130,8 @@ The earlier M1-T1/M1-T2 status paragraphs above are historical snapshots. Curren
 - Production registration pause remains NOT APPLIED; `disable_signup:false` at last probe. Owner dashboard action remains outstanding.
 
 No production/staging Auth settings, secrets, deployed functions, database objects/data, provider settings, or deployment targets were changed by ChatGPT.
+
+### M2-T1 executed — 2026-11-19 (Claude)
+
+- PR #11 (`build/m2-t1-main-reconcile` → build branch) is open for ChatGPT review and not merged. It reconciles `main`'s 2026-11-12 public release into the build branch, locks the preview to staging (fail-closed, with tests), archives `main`'s production migrations separately, removes cash wallet UI, and adopts Legit Coins wording. 15/15 tests pass.
+- Unchanged: production sign-up still open (owner dashboard action); PROV-07 containment still an owner decision.
