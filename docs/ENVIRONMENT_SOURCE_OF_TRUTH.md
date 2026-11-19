@@ -86,6 +86,8 @@ Read-only connector inventory on 2026-11-19:
 | Supabase URL used by browser | `account-auth.js` hard-codes `https://gkbqderyjcuxnjbsiffb.supabase.co` (production) + production publishable key | `supabase-config.js` → `https://scmnxcsggquwtuyyjnnj.supabase.co`, `environment:"staging"`; `account-auth.js`, `admin.js`, `offerwall-launch.js`, `payout-simulator.js` refuse to run unless `environment === "staging"` | source on each branch |
 | Edge Function CORS allow-list | n/a | `offerwall-gg-wall-url` allows `https://legitloot.site` **and** the build preview origin; `admin-dashboard` allows `*` | function source |
 
+- **ENV-05 (VERIFIED 2026-11-19, from Cloudflare's PR #12 bot comments):** two Pages projects build every pushed branch: `legitloot` (branch alias `<branch>.legitloot.pages.dev`) and **`legitloot-preview`** (branch alias `<branch>.legitloot-preview.pages.dev`). Which project serves the `legitloot.site` custom domain is VERIFIED only by content (§7 table: `main`). The purpose of `legitloot-preview`, and its production branch and environment variables, are UNVERIFIED. The staging wall-url allow-list names only the `legitloot` build-branch alias.
+
 **Cross-environment configuration findings**
 - **ENV-01 (VERIFIED, correct):** No branch points the browser at the wrong project: `main` → production, build branch → staging.
 - **ENV-02 (DEFECT, LOW):** `main`'s `earn-hub.js` reads `window.LEGITLOOT_SUPABASE_CONFIG`, which `main` never defines (no `supabase-config.js` on `main`; live `/supabase-config.js` → 404). Provider launch buttons would stay disabled if any provider became `active`. No current user impact because none is active.
