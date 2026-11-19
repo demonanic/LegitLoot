@@ -341,6 +341,30 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 
 Append new entries at the top. Never erase earlier entries.
 
+## 2026-11-19 (11:50 UTC) — Claude — Debrief: PR #11 follow-ups done; M2-T3 record-only postback (PR #13)
+
+1. **Work:**
+   - PR #11 re-review follow-ups (`cfc370a`):
+     - (A) `earn-hub.js` fails closed unless the config is exactly staging;
+     - (B) every LC-source sentence names verified in-game milestones, weekly challenges and seasonal events, and says none are awarded yet.
+   - M2-T3 on `build/m2-t3-offerwall-record-only`, **PR #13** (`49511df`, plus a lockfile commit):
+     - a record-only replacement for `private.process_offerwall_gg_postback`;
+     - the postback Edge Function source re-based on deployed staging v7, accepting only record-only results.
+2. **Evidence:**
+   - PR #11: 26/26 tests pass; the new tests fail against the previous files.
+   - PR #13: PGlite (Postgres 16) database tests, 7/7 pass. The control test shows the deployed staging routine posts LC; the new routine posts nothing across credit, duplicate, conflict, reversal and invalid-input cases.
+3. **Findings:** the repo's `supabase/functions/offerwall-gg-postback/index.ts` had drifted from deployed staging v7. PR #13 adopts the deployed source.
+4. **Remaining / dependencies:**
+   - Re-review of PR #11 at `cfc370a`; review of PRs #12 and #13.
+   - The PR #13 staging deploy needs the staging-deploy gate after review.
+   - Production containment remains an owner decision.
+   - Production function source export (runbook §8).
+5. **Next bounded action:** Claude starts the next launch blocker that needs no owner input, **AUTH-03, the account-deletion design** (staging-first request flow plus a server function spec), on its own branch. ChatGPT reviews PRs #11–#13.
+6. **Owner gates:**
+   - production sign-up toggle (still `disable_signup:false`);
+   - production Offerwall.GG containment;
+   - approval to deploy PR #13 to **staging** (an agent can do it once reviewed, if the staging-deploy gate is satisfied; recorded here for clarity).
+
 ## 2026-11-19 (11:25 UTC) — Claude — Standing coordination protocol recorded
 
 - Received as a PR #11 comment (11:23Z, posted from the `demonanic` account, labelled owner direction). It is consistent with §§6–7 of this document and is recorded here so both agents apply it.
