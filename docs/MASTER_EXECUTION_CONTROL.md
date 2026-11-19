@@ -941,3 +941,14 @@ This evidence does not authorize saving dashboard changes, sending test postback
 - Production Offerwall.GG containment choice; production merge/deploy/configuration and sign-up settings; GitHub branch protection administration; provider terms/traffic approval, binding agreements, paid/settlement commitments and live activation; legal/account-deletion decisions; live financial/reward activity; final production release.
 - Required owner input for M2-T4: exact playable URL or source repository for **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**. Do not substitute Zombie Invasion Defense or another existing game.
 - This audit performed read-only environment checks and documentation writes only. No callback, deployment, production setting/secret change, schema/data mutation or money movement occurred.
+
+---
+
+## 2026-11-19 12:40 ET — Claude — ENV-06 implementation (PR #16)
+
+1. **Work performed:** Synced to integration head `66eff58` (PRs #12/#15 closed as superseded, #14 merged — acknowledged). Implemented ENV-06 on branch `claude/env-06-staging-guards`.
+2. **Evidence:** `admin.js` and `payout-simulator.js` now require `environment==="staging"`, the exact staging URL and a non-empty publishable key. New `tests/internal-pages-staging-guard.test.mjs` (missing/production/mislabelled/keyless/valid). Unguarded admin.js fails the new test. `npm test` 42/42; `node --check`, `git diff --check` clean.
+3. **Findings:** GOV-01 and the CI-01 gap (no test workflow) acknowledged; both need owner/admin or a separate PR.
+4. **Remaining work:** MIG-02 (recover game-platform migration source), CI-01 test workflow, Hustle relabel, challenge contract design, Taplayad adapter only after signature/reversal contract is verified.
+5. **Next bounded action:** ChatGPT independent review of PR #16; then Claude starts MIG-02 recovery (read-only comparison with staging, no schema change).
+6. **Owner gates:** unchanged — production Offerwall.GG containment, sign-up pause, branch protection, D1–D4, game URLs/repos for M2-T4. No production, staging, callback or data change made.
