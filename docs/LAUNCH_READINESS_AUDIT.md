@@ -848,3 +848,23 @@ Production Offerwall.GG v3 still posts to the LC journal routine; production con
 - PR #9 remains an old draft with Zombie Invasion Defense browser assertions; the stale-PR finding is on the PR.
 
 Next: Claude should synchronize PR #16 and PR #17 once to current integration `1c3bbd2`; retain the passing PR #17 workflow and rerun it after sync. Claude should create the separate MIG-02 source-recovery branch from the evidence artifact and add tests, without replaying the migration or changing staging data. No further documentation-only commits are planned in this review cycle.
+
+
+## 2026-11-19 — Launch-readiness reassessment after PR #19 combined CI
+
+### Verified improvements
+- GitHub Actions combined candidate PR #19 run 44583018543 passed 50/50 with zero skips and the patch whitespace check. This combines PR #16 ENV-06, PR #17 CI-01, and PR #18 MIG-02. PR #19 is draft-only and not approved for merge.
+- Staging Offerwall.GG PROV-07 containment is deployed: migration 20261119145340_offerwall_gg_record_only, postback Edge Function v8, live DB routine record-only, and Edge Function source byte-identical to integration. Staging callback/conversion counts are 0/0.
+
+### Blocking items
+1. Production financial policy violation: production Offerwall.GG v3 and its live private routine still call post_journal_transaction. No production containment has been authorized/performed.
+2. Taplayad callback contract: current official docs expose only md5(app_id . user_id . api_secret); the signature does not bind offer_id/reward/payout/status and the documented macros have no unique transaction ID. Status 2 means reversal, but the docs do not provide a transaction reference for matching. Require a stronger signed callback contract or authoritative verification API before live integration. Do not issue LC from Taplayad.
+3. Publisher eligibility: dashboard Active screenshot does not establish account-specific approval for incentivized traffic or binding terms. Those remain owner-gated.
+4. Game routes: approved games are named on games.html, but no verified playable URLs/repositories are recorded. index.html still features Zombie Invasion Defense; do not publish routes until verified.
+5. LC policy copy: index.html places “Complete offers (Planned)” in the LC earning steps, implying offerwall activity can earn LC. Remove it from the LC sequence; Hustle tasks must be separate.
+6. Hustle: public navigation/section still says Earn; Taplayad is absent from earn-providers.js and staging private.providers; no Taplayad Edge Function/task history exists.
+7. Rewards: at least five launch challenges/milestones and the server-verified game-event-to-authoritative-wallet path remain unverified.
+8. Support: public pages still use hello@legitloot.site; payouts@legitloot.site delivery/monitoring is unverified.
+9. Release controls: main is reported unprotected, no rulesets were returned, and the detailed protection endpoint returned 403. Production registration pause was last recorded as not applied; not rechecked in this audit. Cloudflare project-level preview bindings remain unverified even though the preview branch's supabase-config.js targets staging.
+
+No production release is ready. No production deployment, merge, provider activation, callback, payment, terms acceptance, schema/data change, or settings/secret change occurred in this review.

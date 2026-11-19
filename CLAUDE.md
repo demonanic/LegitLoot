@@ -187,3 +187,27 @@ Next: use this evidence to restore the canonical migration source in a separate 
 - PR #17 head `6aa37d4`: corrected CI workflow; Actions run `44572686596` passed 38/38 and the actual submitted-patch whitespace check. It is based on `04e5f46` and needs one refresh to current integration. The 38 tests do not include PR #16's guard tests.
 - MIG-02 source evidence is at `docs/evidence/MIG-02_game_platform_foundation_recovery.md`. Claude's comment says it is starting a separate branch, but no branch/commit/PR was visible at the latest check. When created, compare the evidence to source, add canonical migration and regression tests; never reapply or alter staging schema/data.
 - Keep Taplayad record-only and outside LC; no provider terms or live activation without owner approval. Keep production, financial, legal and release gates unchanged.
+
+
+## 2026-11-19 — Claude handoff: PR #19 combined test candidate and current blockers
+
+Read the latest shared debrief in docs/MASTER_EXECUTION_CONTROL.md, docs/PROJECT_PROGRESS.md, docs/LAUNCH_READINESS_AUDIT.md, and docs/ENVIRONMENT_SOURCE_OF_TRUTH.md before acting.
+
+### Verifiable latest work
+- Claude created PR #19 / branch claude/combined-merge-candidate at 8795409, explicitly marked DRAFT — CI candidate only / Not for merge. It combines PR #16 ENV-06, PR #17 CI workflow, and PR #18 MIG-02 source/tests.
+- GitHub Actions run 44583018543 passed 50/50, 0 failed, 0 skipped, plus npm ci and submitted-patch git diff --check. Keep PR #19 draft-only; it is evidence, not approval to merge.
+- PR #17 individual run 44574267498 passed 38/38. PR #16 and #18 individual heads have no Actions run; the combined PR #19 run is the independent suite evidence.
+- Staging PROV-07 is already contained: migration 20261119145340_offerwall_gg_record_only applied, postback function v8 active, source matches integration, live routine record-only. Do not reapply migrations or invoke callbacks. Production v3 still posts to the LC journal; production containment remains owner-gated.
+
+### Immediate implementation/review tasks
+1. Refresh PRs/branches against the integration head after the latest coordination-doc update; do not merge anything autonomously.
+2. Fix public LC copy: index.html currently lists “Complete offers (Planned)” inside LC earning steps. Remove it from the LC sequence; provider tasks never award LC.
+3. Reconcile the homepage's Zombie Invasion Defense feature card with the two approved launch titles, and keep games.html routes unpublished until the actual playable URLs/repos for Zombies vs Heavy Metal and Rocket 2 Nowhere are verified.
+4. Rename public Earn labels/navigation to Hustle. Taplayad app 10066 is the selected initial publisher but is not yet in the frontend registry, staging provider table, or Edge Function inventory.
+5. Taplayad security blocker: current official docs (https://tplayad.com/docs) say signature = md5(app_id . user_id . api_secret), status 1 credit / 2 reversal, IP 176.97.212.58. The signature does not cover offer_id/reward/payout/status; the macros list no unique transaction ID. Do not implement live postback crediting or claim robust transaction/reversal idempotency until provider supplies a signed transaction ID/payload or authoritative verification API. Use a non-guessable opaque publisher user ID server-generated from the authenticated user; never pass email or trust a client-supplied ID.
+6. Owner-supplied wall URL https://offerwall.tplayad.com/10066/{user_id} differs from current official iframe https://app.tplayad.com/app/iframe/{APP_ID}/{USER_ID}; confirm route with provider before embedding. Do not save dashboard settings or accept terms.
+7. Offerwall.GG staging provider row is disabled but retains stale LC reward-model metadata; flag for a separately authorized cleanup before any activation. No provider event may touch LC.
+8. Build at least five challenges/milestones and the server-verified game-event -> authoritative website wallet path, using existing approved LC economics only.
+
+### Owner gates — unchanged
+No production merge/deploy, production setting/secret changes, real callbacks, live financial activity, paid commitments, provider terms/agreements or live activation, destructive real-data changes, security weakening, legal/business commitments, or final production release. Production Offerwall containment, branch protection, publisher permission, support-mailbox verification, registration pause verification, and final release remain owner-controlled. Do not claim a game source/route is known without a real repo/URL artifact.
