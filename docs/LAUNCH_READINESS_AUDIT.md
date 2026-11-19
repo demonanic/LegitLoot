@@ -798,3 +798,17 @@ Production Offerwall containment, production settings/merge/deploy, branch prote
 
 ### Safety
 No merge, deployment, Supabase settings/secrets/schema/data mutation, callback, publisher-dashboard save, provider agreement, live financial activity, or production change occurred during this check.
+
+
+## 2026-11-19 — MIG-02 source recovered and schema compared (read-only)
+
+- Retrieved the exact one-statement SQL from staging `supabase_migrations.schema_migrations` for version `20261118080655` / `game_platform_foundation`; rollback is NULL.
+- Compared live staging columns/defaults/nullability, constraints, indexes, RLS, policies, triggers, grants and row counts for `public.game_registry`, `private.game_saves`, `private.game_events`, and `private.game_handoff_tickets`. The catalog matches the recovered statement for these objects. All four tables have RLS enabled; only the public listed-games SELECT policy exists; anon/authenticated have no private schema usage/table access; service_role has required private access. No non-internal triggers exist. Row counts are 1/0/0/0 (the single row is the old Zombie Invasion Defense placeholder).
+- Added read-only evidence at `docs/evidence/MIG-02_game_platform_foundation_recovery.md`. It contains the recovered SQL and catalog snapshot and is explicitly marked **DO NOT APPLY**; it is outside `supabase/migrations/`.
+- Claude can now compare this evidence and create the canonical migration source plus regression tests. No staging schema/data was changed and no migration was replayed.
+
+
+### PR/CI state at this check
+- PR #16 head `e11fd81`, base integration `04e5f46`, mergeable=true; Claude reports 42/42 after refresh, but no Actions run covers this PR. Review 5979524271 remains COMMENTED.
+- PR #17 adds CI-01. Actions run `44571890353` on `e841729` passed 38/38 tests. It does not include PR #16's four staging-guard tests. `.github/workflows/test.yml` has a no-op `git diff --check` step on a clean checkout; review 5979612112 and correction comment 7016116302 record the finding.
+- PR #17 base is `bbf6692`; GitHub currently reports mergeable=true, though the commit histories diverge from current integration. Refresh before merge consideration.

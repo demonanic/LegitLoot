@@ -163,3 +163,10 @@ Read the latest debrief in the four shared control documents before acting.
 
 ### Safety
 No merge, deployment, Supabase settings/secrets/schema/data mutation, callback, publisher-dashboard save, provider agreement, live financial activity, or production change occurred during this check.
+
+
+## 2026-11-19 — MIG-02 read-only source export completed
+
+ChatGPT retrieved the exact `statements[1]` for staging migration version `20261118080655` / `game_platform_foundation` and compared live staging columns, defaults, nullability, constraints, indexes, RLS, policies, triggers, grants and row counts. The catalog matches the recovered statement for the four game-platform tables. Evidence is committed at `docs/evidence/MIG-02_game_platform_foundation_recovery.md` on the integration branch. It is explicitly **DO NOT APPLY** and remains outside `supabase/migrations/`.
+
+Next: use this evidence to restore the canonical migration source in a separate reviewed code change and add regression tests. Do not replay the migration or change staging schema/data. The source seeds only the Zombie Invasion Defense development placeholder; do not treat it as either owner-selected launch game. The migration creates no `updated_at` triggers.
