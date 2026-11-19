@@ -1138,3 +1138,39 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 4. **Next active task:** **M2-T5 — Earn → Hustle public naming and launch-copy reconciliation**, on a separate feature branch from current integration. Audit all user-facing labels, navigation, page titles, homepage cards, links, tests and docs. Rename only the public section/navigation labels; preserve provider/technical identifiers and routes unless a verified route migration is explicitly required. Remove misleading statements that offers generate LC; offers/provider points remain separate from LC. Keep all incomplete features honestly labeled. Add/update regression tests and preview checks. Do not add Taplayad callback behavior until signature, transaction identity, retry/reversal semantics and incentivized-traffic permission are verified.
 5. **Parallel blockers remain:** M2-T4 source repositories/playable URLs for Zombies vs Heavy Metal and Rocket 2 Nowhere remain unlocated; do not invent links. Taplayad provider clarification remains required. Challenge definitions may use only existing owner-approved LC values; no invented award values. Production Offerwall.GG v3 still has the legacy LC-posting path and is a critical production blocker.
 6. **Owner gates unchanged:** no merge to `main`, production deployment, production setting/secret changes, paid/provider commitments, live financial activity, destructive real-data changes, security weakening, legal/business commitments, or final release without the applicable owner gate. Existing standing authority covers independently reviewed work and routine reversible changes on the isolated integration branch and staging only.
+
+
+---
+
+## 2026-11-19 14:42 ET — Independent check: Hustle public-copy PR, CI, and live provider-policy state
+
+### Repository / Claude evidence
+- Integration branch `build/legitloot-neon-synthwave`: `3fa518ee27c987a58f3196f682c7e13de483b6a8`; `main`: `3fa7ca58992f786f7b59f22b8fb758149a873d6b`. Compare: integration is 375 commits ahead, 0 behind.
+- GitHub lists 21 branches; every branch reports `protected:false`, including `main`. Main-branch protection remains an owner/admin release gate.
+- PR #16 (ENV-06), #17 (CI-01), and #18 (MIG-02) are confirmed merged into the integration branch only. PR #19 is closed unmerged (combined CI candidate only).
+- Current open PRs: #20 (Hustle public-copy changes; non-draft) and #9 (old visual redesign; draft). PR #9 is 12 commits ahead / 166 behind current integration and remains stale; its prior review comments document the old game-title and LC-copy conflicts.
+- Claude-authored commits on PR #20: `4a0db7a` and `04e4016`. PR #20 changes public labels/copy and adds tests; it does not change backend, Supabase, provider, or LC-economy code.
+- Integration push Actions run [44590656627](https://github.com/demonanic/LegitLoot/actions/runs/44590656627) passed: npm ci, 50/50 Node tests, and submitted-patch whitespace check. PR #20 Actions run [44591660747](https://github.com/demonanic/LegitLoot/actions/runs/44591660747) passed: 54/54 Node tests, 0 failures, 0 skips, and whitespace check.
+- Cloudflare bot comments on PR #20 report successful branch-preview deployments in both Pages projects. The PR branch's `supabase-config.js` explicitly targets staging project `scmnxcsggquwtuyyjnnj`; project-level Cloudflare environment bindings/custom-domain routing were not independently verified. These are preview URLs, not a production deployment.
+
+### Independent PR #20 review — comment 7020270626
+- `earn.html` title, meta description, navigation, and accessible labels now use Hustle. Homepage removed the old “Complete offers” LC step and replaces the Zombie Invasion Defense feature card with Zombies vs Heavy Metal and Rocket 2 Nowhere, without inventing playable URLs.
+- Remaining user-facing defects: `earn-hub.js` still displays “No earning provider is open…” and `tests/earn-hub.browser.py` asserts that phrase; homepage LC step 3 says “Uses announced later”; `earn.html` says “Advertised rewards are not guaranteed earnings” and mentions provider “settlement”, which can be read as a LegitLoot payout promise.
+- CI workflow runs only `npm test` (`node --test tests/*.test.mjs`), not the Python/Playwright browser test. The review requests a Node regression assertion for the summary wording, a meaningful weekly-challenges/seasonal-events step and assertion, and copy explicitly separating provider activity from LC/cash/wallet credit.
+- PR #20 branch is 2 commits ahead / 2 behind integration. Claude was asked to synchronize to `3fa518ee` and rerun CI. PR is not yet ready for owner approval. No code was changed by this review.
+
+### Fresh read-only Supabase verification
+- Production project `gkbqderyjcuxnjbsiffb`: `offerwall-gg-postback` v3 ACTIVE, `verify_jwt=false`; 7 migrations. Live `private.process_offerwall_gg_postback` is SECURITY DEFINER, locks user/platform LC ledger accounts and calls `private.post_journal_transaction`. This is a confirmed active path for provider-to-LC issuance, contrary to owner policy.
+- Staging project `scmnxcsggquwtuyyjnnj`: `offerwall-gg-postback` v8 ACTIVE, `verify_jwt=false`; 21 migrations. Live routine is record-only and contains no ledger/journal operation. Deployed v8 `index.ts` is byte-for-byte identical to `supabase/functions/offerwall-gg-postback/index.ts` at integration (6,990 bytes).
+- Staging `private.providers`: CPAGrip disabled with no approval metadata; Offerwall.GG disabled but still has stale `approved_reward_model={reward_mode:standard_virtual_currency,currency_code:LC,currency_name:LootCoins}` and null terms/verification/approval references. Taplayad is absent. Staging Edge Function inventory has no Taplayad function.
+- No callbacks were invoked; no Supabase setting, secret, schema, row, or provider state was changed.
+
+### Next owner-independent actions
+1. Claude addresses comment 7020270626, syncs PR #20 with integration, and reruns CI.
+2. Independently review the updated PR and its copy regression tests.
+3. Keep PR #9 draft-only until it is rebased and its obsolete homepage/game assertions are replaced.
+4. Continue Taplayad only as record-only staging design until the provider supplies payload-bound transaction authentication, unique transaction identity/reversal matching, and account-specific incentivized-traffic permission.
+5. Continue launch game routes and challenge/wallet integration only after real game sources and approved LC rules are evidenced.
+
+### Owner gates
+Production Offerwall containment is still critical and owner-gated. Main branch protection, Taplayad binding terms/traffic permission and any live activation, production deployment, paid commitments, destructive data changes, support mailbox verification, production registration pause, legal/business decisions, and final launch remain owner-controlled.
