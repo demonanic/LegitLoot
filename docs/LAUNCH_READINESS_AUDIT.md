@@ -386,3 +386,13 @@ Accepted. The audit may be used as the M1 baseline subject to the qualifications
 
 ### Owner decision still required
 **E1:** Approve or decline disabling public sign-ups on the production Supabase project. No setting has been changed by ChatGPT.
+
+
+
+## 14. Owner decision update — 2026-11-19
+
+See `docs/MASTER_EXECUTION_CONTROL.md` §13 for the authoritative owner decisions:
+- E1 registration pause approved for **production only**, with existing sign-in preserved. Execution and verification are pending Claude's dashboard access.
+- E2 is now settled: Legit Coins are earned from in-game milestones, weekly challenges, and seasonal events; the website wallet is authoritative; game notifications prompt users to check it. Illustrative objectives are examples only. No LC values, redemption catalogue, cash conversion, or payout use is authorized.
+- Supabase connector mapping is now confirmed: production `gkbqderyjcuxnjbsiffb` via `Supabase`; staging `scmnxcsggquwtuyyjnnj` via `Legitloot dev`. Previous OPS-02 statement that only `gauntlet` was visible is obsolete.
+- A unified environment/source-of-truth inventory is the next cross-agent task. No production deploy, schema change, provider activation, or reward issuance is authorized.
