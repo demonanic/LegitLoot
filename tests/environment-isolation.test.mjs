@@ -84,3 +84,45 @@ test("staging wall-url function does not allow the production origin", () => {
   const source = read("supabase/functions/offerwall-gg-wall-url/index.ts");
   assert.ok(!/["']https:\/\/legitloot\.site["']/.test(source));
 });
+
+// Runs earn-hub.js with one active provider and a fake DOM, and reports whether a client was created.
+function runEarnHub(config) {
+  const created = [];
+  const node = () => ({
+    className: "", textContent: "", id: "", disabled: false, dataset: {},
+    append() {}, setAttribute() {}, addEventListener() {},
+  });
+  const sandbox = {
+    window: {
+      LEGITLOOT_SUPABASE_CONFIG: config,
+      LEGITLOOT_EARN_REGISTRY: {
+        states: { active: { label: "Active", mark: "●", canOpen: true, detail: "" } },
+        providers: [{ id: "test", kind: "provider", state: "active", name: "Test", kicker: "", description: "", categories: ["offerwall"],
+          launch: { functionName: "wall-url", allowedOrigins: ["https://example.com"], pathPrefix: "/" } }],
+      },
+      supabase: { createClient: (url) => { created.push(url); throw new Error("stop after client creation"); } },
+      location: {},
+    },
+    document: { getElementById: () => node(), createElement: () => node() },
+  };
+  try { vm.runInNewContext(read("earn-hub.js"), sandbox); } catch (error) {
+    if (error.message !== "stop after client creation") throw error;
+  }
+  return created;
+}
+
+test("earn-hub creates a client only for the staging config", () => {
+  assert.deepEqual(runEarnHub(loadConfig()), [STAGING_URL]);
+});
+
+test("earn-hub fails closed for missing, production, or mislabelled config", () => {
+  for (const config of [
+    undefined,
+    { url: `https://${PRODUCTION_REF}.supabase.co`, publishableKey: "x", environment: "production" },
+    { url: `https://${PRODUCTION_REF}.supabase.co`, publishableKey: "x", environment: "staging" },
+    { url: STAGING_URL, publishableKey: "x", environment: "production" },
+    { url: STAGING_URL, publishableKey: "", environment: "staging" },
+  ]) {
+    assert.deepEqual(runEarnHub(config), [], JSON.stringify(config));
+  }
+});

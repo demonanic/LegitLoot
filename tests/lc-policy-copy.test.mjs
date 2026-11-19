@@ -39,3 +39,15 @@ test("account page shows no USD wallet fields", () => {
   assert.ok(!/wallet-cash-/.test(html), "account.html still has cash wallet elements");
   assert.ok(!/\$ — —/.test(html), "account.html still shows a dollar placeholder");
 });
+
+test("every statement of where LC come from names all three owner-approved sources", () => {
+  // Owner-locked 2026-11-19: verified in-game milestones, weekly challenges and seasonal events.
+  for (const file of playerFiles) {
+    const text = visibleText(file);
+    for (const match of text.matchAll(/[^.]*\b(Legit Coins|LC)\b[^.]*\b(come|came|coming|earn(?:ed)?|award(?:s|ed)?|land)\b[^.]*\bmilestones?\b[^.]*\./gi)) {
+      const sentence = match[0];
+      assert.match(sentence, /weekly challenges?/i, `${file}: "${sentence.trim()}" omits weekly challenges`);
+      assert.match(sentence, /seasonal events?/i, `${file}: "${sentence.trim()}" omits seasonal events`);
+    }
+  }
+});

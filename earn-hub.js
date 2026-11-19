@@ -77,8 +77,12 @@
   if (buttons.size === 0) return;
 
   // Launching is only wired up for active providers.
+  // This build branch is staging-only: fail closed unless the config is
+  // explicitly the staging project (same guard as account-auth.js).
+  const STAGING_PROJECT_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
   const config = window.LEGITLOOT_SUPABASE_CONFIG;
-  const client = config?.url && config?.publishableKey && window.supabase?.createClient
+  const isStaging = Boolean(config && config.environment === "staging" && config.url === STAGING_PROJECT_URL && config.publishableKey);
+  const client = isStaging && window.supabase?.createClient
     ? window.supabase.createClient(config.url, config.publishableKey)
     : null;
 

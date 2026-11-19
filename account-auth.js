@@ -58,7 +58,7 @@
       const wallet = window.LEGITLOOT_WALLET;
       if (!wallet) throw new Error("Wallet parser did not load");
       $("wallet-lootcoins-available").textContent = wallet.formatLegitCoins(wallet.parseLegitCoins(data));
-      $("wallet-lootcoins-detail").textContent = "Legit Coins will come only from verified game milestones and challenges. LC are not cash, not transferable and not withdrawable.";
+      $("wallet-lootcoins-detail").textContent = "Legit Coins will come only from verified in-game milestones, weekly challenges and seasonal events. None are awarded yet. LC are not cash, not transferable and not withdrawable.";
     } catch (error) {
       console.error("LegitLoot wallet summary failed:", error);
       showMessage("WALLET SUMMARY UNAVAILABLE", "Your account is signed in, but the secure wallet summary did not load. No balances have been changed. Please try again later.", true);
