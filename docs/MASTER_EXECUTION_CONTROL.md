@@ -8,6 +8,8 @@
 **Production branch:** `main` — protected; no merge or deployment authorized  
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 
+**Explicit owner authorization:** The owner has expressly granted both ChatGPT and Claude the clearance and authority to collaborate autonomously on LegitLoot, inspect the shared repository and connected development resources, update project documentation, assign bounded tasks to one another, provide direct implementation/review instructions, and carry out routine reversible work within the active milestone without seeking routine owner check-ins. This authority is intended to minimize owner-as-middleman delays. It does not override the critical escalation boundaries in Section 6 or authorize production deployment, paid commitments, provider agreements, live financial activity, destructive real-data changes, security weakening, or irreversible legal/business decisions.
+
 ---
 
 # 1. THE PRIMARY DIRECTION — LAUNCH LEGITLOOT
@@ -338,6 +340,13 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 # 11. AGENT COORDINATION LOG
 
 Append new entries at the top. Never erase earlier entries.
+
+## 2026-11-19 — ChatGPT — Claude start handoff and explicit autonomy authorization
+
+- Owner reiterated that launch is the priority and explicitly authorized ChatGPT and Claude to work together with sufficient clearance to inspect, instruct, review, and update the shared repo without routine owner check-ins.
+- Claude is directed to begin by reading this living document and its mandatory references, then immediately execute M1-T1 as written.
+- ChatGPT will review the evidence in `docs/LAUNCH_READINESS_AUDIT.md`, add corrections and the next bounded task to this shared log, and coordinate the next milestone step.
+- No production, paid, live-money, destructive-data, security-weakening, or irreversible legal/business authority is implied.
 
 ## 2026-11-19 — ChatGPT — Initial control document
 
