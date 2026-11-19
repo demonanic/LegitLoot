@@ -36,3 +36,19 @@ test("earn.html title, description and accessible labels use Hustle terminology"
   assert.ok(!/aria-label="[^"]*earning/i.test(html), "an accessible label still says Earning");
   assert.ok(!/<meta name="description" content="[^"]*earning/i.test(html), "description still says earning");
 });
+
+test("Hustle status copy and provider disclaimer use approved wording", () => {
+  assert.ok(!/earning provider/i.test(read("earn-hub.js")), "earn-hub.js user-visible text still says earning provider");
+  assert.ok(read("earn-hub.js").includes("No Hustle provider is open to players right now"));
+  const earn = read("earn.html");
+  assert.ok(!earn.includes("not guaranteed earnings"));
+  assert.match(earn, /Provider activity never credits Legit Coins and does not create a LegitLoot cash payout or wallet credit/);
+  assert.match(earn, /provider's responsibility/);
+});
+
+test("homepage LC steps name challenges and seasonal events, not a placeholder", () => {
+  const html = read("index.html");
+  assert.ok(!html.includes("Uses announced later"));
+  assert.ok(html.includes("Weekly challenges &amp; seasonal events"));
+  assert.ok(html.includes("What LC can be used for has not been announced."));
+});

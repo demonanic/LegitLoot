@@ -37,7 +37,7 @@ async def main():
             check(page.url == start_url, f"[{vp_name}] clicking disabled buttons navigates nowhere")
             check(not fn_calls, f"[{vp_name}] no server function calls made ({fn_calls})")
             summary = await page.locator("#earn-hub-summary").inner_text()
-            check("No earning provider is open" in summary, f"[{vp_name}] summary says no provider is open")
+            check("No Hustle provider is open" in summary, f"[{vp_name}] summary says no provider is open")
             await page.click("button[data-filter=survey]")
             visible = [c for c in await cards.all() if await c.is_visible()]
             check(len(visible) == 1, f"[{vp_name}] Surveys filter shows 1 card")
