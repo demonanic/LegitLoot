@@ -54,12 +54,10 @@
       });
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
-      if (!data || !data.lootCoins || data.lootCoins.available == null) {
-        throw new Error("Wallet summary response was incomplete");
-      }
-      const lootCoinsAtoms = Number(data.lootCoins.available);
-      if (!Number.isFinite(lootCoinsAtoms)) throw new Error("Invalid Legit Coins balance");
-      $("wallet-lootcoins-available").textContent = (lootCoinsAtoms / 10000).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 4 }) + " LC";
+      // Shape differs by environment; see wallet-summary.js.
+      const wallet = window.LEGITLOOT_WALLET;
+      if (!wallet) throw new Error("Wallet parser did not load");
+      $("wallet-lootcoins-available").textContent = wallet.formatLegitCoins(wallet.parseLegitCoins(data));
       $("wallet-lootcoins-detail").textContent = "Legit Coins will come only from verified game milestones and challenges. LC are not cash, not transferable and not withdrawable.";
     } catch (error) {
       console.error("LegitLoot wallet summary failed:", error);
