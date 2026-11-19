@@ -117,3 +117,16 @@ The owner has selected **launch LegitLoot** as the single primary direction. Thi
 - New HIGH defect PROV-07: Offerwall.GG postback can mint LC in production and staging (secrets configured), contrary to the LC policy; nothing minted so far. Owner containment decision pending (audit §15.3).
 - LC policy and game lineup now governed by `docs/PLATFORM_BUILD_SPEC.md` v1.2 §0; obsolete passages marked superseded.
 - No implementation status changed. Proposed M2 task list: audit §15.4.
+
+## Independent review and staging export — 2026-11-19
+
+The earlier M1-T1/M1-T2 status paragraphs above are historical snapshots. Current state is governed by the latest entry in `docs/MASTER_EXECUTION_CONTROL.md` and audit §15.6.
+
+- M1-T1: completed and accepted with qualifications.
+- M1-T2 read-only environment reconciliation: Claude completed its inventory; ChatGPT independently verified deployed postback and wall URL function behavior.
+- M2-T1: merge rules approved with amendments for an isolated review branch and PR into `build/legitloot-neon-synthwave`. No such review branch exists yet at this check; Claude may create it and proceed. No merge to `main` or production deployment.
+- M2-T2: staging deployed-source export completed by ChatGPT. Six Edge Functions, version/hash manifest, 16 deployed routine definitions, and 20 applied migration version/name records are committed under `supabase/environments/staging/`. The routine snapshot is not original migration SQL and must not be replayed.
+- PROV-07: verified high-severity policy conflict. Both production and staging Offerwall.GG postback functions can still mint LC. Production's shared secret is also needed by the wall URL function. Owner containment decision remains pending; no secret or function was changed.
+- Production registration pause remains NOT APPLIED; `disable_signup:false` at last probe. Owner dashboard action remains outstanding.
+
+No production/staging Auth settings, secrets, deployed functions, database objects/data, provider settings, or deployment targets were changed by ChatGPT.
