@@ -294,3 +294,13 @@ This recheck used read-only GitHub and Supabase queries. No settings, secrets, f
 - The four documentation updates for this check advanced integration from `1a8be57` to `150d7a4`. This final batched documentation correction is being committed now; PR branches must be refreshed from the live integration branch tip when Claude resumes, not from either historical SHA.
 - Immediately before this closeout correction, PR #12/#14/#15 were 11 commits behind integration (11/6/7 commits ahead respectively). The earlier branch-refresh instruction is superseded: use the current integration branch head at pickup and report exact compare counts after refresh.
 - No PR merge, deployment, callback, provider activation, Supabase mutation, production action or financial activity occurred.
+
+
+## 2026-11-19 09:40 America/New_York — Taplayad integration source of truth (owner-supplied screenshots)
+
+- Selected provider: Taplayad; owner-supplied dashboard shows Legitloot, app ID 10066, Web platform, Rewarding category, and Active badge. Status is screenshot evidence only; not independently verified by API or a successful LegitLoot integration.
+- Offerwall URL template: `https://offerwall.tplayad.com/10066/{user_id}`. The server must substitute the authenticated user's stable opaque internal identifier; never trust a client-supplied user_id.
+- Publisher-side multiplier: `$1 = 1 points`; do not interpret as LC value or user USD redemption. Publisher dashboard also displays a $15 publisher withdrawal minimum; this is not a LegitLoot user withdrawal feature.
+- Postback macros shown: `{user_id}`, `{payout}`, `{reward}`, `{offer_id}`, `{country}`, `{user_ip}`, `{status}`, `{sig}`. Documentation screenshot calls `{sig}` an MD5 security signature and lists source IP `176.97.212.58`. Full signature formula, transaction ID, retry behavior, and reversal semantics remain unverified.
+- Treat the IP as a lead for current provider confirmation, not sole authentication. Confirm exact signature algorithm/canonical string/secret, app ID binding, transaction identity, status and chargeback semantics before live integration. Enforce replay/duplicate handling, least privilege, audit logs, fail closed, and no LC wallet/ledger path.
+- No dashboard save, test postback, provider agreement, live activation, secret change, production action, or reward issuance authorized by this record.
