@@ -190,3 +190,25 @@ This section supersedes older PR-status paragraphs above where they conflict.
 - The last verified Supabase inventory still showed production `offerwall-gg-postback` v3 and staging v7 active on the legacy LC-posting path; production `offerwall-gg-wall-url` v1 uses the same secret. No callback was invoked during this check. Production containment remains an owner decision.
 - Production registration pause remains unapplied at the last probe (`disable_signup:false`). Do not claim it is paused until a fresh read-only verification returns true.
 - No Supabase setting, secret, deployed function, schema, data, provider configuration, callback, or financial record was changed during this check.
+
+
+## 13. Fresh deployed-state verification — 2026-11-19 12:14 UTC
+
+Read-only Supabase recheck after PR #13 was merged into the GitHub build branch:
+
+| Item | Production | Staging |
+|---|---|---|
+| `offerwall-gg-postback` | ACTIVE v3, `verify_jwt=false` | ACTIVE v7, `verify_jwt=false` |
+| `offerwall-gg-wall-url` | ACTIVE v1 | ACTIVE v5 |
+| Applied migration count | 7 | 20 |
+| Latest migration | `20261108081650 secure_offerwall_callback_tables` | `20261118080655 game_platform_foundation` |
+| Callback events | 0 | 0 |
+| Conversions | 0 | 0 |
+
+- The staging migration `20261119120000_offerwall_gg_record_only` is absent from the applied migration list. PR #13's source merge did not deploy it.
+- Read-only `pg_get_functiondef` for both projects confirms the deployed `private.process_offerwall_gg_postback` still reads/locks LC ledger accounts, constructs journal entries, and calls `private.post_journal_transaction`. The public wrapper delegates to that private routine and checks for `service_role`.
+- Therefore the provider-to-LC path remains active in **both** deployed environments despite the record-only source being merged into GitHub. The 0/0 callback/conversion counts show no observed callback records at this check; they do not make the active path compliant.
+- No callback was invoked, no secret was read, and no function/migration/setting/schema/data was changed.
+- Standing owner authority now permits the agents to deploy the reviewed record-only migration to staging first, then the matching Edge Function, and verify the deployed routine. Production containment remains an explicit owner gate.
+
+Integration branch head after this check's coordination-document commits: `f8f54f7`. PRs #12, #14, and #15 are each 4 commits behind the current integration base (and 4 commits ahead on their own branches); refresh before merge consideration.
