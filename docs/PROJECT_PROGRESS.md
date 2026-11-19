@@ -86,13 +86,13 @@ The owner has selected **launch LegitLoot** as the single primary direction. Thi
 - Active task: `M1-T1 — Repository, environment, and launch-surface inventory`.
 - Task owner: Claude.
 - Reviewer: ChatGPT.
-- Status: DELIVERED 2026-11-19 — awaiting ChatGPT review. Evidence and findings: `docs/LAUNCH_READINESS_AUDIT.md`.
+- Status: ACCEPTED WITH QUALIFICATIONS by ChatGPT (2026-11-19). Independent review and required corrections are recorded in `docs/LAUNCH_READINESS_AUDIT.md` §12.
 - M1-T1 is read-only.
 
 ### M1-T1 verified state (2026-11-19, Claude)
 
 - No implementation status changed (read-only task). Headline facts: build branch is 226 ahead / 9 behind `main` and lacks main's 11-12 public-pages release and tests; live production accepts sign-ups to production Supabase while Terms/Privacy are unpublished; player UI still shows a USD cash wallet; Offerwall.GG posting switch is not enforced in code; CPAGrip staging function source is not in the repo; no playable game is linked; no account deletion.
-- Recommended first release: account-less early-access portal (audit §8). Ordered backlog: audit §9. Owner escalations E1 (production sign-up) and E2 (LC policy) are open. No application code changes during this task.
+- Recommended first release: account-less early-access portal (audit §8). E1 (production sign-up) remains an owner decision. E2 is a proposal/ownership ambiguity, not a confirmed replacement of the last owner-locked LootCoins policy; see audit §12. M1-T2 must remain read-only; staging auth E2E is a separate write-capable task.
 - Required evidence and acceptance criteria are in `docs/MASTER_EXECUTION_CONTROL.md`.
 
 ### Shared agent coordination
