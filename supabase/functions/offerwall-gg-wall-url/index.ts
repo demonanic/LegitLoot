@@ -39,7 +39,8 @@ Deno.serve(async (request: Request) => {
   if (request.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   const origin = request.headers.get("origin");
-  if (origin && !["https://legitloot.site", "https://build-legitloot-neon-synthwa.legitloot.pages.dev"].includes(origin)) return json({ error: "Origin not allowed" }, 403);
+  // Staging-only function: the production origin is intentionally not allowed (audit ENV-03).
+  if (origin && origin !== "https://build-legitloot-neon-synthwa.legitloot.pages.dev") return json({ error: "Origin not allowed" }, 403);
 
   const authHeader = request.headers.get("authorization") ?? "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
