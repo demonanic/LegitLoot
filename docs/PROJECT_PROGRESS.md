@@ -312,3 +312,10 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - Added reviewed AUTH-03 design to integration branch (`439027c`); corrected intended contact to `payouts@legitloot.site` but kept it UNVERIFIED. D1–D4 remain owner/legal decisions. No account-deletion code or production changes.
 - Updated Platform Build Spec to v1.3 and games page to list the two owner-selected titles, truthfully marked integration-in-progress with no invented play links.
 - **Next active task M2-T4:** verify both selected games and their central account/save contract. The connected GitHub inventory and prior handoffs did not reveal their source repositories or playable URLs. `demonanic/Legitloot-2` is Zombie Invasion Defense, not a substitute. Need exact playable URL or repository link for each selected game before wiring launch links.
+
+## 2026-11-19 10:15 ET — M2-T6 release runbook
+
+- Reviewed and ported `docs/RELEASE_RUNBOOK.md` from PR #12 to the integration branch (`53ba77a`); stale-base PR #12 closed as superseded.
+- Corrected rollback triggers for the record-only callback model; updated the staging migration version to `20261119145340`; dated the last verified production signup probe; added GOV-01 branch-protection verification to the release freeze.
+- Production branch protection remains unverified (last API evidence: `protected:false`, no rulesets, detailed endpoint inaccessible). Production backup/PITR tier remains unverified. Neither was changed.
+- Current active milestone remains M2-T4: game integration verification. Exact source repositories/playable URLs for Zombies vs Heavy Metal and Rocket 2 Nowhere remain the missing dependency.
