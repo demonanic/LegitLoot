@@ -167,3 +167,26 @@ ChatGPT approved the conflict-resolution rules with amendments recorded in `docs
 - **PROV-07 current state:** production postback v3 and staging postback v7 are still ACTIVE and their source calls process_offerwall_gg_postback; production wall-url v1 is ACTIVE. Current callback/conversion counts were 0 in both environments. No callbacks or writes were performed. This remains a policy violation and launch blocker; production containment requires the owner decision already recorded above.
 - **PR review state:** PR #11 and PR #12 remain open and currently report non-mergeable. Their branches are behind the current authorized build branch (13 and 10 commits respectively at the 2026-11-19 check). Cloudflare preview deployments succeeded; no GitHub workflow/status checks were returned for PR #11's reviewed head.
 - **Outstanding verification:** production Cloudflare Pages binding is still only owner-recorded, not verified in the dashboard; production backup/PITR tier remains unverified. Exact production source is now preserved, but a full SQL/schema/policy/grant/trigger reconstruction is still outstanding.
+
+## 12. Current coordination and deployment state — 2026-11-19 12:14 UTC
+
+This section supersedes older PR-status paragraphs above where they conflict.
+
+### GitHub / branch state at start of Sync Watch #2
+- Integration branch: `build/legitloot-neon-synthwave`, head `5ab48bdcc3ca5e6e57412e0ae7fb348948bba724`; compare with `main`: 290 ahead, 0 behind.
+- PR #11 (M2-T1 reconciliation) merged into the integration branch at `2824563`; no production merge/deploy.
+- PR #13 (M2-T3 record-only Offerwall callback) merged into the integration branch at `1faf854`; migration/function source only, not deployed.
+- PR #12 (runbook), #14 (staging CPAGrip origin correction), and #15 (account-deletion design) remain open. Their heads predate the latest integration base and must be refreshed before merge consideration. PR #9 remains an older draft.
+- The owner has granted standing authority for independently reviewed integration merges and staging deployments, including staging-only migrations. This does not authorize production changes or live financial activity.
+
+### Code and preview evidence
+- PR #14 adds canonical `supabase/functions/cpagrip-attribution/index.ts` copied from deployed staging v4 with only `https://legitloot.site` removed from `allowedOrigins`; the deployed snapshot remains unchanged. Its test checks canonical function sources for production-origin allow-lists and compares the canonical CPAGrip source with the preserved snapshot. Source-level review found no new blocker.
+- PR #15 is documentation-only. The account-deletion design preserves append-only ledger history and proposes no LC movement. Its statement that “no accounts [are] open” is not supported: the last production Auth probe returned `disable_signup:false`, and the inventory recorded two profiles. A correction was requested on PR #15.
+- PR #12's runbook correctly marks Cloudflare production binding/trigger as NOT dashboard-verified and production migration history as metadata-only. A review note asks it to make the already-approved production sign-up pause an explicit precondition before public account onboarding.
+- Claude reports 34/34 tests on `ab61c6e` and 37/37 on PR #14 head `3bb1226`; GitHub combined status and PR workflow queries returned no checks/runs for the inspected heads. Cloudflare bot comments confirm successful static preview deployments for PRs #12, #14, #15 in both Pages projects. These do not prove Edge Function or migration deployment.
+
+### Deployed-state boundary
+- The staging record-only Offerwall migration and matching Edge Function are present in the integration branch only. No staging deployment occurred in this check.
+- The last verified Supabase inventory still showed production `offerwall-gg-postback` v3 and staging v7 active on the legacy LC-posting path; production `offerwall-gg-wall-url` v1 uses the same secret. No callback was invoked during this check. Production containment remains an owner decision.
+- Production registration pause remains unapplied at the last probe (`disable_signup:false`). Do not claim it is paused until a fresh read-only verification returns true.
+- No Supabase setting, secret, deployed function, schema, data, provider configuration, callback, or financial record was changed during this check.
