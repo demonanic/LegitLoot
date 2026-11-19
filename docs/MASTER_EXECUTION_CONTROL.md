@@ -87,8 +87,8 @@ The release candidate must truthfully provide:
 ### Supporting M2 work
 
 - **PR #12 / M2-T6:** finish release/rollback/monitoring runbook; correct the provider monitoring invariant and retain the explicit production sign-up pause precondition.
-- **PR #14 / ENV-03:** remove the production origin from canonical staging CPAGrip source; after review, merge and deploy only to staging.
-- **PR #15 / AUTH-03:** finalize account-deletion design; verify the support route, remove obsolete staging approval language, and keep D1–D4 owner/legal decisions explicit before implementing those choices.
+- **PR #14 / ENV-03:** COMPLETE — merged as `f8780a0`; staging `cpagrip-attribution` deployed as ACTIVE v5 with `verify_jwt=true`; production origin absent and bearer/JWT validation preserved.
+- **AUTH-03 design:** COMPLETE FOR DESIGN REVIEW — `docs/ACCOUNT_DELETION_DESIGN.md` is now on the integration branch. `payouts@legitloot.site` remains UNVERIFIED; D1–D4 owner/legal decisions remain open. No deletion implementation or production change has occurred.
 - **AUTH-02:** the owner-approved production sign-up pause remains unapplied; verify `disable_signup:true` while preserving email sign-in before public account onboarding.
 - **LEGAL-01 / GAME-02 / OPS-01 / OPS-03:** complete accurate Terms/Privacy/support, the playable-game vs early-access scope, monitoring, backup/PITR verification, and release/rollback readiness.
 
@@ -878,3 +878,12 @@ This evidence does not authorize saving dashboard changes, sending test postback
 - Post-deploy counts: callback events 0, conversions 0, Offerwall.GG journal transactions 0, Offerwall.GG journal entries 0. No callback was invoked; no provider secret was read or changed. Production was not touched.
 - Additional source defect fixed before deployment: reversed provider callbacks carry a negative `payoutUsd`, while the metadata routine accepts only nonnegative original payout amounts. The Edge Function now stores the absolute textual amount for reversal metadata (without floating-point conversion); reversal state remains separately recorded. Added a regression test and updated migration-path references. Source-level checks passed. The full npm suite was not rerun in this session; Claude's prior 8/8 PGlite report applies to the earlier source head.
 - **Result:** PROV-07 is contained in staging. Production Offerwall.GG v3 remains on its legacy LC-posting path and is still an explicit owner decision/blocker. Do not infer staging containment is production containment.
+
+## 2026-11-19 10:10 ET — ChatGPT — M2-T3b and AUTH-03 design closeout; M2-T4 pickup
+
+- **PR #14 / ENV-03:** independently checked canonical CPAGrip against the deployed staging v4 snapshot (only the production origin removed), confirmed bearer token required and server-side `auth.getUser(jwt)` verification, and confirmed regression tests cover all canonical provider function origins. Merged PR #14 into the integration branch (`f8780a0`).
+- **Staging deploy:** deployed `cpagrip-attribution` to staging as ACTIVE v5, `verify_jwt=true`. The live deployed source exactly matches the canonical integration source; production origin is absent; bearer and JWT validation remain. Updated staging function snapshot and deployment manifest.
+- **PR #15 / AUTH-03:** corrected the intended support contact to `payouts@legitloot.site` while retaining UNVERIFIED status, then ported the reviewed design to `docs/ACCOUNT_DELETION_DESIGN.md` on the integration branch (`439027c`). Closed stale-base PR #15 as superseded. D1–D4 remain open; no deletion implementation, legal publication, production setting or user data was changed.
+- **Platform spec:** updated to v1.3, reconciling the later owner decision for two launch games and at least five challenges using only existing approved LC values. No new LC amounts or redemption rules were created.
+- **Games page:** replaced the obsolete Zombie Invasion Defense placeholder with the two owner-selected launch titles. It truthfully labels both as integration-in-progress and publishes no unverified links.
+- **M2-T4:** active task advanced to game integration verification. Connected GitHub repo inventory and prior handoffs did not reveal source repositories or playable URLs for either selected game. `demonanic/Legitloot-2` is explicitly Zombie Invasion Defense and is not a substitute. Exact game URLs/repositories are the sole immediate dependency for completing the integration audit.
