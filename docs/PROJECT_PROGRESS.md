@@ -35,7 +35,7 @@ The owner authorized public website visual design and the platform model/specifi
 ## Verification record
 
 - Stage 0 source/asset inspection is recorded in `docs/WEBSITE_STAGE0_AUDIT.md`.
-- Browser screenshot/capture remains DEFERRED by owner acceptance, not a blocker to implementation. Do not claim rendered QA until it is actually performed.
+- Browser screenshot/capture remains DEFERRED by owner acceptance, not a blocker to visual design implementation. Do not claim rendered QA until it is actually performed.
 
 ## Visual rebuild implementation
 
@@ -72,3 +72,28 @@ See `git show --stat` for the coherent implementation commit; the Creative Bible
 3. Inspect actual Supabase schema, Edge Functions, RLS policies, and CPAGrip staging code before declaring backend or provider readiness.
 4. Continue with CPAGrip adapter verification only after current official terms/macros and incentive eligibility for game-only LC are confirmed. Keep live reward posting disabled until all gates pass.
 5. Production deployment, merging, paid services, provider agreements, live rewards, and money movement remain outside this authorization.
+
+---
+
+## Owner direction update — 2026-11-19
+
+The owner has selected **launch LegitLoot** as the single primary direction. This update supersedes the older "remaining authorized task is rendered review" as the active priority. Rendered review remains a required release check, but the next task is now governed by `docs/MASTER_EXECUTION_CONTROL.md`.
+
+### Active milestone
+
+**M1 — Launch Readiness Baseline and Blocker Plan**
+
+- Active task: `M1-T1 — Repository, environment, and launch-surface inventory`.
+- Task owner: Claude.
+- Reviewer: ChatGPT.
+- Status: NOT STARTED.
+- M1-T1 is read-only. No application code changes during this task.
+- Required evidence and acceptance criteria are in `docs/MASTER_EXECUTION_CONTROL.md`.
+
+### Shared agent coordination
+
+- `docs/MASTER_EXECUTION_CONTROL.md` is the shared operating agreement and living coordination record for Claude and ChatGPT.
+- `CLAUDE.md` is Claude's repository entrypoint.
+- `AGENTS.md` directs coding agents to the same control document.
+- Agents are authorized to coordinate and complete routine, bounded work autonomously on `build/legitloot-neon-synthwave`.
+- Critical owner approval gates remain unchanged: production deployment/merge, paid services, provider agreements, live financial activity, destructive real-data changes, security weakening, LC economic changes, and irreversible legal/business decisions.
