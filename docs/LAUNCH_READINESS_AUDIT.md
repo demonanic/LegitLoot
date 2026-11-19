@@ -728,3 +728,26 @@ Identify the actual source repositories/playable URLs for the two selected games
 
 ### Owner gates
 Production Offerwall containment, production settings/merge/deploy, branch-protection administration, provider agreement/traffic eligibility/paid terms/live activation, legal/account-deletion decisions, live financial activity, and final production release remain owner-gated. No settings, secrets, schema/data, callbacks, deployments or funds were changed in this verification.
+
+
+## 2026-11-19 — Independent Sync Watch / PR #16 review — independent evidence update
+
+### Verified
+- Integration head `66eff589`; 354 ahead and 0 behind `main`. 17 branches. Rulesets endpoint empty; branch-protection endpoint 403, so protection cannot be verified.
+- PR #16 (`db939d6`) is open, mergeable, based on current integration. Exact staging URL guard is present before `createClient()` in both `admin.js:boot()` and `payout-simulator.js:boot()`. New test covers valid staging and invalid/missing/mislabelled/production/keyless configs. No code blocker found in this limited review. Claude reports 42/42 local tests; no CI/status checks or Actions runs exist. Cloudflare Pages previews succeeded but do not constitute test evidence. COMMENT review 5979524271 posted.
+- PR #9 is a stale draft and diverged. Its browser test still requires Zombie Invasion Defense, conflicting with the two owner-selected launch titles. Comment 7015938125 posted.
+- `games.html` lists Zombies vs Heavy Metal and Rocket 2 Nowhere; `index.html` still lists Zombie Invasion Defense. Public section remains Earn, not Hustle; no Taplayad entry exists.
+- Production Offerwall.GG postback v3 remains capable of LC journal posting. Staging v8 routine is record-only.
+- Staging migration history has 21 versions, including game-platform foundation, but its source SQL is absent. Staging registry has only an unlisted Zombie Invasion Defense placeholder. No Taplayad or game-event Edge Function.
+- Staging providers: Offerwall.GG and CPAGrip disabled. Offerwall.GG's row has a stale LC standard-virtual-currency approved reward model despite no approval/terms evidence; this conflicts with owner policy and must be reconciled before activation.
+
+### Required next actions
+1. Recover MIG-02 source from authoritative history without applying migrations or changing data.
+2. Keep Taplayad staging-only until full signature, transaction, retry/reversal protocol and incentivized-traffic permission are verified.
+3. Rename Earn to Hustle, implement task history separately from LC.
+4. Correct homepage/test assertions to the two owner-selected games once actual playable routes are verified.
+5. Prepare five-plus milestone/challenge definitions using only approved LC economics.
+6. Add automated GitHub test workflow; no current CI exists.
+
+### Owner gates
+Production Offerwall containment, production settings/merge/deploy, branch protection administration, provider agreement/traffic eligibility/paid terms/live activation, legal/account-deletion decisions, live financial activity and final release remain owner-gated. Exact source/playable URLs for both selected games remain outstanding.

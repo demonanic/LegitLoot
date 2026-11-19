@@ -346,3 +346,21 @@ This recheck used read-only GitHub and Supabase queries. No settings, secrets, f
 
 ### Scope and safety
 - These were read-only migration/function/schema/SQL checks. No callback was invoked, no provider test was sent, no secret or setting was read/changed, no migration/schema/data was changed, and no deployment or financial activity occurred.
+
+
+## 2026-11-19 — Independent Sync Watch / PR #16 review — read-only environment recheck
+
+### Production `gkbqderyjcuxnjbsiffb`
+- Migration history: 7 entries.
+- `offerwall-gg-postback`: ACTIVE v3, `verify_jwt=false` (provider HMAC is handled by function).
+- Read-only `pg_get_functiondef` confirms `private.process_offerwall_gg_postback` looks up user/platform LC ledger accounts and calls `private.post_journal_transaction`. Production still violates the no-provider-to-LC policy. No callback invoked.
+
+### Staging `scmnxcsggquwtuyyjnnj`
+- Migration history: 21 entries, including `20261118080655_game_platform_foundation` and `20261119145340_offerwall_gg_record_only`.
+- `offerwall-gg-postback`: ACTIVE v8; live `private.process_offerwall_gg_postback` records provider callbacks/conversions/reversals and contains no ledger/journal write path.
+- Game registry: only `zombie-invasion-defense`, `launch_url=null`, `status=development`, `is_listed=false`.
+- Edge Functions: admin-dashboard, offerwall-gg-wall-url, cpagrip-attribution, offerwall-gg-postback, payout-simulator, provision-initial-owner. No Taplayad or game-event function.
+- Provider rows: Offerwall.GG and CPAGrip, both disabled with null approval reference/terms URL/terms verification. Offerwall.GG still carries `approved_reward_model={reward_mode: standard_virtual_currency, currency_code: LC, currency_name: LootCoins}`; this is contradictory stale metadata and must be corrected before any activation. No data changed.
+- Migration history lists `20261118080655_game_platform_foundation`, but no matching SQL source exists in the integration Git tree. Do not reconstruct as original or replay it without authoritative evidence.
+
+No Supabase settings, secrets, schema, data, migrations, callbacks, functions, or deployments were changed during this check.
