@@ -54,34 +54,32 @@ Deno.serve(async (request: Request) => {
   if (!secret || !supabaseUrl || !serviceRoleKey) return response("SERVICE NOT CONFIGURED", 503);
 
   const requestUrl = new URL(request.url);
-  // Offerwall.GG can place macros in the configured callback URL even when
-  // the selected delivery method is POST. Merge URL query parameters with
-  // form-body fields so neither delivery location is silently ignored.
   const params = new URLSearchParams(requestUrl.search);
-  let signedPayload = requestUrl.search.slice(1);
+  let rawBody = "";
   if (request.method === "POST") {
-    const raw = await request.text();
-    const bodyParams = new URLSearchParams(raw);
+    rawBody = await request.text();
+    if (rawBody.length > 16_384) return response("PAYLOAD TOO LARGE", 413);
+    const bodyParams = new URLSearchParams(rawBody);
     for (const [key, value] of bodyParams.entries()) params.set(key, value);
-    signedPayload = [signedPayload, raw].filter(Boolean).join("&");
   }
 
   const userId = params.get("userId") ?? "";
   const transactionId = params.get("transactionId") ?? "";
   const currencyAmount = params.get("currencyAmount") ?? "";
+  const currencyName = params.get("currencyName") ?? "";
+  const payoutUsd = params.get("payoutUsd");
+  const timestamp = params.get("timestamp");
   const status = params.get("status") ?? "";
   const signature = (params.get("signature") ?? "").toLowerCase();
   const test = params.get("test") ?? "0";
 
-  // Offerwall.GG dashboard test requests may not include a real user, transaction,
-  // status, amount, or signature. A test marker can never issue rewards, so safely
-  // acknowledge it before validating production conversion fields.
+  // Dashboard test callbacks are acknowledged but can never issue rewards.
   if (test === "1") return response("OK", 200);
 
   if (!userId || !/^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(userId)
-      || transactionId.length < 8 || transactionId.length > 200
+      || transactionId.length < 8 || transactionId.length > 64
       || !["credited", "reversed"].includes(status)
-      || !currencyAmount || !signature) {
+      || !currencyAmount || currencyName !== "Loot Coins" || !signature) {
     return response("INVALID CALLBACK", 400);
   }
 
@@ -97,9 +95,29 @@ Deno.serve(async (request: Request) => {
     return response("INVALID AMOUNT", 400);
   }
 
-  const expected = await hmacSha256Hex(`${userId}:${transactionId}:${currencyAmount}`, secret);
-  if (!equalHex(expected, signature)) return response("FORBIDDEN", 403);
+  let payoutUsdValue: string | null = null;
+  if (payoutUsd !== null && payoutUsd !== "") {
+    if (!/^-?\d+(?:\.\d{1,6})?$/.test(payoutUsd)) return response("INVALID PAYOUT", 400);
+    const payoutNumber = Number(payoutUsd);
+    if (!Number.isFinite(payoutNumber) || Math.abs(payoutNumber) > 1000000000
+        || (status === "credited" && payoutNumber < 0)
+        || (status === "reversed" && payoutNumber > 0)) {
+      return response("INVALID PAYOUT", 400);
+    }
+    payoutUsdValue = payoutUsd;
+  }
 
+  let providerTimestamp: string | null = null;
+  if (timestamp !== null && timestamp !== "") {
+    if (!/^\d{10}$/.test(timestamp)) return response("INVALID TIMESTAMP", 400);
+    const parsed = new Date(Number(timestamp) * 1000);
+    if (!Number.isFinite(parsed.getTime())) return response("INVALID TIMESTAMP", 400);
+    providerTimestamp = parsed.toISOString();
+  }
+
+  const signedMessage = `${userId}:${transactionId}:${currencyAmount}`;
+  const expected = await hmacSha256Hex(signedMessage, secret);
+  if (!equalHex(expected, signature)) return response("FORBIDDEN", 403);
 
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -112,16 +130,34 @@ Deno.serve(async (request: Request) => {
     p_offer_id: params.get("offerId") ?? "",
     p_offer_name: params.get("offerName") ?? "",
     p_goal_id: params.get("goalId") ?? "",
-    p_payload_digest: await sha256Hex(signedPayload),
+    // Hash only the signed fields. Unsigned metadata such as timestamp can
+    // legitimately differ between retries and must not break idempotency.
+    p_payload_digest: await sha256Hex(signedMessage),
   });
 
   if (error) {
-    // Do not acknowledge failed durable writes; Offerwall.GG will retry.
     console.error("Offerwall.GG callback processing failed", error.message);
     return response("RETRY", 500);
   }
 
-  if (!data || !["posted", "duplicate", "duplicate_reversal"].includes(data.result)) {
+  // Record-only (2026-11-19, spec §0.1, audit PROV-07): callbacks are stored for
+  // provider reconciliation but never mint Legit Coins. "posted" is no longer an
+  // accepted result; if the database still returns it, the record-only migration
+  // has not been applied, so fail loudly instead of acknowledging.
+  const RECORD_ONLY_RESULTS = ["recorded", "reversal_recorded", "duplicate"];
+  if (!data || !RECORD_ONLY_RESULTS.includes(data.result)) {
+    console.error("Offerwall.GG callback returned an unexpected result", data?.result);
+    return response("RETRY", 500);
+  }
+  const { error: metadataError } = await supabase.rpc("record_offerwall_gg_metadata", {
+    p_user_id: userId,
+    p_transaction_id: transactionId,
+    p_currency_name: currencyName,
+    p_payout_usd: payoutUsdValue,
+    p_provider_timestamp: providerTimestamp,
+  });
+  if (metadataError) {
+    console.error("Offerwall.GG metadata recording failed", metadataError.message);
     return response("RETRY", 500);
   }
   return response("OK", 200);
