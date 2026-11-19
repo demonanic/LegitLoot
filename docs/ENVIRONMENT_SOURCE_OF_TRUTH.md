@@ -536,3 +536,14 @@ Internal guide says Loot coins; staging handler requires Loot Coins. Public Offe
 - Staging Supabase `scmnxcsggquwtuyyjnnj`: 21 migrations; Offerwall.GG postback v8 ACTIVE, verify_jwt=false; routine is record-only. Provider rows: Offerwall.GG disabled with stale LC/LootCoins approved_reward_model and null terms/approval fields; CPAGrip disabled; no Taplayad row.
 - Staging game registry: only ZID development/unlisted, launch_url null. Game saves/events/handoff tickets each zero. No challenge/milestone/season tables found.
 - No project settings, secrets, schema, rows, functions, callbacks or financial records changed. Production containment remains owner-gated.
+
+
+## 2026-11-19 17:49 ET — Cloudflare Pages preview isolation independently verified
+
+Read-only Cloudflare API inspection of both Pages projects confirms the current PR #20 deployment is a **preview**, not a production deployment:
+
+- Project `legitloot`: production branch is `main`; custom domains include `legitloot.site`. Canonical deployment is `environment=production`, branch `main`, commit `3fa7ca58992f786f7b59f22b8fb758149a873d6b`. The latest PR branch deployment is `environment=preview`, branch `claude/hustle-rename`, commit `00d48d0958e5a2d35ebb0a173f6c9e3865dc80fd`, URL `https://d34ac518.legitloot.pages.dev`, with no aliases/custom-domain binding.
+- Project `legitloot-preview`: only custom domain is `legitloot-preview.pages.dev`. Its latest PR branch deployment is also `environment=preview`, branch `claude/hustle-rename`, same commit `00d48d0`, URL `https://44b52782.legitloot-preview.pages.dev`, with no aliases. Its separate canonical deployment is on its configured preview-project production branch `design/industrial-cyberpunk-rebuild`; it is not bound to `legitloot.site`.
+- Both projects have empty project-level preview and production `env_vars`; both inspected deployment objects have empty deployment `env_vars`. No Cloudflare environment-variable override was found.
+- `supabase-config.js` in integration and PR #20 is byte-identical (blob SHA `8504420e1daec988198c5ea3cb0dfcb32b195a09`) and explicitly sets environment `staging` with URL `https://scmnxcsggquwtuyyjnnj.supabase.co`.
+- At query time, the two latest PR deployments were queued/in progress; this check verifies their environment classification and configuration, not successful completion. No Cloudflare settings, bindings, domains or deployments were changed.
