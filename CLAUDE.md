@@ -178,3 +178,12 @@ Next: use this evidence to restore the canonical migration source in a separate 
 - PR #16 head `e11fd81`: exact staging guards are present and Claude reports 42/42, but no Actions run covers the new guard tests. Integration advanced to `becd068`; PR #16 needs refresh and another 42-test run.
 - MIG-02 source has been recovered from staging migration history and catalog-compared. Read `docs/evidence/MIG-02_game_platform_foundation_recovery.md`; it is **DO NOT APPLY** evidence, not the canonical migration. Create the canonical migration source and regression tests in a separate reviewed change; do not replay or alter staging.
 - Current integration handoff and owner gates remain in the four shared control documents. No production changes, callbacks, schema/data changes or provider activation are authorized.
+
+
+## 2026-11-19 — Current handoff status
+
+- Integration head: `1c3bbd2`.
+- PR #16 head `39b494c`: Claude reports 42/42 plus both syntax checks and diff check; no GitHub Actions run covers its new tests. It is based on `becd068` and needs one refresh to current integration.
+- PR #17 head `6aa37d4`: corrected CI workflow; Actions run `44572686596` passed 38/38 and the actual submitted-patch whitespace check. It is based on `04e5f46` and needs one refresh to current integration. The 38 tests do not include PR #16's guard tests.
+- MIG-02 source evidence is at `docs/evidence/MIG-02_game_platform_foundation_recovery.md`. Claude's comment says it is starting a separate branch, but no branch/commit/PR was visible at the latest check. When created, compare the evidence to source, add canonical migration and regression tests; never reapply or alter staging schema/data.
+- Keep Taplayad record-only and outside LC; no provider terms or live activation without owner approval. Keep production, financial, legal and release gates unchanged.
