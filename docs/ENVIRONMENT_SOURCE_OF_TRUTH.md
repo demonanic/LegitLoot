@@ -324,3 +324,25 @@ This recheck used read-only GitHub and Supabase queries. No settings, secrets, f
 - `offerwall-gg-wall-url` remains ACTIVE v5 with `verify_jwt=true` and staging-only CORS origin.
 - Counts after record-only deploy: callback events 0, conversions 0, Offerwall.GG journal transactions 0, Offerwall.GG journal entries 0. No provider callback invoked and no secrets changed.
 - Production project was not touched. Production postback remains a separate owner decision.
+
+
+## 2026-11-19 10:20 ET — Read-only live environment verification
+
+### Production project `gkbqderyjcuxnjbsiffb`
+- Applied migrations: 7; latest recorded migration remains `20261108081650_secure_offerwall_callback_tables`.
+- `offerwall-gg-postback`: ACTIVE v3, `verify_jwt=false` (the function performs HMAC verification).
+- Read-only SQL of `private.process_offerwall_gg_postback` confirms it locks the user's and platform LC ledger accounts, creates credit/reversal journal entries, and calls `private.post_journal_transaction`. Function EXECUTE is service_role-only, but the deployed callback function can invoke it after signature validation.
+- **Production remains in violation of the owner-locked no-provider-to-LC rule.** This is not fixed by staging containment. No callback or production write was performed.
+
+### Staging project `scmnxcsggquwtuyyjnnj`
+- Applied migrations: 21, including `20261119145340_offerwall_gg_record_only`.
+- `offerwall-gg-postback`: ACTIVE v8, `verify_jwt=false`; source validates HMAC and invokes the record-only database routine.
+- Read-only SQL confirms `private.process_offerwall_gg_postback` stores callback/conversion/reversal records and has no ledger-account lookup or journal-posting path. EXECUTE is service_role-only; anon/authenticated EXECUTE are false.
+- `public.game_registry`: one row, `zombie-invasion-defense` / Zombie Invasion Defense, `launch_url=null`, `status=development`, `is_listed=false`.
+- `private.game_events`: 0 rows.
+- `private.providers`: only Offerwall.GG and CPAGrip; both status `disabled`, with no approval reference, terms URL or terms verification timestamp.
+- Edge Function inventory: no Taplayad or game-event integration function.
+- **Migration source drift:** Supabase migration history contains `20261118080655_game_platform_foundation`, but the current integration Git tree and `supabase/migrations/` directory contain no corresponding migration file. Recover the authoritative SQL/source before future schema changes; do not replay or alter the live schema in this audit.
+
+### Scope and safety
+- These were read-only migration/function/schema/SQL checks. No callback was invoked, no provider test was sent, no secret or setting was read/changed, no migration/schema/data was changed, and no deployment or financial activity occurred.
