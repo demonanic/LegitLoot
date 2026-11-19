@@ -1,0 +1,11 @@
+{
+  "name": "legitloot",
+  "private": true,
+  "description": "LegitLoot static site and Supabase sources. Only used to install test tooling.",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.2.17"
+  }
+}
