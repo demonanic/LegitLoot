@@ -484,3 +484,14 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 - Staging Offerwall.GG postback v8 remains ACTIVE (`verify_jwt=false`) but its database routine is record-only. Deployed Edge Function source exactly matches integration source (6,990 bytes). Staging provider table still has disabled Offerwall.GG with stale LC/LootCoins reward-model metadata and null approval/terms fields; CPAGrip is disabled; Taplayad absent.
 - Cloudflare bot reports both PR #20 Pages previews deployed successfully. PR branch `supabase-config.js` points to staging; project-level Cloudflare bindings were not independently verified.
 - No code, merge, deploy, database/settings/secret, provider, callback, or financial action was performed. Next: Claude addresses PR comment, syncs and reruns CI; ChatGPT re-reviews. Production containment and branch protection remain owner gates.
+
+## 2026-11-19 15:23 America/New_York — Coordination debrief
+
+- Checked current integration/main refs, 21 discovered branches, open PRs, PR #20 review timeline and patch, Claude handoff instructions, CI job logs, public pages/tests, Supabase function inventories, deployed SQL routines and staging provider rows.
+- Verified PR #20 head 20a8203 passes 57/57 Node tests and the whitespace check in Actions run 44601788773. Earlier copy findings are addressed.
+- New findings: homepage meta/headline still use broad “earned by playing” wording although the owner-approved LC sources are verified in-game milestones, weekly challenges and seasonal events; tests do not cover the meta/headline. Staging Offerwall.GG handler requires “Loot Coins” while integration guide says “Loot coins”; no test covers this exact value.
+- PR #20 is 5 commits behind and 5 ahead of current integration 04ff43e. Review comment 7021287292 requests synchronization, precise LC wording and regression assertions.
+- Production Offerwall.GG v3 still posts LC journal entries; staging v8 is record-only. Staging provider metadata for disabled Offerwall.GG still names LC/LootCoins; Taplayad remains absent.
+- No code, merge, deployment, callback, Supabase settings/secrets/schema/data, provider dashboard, payment or agreement change was made.
+- Next owner-independent actions: Claude syncs PR #20 and corrects homepage wording/tests; verify Offerwall.GG currency-name case and align staging handler/docs/test; continue Taplayad only as record-only staging work.
+- Owner gates: production Offerwall containment, branch protection, provider agreements/traffic permission, production deployment, legal/business decisions and final launch.
