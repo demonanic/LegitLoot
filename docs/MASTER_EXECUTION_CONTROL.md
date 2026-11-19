@@ -60,23 +60,29 @@ The release candidate must truthfully provide:
 - Approved Terms, Privacy, support route, monitoring, backup/recovery expectations, and rollback plan.
 - No live financial activity or provider activation without the applicable owner gate.
 
-### Current active task — M2-T3a: staging record-only callback containment
+### Current active task — M2-T4: verify and integrate the two launch games
 
-**Status:** READY FOR STAGING DEPLOYMENT after final review of the merged source.  
-**Implementation:** Claude authored the migration and matching Edge Function in PR #13; both are merged into the authorized build branch.  
-**Staging deployment operator:** ChatGPT (linked staging Supabase connection has the required deployment actions).  
-**Independent review:** ChatGPT inspected the migration, Edge Function, PGlite tests, live routine definitions, and grants.
+**Status:** IN PROGRESS — blocked only on identifying the actual playable builds/source repositories.  
+**Acting lead:** ChatGPT (Claude's credit allowance is exhausted; Claude can resume from this shared record).  
+**Partner:** Claude when available; both agents retain standing integration/staging authority.
 
-Acceptance criteria:
-1. Confirm the target is staging project `scmnxcsggquwtuyyjnnj`, never production.
-2. Apply `supabase/migrations/20261119120000_offerwall_gg_record_only.sql` to staging first.
-3. Deploy the matching `supabase/functions/offerwall-gg-postback/index.ts` second.
-4. Verify the staging function version changed and the live `private.process_offerwall_gg_postback` no longer reads/locks LC ledger accounts or calls `private.post_journal_transaction`.
-5. Verify the public wrapper still requires `service_role` and no anon/authenticated execute grant was introduced.
-6. Do not invoke a real callback. Callback/conversion records may be nonzero after record-only operation; provider-sourced LC journal/ledger postings must remain zero.
-7. Record exact migration/function versions and verification evidence. Do not touch production.
+**Owner-locked launch titles:** **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**. The owner says both are playable as-is. That statement is direction, not integration test evidence.
 
-This audit run did not perform the deployment because its execution instructions explicitly required a read-only check. The standing owner authorization permits this staging task in a normal implementation turn without another owner prompt.
+**Current evidence and gap:**
+- The current `games.html` still contains the obsolete one-game Zombie Invasion Defense card and no playable links.
+- The connected GitHub account's visible repositories include `demonanic/Legitloot-2`, whose README identifies it as Zombie Invasion Defense. That is not one of the two selected launch titles.
+- No source repository or playable hosting URL for either selected launch title has been located in the connected GitHub repositories or prior handoffs. Do not substitute unrelated game repositories or invent links.
+- The shared integration contract remains: one LegitLoot account, game-specific saves retained by each game, website-only authoritative LC wallet, and only server-verified signed/idempotent game events may request eligible LC awards.
+
+**Acceptance criteria:**
+1. Identify the exact source repository and playable URL for each selected title.
+2. Independently inspect each build for a working play route, mobile usability, save persistence, and account integration.
+3. Implement a shared LegitLoot login/session handoff without moving game-specific saves into a duplicate central save.
+4. Prove no game can mint or spend LC locally; only authenticated server-verified milestone events may reach the central reward service.
+5. Add truthful game cards and working launch links; test on mobile and desktop preview.
+6. Record exact evidence and unresolved dependencies. No production release.
+
+**Immediate next action:** Owner to provide the playable URL or repository link for each game if not discoverable from existing connected sources. In parallel, ChatGPT will complete the repository-side launch-page and account-contract audit without inventing destinations.
 
 ### Supporting M2 work
 
