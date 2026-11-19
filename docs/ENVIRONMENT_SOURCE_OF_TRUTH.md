@@ -55,7 +55,7 @@ Read-only connector inventory on 2026-11-19:
 3. Production has `wallet-summary` deployed even though the current production public account client may use a direct RPC; determine whether it is live dependency or orphaned.
 4. Production and staging function versions differ substantially. Export source for each deployed function and compare against GitHub before any update.
 5. The build branch is not a safe production release candidate until reconciled with current `main`; see `docs/LAUNCH_READINESS_AUDIT.md`.
-6. Supabase connector account visibility is now confirmed for both projects. The prior audit statement that only `gauntlet` was visible is obsolete.
+6. Supabase connector visibility is **per agent**. ChatGPT's connectors (`Supabase`, `Legitloot dev`) see both LegitLoot projects. Claude's Supabase connector is linked to a different Supabase account and, re-checked 2026-11-19 01:40 ET, still lists only `gauntlet` (`xtgpznknlaihmfohdmqs`). Claude's deployed-state evidence therefore comes from anonymous HTTP probes (§9) plus ChatGPT's connector inventory above.
 
 ## 4. Owner-locked operational rules
 
@@ -75,6 +75,59 @@ Read-only connector inventory on 2026-11-19:
 - Identify and document every function/table/config dependency before marking any code as safe to remove.
 - Verify production Auth `disable_signup=true` after the approved pause is applied; do not disable sign-in or pause the entire project.
 - Add a deployment manifest/runbook that names exact Git SHA, Pages environment, Supabase project ref, and function versions for every release.
+
+## 7. Frontend and hosting map (Claude, 2026-11-19)
+
+| Item | Production | Preview / staging | Evidence |
+|---|---|---|---|
+| Pages project | `legitloot` | same project, branch preview | Prior owner record; dashboard binding not inspected |
+| Branch served | `main` @ `3fa7ca5` | `build/legitloot-neon-synthwave` | LIVE HTML == `main` (only Cloudflare `mailto` obfuscation differs); preview alias `https://build-legitloot-neon-synthwa.legitloot.pages.dev/` byte-identical to branch HEAD for 11 routes. **Binding is verified by content, not by reading the Cloudflare dashboard.** |
+| Build command / env vars | None. Static files, no `package.json`, no build step; no `env.*`/`process.env` references in frontend source. Pages environment variables, if any exist, are unused by the code. | same | `git grep` on both branches |
+| Supabase URL used by browser | `account-auth.js` hard-codes `https://gkbqderyjcuxnjbsiffb.supabase.co` (production) + production publishable key | `supabase-config.js` → `https://scmnxcsggquwtuyyjnnj.supabase.co`, `environment:"staging"`; `account-auth.js`, `admin.js`, `offerwall-launch.js`, `payout-simulator.js` refuse to run unless `environment === "staging"` | source on each branch |
+| Edge Function CORS allow-list | n/a | `offerwall-gg-wall-url` allows `https://legitloot.site` **and** the build preview origin; `admin-dashboard` allows `*` | function source |
+
+**Cross-environment configuration findings**
+- **ENV-01 (VERIFIED, correct):** No branch points the browser at the wrong project: `main` → production, build branch → staging.
+- **ENV-02 (DEFECT, LOW):** `main`'s `earn-hub.js` reads `window.LEGITLOOT_SUPABASE_CONFIG`, which `main` never defines (no `supabase-config.js` on `main`; live `/supabase-config.js` → 404). Provider launch buttons would stay disabled if any provider became `active`. No current user impact because none is active.
+- **ENV-03 (DEFECT, MEDIUM):** The staging `offerwall-gg-wall-url` source in GitHub allows the production origin `https://legitloot.site`. A staging function accepting production-origin calls blurs isolation; the deployed v5 allow-list is UNVERIFIED (source not exported).
+- **ENV-04 (DEFECT, MEDIUM):** The build branch's frontend can only ever talk to staging (hard `environment === "staging"` guards). It cannot be released to production as-is without a reviewed config change; this is a release-process gap, not a live fault.
+
+## 8. Edge Functions — deployed vs GitHub
+
+Deployed versions from ChatGPT's connector inventory (§2). Reachability from Claude's anonymous `OPTIONS /functions/v1/<name>` probes (404 = not deployed). "Source in GitHub" checked across **all 11 remote branches**.
+
+| Function | Production | Staging | Source in GitHub | Status |
+|---|---|---|---|---|
+| `offerwall-gg-postback` | v3, verify_jwt=false; reachable (405 to OPTIONS); **empty GET → 400 `INVALID CALLBACK`** | v7, verify_jwt=false; empty GET → 400 | `main` and build branch (different versions) | **Secrets configured in both** (code returns 503 when `OFFERWALL_GG_SECRET`/service key are absent). Both versions call `process_offerwall_gg_postback`, which posts LC. **DEFECT under LC policy — see audit PROV-07.** Exact deployed code UNVERIFIED (not exported). |
+| `offerwall-gg-wall-url` | v1, verify_jwt=true; 200 | v5, verify_jwt=true; 200 | `main`, build branch | Version drift; deployed source UNVERIFIED |
+| `wallet-summary` | **v4, verify_jwt=false; reachable; unauthenticated POST → 401 `Authentication required`** | not deployed (404) | `main`, build branch | **Orphaned in production:** live `account-auth.js?v=walletfix-2` calls RPC `get_wallet_summary` directly and never invokes this function. Function enforces its own auth. Recommend: confirm no other caller, then retire under a reviewed production change. |
+| `admin-dashboard` | not deployed | v7; 200 | build branch only | Staging-only; expected |
+| `payout-simulator` | not deployed | v6; 200 | build branch only | Staging-only; expected (must never reach production) |
+| `cpagrip-attribution` | not deployed | v4; 200 | **none** | **Untracked deployed code** |
+| `provision-initial-owner` | not deployed | v7; 204 | **none** (only the SQL helper `private.provision_initial_owner_admin` is in a migration) | **Untracked deployed code** |
+
+Secrets by name only (inferred from code paths and probe responses, values never read): production and staging both have `OFFERWALL_GG_SECRET` and `SUPABASE_SERVICE_ROLE_KEY` present for `offerwall-gg-postback`. `OFFERWALL_GG_PUBLIC_KEY` presence UNVERIFIED (wall-url requires a JWT before revealing configuration state).
+
+## 9. Production vs staging drift report
+
+| Area | Production | Staging | Drift / risk |
+|---|---|---|---|
+| Migrations | 7 records, latest `20261108081650` | 20 records, latest `20261118080655` (`game_platform_foundation`) | Staging-only: admin authorization, payout simulator ×4, Offerwall metadata, CPAGrip, game platform. Applied-version timestamps do not match repo filenames (Supabase assigns versions on apply), so mapping to files must be done by name/SQL. |
+| Migration SQL in GitHub | `main` has bootstrap + 6 migrations (plausibly the 7 prod records) | Build branch has bootstrap + 13; **no branch contains CPAGrip or `game_platform_foundation` SQL** | Staging schema cannot be rebuilt from GitHub. |
+| Game platform objects | absent | `public.game_registry` (anon `GET` → `[]` 200, i.e. table exposed through the API but RLS returns no rows to `anon`), `private.game_saves`, `private.game_events`, `private.game_handoff_tickets` | Untracked; contract undocumented. |
+| CPAGrip | absent | function + attribution/conversion tables | Untracked. |
+| Admin / simulator | absent | present, `private.admin_users` 1 row | Expected staging-only tooling. |
+| Auth | email on, `disable_signup:false`, `mailer_autoconfirm:false`; **2 profiles** | same; 2 profiles | Production sign-up pause **not yet applied** (§10). |
+| Anonymous access controls | `profiles` 401, `rpc/get_wallet_summary` 401 | same; `private` schema not exposed (PGRST106) | VERIFIED consistent. |
+| LC posting from provider | armed (secrets present; postback reaches validation) | armed | Both violate the 2026-11-19 LC policy. |
+
+## 10. Production registration pause — status
+
+- **Status: BLOCKED (access).** Probe at 2026-11-19 ~01:40 ET: production `GET /auth/v1/settings` → `disable_signup: false`.
+- Why Claude could not execute: (1) Claude's Supabase connector lists only `gauntlet`; (2) the Supabase MCP toolset has no Auth-configuration tool in any case, and `disable_signup` is not a SQL setting; (3) the cloud browser opened `supabase.com/dashboard/project/gkbqderyjcuxnjbsiffb/auth/providers` and was redirected to the Supabase sign-in page. Agents must not enter the owner's credentials.
+- Not substituted (per owner instruction): no project pause, no sign-in change, no live UI change, nothing on staging.
+- **Owner action (≈1 minute):** Supabase dashboard → project `LegitLoot` (`gkbqderyjcuxnjbsiffb`) → Authentication → Sign In / Providers → turn **off** "Allow new users to sign up" → Save. Leave the Email provider enabled so existing users can still sign in. Alternatively, sign in inside the cloud browser session Claude left on that page and hand control back to Claude.
+- **Verification (any agent, read-only):** `curl -s https://gkbqderyjcuxnjbsiffb.supabase.co/auth/v1/settings -H "apikey: <production publishable key from main/account-auth.js>"` must show `"disable_signup":true` and `"email":true`.
 
 ## 6. Source and confidence
 

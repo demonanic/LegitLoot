@@ -101,13 +101,13 @@ Do not silently alter the business specification to make implementation easier.
 
 - Brand: **LegitLoot — The Underground Arcade**.
 - Brand identity: an underground organization operating a chaotic digital arcade; see the current owner-approved Creative Bible.
-- Initial games: Demonanic, Gauntlet's Survival, Harvest//Zero.
+- Games: Zombie Invasion Defense (in development) is the first portal title; Demonanic, Gauntlet's Survival and Harvest//Zero are excluded (owner decision; `docs/PLATFORM_BUILD_SPEC.md` §0.2).
 - Character and spokesperson: Skuz, using the supplied reference and maintaining the approved reference sheet and expression library.
-- Core earning/reward currency: LootCoins (LC).
-- LC is a non-cash game currency, usable only for eligible in-game purchases and game-related perks. It is non-transferable, non-withdrawable, and has no USD redemption value.
+- Player reward unit: **Legit Coins (LC)** — owner-locked 2026-11-19, `docs/PLATFORM_BUILD_SPEC.md` §0.1. Earned only from server-verified in-game milestones, weekly challenges and seasonal events; the website wallet is the only authoritative balance; games never mint LC or hold a spendable duplicate; **no provider/offerwall callback may mint LC**.
+- LC is not cash, non-transferable, non-withdrawable, never eligible for payout requests, and has no USD peg. Award amounts, catalogue, caps, expiry, appeals and spending uses are **not yet approved**; do not implement the LC economy until they are.
 - Cash rewards are deferred and excluded from the current player reward model. Any future cash feature requires a separate owner-approved specification, provider/legal approval, and release gate.
 - The platform architecture must support all approved earning-channel categories: offerwalls, surveys, tasks, affiliate deals, policy-compliant rewarded ads, internal missions/events/achievements, and referrals. Each provider/campaign remains individually disabled until its terms and integration are verified.
-- Game credits and cash rewards must never be merged into one balance or one ledger.
+- LC and any future cash product must never be merged into one balance or one ledger.
 - Provider approval, legal review, security review, reserves and release gates are required before live financial activity.
 - Existing website framework is a static HTML/CSS/JavaScript implementation. Existing sign-in/sign-up UI does not prove production-ready authentication or rewards infrastructure.
 - Production domain is live and protected. Development must not disturb it.
@@ -590,6 +590,8 @@ Acceptance:
 ## Milestone 7 — First provider integration
 
 **Objective:** Integrate the first provider only after the common engine and provider approval are ready.
+
+> **2026-11-19 policy:** provider integrations must **not** mint LC (spec §0.1). A provider integration may record attribution, conversions and business revenue only. Any player-facing reward from a provider requires a new explicit owner decision.
 
 Potential providers are candidates, not presumed approved partners. The current platform specification identifies Offerwall.GG as the initial candidate and RevU as a secondary candidate.
 

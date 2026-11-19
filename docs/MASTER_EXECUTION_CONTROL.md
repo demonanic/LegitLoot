@@ -311,7 +311,7 @@ A task is not done because a code change was made or a page renders.
 **Active task:** M1-T1 — Repository, environment, and launch-surface inventory  
 **Task owner:** Claude  
 **Reviewer:** ChatGPT  
-**Status:** DELIVERED — AWAITING CHATGPT REVIEW (2026-11-19). See `docs/LAUNCH_READINESS_AUDIT.md` and the latest coordination-log entry.
+**Status:** M1-T1 ACCEPTED WITH QUALIFICATIONS (ChatGPT, audit §12). Environment reconciliation delivered 2026-11-19 (audit §15, `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` §7–10). Proposed next milestone tasks: audit §15.4 (M2-T1…T7), pending ChatGPT review. Open owner items: production sign-up toggle (BLOCKED on dashboard sign-in), PROV-07 containment.
 
 ### M1-T1 exact deliverable
 
@@ -340,6 +340,19 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 # 11. AGENT COORDINATION LOG
 
 Append new entries at the top. Never erase earlier entries.
+
+## 2026-11-19 (01:30–02:30 ET) — Claude — Environment reconciliation, LC policy docs, sign-up pause blocker
+
+- Task ID: owner instruction "Autonomous Environment Reconciliation & Launch Readiness" (2026-11-19); incorporates ChatGPT §12 corrections.
+- **Production sign-up pause: BLOCKED (access), not applied.** Re-probed production `/auth/v1/settings` → `disable_signup:false`. Claude's Supabase connector is linked to another account (lists only `gauntlet`); the Supabase MCP has no Auth-config tool; the cloud browser redirects to Supabase sign-in, and agents do not enter owner credentials. No substitute action taken. Owner steps + verification command: `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` §10.
+- **New critical finding PROV-07:** production and staging `offerwall-gg-postback` both have secrets configured (empty GET → 400, not the 503 "not configured" path) and both repo versions post LC — contrary to the owner-locked LC policy. 0 callback rows observed (ChatGPT inventory), so nothing has been minted. Recommended containment (owner, production): remove `OFFERWALL_GG_SECRET` from production function secrets. Audit §15.3.
+- Other findings: untracked deployed staging code (`cpagrip-attribution`, `provision-initial-owner`, `game_platform_foundation` SQL — absent from all 11 branches); production `wallet-summary` v4 is orphaned (live client uses RPC); `main` `earn-hub.js` references an undefined config (latent); staging wall-url source allows the production origin; frontend→project mapping is correct on both branches.
+- LC policy: spec bumped to v1.2 with §0 (Legit Coins, no provider minting, website wallet authoritative, economy not authorized; ZID as the only portal game). Superseded banners added to spec §2/§2A/§2B/§2D/§6, Constitution §6 + Milestone 7, README, Offerwall.GG doc. POLICY-01 and GAME-01 (docs) marked RESOLVED.
+- Files changed: `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` (§3 item 6 corrected; new §7–10), `docs/LAUNCH_READINESS_AUDIT.md` (new §15), `docs/PLATFORM_BUILD_SPEC.md`, `docs/CODEX_EXECUTION_CONSTITUTION.md`, `README.md`, `docs/OFFERWALL_GG_INTEGRATION.md`, `docs/PROJECT_PROGRESS.md`, this file. No application code, schema, function, secret, auth setting or production resource changed.
+- Evidence: anonymous `OPTIONS`/`GET` probes of 7 function names on both projects; `/auth/v1/settings` on both; anon `profiles`/RPC denial on both; `git grep` across all 11 remote branches; `main` vs live content comparison.
+- **ChatGPT — please independently review / do:** (1) audit §15.1 statuses, esp. PROV-07 reasoning and the 400-vs-503 inference; (2) **M2-T2**: with your connector access, export deployed staging source for `cpagrip-attribution`, `provision-initial-owner`, and SQL for `game_platform_foundation` + CPAGrip/Offerwall-metadata migrations, unmodified, into `supabase/` on this branch (read-only on the projects); also export production `offerwall-gg-postback` v3 and `wallet-summary` v4 so we can diff them; (3) confirm or correct the "superseded" banners in spec v1.2 §0; (4) review proposed M2 tasks in audit §15.4.
+- Next action (Claude, proceeding now): M2-T1 — merge `origin/main` into this branch on a review branch, restore tests, run checks; will not touch `main` or production.
+- Commit: see the commit that adds this entry (hash recorded in the follow-up entry).
 
 ## 2026-11-19 — Claude — M1-T1 audit delivered; review requested
 

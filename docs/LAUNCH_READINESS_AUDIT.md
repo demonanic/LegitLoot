@@ -396,3 +396,71 @@ See `docs/MASTER_EXECUTION_CONTROL.md` §13 for the authoritative owner decision
 - E2 is now settled: Legit Coins are earned from in-game milestones, weekly challenges, and seasonal events; the website wallet is authoritative; game notifications prompt users to check it. Illustrative objectives are examples only. No LC values, redemption catalogue, cash conversion, or payout use is authorized.
 - Supabase connector mapping is now confirmed: production `gkbqderyjcuxnjbsiffb` via `Supabase`; staging `scmnxcsggquwtuyyjnnj` via `Legitloot dev`. Previous OPS-02 statement that only `gauntlet` was visible is obsolete.
 - A unified environment/source-of-truth inventory is the next cross-agent task. No production deploy, schema change, provider activation, or reward issuance is authorized.
+
+---
+
+## 15. Reconciliation update — Claude, 2026-11-19 (supersedes §4 statuses where they differ)
+
+**Status vocabulary from here on (owner instruction 2026-11-19):** VERIFIED · DEFECT · UNVERIFIED · BLOCKED · RESOLVED. A finding is RESOLVED only when the correction is implemented *and* verified.
+
+**Evidence basis.** Deployed inventory from ChatGPT's connectors (`docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` §2) plus Claude's anonymous read-only HTTP probes of both projects (§9 there). Claude's own Supabase connector still sees only `gauntlet`, so deployed SQL and function source were **not** exported by Claude. No setting, schema, function, callback or production resource was changed.
+
+**Incorporating ChatGPT's §12 corrections.** (a) POLICY-01/E2: superseded by the owner's explicit 2026-11-19 decision (MASTER §13); the spec now carries it as §0.1. (b) PROV-02 deployed state: now partly evidenced — both postbacks are configured and reach validation (PROV-07) — but the deployed SQL still was not read, so the "switch not enforced" detail remains UNVERIFIED for deployed code. (c) The staging auth E2E test is split out of read-only work (task M2-T4 below, needs its own approval of a test mailbox and cleanup plan).
+
+### 15.1 Reclassified launch-readiness findings
+
+| Area | ID | Status | Severity | Finding / evidence | Next action | Owner? |
+|---|---|---|---|---|---|---|
+| Registration | AUTH-02 | **BLOCKED** | BLOCKER | Pause approved, not applied. Production `/auth/v1/settings` still `disable_signup:false` (re-probed). Claude lacks dashboard/API access; cloud browser lands on Supabase sign-in. ENV doc §10 has the 1-minute owner steps and the verification command. | Owner toggles setting; any agent verifies | **Yes** (dashboard sign-in) |
+| Authentication | AUTH-01 | UNVERIFIED | MEDIUM | Flows exist in source; email-only, autoconfirm off in both projects. No E2E performed. | M2-T4 (write-capable, separately approved) | No |
+| Authentication | AUTH-04 | UNVERIFIED | MEDIUM | Rate limits, CAPTCHA, leaked-password settings not readable anonymously. | ChatGPT reads Auth config via its connector if exposed | No |
+| Privacy/Terms | LEGAL-01, AUTH-05 | DEFECT | BLOCKER | Placeholders only (SRC, LIVE). | ChatGPT drafts; owner approves publication | **Yes** (publication) |
+| Account deletion | AUTH-03 | DEFECT | BLOCKER | No deletion/export path in any branch or deployed function list. Production holds 2 profiles. | Document an interim email-request deletion procedure; build staging deletion function | No (procedure text needs owner sign-off with LEGAL-01) |
+| Wallet presentation | WALLET-01 | DEFECT | HIGH | Branch and LIVE account pages show USD cash wallet fields; branch shows "LLC"; LIVE `/earn` (MAIN `earn.html`) tells players LootCoins "are credited only by our server after a provider confirms a completion" — false under the new LC policy. | Branch UI fix after REPO-01 merge; live fix rides a reviewed release | Release only |
+| LC/cash separation | WALLET-02 | VERIFIED (design) | MEDIUM | Separate `cash_usd` / `game_credits` wallet kinds; payout tooling staging-only (production has no admin/simulator functions). | Keep dormant | No |
+| Reward authorization | PROV-07 (new) | **DEFECT** | HIGH | **Both production and staging `offerwall-gg-postback` have secrets configured** (empty GET → 400, not the 503 "not configured" path) and both repo versions post LC via `process_offerwall_gg_postback`. Under §0.1 no offerwall callback may mint LC. Callback/conversion row counts were 0 in both projects at inventory time, so no LC has been minted. Exploitation requires the HMAC secret. | Containment recommendation below (15.3) | **Yes** for the production change |
+| Reward authorization | PROV-02 | DEFECT (source) / UNVERIFIED (deployed) | HIGH | Posting switch stored but not read in repo SQL. Superseded in practice by PROV-07: the correct fix is "provider callbacks never post LC", not "check a switch". | Rewrite postback path to record-only (staging first) | No for staging |
+| Ledger integrity | WALLET-03 | VERIFIED (source) / UNVERIFIED (deployed) | MEDIUM | Immutability triggers + service-role-only posting in source; anon denied on both projects. | ChatGPT exports deployed trigger/policy list | No |
+| Offerwall callback security | PROV-03 | VERIFIED | LOW | HMAC-SHA256 with constant-time compare; idempotency on `(transaction_id, status)`; `test=1` acknowledged without write. | none beyond PROV-07 | No |
+| Untracked code | REPO-03, PROV-04 | DEFECT | HIGH | Staging runs `cpagrip-attribution` v4, `provision-initial-owner` v7 and migration `game_platform_foundation` with **no source on any of 11 branches**. | ChatGPT (has connector access) exports source + SQL into a `supabase/` import commit on the build branch, read-only on the project | No |
+| Orphaned code | WALLET-05 | DEFECT | LOW | Production `wallet-summary` v4 deployed and auth-guarded, but the live frontend calls RPC `get_wallet_summary`, not the function. Staging lacks it. | Confirm no caller (logs), then retire via reviewed production change | Yes (prod change) |
+| Game integration / handoff | GAME-02, GAME-03 | UNVERIFIED | BLOCKER for "live games" | Staging now has `game_registry` (1 row), `game_saves`, `game_events`, `game_handoff_tickets` — source untracked; no frontend uses them; no playable game linked. `demonanic/Legitloot-2` not inspected. | Export SQL (above); inspect Legitloot-2; write the handoff contract doc. LC awards from games stay unimplemented per §0.1. | No |
+| Monitoring / crash reporting | OPS-01 | DEFECT | HIGH | No error reporting, uptime check or alerting configured in repo. | Free tooling runbook (Pages + Supabase logs, uptime ping) | Yes only if paid |
+| Rollback / recovery | OPS-03 (new) | DEFECT | HIGH | No release manifest naming Git SHA + Pages deployment + Supabase ref + function versions; Supabase backup/PITR tier unknown. | Write `docs/RELEASE_RUNBOOK.md` (rollback = redeploy previous Pages deployment; function rollback = redeploy prior source, which requires REPO-03 first) | No |
+| Prod/staging isolation | ENV-01 | VERIFIED | — | `main` → production project, build branch → staging; staging-only functions absent from production. | — | No |
+| Prod/staging isolation | ENV-03 | DEFECT | MEDIUM | Staging wall-url source allows production origin. | Remove `https://legitloot.site` from staging allow-list (staging) | No |
+| Branch reconciliation | REPO-01 | DEFECT | BLOCKER | Branch 227+ ahead / 9 behind `main`; branch would regress live content and drop tests. | M2-T1 merge `origin/main` → build branch | No |
+| Frontend config | ENV-02, ENV-04 | DEFECT | LOW / MEDIUM | See ENV doc §7. | Fix during REPO-01 merge / release design | No |
+| LC policy docs | POLICY-01 | **RESOLVED** | — | Spec v1.2 §0, Constitution §6, README, Offerwall.GG doc updated and committed with this section (commit hash in MASTER log). Verified by `grep`: remaining provider→LC passages sit under explicit "superseded" banners (spec §2/§2A/§2B/§2D, Constitution Milestone 7, Offerwall.GG doc). Historical status docs (`BUILD_STATUS.md`, `WITHDRAWAL_BUILD_STATUS.md`, `WEBSITE_STAGE0_AUDIT.md`) were left as dated records. | — | No |
+| Games list docs | GAME-01 | **RESOLVED** (docs) / DEFECT (branch UI) | — | Spec §0.2, Constitution, README updated. Branch pages still show the three retired games until REPO-01. | M2-T1 | No |
+
+### 15.2 Prioritized remaining launch blockers
+
+1. **AUTH-02** production sign-up pause — owner toggle (BLOCKED).
+2. **PROV-07** provider callbacks can mint LC in production — owner decision on containment (15.3).
+3. **REPO-01** reconcile build branch with `main`.
+4. **REPO-03** bring all deployed staging code/SQL under version control.
+5. **LEGAL-01 / AUTH-03** Terms, Privacy, deletion procedure.
+6. **WALLET-01** remove cash and provider→LC claims from player UI and live Earn copy.
+7. **OPS-01 / OPS-03** monitoring + release/rollback runbook.
+8. **GAME-02** truthful early-access labelling (already true on `main`) or a playable ZID build.
+
+### 15.3 Critical escalation — PROV-07 containment (prepared, not executed)
+
+- **Decision required:** stop production `offerwall-gg-postback` from being able to mint LC.
+- **Why critical:** It is a live production path that contradicts an owner-locked financial policy; anyone holding the HMAC secret (or a misconfigured provider postback URL) could mint LC into real accounts. No minting has occurred (0 callback rows).
+- **Options:** (a) **Recommended:** remove the `OFFERWALL_GG_SECRET` secret from the production project's Edge Function secrets — the function then returns 503 for every request and posts nothing; fully reversible; no code deploy. (b) Undeploy the production function (reversible only by redeploying source). (c) Leave as is until a record-only version is built and reviewed.
+- **Can continue without the decision:** all branch/staging work, including writing the record-only postback.
+- **Who:** owner (production secret change is outside agent authorization).
+
+### 15.4 Next-stage execution plan (M2 — launch blocker closure, proposed)
+
+| Task | Owner | Reviewer | Type |
+|---|---|---|---|
+| M2-T1 Merge `origin/main` into build branch; restore tests; keep branch-only staging tooling; remove retired games and cash UI on branch | Claude | ChatGPT | Branch code |
+| M2-T2 Export deployed staging function source + missing migration SQL (`cpagrip-attribution`, `provision-initial-owner`, `game_platform_foundation`, CPAGrip/Offerwall metadata) into the repo, unmodified | ChatGPT (has access) | Claude | Read-only export → commit |
+| M2-T3 Rewrite provider postback to record-only (no LC posting) on branch; staging deploy only after ChatGPT review | Claude | ChatGPT | Branch + staging |
+| M2-T4 Staging auth E2E with an approved test mailbox and cleanup plan | Claude | ChatGPT | Staging writes — needs explicit go-ahead in MASTER log |
+| M2-T5 Draft Terms, Privacy, deletion procedure, Support page | ChatGPT | Claude | Docs → owner approval |
+| M2-T6 `docs/RELEASE_RUNBOOK.md`: release manifest, rollback, monitoring | Claude | ChatGPT | Docs |
+| M2-T7 Early-access release candidate from reconciled branch → owner approval | Claude | ChatGPT | **Owner gate** |

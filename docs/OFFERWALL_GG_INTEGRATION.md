@@ -1,5 +1,7 @@
 # Offerwall.GG — LegitLoot LootCoins Integration
 
+> **POLICY CHANGE 2026-11-19 — read before using this document.** Under the owner-locked Legit Coins policy (`docs/PLATFORM_BUILD_SPEC.md` §0.1), **Offerwall.GG callbacks must not mint LC.** The LootCoins reward design below is historical. The deployed `offerwall-gg-postback` → `process_offerwall_gg_postback` path, which posts LC journal entries, is a defect under the current policy (see `docs/LAUNCH_READINESS_AUDIT.md` §15, PROV-07). Do not enable, configure or extend it to credit players.
+
 **Status:** staging schema and Edge Functions deployed; provider remains disabled. Publisher approval and staging secrets are still pending.
 
 ## Verified staging deployment (2026-11-09)

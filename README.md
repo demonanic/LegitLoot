@@ -15,13 +15,15 @@ Independent games and rewards platform.
 - Approved brand direction: **LegitLoot — an underground organization operating a chaotic digital arcade**. See the Creative Bible and [Brand Art Direction](docs/BRAND_ART_DIRECTION.md).
 - Website framework: Home, Games, Earn, Deals/Marketplace, Rewards, Wallet/Account, How It Works, Terms, Privacy, and a custom 404 page. Shared portal navigation and mobile menu are used across the secondary pages.
 - Homepage strategy: mobile-first games-first arcade entrance with a strong original character/art focal point, verified game art, and transparent opportunity/status panels. All unavailable systems must be labeled planned, preview or inactive; never show invented balances or activity.
-- Initial games: Demonanic, Gauntlet's Survival, Harvest//Zero.
+- Games: Zombie Invasion Defense (in development). Demonanic, Gauntlet's Survival and Harvest//Zero are not part of the portal (spec §0.2).
+- Environment map (what runs where): [ENVIRONMENT_SOURCE_OF_TRUTH.md](docs/ENVIRONMENT_SOURCE_OF_TRUTH.md).
 - Brand character and spokesperson: Skuz. Use the supplied reference and the approved reference sheet/expression library to preserve his appearance. Do not make him a generic advertising mascot or force catchphrases.
 
 ## Financial integrity rules
 
-- Game credits and cash rewards are separate currencies and separate ledgers.
-- Game credits are non-transferable, have no cash value, and cannot be withdrawn or converted.
+- **Legit Coins (LC)** are the only player reward unit (owner-locked 2026-11-19; spec §0.1). LC come only from server-verified in-game milestones, weekly challenges and seasonal events. No provider/offerwall callback may mint LC. The website wallet is authoritative; games never mint LC.
+- LC are non-transferable, have no cash value, cannot be withdrawn, converted or used in payout requests. The LC economy (amounts, catalogue, spending) is not yet approved for implementation.
+- Any future cash product stays a separate currency and ledger.
 - Cash is tracked in pending, available, withdrawal-reserved, and paid states.
 - Unsettled provider receivables cannot fund cash withdrawals.
 - All financial events are server-authoritative, idempotent, auditable, and reconciled.

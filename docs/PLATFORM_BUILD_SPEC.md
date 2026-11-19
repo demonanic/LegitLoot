@@ -1,16 +1,39 @@
 # LegitLoot — Platform Build Specification
 
-**Version:** 1.1  
-**Date:** 2026-11-10  
+**Version:** 1.2  
+**Date:** 2026-11-19 (v1.1 2026-11-10)  
+**v1.2 change:** Section 0 records the owner-locked Legit Coins policy and current game lineup. Where any later section conflicts with Section 0, **Section 0 governs**. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — untouched; no production deployment authorized.  
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
 **Authorization:** Owner has now explicitly authorized development. This supersedes v1.3's earlier "no development authorized" status for work on the isolated build branch only. It does not authorize paid services, account creation, provider agreements, live money movement, or production deployment.
 
+## 0. Owner-locked decisions of 2026-11-19 — read first
+
+Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2) and the owner's reconciliation instruction of 2026-11-19.
+
+### 0.1 Legit Coins (LC)
+- **LC means Legit Coins.** "LootCoins", "game credits" and "LLC" are obsolete names for the same player reward unit and must not be used in new UI, code or docs.
+- LC are earned **only** through verified in-game milestones/achievements, weekly challenges, and seasonal events, validated server-side.
+- **No offerwall, survey, CPA, affiliate, ad or other provider callback may mint LC.** Provider integrations are kept separate from the LC award path unless the owner later explicitly authorizes otherwise.
+- The **website LC wallet is the only authoritative balance.** Games must not mint LC or keep a spendable duplicate balance. A game may show a short notice such as "Milestone completed — check your LC wallet" and send a trusted completion event; the platform decides and posts the award.
+- LC are not cash, not withdrawable, not transferable, never eligible for cash/payout requests, and have no LC↔USD peg or cash-equivalent claim.
+- **Not yet approved (do not implement or infer):** challenge catalogue, award amounts, caps, expiry, event rules, anti-cheat evidence, appeals, reversals, and any spending/redemption use (including merchandise or events). The LC economy itself is **not authorized for implementation** yet.
+
+### 0.2 Games
+- The three earlier titles (Demonanic, Gauntlet's Survival, Harvest//Zero) are **not** part of the LegitLoot portal. They remain independent projects.
+- Reference Game 01 is **Zombie Invasion Defense** (working title, in development; source repository `demonanic/Legitloot-2`). Further games are listed only when real.
+
+### 0.3 Effect on the rest of this document
+- §1 item 2 and all offerwall/survey/task/referral → LC reward rules in §2, §2A ("Reward destination rules"), §2B ("Offer-to-LC journey"), and §2D are **superseded** for LC. Providers may still be researched and integrated in a disabled state, but they produce no LC.
+- §2A "LootCoins: games only" spend rules are **superseded** by 0.1: spending uses are undecided.
+- §6 game list is **superseded** by 0.2.
+- Cash rewards remain deferred exactly as before (§2, §13).
+
 ## 1. Product definition
 
 LegitLoot is a combined independent games and rewards platform with four public-facing pillars:
-1. Original games: Demonanic, Gauntlet's Survival, Harvest//Zero.
+1. Original games: *(superseded — see §0.2; currently Zombie Invasion Defense)*.
 2. Approved third-party offerwalls and activities.
 3. Affiliate marketplace and promotional deals.
 4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval.
@@ -18,6 +41,8 @@ LegitLoot is a combined independent games and rewards platform with four public-
 Homepage direction: **LegitLoot — an underground organization operating a chaotic digital arcade**. Follow [LEGITLOOT_CREATIVE_BIBLE.md](LEGITLOOT_CREATIVE_BIBLE.md) for the mature western comic visual direction, near-black/charcoal/blood-red/acid-green/bone/industrial-grey identity, character tone, and Skuz continuity. Skuz is the embodiment and spokesperson of LegitLoot; maintain his supplied reference, reference sheet, and expression library. The current owner explicitly authorizes this visual redesign and character-reference work, superseding older character-sheet restrictions. Keep the public interface welcoming, truthful, accessible, and respectful. Official game art remains authoritative; generated art must never masquerade as a game screenshot. Keep important text and UI controls as real HTML, not baked into images. Never use invented balances, streaks, leaderboards, task completion or payout claims to make the interface look populated; show real connected data or clearly label a preview/planned state. No business or financial rules are changed by the visual direction.
 
 ## 2. Hard business rules (must be enforced in code and UX)
+
+> **Superseded for LC by §0.1 (2026-11-19).** The cash-deferral, no-payout, ledger-integrity and reversal-by-compensating-entry rules below still apply. Every statement that providers/campaigns earn LC, or that LC is spendable only in games, is replaced by §0.1.
 
 **Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. Cash rewards are deferred to a separately approved future phase. The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
 
@@ -49,6 +74,8 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 
 
 ## 2A. Owner-locked platform model decisions (2026-11-10)
+
+> **Partly superseded by §0 (2026-11-19).** "LootCoins: games only", the initial-games list, and "Reward destination rules" for offerwalls/surveys/tasks/referrals are replaced by §0.1–0.2. Cash-deferral rules here remain in force.
 
 These decisions are binding for product design and implementation and supersede any conflicting earlier proposal in this document.
 
@@ -107,7 +134,7 @@ Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affili
 - Account: profile, authentication/security, linked game identities, preferences, privacy controls, export/deletion request.
 - Support: account, attribution, missing reward, and safety/reporting paths.
 
-### Offer-to-LC journey
+### Offer-to-LC journey — SUPERSEDED (§0.1: provider callbacks must not mint LC; retained as history only)
 1. Player signs in and meets provider/campaign eligibility.
 2. Offer detail shows material terms, required actions, time limits, exclusions, incentive disclosure, and verified reward units.
 3. Server creates a tracked click/session and provider-approved parameters.
@@ -145,6 +172,8 @@ This is the required logical model, not a claim that these tables already exist.
 - Raw provider payloads are untrusted, access-controlled evidence with justified retention limits.
 
 ## 2D. Provider adapter contract and channel controls
+
+> **§0.1 applies:** adapters may track sessions/events and business revenue, but must not post LC. Any existing code path that posts LC from a provider callback (e.g. `private.process_offerwall_gg_postback`) is a defect under the current policy.
 
 Every provider adapter must expose equivalent internal operations for capabilities, tracking-session creation, event authentication, event normalization, event processing, reconciliation, and health. Provider-specific semantics and source evidence must be preserved.
 
@@ -234,6 +263,8 @@ No incentivized traffic unless the specific program explicitly permits it. No pa
 - Never trust client-provided player IDs, balances, reward values, provider event data, or payout status.
 
 ## 6. Games and game integration
+
+> **Superseded by §0.2 (2026-11-19):** the directory lists Zombie Invasion Defense (in development) and future titles only when real. The list below is history.
 
 Game directory must contain exactly the owner-approved initial titles:
 - Demonanic
