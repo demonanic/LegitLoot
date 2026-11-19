@@ -1,13 +1,39 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-19
-**Branch:** `build/legitloot-neon-synthwave`
-**Active milestone:** M1 — Launch Readiness Baseline and Blocker Plan (see `docs/MASTER_EXECUTION_CONTROL.md`)
-**Baseline:** Stage 0 accepted by owner; rendered desktop/mobile capture deferred until browser access is available.
+**Updated:** 2026-11-19 08:10 ET
+**Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
+**Active task:** M2-T3a — staging record-only Offerwall.GG callback containment
+**Integration branch:** `build/legitloot-neon-synthwave` @ `c5525d0` at the start of this check
+**Production branch:** `main` @ `3fa7ca5`; no production merge or deployment occurred
+**Current review PRs:** #12 runbook (`9a1f136`), #14 staging origin isolation (`38715b4`), #15 account-deletion design (`e32c2fa`); older draft #9 remains open
 
-## Owner authorization and restrictions
+## Current owner-locked operating rules
 
-The owner authorized public website visual design and the platform model/specification work on the isolated build branch. The 2026-11-10 owner-locked model is authoritative: LC is game-only; cash rewards are deferred; all supported earning-channel categories are in the long-term architecture, with provider/campaign activation gated by verified terms and approval. This does not authorize production deployment, paid services, provider agreements, live reward issuance, or money movement.
+- Legit Coins (LC) are earned only through verified in-game milestones, weekly challenges, and seasonal events.
+- The LegitLoot website wallet is authoritative. Games do not maintain spendable duplicate wallets.
+- LC are not cash, withdrawable, transferable, pegged to USD, or issued by provider offerwall callbacks.
+- The first public release remains the smallest complete, honest, basic-operable scope; do not expand the product before the core user journey works.
+- Claude and ChatGPT may independently merge verified work into the integration branch and deploy reviewed changes to staging. Production merge/deploy, production settings/secrets/data, live financial activity, paid commitments, provider agreements, security weakening, destructive real-data changes, and irreversible legal/business decisions remain owner-gated.
+
+## Current launch blockers and evidence
+
+- **PROV-07:** production Offerwall.GG postback v3 and staging v7 remain active on the old LC-journaling routine. The record-only migration is in the build branch but is not applied to staging. Callback events/conversions/provider transactions were 0/0/0 in both projects at this check; no callback was invoked.
+- **AUTH-02:** the last production Auth probe (12:18 UTC) reported `disable_signup:false`; the approved sign-up pause is not yet verified as applied.
+- **AUTH-03:** PR #15 is a design only. The support address `hello@legitloot.site` is unverified; owner/legal decisions D1–D4 remain open before the related deletion policy is implemented.
+- **LEGAL-01 / GAME-02 / OPS-01 / OPS-03:** accurate approved Terms/Privacy, verified support, playable-game versus early-access scope, monitoring, backup/PITR, and release/rollback readiness still need evidence.
+- **GOV-01:** GitHub reports `protected:false` for `main`; no repository rulesets were returned. The branch-protection detail endpoint was inaccessible (403). Do not describe `main` as protected until verified.
+- **ENV-06:** current `supabase-config.js` correctly targets staging; `admin.js` and `payout-simulator.js` have weaker environment-label-only guards that need exact staging URL checks and runtime tests. Review comment 7010372122 is on PR #14.
+
+## Current verification status
+
+- Claude's latest verifiable handoff (PR #12 comment, 12:27 UTC) reports 34/34 tests on #12, 37/37 on #14, and 34/34 on #15, with clean diff checks. These are local test reports, not GitHub CI; ChatGPT did not rerun the suite.
+- Cloudflare Pages preview checks succeeded for the integration head and PR heads in both Pages projects. These prove static preview deployments only, not Supabase deployment or unit-test CI.
+- The repository has no automated test workflow; the only workflow present is the older artwork-extraction workflow.
+- No merge, deployment, Supabase setting/secret/schema/data change, callback invocation, reward issuance, or money movement occurred during this read-only check.
+
+---
+
+## Historical M1 visual-rebuild baseline (retained for context)
 
 ## Completed
 
@@ -17,13 +43,13 @@ The owner authorized public website visual design and the platform model/specifi
 - Reconciled `AGENTS.md`, `README.md`, `docs/CODEX_EXECUTION_CONSTITUTION.md`, `docs/PLATFORM_BUILD_SPEC.md`, `docs/BRAND_ART_DIRECTION.md`, and `docs/WEBSITE_CREATIVE_WORKFLOW.md` with the current creative decisions while retaining business and financial restrictions.
 - Completed the Stage 1 visual blueprint in `docs/DESIGN_BLUEPRINT.md`, mapped to the existing static HTML/CSS system and the current site inventory.
 
-## Active sequence
+## Historical M1 active sequence
 
 - Public visual system, homepage composition, original artwork briefs/continuity sheet, and visual treatment of all public routes are implemented.
 - Source checks are complete and recorded below. Rendered desktop/mobile, browser accessibility, hero crop, and interactive-state checks remain deferred until browser access is available.
 - The remaining authorized task is rendered review and any resulting visual corrections. Stop for owner approval at production release; no production action is included here.
 
-## Current findings / limitations
+## Historical M1 findings / limitations
 
 - `assets/lootbadger.webp` is the supplied Skuz reference candidate (192×244). The new continuity sheet and homepage hero are original illustrations based on it.
 - Official game artwork is available for all three approved games; no new game imagery is needed.
@@ -32,7 +58,7 @@ The owner authorized public website visual design and the platform model/specifi
 - Page behavior lives in `app.js` for shared navigation/year, `portal.js` for filters, `account-auth.js` for account state, `offerwall-launch.js` for the disabled provider placement, and other page-specific scripts. Functional IDs and backend integrations were preserved.
 - Admin and payout simulator tools are out of the public visual-redesign scope.
 
-## Verification record
+## Historical M1 verification record
 
 - Stage 0 source/asset inspection is recorded in `docs/WEBSITE_STAGE0_AUDIT.md`.
 - Browser screenshot/capture remains DEFERRED by owner acceptance, not a blocker to visual design implementation. Do not claim rendered QA until it is actually performed.
@@ -214,3 +240,12 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - At least one genuine publisher offering user tasks must be researched, selected, technically configured and tested for launch. Provider agreement acceptance, external account activation where legally binding, incentivized-traffic approval, paid terms or other commitments remain owner-gated. Until then, sandbox/test mode only; provider tasks cannot mint LC.
 - Next implementation sequence: (1) staging-only PROV-07 record-only containment; (2) verify both game integrations and shared account/save contract; (3) author >=5 challenges and prove server-authoritative/idempotent LC awards in staging; (4) complete Hustle and a provider sandbox/test integration; (5) verify support, ads/privacy, account deletion, monitoring and release runbook.
 - No production setting, secret, schema/data, provider agreement, callback, financial record or deployment was changed by recording this charter. Production release and all existing owner gates remain unchanged.
+
+
+## 2026-11-19 08:10 ET — Independent Sync Watch #3
+
+- Checked integration head `c5525d0`, production `main` at `3fa7ca5`, active branches, PR heads/comments, Cloudflare check runs, workflow inventory, current environment guards, and both live Supabase projects using read-only queries.
+- PR #12, #14, and #15 are each up to date with the integration base (0 commits behind). Claude's latest comment reports local test results 34/34, 37/37, and 34/34 respectively. Cloudflare preview checks are green; no automated unit-test CI exists.
+- New findings: GOV-01 (main branch protection not reported by GitHub) and ENV-06 (admin/payout-simulator runtime guards do not verify the exact staging URL). Actionable comments posted to PR #12 and #14.
+- Live PROV-07 remains unchanged: production v3 and staging v7 still call the LC-journaling routine; the record-only migration is not applied. Counts remain 0 callback events, 0 conversions, 0 provider transactions in both projects.
+- Next: Claude fixes ENV-06 with exact URL guards and runtime tests; ChatGPT re-reviews. Staging record-only deployment is authorized but was not performed in this read-only check. Production, legal/business, and live financial gates remain owner-controlled.
