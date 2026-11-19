@@ -360,3 +360,29 @@ This needs no backend, provider, or financial approvals beyond Terms/Privacy tex
 5. Update findings statuses; no code, schema, secret or dashboard changes.
 
 If access in step 1 is not granted, steps 3 (doc comparison) and 4 proceed, and step 1 is marked BLOCKED.
+
+
+---
+
+## 12. ChatGPT independent review — 2026-11-19
+
+**Review result: M1-T1 accepted with corrections and qualifications.** The audit is useful, evidence-led, and appropriately distinguishes observed behavior from unverified deployed state. No production, database, provider, or application changes are authorized by this review.
+
+### Confirmed / accepted
+- **AUTH-02 / E1:** The audit's combination of the live account page targeting the production Supabase project, the public Auth settings reporting sign-up enabled, and the live Privacy/Terms placeholders is sufficient to treat public registration as a current launch blocker. Recommendation: owner should disable production public sign-up as containment; existing sign-in should remain available. This review does not change the setting. Disabling new registrations does not itself resolve handling, retention, or deletion of data already collected.
+- **REPO-01:** Independent GitHub compare confirms the branch is divergent from `main`. At the audit commit it was 226 ahead / 9 behind; after the audit commit the compare is 227 ahead / 9 behind. Do not merge or deploy until the branch is reconciled against current `main` and the release diff is reviewed.
+- **WALLET-01 / LEGAL-01 / GAME-02:** Cash-wallet presentation, unpublished legal pages, and absence of a playable game support the proposed account-less early-access portal as the smallest truthful launch scope.
+- **PROV-02:** The checked-in migration function does not read the `platform_settings.is_enabled` switch before posting. This is a valid source-level security defect and should be fixed staging-first before any provider reward path is enabled.
+
+### Corrections / qualifications
+- **POLICY-01 / E2 wording:** The November 17 context retrieved for review does not establish an explicit owner decision replacing the earlier LootCoins policy. It records a specialist brief/proposal for milestone and challenge awards and that LegitCoin economics belong to a separate specialist. The November 18 direction also states no cash, payouts, or cash-out claims and that game Legit Coins must not enter payout requests. Therefore, do not characterize the website-wallet / events / merchandise model as an approved replacement. Until the owner explicitly approves a replacement, retain the last owner-locked policy as the governing baseline and keep changes to coin economics/redemption paused. The ambiguity is real, but the evidence currently supports “proposal awaiting owner/specialist decision,” not “owner described and approved a new model.”
+- **PROV-02 deployed status:** The missing settings check is verified in repository migration source. Because direct database/function-source access was unavailable, whether the deployed staging database runs this exact migration/function version remains NOT VERIFIED. Keep the risk high, but do not claim a confirmed live staging credit path until the deployed SQL/function version is inspected.
+- **E1 containment scope:** Turning off production sign-ups is the recommended immediate containment choice, not a complete privacy remediation. Existing account data and a deletion/retention process still require separate handling.
+- **M1-T2 task boundary:** The proposed staging auth end-to-end test creates an account, sends email, and writes auth data; it is not read-only. Split that into a separately authorized staging test task with an agreed test mailbox and cleanup plan. M1-T2 itself should remain read-only: inspect deployed schema, policies, grants, triggers, migration history, and deployed Edge Function source only. No test-account creation, callback invocation beyond harmless read-only probes, setting changes, or database writes.
+- **OPS-02:** Do not ask for broad service-role credentials. The next access step should be a read-only Supabase connection/role limited to the LegitLoot staging and production projects, or an owner-run read-only evidence pack. Staging and production must remain clearly separated.
+
+### M1-T1 disposition
+Accepted. The audit may be used as the M1 baseline subject to the qualifications above. Claude should update E2 wording/status, mark the deployed PROV-02 state NOT VERIFIED pending direct inspection, and revise M1-T2 to exclude staging auth E2E/write operations. ChatGPT will review the revised task before any staging test is proposed.
+
+### Owner decision still required
+**E1:** Approve or decline disabling public sign-ups on the production Supabase project. No setting has been changed by ChatGPT.
