@@ -41,7 +41,7 @@
 4. **Processing.** After the grace period, a service-role job (manual admin action at first, scheduled later) calls `private.process_account_deletion(user_id)` and then the Auth admin API (§4).
 5. **Done.** The request becomes `completed` with a timestamp. The audit log records who or what processed it.
 
-**Interim procedure (required now).** Production sign-up is **still open**: `disable_signup:false` at the 2026-11-19 12:18 UTC probe, and two production profiles were inventoried. The owner-approved pause has not yet been applied or verified. Until it is applied **and** the self-serve flow ships, assume accounts can still be created and keep an interim deletion/export request path available. That path is a documented support-email request (`hello@legitloot.site`). An admin verifies the requester controls the account email, then runs the §4 steps, with a 30-day response commitment (owner decision D3). The Privacy Notice must describe this path. This document changes no production setting.
+**Interim procedure (required now).** Production sign-up is **still open**: `disable_signup:false` at the 2026-11-19 12:18 UTC probe, and two production profiles were inventoried. The owner-approved pause has not yet been applied or verified. Until it is applied **and** the self-serve flow ships, assume accounts can still be created and keep an interim deletion/export request path available. That path is a documented support-email request. The candidate address `hello@legitloot.site` is used in site footers but is **UNVERIFIED**: there is no evidence it is configured and monitored. Test it end to end and record it before publishing it as a deletion/export route. An admin verifies the requester controls the account email, then runs the §4 steps. The response time is **not yet a commitment**: 30 days is only a proposal pending owner decision D3. The Privacy Notice must describe this path once the address and D3 are confirmed. This document changes no production setting.
 
 ## 4. Processing steps (`private.process_account_deletion`, service_role only)
 
@@ -74,7 +74,7 @@ Self-serve **export** returns profile fields, LC balance and the user's own ledg
    - a second run is a no-op;
    - an open payout request stops it;
    - a non-service caller is rejected.
-2. **Staging E2E with a dedicated test account** (needs the separate staging write approval already listed as M2-T4):
+2. **Staging E2E with a dedicated staging-only test account** (creation and cleanup documented; never a production account):
    - register → request → cancel → request → process;
    - sign-in fails afterwards;
    - re-registering with the same email behaves as expected;
@@ -99,6 +99,6 @@ Self-serve **export** returns profile fields, LC balance and the user's own ledg
 | AUTH-03a: migration (`account_deletion_requests`, `profiles.deleted_at`, `ledger_accounts.closed_at`, `process_account_deletion`) + PGlite tests | Branch code | Review |
 | AUTH-03b: Edge Functions `request-account-deletion`, `cancel-account-deletion` + `deleted_at` guard in existing functions | Branch code | Review |
 | AUTH-03c: account page UI + copy | Branch code | Review |
-| AUTH-03d: staging deploy + E2E (§6.2) | Staging writes | Staging-deploy gate + M2-T4 approval |
+| AUTH-03d: staging deploy + E2E (§6.2) | Staging writes | Independent review, then deploy under the standing staging authority recorded in `AGENTS.md` by an agent with staging write access (currently ChatGPT). Safety requirements: a dedicated staging-only test identity/mailbox; its creation and cleanup documented in the log; never a production account; never touch production. |
 | AUTH-03e: export function | Branch code | Review |
 | Privacy Notice section | Docs | Owner approval (LEGAL-01) |
