@@ -134,5 +134,5 @@ test("Edge Function accepts only record-only results and never 'posted'", () => 
   const list = source.match(/RECORD_ONLY_RESULTS = \[([^\]]*)\]/);
   assert.ok(list, "RECORD_ONLY_RESULTS list missing");
   assert.deepEqual(JSON.parse(`[${list[1]}]`).sort(), ["duplicate", "recorded", "reversal_recorded"]);
-  assert.ok(!/"posted"/.test(source.replace(/\/\/.*$/gm, "")));
+  assert.ok(!/"posted"/.test(source.replace(/(^|[\s;{}])\/\/.*$/gm, "$1"))); // strip comments, not URLs
 });
