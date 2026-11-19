@@ -73,7 +73,7 @@ Use asymmetry, inked dividers, hand-made texture, expressive image crops, and va
 
 ## Non-negotiable product truth
 
-- Use only the approved initial games: Demonanic, Gauntlet's Survival, and Harvest//Zero.
+- Use only the owner-locked LegitLoot portal launch titles: **Zombies vs Heavy Metal** and **Rocket 2 Nowhere** (see `docs/MASTER_EXECUTION_CONTROL.md` and `docs/PLATFORM_BUILD_SPEC.md` §0.4). Demonanic, Gauntlet's Survival, Harvest//Zero, and Zombie Invasion Defense are separate projects/reference work and are not substitutes for either selected portal launch game.
 - Use official game art only for its actual game. Never present generated artwork as gameplay or a screenshot.
 - Do not invent users, balances, transactions, earnings, reward rates, partner approvals, availability, payout claims, or scarcity.
 - Keep LootCoins/game credits separate from any future USD cash ledger. Game credits have no cash value, are non-transferable, and cannot be withdrawn or converted.

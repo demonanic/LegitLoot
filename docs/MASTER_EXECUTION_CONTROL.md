@@ -1258,3 +1258,35 @@ Official public documentation exposes two materially different systems:
 
 ### Owner gates
 Production Offerwall containment, main branch protection, Taplayad account-specific terms/traffic approval and live activation, publisher dashboard changes, production deployment, paid commitments, destructive real-data changes, security weakening, support-mailbox verification, production sign-up-pause verification, legal/business decisions, and final release remain owner-controlled. No PR was merged, no deployment occurred, no callback was invoked, and no Supabase or provider setting/data was changed.
+
+
+---
+
+## 2026-11-19 17:42 America/New_York — Independent Sync Watch: PR #20 re-review, M2-T4 source search, and live environment verification
+
+### Repository and PR evidence
+- Integration `build/legitloot-neon-synthwave`: `a0cef5e69867d31235ffca5778dc11bab7cfccba`; production `main`: `3fa7ca58992f786f7b59f22b8fb758149a873d6b`. Integration is 393 commits ahead, 0 behind. GitHub lists 21 branches; all report `protected=false`, including main and integration.
+- Open PRs: #20 and #9. PR #20 is non-draft, mergeable, 9 commits ahead / 0 behind integration. Head `8cee6f7f5e5208363fe4f58077173dd0f8897575`, base `a0cef5e69867d31235ffca5778dc11bab7cfccba`. GitHub Actions run [44624595265](https://github.com/demonanic/LegitLoot/actions/runs/44624595265) passed `npm ci`, `npm test` (58 passed, 0 failed, 0 skipped), and submitted-patch whitespace check. The workflow does not run the Python/Playwright browser suite.
+- ChatGPT independently reviewed the current 15-file PR #20 diff and posted COMMENT review `5984643477`: no blocking defect in the scoped public-copy/navigation change. It updates Hustle labels, correct LC-source wording, the two selected game names, and regression tests; it does not alter provider, wallet, database or LC-issuance logic. This is not an APPROVE review or production-release approval. No merge was performed.
+- PR #9 remains a stale, non-mergeable draft: 12 commits ahead / 184 behind integration. Its old game assertions and design branch must not be merged as-is.
+- Latest verifiable Claude handoff is PR #20 comment [7023430231](https://github.com/demonanic/LegitLoot/pull/20#issuecomment-7023430231), which reports sync to `a0cef5e` and 58/58 local tests. GitHub Actions independently confirms the 58-test run. No newer handoff file was found; the only handoff document in the integration tree is the older M1 start handoff.
+
+### M2-T4 — exact launch-game sources remain unavailable
+- The active task remains M2-T4, with ChatGPT as acting lead per this control document. Owner-approved titles are exactly **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**; both were described by the owner as playable as-is, but each still needs its exact source repository/playable URL and technical verification.
+- Read-only inventory of all seven accessible owner repositories found: `ageis_game`, `Demonanic`, `Sweeps`, `Gauntlet-s-survival`, `LegitLoot`, `Legitloot-2`, and `Fresh`. Repository README/code searches found no exact source for either selected title. `Legitloot-2` is Zombie Invasion Defense; `Gauntlet-s-survival`, `Demonanic`, and `Fresh` (Harvest//Zero) are distinct projects and must not be substituted. Exact-title searches also returned no repositories.
+- Fresh staging read-only SQL: `public.game_registry` still contains only `zid / zombie-invasion-defense`, status `development`, `is_listed=false`, `launch_url=null`. `private.game_saves`, `private.game_events`, and `private.game_handoff_tickets` each contain 0 rows. No challenge/milestone/season tables are present. No game integration or reward event is verified.
+- Continue without guessing routes. The remaining M2-T4 dependency is the exact owner-provided source/playable reference for each selected title; once supplied, verify mobile behavior, shared account linkage and game-specific save persistence before publishing links.
+
+### Fresh financial/provider verification (read-only)
+- Production project `gkbqderyjcuxnjbsiffb`: 7 migrations; Offerwall.GG postback v3 ACTIVE, `verify_jwt=false`. Live `private.process_offerwall_gg_postback` is SECURITY DEFINER and calls `private.post_journal_transaction`, locking user/platform LC ledger accounts. Provider-to-LC issuance remains possible and violates §0.1.
+- Staging project `scmnxcsggquwtuyyjnnj`: 21 migrations; Offerwall.GG postback v8 ACTIVE, `verify_jwt=false`. Live `private.process_offerwall_gg_postback` is record-only and has no ledger/journal operation.
+- Staging `private.providers`: Offerwall.GG disabled but stale `approved_reward_model` still names `standard_virtual_currency / LC / LootCoins`; terms URL, terms verification and approval reference are null. CPAGrip is disabled with no approval metadata. Taplayad is absent. No row was changed.
+- Taplayad remains unresolved between new/current and legacy protocols. Do not implement live callback handling until App ID 10066's account generation, canonical URL, authenticated transaction identity, signed fields, reversal matching, retry/idempotency and authoritative verification are confirmed in writing. Provider points never map to LC.
+
+### Documentation consistency corrections
+- `docs/LEGITLOOT_CREATIVE_BIBLE.md` contained an obsolete initial-game list naming Demonanic, Gauntlet's Survival and Harvest//Zero. It is corrected to the two current owner-locked portal launch titles and explicitly excludes the older independent projects as substitutes.
+- `docs/PLATFORM_BUILD_SPEC.md` §1 item 1 contained an obsolete one-game Zombie Invasion Defense reference. It is corrected to point to the current §0.4 two-game launch decision.
+
+### Safety and next actions
+- No PR merge, deployment, Supabase settings/secrets/schema/data mutation, publisher change, callback, payment, provider agreement or production action occurred. Production containment and branch protection remain owner-gated.
+- Next: owner reviews PR #20 as an integration-only public-copy change; ChatGPT continues M2-T4 when exact game sources are supplied; Claude must not substitute other games. Continue record-only staging/provider design and keep production Offerwall.GG v3 disabled from any new use; do not alter production under this check.

@@ -512,3 +512,12 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 - No PR merge, deploy, callback, provider-dashboard change, payment, Supabase setting/secret/schema/row change, or production action occurred.
 - Next: Claude syncs PR #20 to the new integration head and reruns CI; ChatGPT re-reviews. Continue M2-T4 discovery and request exact game source/playable links only as required. Keep Taplayad record-only until its account-specific protocol and permission are confirmed.
 - Owner gates unchanged: production Offerwall containment, branch protection, provider agreement/activation, paid commitments, production deployment, destructive data, security weakening, legal/business decisions, support-mailbox and registration-pause verification, final release.
+
+
+## 2026-11-19 17:42 America/New_York — Sync Watch debrief
+- PR #20 current head `8cee6f7` is synchronized to integration `a0cef5e` (9 ahead, 0 behind), mergeable and non-draft. Actions run 44624595265 independently confirms 58/58 Node tests, 0 failures/skips and patch whitespace check. ChatGPT posted independent COMMENT review 5984643477: no blocking defect in the scoped public-copy diff. PR is ready for owner review; not merged.
+- PR #9 remains a non-mergeable draft, 12 ahead / 184 behind; do not merge as-is.
+- M2-T4 source search covered all seven accessible owner repositories and exact-title searches. No source/playable URL for Zombies vs Heavy Metal or Rocket 2 Nowhere found. Staging registry still contains only unlisted development ZID with no launch URL; game saves/events/handoff tickets are all zero and no challenge/milestone/season tables exist.
+- Fresh read-only Supabase: production Offerwall.GG v3 still calls journal posting (critical provider-to-LC path); staging v8 remains record-only. Staging provider row for Offerwall.GG is disabled but retains stale LC/LootCoins metadata and null approval/terms fields; CPAGrip disabled; Taplayad absent.
+- Corrected stale launch-game references in Creative Bible and Platform Build Spec §1 to match the current two-title owner decision. No application code or live system was changed.
+- Next: owner review of PR #20; obtain exact game source/playable references; continue M2-T4 integration verification only after sources are identified. Production containment, branch protection, provider agreements and production release remain owner-gated.

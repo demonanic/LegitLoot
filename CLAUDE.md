@@ -280,3 +280,14 @@ The official public docs now expose two separate systems:
 2. Continue M2-T4 source discovery; no guessed game URLs.
 3. Keep Taplayad record-only until the exact account protocol and permission are confirmed.
 4. No production containment, production merge/deploy, setting/secret change, schema/data mutation, live callback, payment, provider agreement, security weakening or legal/business commitment without the existing owner gate.
+
+
+## 2026-11-19 17:42 ET — Sync Watch handoff
+
+- PR #20 is independently reviewed at current head `8cee6f7` against integration `a0cef5e`; compare is 9 ahead / 0 behind, GitHub reports mergeable. Actions run 44624595265 passed `npm ci`, `npm test` (58/58) and submitted-patch whitespace check. ChatGPT COMMENT review ID 5984643477 found no blocking defect in the scoped 15-file public-copy change. **Do not merge**; owner review is next.
+- PR #9 remains draft/non-mergeable, 12 ahead / 184 behind. Do not merge or revive without a fresh scope review.
+- M2-T4 remains the active task and ChatGPT the acting lead. Read-only search covered all seven accessible owner repositories; no exact source repo or playable URL for Zombies vs Heavy Metal or Rocket 2 Nowhere was found. Do not substitute Demonanic, Gauntlet's Survival, Harvest//Zero or Zombie Invasion Defense. Staging registry still has only unlisted ZID development placeholder; saves/events/handoff tickets are zero and no challenge tables exist.
+- Current production Offerwall.GG v3 still calls journal posting and can issue LC; production containment is owner-gated. Staging v8 is record-only. Staging provider metadata still contains disabled Offerwall.GG with stale LC model; Taplayad absent.
+- Taplayad remains record-only design until account 10066's exact protocol, wall URL, signed transaction fields, unique transaction identity, reversal/retry semantics and incentivized-traffic permission are confirmed. Never map publisher points/callback reward to LC.
+- Documentation consistency was corrected: Creative Bible now names the two owner-locked portal launch games; Platform Build Spec §1 points to §0.4. No application code, provider configuration, database or deployment changed in this audit.
+- Next: preserve PR #20 for owner review; ChatGPT continues M2-T4 only when exact game source/playable references are available. No substitute routes, production action, callback or provider agreement.

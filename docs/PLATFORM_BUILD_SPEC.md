@@ -56,7 +56,7 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 ## 1. Product definition
 
 LegitLoot is a combined independent games and rewards platform with four public-facing pillars:
-1. Original games: *(superseded — see §0.2; currently Zombie Invasion Defense)*.
+1. Original games: the owner-selected portal launch titles are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere** (see §0.4); Zombie Invasion Defense is not a launch substitute.
 2. Approved third-party offerwalls and activities.
 3. Affiliate marketplace and promotional deals.
 4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval.

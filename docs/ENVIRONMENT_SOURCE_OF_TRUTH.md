@@ -527,3 +527,12 @@ No callbacks, data changes, schema changes, settings/secrets changes, provider a
 
 ### Offerwall.GG currencyName
 Internal guide says Loot coins; staging handler requires Loot Coins. Public Offerwall.GG docs describe the name as publisher-defined, so exact case must be confirmed from the placement's authorized configuration. No callback sent.
+
+
+## 2026-11-19 17:42 America/New_York — Current environment verification (read-only)
+- GitHub: integration `a0cef5e69867d31235ffca5778dc11bab7cfccba`; main `3fa7ca58992f786f7b59f22b8fb758149a873d6b`; 393 ahead / 0 behind. 21 branches, all `protected=false`.
+- PR #20 head `8cee6f7`, base `a0cef5e`, 9 ahead / 0 behind. Actions run 44624595265 passed 58 Node tests, no failures/skips, plus whitespace check. Independent COMMENT review 5984643477; not merged.
+- Production Supabase `gkbqderyjcuxnjbsiffb`: 7 migrations; Offerwall.GG postback v3 ACTIVE, verify_jwt=false; `private.process_offerwall_gg_postback` is SECURITY DEFINER and calls `private.post_journal_transaction` for LC issuance.
+- Staging Supabase `scmnxcsggquwtuyyjnnj`: 21 migrations; Offerwall.GG postback v8 ACTIVE, verify_jwt=false; routine is record-only. Provider rows: Offerwall.GG disabled with stale LC/LootCoins approved_reward_model and null terms/approval fields; CPAGrip disabled; no Taplayad row.
+- Staging game registry: only ZID development/unlisted, launch_url null. Game saves/events/handoff tickets each zero. No challenge/milestone/season tables found.
+- No project settings, secrets, schema, rows, functions, callbacks or financial records changed. Production containment remains owner-gated.
