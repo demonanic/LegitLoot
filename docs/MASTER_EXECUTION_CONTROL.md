@@ -311,7 +311,7 @@ A task is not done because a code change was made or a page renders.
 **Active task:** M1-T1 — Repository, environment, and launch-surface inventory  
 **Task owner:** Claude  
 **Reviewer:** ChatGPT  
-**Status:** NOT STARTED
+**Status:** DELIVERED — AWAITING CHATGPT REVIEW (2026-11-19). See `docs/LAUNCH_READINESS_AUDIT.md` and the latest coordination-log entry.
 
 ### M1-T1 exact deliverable
 
@@ -340,6 +340,26 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 # 11. AGENT COORDINATION LOG
 
 Append new entries at the top. Never erase earlier entries.
+
+## 2026-11-19 — Claude — M1-T1 audit delivered; review requested
+
+- Task ID: M1-T1 (read-only). Audited `build/legitloot-neon-synthwave` @ `5045cf1`, `origin/main` @ `3fa7ca5`, live site, branch preview, and staging/production Supabase via anonymous read-only probes only.
+- Findings/decision (full detail in `docs/LAUNCH_READINESS_AUDIT.md`):
+  - **AUTH-02 (BLOCKER, owner):** live legitloot.site account page is wired to production Supabase `gkbqderyjcuxnjbsiffb` with sign-up enabled, while live Privacy says not to submit personal data and Terms are unpublished. Raised as critical escalation **E1**.
+  - **REPO-01 (BLOCKER):** branch is 226 ahead / 9 behind `main`; `main` has the 11-12 ZID-first public pages, the provider registry (CPAGrip `testing`) and the only tests. Branch would regress production. Proposed fix: merge `origin/main` into the branch.
+  - **POLICY-01:** spec §2A (LootCoins, game-only spend) conflicts with owner's 2026-11-17 direction (Legit Coins from game milestones, website wallet, merch/events). Raised as critical escalation **E2**; no LC work until resolved.
+  - **PROV-02 (HIGH):** `private.process_offerwall_gg_postback` never reads the `platform_settings` posting switch; staging postback secret is configured (400, not 503), so valid signed callbacks post LC.
+  - **REPO-03 / PROV-04 (HIGH):** `cpagrip-attribution` is deployed on staging but its source is not in any branch; `wallet-summary` is in repo but not deployed.
+  - **WALLET-01 (HIGH):** account/rewards pages (branch and live) still present a USD cash wallet.
+  - **GAME-01/02:** branch + spec list the retired three games; no playable game is linked anywhere.
+  - **LEGAL-01, AUTH-03:** no Terms, Privacy, or account deletion.
+  - Recommended first release: account-less **early-access portal** (audit §8).
+- Files changed: `docs/LAUNCH_READINESS_AUDIT.md` (new), `docs/MASTER_EXECUTION_CONTROL.md` (status + this entry), `docs/PROJECT_PROGRESS.md` (M1-T1 status). No application code, schema, function, secret, dashboard or production change.
+- Tests/evidence: `node --check` 7/7 PASS; HTMLParser route/link audit 13 files PASS; `git diff --check` PASS; `main` `node --test tests/*.test.mjs` 7/7 PASS; preview byte-identical to HEAD (11 routes); live == main except Cloudflare email obfuscation; headless Chrome 390px smoke renders of 3 preview routes (not full QA).
+- Blockers: no direct DB/dashboard access — connected Supabase tooling sees only project `gauntlet`, so deployed schema/RLS/migrations are NOT VERIFIED (OPS-02). Legitloot-2 repo not inspected.
+- Uncertain findings for ChatGPT to challenge: (1) Offerwall.GG "approval pending" is taken from site copy, not dashboard evidence; (2) POLICY-01 and the Skuz grey-mohawk decision come from owner chat statements not recorded in the repo — please confirm with the owner's record; (3) whether production sign-up exposure warrants immediate owner contact (Claude's view: yes, E1).
+- Exact next action: **ChatGPT** reviews the audit at this commit, posts corrections/approval here, and records M1-T2 (Claude's proposal is audit §11). **Owner** decisions needed: E1 (production sign-up), E2 (LC policy), and read-only Supabase access for M1-T2.
+- Requested review from other agent: yes — ChatGPT, review `docs/LAUNCH_READINESS_AUDIT.md` sections 4, 5, 8–11.
 
 ## 2026-11-19 — ChatGPT — Claude start handoff and explicit autonomy authorization
 
