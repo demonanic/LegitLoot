@@ -102,6 +102,8 @@ test("record-only: reversals are matched and recorded, never post LC", needsDb, 
   await assert.rejects(call(db, { status: "reversed", atoms: -40000, digest: "r1" }), /does not match/);
   assert.equal((await call(db, { status: "reversed", atoms: -50000, digest: "r2" })).result, "reversal_recorded");
   assert.equal((await call(db, { status: "reversed", atoms: -50000, digest: "r2" })).result, "duplicate");
+  // A reversal that differs from the stored one is rejected, never reported as a duplicate.
+  await assert.rejects(call(db, { status: "reversed", atoms: -50000, digest: "r3" }), /Conflicting duplicate/);
   assert.equal((await db.query("select status from private.offerwall_gg_conversions")).rows[0].status, "reversed");
   assert.equal(await count(db, "private.journal_canary"), 0);
 });
@@ -116,6 +118,12 @@ test("record-only: invalid input is rejected before anything is stored", needsDb
   assert.equal(await count(db, "private.offerwall_gg_callback_events"), 0);
 });
 
+test("record-only: the routine can only return the three documented results", () => {
+  const sql = recordOnlyMigration().replace(/--.*$/gm, "");
+  const results = [...sql.matchAll(/jsonb_build_object\('result',\s*'([a-z_]+)'\)/g)].map((m) => m[1]).sort();
+  assert.deepEqual([...new Set(results)], ["duplicate", "recorded", "reversal_recorded"]);
+});
+
 test("record-only migration never references the ledger", () => {
   const sql = recordOnlyMigration().replace(/--.*$/gm, "");
   assert.ok(!/post_journal_transaction|ledger_accounts|journal_entries/i.test(sql));
@@ -125,6 +133,6 @@ test("Edge Function accepts only record-only results and never 'posted'", () => 
   const source = read("supabase/functions/offerwall-gg-postback/index.ts");
   const list = source.match(/RECORD_ONLY_RESULTS = \[([^\]]*)\]/);
   assert.ok(list, "RECORD_ONLY_RESULTS list missing");
-  assert.deepEqual(JSON.parse(`[${list[1]}]`).sort(), ["duplicate", "duplicate_reversal", "recorded", "reversal_recorded"]);
+  assert.deepEqual(JSON.parse(`[${list[1]}]`).sort(), ["duplicate", "recorded", "reversal_recorded"]);
   assert.ok(!/"posted"/.test(source.replace(/\/\/.*$/gm, "")));
 });

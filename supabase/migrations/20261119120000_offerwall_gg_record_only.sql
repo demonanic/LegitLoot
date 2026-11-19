@@ -11,8 +11,10 @@
 -- Result values returned to the Edge Function:
 --   recorded            first credited callback stored
 --   reversal_recorded   first reversed callback stored and matched to its conversion
---   duplicate           identical retry of a stored callback
---   duplicate_reversal  repeated reversal of an already-reversed conversion
+--   duplicate           identical retry of any stored callback (credit or reversal)
+-- (There is deliberately no separate "duplicate_reversal": events are unique per
+-- (transaction_id, callback_status), so a repeated reversal is always an identical
+-- retry and returns "duplicate"; a differing one raises.)
 --
 -- Apply to STAGING ONLY after review. Production has a different migration lineage
 -- (supabase/environments/production/migrations-archive/, audit MIG-01) and a separate
@@ -105,8 +107,8 @@ begin
     raise exception 'Reversal does not match original conversion';
   end if;
   if v_conversion.status = 'reversed' then
-    update private.offerwall_gg_callback_events set result = 'duplicate_reversal' where id = v_event_id;
-    return jsonb_build_object('result','duplicate_reversal');
+    -- Unreachable while callback events are retained (see header); fail closed.
+    raise exception 'Conversion already reversed';
   end if;
 
   update private.offerwall_gg_conversions

@@ -144,7 +144,7 @@ Deno.serve(async (request: Request) => {
   // provider reconciliation but never mint Legit Coins. "posted" is no longer an
   // accepted result; if the database still returns it, the record-only migration
   // has not been applied, so fail loudly instead of acknowledging.
-  const RECORD_ONLY_RESULTS = ["recorded", "reversal_recorded", "duplicate", "duplicate_reversal"];
+  const RECORD_ONLY_RESULTS = ["recorded", "reversal_recorded", "duplicate"];
   if (!data || !RECORD_ONLY_RESULTS.includes(data.result)) {
     console.error("Offerwall.GG callback returned an unexpected result", data?.result);
     return response("RETRY", 500);
