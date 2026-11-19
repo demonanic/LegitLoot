@@ -1290,3 +1290,36 @@ Production Offerwall containment, main branch protection, Taplayad account-speci
 ### Safety and next actions
 - No PR merge, deployment, Supabase settings/secrets/schema/data mutation, publisher change, callback, payment, provider agreement or production action occurred. Production containment and branch protection remain owner-gated.
 - Next: owner reviews PR #20 as an integration-only public-copy change; ChatGPT continues M2-T4 when exact game sources are supplied; Claude must not substitute other games. Continue record-only staging/provider design and keep production Offerwall.GG v3 disabled from any new use; do not alter production under this check.
+
+
+## 2026-11-19 18:21 ET — Independent Sync Watch: PR #20, previews, and launch blockers
+
+### Repository and PR state (read-only)
+- Integration `build/legitloot-neon-synthwave` is `affb6f54cdc98b17334021dd9d2d00ff6106d7d5`; production `main` is `3fa7ca58992f786f7b59f22b8fb758149a873d6b`. GitHub compare reports integration 402 commits ahead / 0 behind main.
+- GitHub lists 21 branches; the branch API reports `protected=false` for all 21, including `main` and integration.
+- PR #20 is open, non-draft, mergeable, 12 commits ahead / 0 behind integration. Head `2081d0fce8b5f066de500420f136cc6dc7de57d2`, base `affb6f54cdc98b17334021dd9d2d00ff6106d7d5`, 15 files changed. It remains a public-copy/navigation/test-only change; no provider, wallet, database or LC issuance logic changed.
+- Actions run [44632297288](https://github.com/demonanic/LegitLoot/actions/runs/44632297288) passed `npm ci`, `npm test` (58 passed, 0 failed), and submitted-patch whitespace check. The Node log contains a non-blocking DEP0169 `url.parse()` deprecation warning. Python/Playwright browser tests are not part of this workflow.
+- Independent COMMENT review `5984698005` found no blocking defect in the exact current PR head. It is not an APPROVE review or production-release approval. Latest Claude handoff comment is [7024420349](https://github.com/demonanic/LegitLoot/pull/20#issuecomment-7024420349), reporting sync to integration `affb6f5` and 58/58 local tests; no newer Claude handoff/implementation artifact was found.
+- PR #9 remains a stale, non-mergeable draft: 12 commits ahead / 193 behind integration. Do not merge as-is.
+
+### Cloudflare Pages preview verification (read-only)
+- Both Pages projects now have successful PR #20 preview deployments on branch `claude/hustle-rename`, commit `2081d0f`, with `environment=preview`.
+- `legitloot`: preview deployment `b883bf05`, URL `https://b883bf05.legitloot.pages.dev`, branch alias `https://claude-hustle-rename.legitloot.pages.dev`. Canonical production remains branch `main`, commit `3fa7ca5`, alias `https://legitloot.site`.
+- `legitloot-preview`: preview deployment `567830da`, URL `https://567830da.legitloot-preview.pages.dev`, branch alias `https://claude-hustle-rename.legitloot-preview.pages.dev`. Its separate canonical deployment remains on `design/industrial-cyberpunk-rebuild`; it is not the `legitloot.site` production project.
+- Both projects report empty project/deployment environment-variable maps. The checked-in `supabase-config.js` targets staging project `scmnxcsggquwtuyyjnnj`. No production deployment or Cloudflare setting was changed.
+
+### Fresh Supabase read-only verification
+- Production project `gkbqderyjcuxnjbsiffb`: 7 migrations; `offerwall-gg-postback` v3 ACTIVE, `verify_jwt=false`. Live `private.process_offerwall_gg_postback` is SECURITY DEFINER and calls `private.post_journal_transaction`, with user/platform LC ledger account locks. Provider-to-LC issuance remains possible and violates the owner-locked policy.
+- Staging project `scmnxcsggquwtuyyjnnj`: 21 migrations; `offerwall-gg-postback` v8 ACTIVE, `verify_jwt=false`. Its live database routine is record-only: it stores callback/conversion/reversal events and contains no LC ledger or journal posting call.
+- Staging `private.providers`: CPAGrip disabled with no approval metadata; Offerwall.GG disabled but retains stale `standard_virtual_currency / LC / LootCoins` reward metadata and null terms/approval fields; Taplayad is absent. No row changed.
+- Migrations remain 7 production / 21 staging. No settings, secrets, schema, rows, functions or migrations were modified.
+
+### M2-T4 game and challenge status
+- Staging `public.game_registry` still contains only `zid / zombie-invasion-defense`, title Zombie Invasion Defense, status `development`, `is_listed=false`, `launch_url=null`.
+- `private.game_saves`, `private.game_events`, and `private.game_handoff_tickets` each contain 0 rows. No challenge, milestone or season tables were found in public/private schemas.
+- Exact source repositories/playable URLs for the owner-selected **Zombies vs Heavy Metal** and **Rocket 2 Nowhere** remain unavailable in the connected repository inventory. Do not substitute unrelated games or invent URLs. M2-T4 remains active; ChatGPT is acting lead per Master Control.
+
+### Taplayad and remaining controls
+- Taplayad App ID 10066 remains selected as the initial Hustle publisher, but account-generation/protocol, canonical URL, payload-bound authentication, transaction identity, reversal matching, retries/idempotency, authoritative verification and incentivized-traffic permission remain unconfirmed. Keep any permitted staging work record-only. Publisher `$1 = 1 point`, `{reward}` and `{payout}` must never map to LC or user cash/withdrawal.
+- Production Offerwall.GG provider-to-LC issuance is the critical owner-gated blocker. Branch protection is disabled on all 21 branches. Support-mailbox verification, sign-up-pause verification, provider agreements/paid commitments and final production release remain owner-controlled.
+- No PR was merged, no deployment performed, no callback invoked, no provider terms accepted, no money moved, and no Supabase/Cloudflare settings, secrets, schema or data changed.
