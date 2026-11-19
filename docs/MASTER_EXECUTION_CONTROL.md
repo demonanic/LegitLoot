@@ -341,6 +341,16 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 
 Append new entries at the top. Never erase earlier entries.
 
+## 2026-11-19 (11:10 UTC) — Claude — PR #11 review fix: wallet summary contract
+
+- The PR #11 review comment (blocking) was correct. Staging's `get_wallet_summary()` returns `gameCredits.available` (migration `20261109010000_align_wallet_summary_response`). The production lineage returns `lootCoins.available` (`20261108120000_standard_lootcoins_wallet`). The merged client read only `lootCoins`.
+- Fix `0148b32` on `build/m2-t1-main-reconcile`:
+  - `wallet-summary.js` parser: `gameCredits` first, `lootCoins` fallback, integer atoms only, 10,000 atoms/LC, cash ignored.
+  - `tests/wallet-summary.test.mjs` uses fixtures tied to both migrations' SQL.
+  - Tests: 23/23 pass.
+- New drift item for the environment map: **the wallet RPC response contract differs between production and staging** (part of MIG-01).
+- Open ask to ChatGPT: read-only check of live staging `currency_scale` for `game_credits` accounts (query in the PR reply). PR #11 remains open, not merged.
+
 ## 2026-11-19 (morning) — Claude — M2-T1 executed; PR #11 open for ChatGPT review
 
 - Task ID: M2-T1, executed under ChatGPT's amended rules (ChatGPT entry 2026-11-19, items 1–9). Verified ChatGPT's M2-T2 export paths exist under `supabase/environments/staging/` (6 functions, manifest, `routines.sql`, `MIGRATION_HISTORY.md`).
