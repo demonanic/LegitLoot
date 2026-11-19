@@ -446,3 +446,29 @@ Production Offerwall.GG v3 still posts to the LC journal routine; production con
 - PR #9 remains an old draft with Zombie Invasion Defense browser assertions; the stale-PR finding is on the PR.
 
 Next: Claude should synchronize PR #16 and PR #17 once to current integration `1c3bbd2`; retain the passing PR #17 workflow and rerun it after sync. Claude should create the separate MIG-02 source-recovery branch from the evidence artifact and add tests, without replaying the migration or changing staging data. No further documentation-only commits are planned in this review cycle.
+
+
+## 2026-11-19 — Environment snapshot: combined CI and deployed staging containment
+
+### GitHub / Pages
+- Integration branch at start of check: build/legitloot-neon-synthwave = b6bcf75870025b13312c9d7006dc0670ae0b4c13; main = 3fa7ca58992f786f7b59f22b8fb758149a873d6b.
+- GitHub branch API returned 20 branches; none protected. main.protected=false; rulesets endpoint empty; detailed branch-protection endpoint 403.
+- Open PRs: #9, #16, #17, #18, #19. PR #19 is a draft combined test candidate only.
+- PR #18 and #19 preview bots deployed branch previews to both legitloot and legitloot-preview. On the PR branch, supabase-config.js explicitly points to staging project scmnxcsggquwtuyyjnnj. This is content-level confirmation that the checked preview source targets staging; Cloudflare dashboard project-level bindings/custom-domain routing were not independently verified. Do not treat preview bot success as production release.
+- Combined Actions run 44583018543 on PR #19 head 8795409: 50 passed, 0 failed, 0 skipped; npm ci and git diff --check passed.
+
+### Supabase
+- Production project: gkbqderyjcuxnjbsiffb; staging project: scmnxcsggquwtuyyjnnj.
+- Production migrations latest observed: 20261108081650 secure_offerwall_callback_tables. Staging latest observed: 20261119145340 offerwall_gg_record_only (after 20261118080655 game_platform_foundation).
+- Production offerwall-gg-postback v3 ACTIVE, verify_jwt=false; live private.process_offerwall_gg_postback references ledger_accounts and calls post_journal_transaction.
+- Staging offerwall-gg-postback v8 ACTIVE, verify_jwt=false; its source is byte-identical to supabase/functions/offerwall-gg-postback/index.ts in integration. Live private routine has no ledger/journal path. record_offerwall_gg_metadata also has no ledger/journal path. Staging callback events/conversions = 0/0.
+- Both projects' private schema currently denies USAGE to PUBLIC, anon, and authenticated and grants USAGE to service_role.
+- Staging private.providers: Offerwall.GG disabled but stale approved_reward_model={currency_code:LC,reward_mode:standard_virtual_currency}, terms URL/verification/approval reference null; CPAGrip disabled with no approved reward model; Taplayad absent. No data changed.
+
+### Taplayad (public docs + owner screenshots)
+- Owner-selected app 10066; owner screenshot shows Active badge and publisher point multiplier $1=1 point. This is screenshot evidence only, not proof of incentivized-traffic approval or LegitLoot integration.
+- Owner URL template: https://offerwall.tplayad.com/10066/{user_id}. Current official docs instead show iframe https://app.tplayad.com/app/iframe/{APP_ID}/{USER_ID}; confirm which route is correct for app 10066.
+- Official docs: https://tplayad.com/docs; postback signature md5(app_id . user_id . api_secret); status 1 credited / 2 reversed; source IP 176.97.212.58; macros include user_id, payout, reward, offer_id, country, user_ip, status, sig. No unique transaction ID macro is listed; sample dedupe is offer_id + user_id. Signature does not bind reward/payout/offer_id/status. Do not trust this as transaction-level payload integrity or reliable reversal matching. Require provider clarification or stronger signed transaction proof before live callback handling.
+- Publisher-side points/revenue/withdrawal are not LC, user cash value, USD peg, or user withdrawal.
+
+No live callback was invoked; no project setting/secret, schema/data, publisher dashboard, or production resource was changed.
