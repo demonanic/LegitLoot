@@ -36,19 +36,15 @@
     });
   };
   document.querySelectorAll("[data-auth-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.authTab)));
-  const formatUsd = (cents) => {
-    const amount = Number(cents) / 100;
-    return Number.isFinite(amount) ? amount.toLocaleString("en-US", { style: "currency", currency: "USD" }) : "$—";
-  };
   const setWalletUnavailable = (fields) => {
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
     const gameDetail = $("wallet-lootcoins-detail");
-    const cashDetail = $("wallet-cash-detail");
-    if (gameDetail) gameDetail.textContent = "The wallet summary could not be loaded. Please try again later.";
-    if (cashDetail) cashDetail.textContent = "No wallet values were changed.";
+    if (gameDetail) gameDetail.textContent = "The wallet summary could not be loaded. No balances were changed. Please try again later.";
   };
   const loadWalletSummary = async () => {
-    const fields = ["wallet-lootcoins-available", "wallet-cash-available", "wallet-cash-pending", "wallet-cash-reserved", "wallet-cash-paid"];
+    // Only the Legit Coins balance is shown to players. Any cash fields the
+    // server still returns are deliberately ignored (cash is deferred; spec §0.1).
+    const fields = ["wallet-lootcoins-available"];
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Loading…"; });
     let timeoutId;
     try {
@@ -58,24 +54,13 @@
       });
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
-      if (!data || !data.lootCoins || !data.cash ||
-          data.lootCoins.available == null ||
-          data.cash.availableCents == null ||
-          data.cash.pendingCents == null ||
-          data.cash.withdrawalReservedCents == null ||
-          data.cash.paidCents == null ||
-          data.cash.heldCents == null) {
+      if (!data || !data.lootCoins || data.lootCoins.available == null) {
         throw new Error("Wallet summary response was incomplete");
       }
       const lootCoinsAtoms = Number(data.lootCoins.available);
-      if (!Number.isFinite(lootCoinsAtoms)) throw new Error("Invalid LootCoins balance");
+      if (!Number.isFinite(lootCoinsAtoms)) throw new Error("Invalid Legit Coins balance");
       $("wallet-lootcoins-available").textContent = (lootCoinsAtoms / 10000).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 4 }) + " LC";
-      $("wallet-cash-available").textContent = formatUsd(data.cash.availableCents);
-      $("wallet-cash-pending").textContent = formatUsd(data.cash.pendingCents);
-      $("wallet-cash-reserved").textContent = formatUsd(data.cash.withdrawalReservedCents);
-      $("wallet-cash-paid").textContent = formatUsd(data.cash.paidCents);
-      $("wallet-lootcoins-detail").textContent = "LootCoins earned through approved activities. LC is a platform reward currency, not cash and not withdrawable.";
-      $("wallet-cash-detail").textContent = formatUsd(data.cash.heldCents) + " held. Pending provider funds are not available for withdrawal.";
+      $("wallet-lootcoins-detail").textContent = "Legit Coins will come only from verified game milestones and challenges. LC are not cash, not transferable and not withdrawable.";
     } catch (error) {
       console.error("LegitLoot wallet summary failed:", error);
       showMessage("WALLET SUMMARY UNAVAILABLE", "Your account is signed in, but the secure wallet summary did not load. No balances have been changed. Please try again later.", true);

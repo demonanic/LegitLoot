@@ -1,7 +1,7 @@
 // Renders the earning hub from window.LEGITLOOT_EARN_REGISTRY.
 // Display and navigation only: this script never records, attributes or credits
 // rewards. Opening a provider asks a server function for an account-bound link;
-// all tracking, callbacks and LootCoin issuance stay server-side.
+// all tracking and callbacks stay server-side. Partner offers never award Legit Coins.
 (() => {
   const registry = window.LEGITLOOT_EARN_REGISTRY;
   const grid = document.getElementById("provider-hub");
@@ -70,8 +70,8 @@
   const openCount = providers.filter(canOpen).length;
   if (summary) {
     summary.textContent = openCount === 0
-      ? "No earning provider is open to players right now, so nothing here can earn LootCoins yet. Each provider's status is shown on its card."
-      : `${openCount} provider${openCount === 1 ? " is" : "s are"} open to signed-in players. LootCoins are credited only by our server after a provider confirms a completion.`;
+      ? "No earning provider is open to players right now, so nothing here is available yet. Each provider's status is shown on its card."
+      : `${openCount} provider${openCount === 1 ? " is" : "s are"} open to signed-in players. Partner offers do not award Legit Coins.`;
   }
 
   if (buttons.size === 0) return;

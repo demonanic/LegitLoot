@@ -2,7 +2,8 @@
 //
 // This file only DESCRIBES providers for display. It never tracks, attributes,
 // verifies or credits anything. Tracking, attribution, provider callbacks and
-// LootCoin issuance live server-side (Supabase Edge Functions + ledger RPCs).
+// any server-side processing live in Supabase. Provider callbacks must never
+// award Legit Coins (docs/PLATFORM_BUILD_SPEC.md §0.1).
 //
 // To add a provider (offerwall, survey network, CPA network or direct offer),
 // add one entry to `providers`. Rules:
@@ -20,13 +21,13 @@
       label: "Active",
       mark: "●",
       canOpen: true,
-      detail: "Open to signed-in players. LootCoins are credited only by our server after the provider confirms a completion."
+      detail: "Open to signed-in players. Partner offers do not award Legit Coins."
     }),
     testing: Object.freeze({
       label: "Testing · not open",
       mark: "◐",
       canOpen: false,
-      detail: "Integration is being tested on our staging system. Not open to players, and it issues no LootCoins."
+      detail: "Integration is being tested on our staging system. Not open to players."
     }),
     pending_approval: Object.freeze({
       label: "Pending approval",
@@ -63,7 +64,7 @@
       symbol: "◈",
       categories: Object.freeze(["offerwall"]),
       kicker: "Offerwall",
-      description: "Third-party offerwall. Offers, eligibility and LootCoin amounts are set by the provider and will only be shown once the integration is approved and verified.",
+      description: "Third-party offerwall. Offers and eligibility are set by the provider and will only be shown once the integration is approved and verified. Partner offers do not award Legit Coins.",
       state: "pending_approval",
       stateDetail: "Publisher approval is pending. The wall stays unavailable until approval, server secrets, callback verification and ledger tests are complete.",
       launch: Object.freeze({
@@ -80,9 +81,9 @@
       symbol: "◆",
       categories: Object.freeze(["offerwall", "cpa"]),
       kicker: "Offerwall · CPA network",
-      description: "Third-party CPA network offerwall. Offers, eligibility and LootCoin amounts are set by the provider and will only be shown once the integration is verified.",
+      description: "Third-party CPA network offerwall. Offers and eligibility are set by the provider and will only be shown once the integration is verified. Partner offers do not award Legit Coins.",
       state: "testing",
-      stateDetail: "The callback receiver is being built and tested on our staging system. Not open to players, and no LootCoins are issued from it.",
+      stateDetail: "The callback receiver is being built and tested on our staging system. Not open to players.",
       // No launch endpoint until the server-side wall-link function is built and verified.
       launch: null
     }),
