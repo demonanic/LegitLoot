@@ -19,19 +19,17 @@ Then read:
 
 The owner has selected **launch LegitLoot** as the primary direction. Do not introduce project creep.
 
-The active milestone and exact next task are always recorded in `docs/MASTER_EXECUTION_CONTROL.md`. At the time this file was created:
+The current milestone and exact active task are defined only by `docs/MASTER_EXECUTION_CONTROL.md`. The M1 audit is historical and accepted with qualifications. The active milestone is now **M2 — Launch Blocker Closure and Basic-Operable Release**.
 
-- Active milestone: M1 — Launch Readiness Baseline and Blocker Plan.
-- Active task: M1-T1 — Repository, environment, and launch-surface inventory.
-- Task owner: Claude.
-- Reviewer: ChatGPT.
-- M1-T1 is read-only. Do not modify application code during that task.
+Current next task: **M2-T3a — staging record-only Offerwall.GG callback containment**. Claude owns the implementation and review handoff; ChatGPT has the linked staging Supabase access and is the deployment operator. The record-only migration must be applied to staging before the matching Edge Function is deployed. Verify the live routine has no LC ledger/journal write path. Never invoke a live callback for testing. Do not touch production.
 
-Follow the task's exact steps and acceptance criteria. Continue routine work without asking the owner for unnecessary confirmations.
+Continue the supporting PR #12/#14/#15 review work and AUTH-03 design as recorded in the Master Execution Control. Do not wait for routine owner approval for independently reviewed integration merges or staging deployments; the owner has granted standing authority. If your own connector lacks staging write access, hand off the exact reviewed artifact to ChatGPT rather than asking the owner to relay permissions.
+
+Production and business-critical gates remain unchanged.
 
 ## Collaboration with ChatGPT
 
-ChatGPT is the architecture/risk reviewer and independent second set of eyes. Claude is the primary repository investigator and implementation lead for the current M1 task.
+ChatGPT is the architecture/risk reviewer, independent second set of eyes, and staging deployment operator where its connected access permits. Claude is the primary implementation lead for the active M2 milestone.
 
 Both agents are authorized to:
 - Review each other's findings and code.
