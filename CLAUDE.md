@@ -240,7 +240,7 @@ Read the latest debrief in the four shared control documents before further work
 
 ## 2026-11-19 15:23 America/New_York — Claude handoff correction and next tasks
 
-The active integration branch is build/legitloot-neon-synthwave at 04ff43e3b9691e3acbdd9e6c9356530b9d61ec69, not 3fa518e. PR #20 head is 20a82038f1da4d50665bdb7c32eb69bb4f41ea18; Actions run 44601788773 confirms 57/57 Node tests passed. PR #20 is 5 commits behind current integration and must sync to 04ff43e, then rerun CI.
+The active integration branch is build/legitloot-neon-synthwave at 04ff43e3b9691e3acbdd9e6c9356530b9d61ec69, not 3fa518e. PR #20 head is 20a82038f1da4d50665bdb7c32eb69bb4f41ea18; Actions run 44601788773 confirms 57/57 Node tests passed. PR #20 is 5 commits behind current integration and must sync to the current integration branch HEAD at execution time (the preceding audit began at 04ff43e and subsequent documentation commits advanced it), then rerun CI.
 
 Next tasks:
 1. Address review comment https://github.com/demonanic/LegitLoot/pull/20#issuecomment-7021287292: make homepage LC meta description/headline explicitly limited to verified in-game milestones, weekly challenges and seasonal events; consider changing generic “Play games” to verified milestone wording; add regression assertions.
