@@ -542,3 +542,20 @@ This update records the current build/review state; it does not replace the depl
 3. Run the integrated test suite and syntax/diff checks on the current integration head; record exact commit and results.
 4. After independent review, merge verified source/documentation PRs into the integration branch and proceed with staging-only record-only callback migration/function deployment under the standing owner authorization.
 5. Keep production Offerwall containment, production release, legal publication, paid commitments, live financial activity, and irreversible business choices owner-gated.
+
+
+## 17. PROV-07 live-state recheck — 2026-11-19 (12:14 UTC)
+
+**Status: DEFECT — VERIFIED in both deployed environments.**
+
+Read-only Supabase checks reconfirmed:
+- Production `offerwall-gg-postback` v3 ACTIVE, `verify_jwt=false`; staging v7 ACTIVE, `verify_jwt=false`.
+- Production has 7 applied migrations; staging has 20, latest `20261118080655 game_platform_foundation`. The build-branch record-only migration `20261119120000_offerwall_gg_record_only` is not applied to staging.
+- Both live `private.process_offerwall_gg_postback` definitions still select/lock LC ledger accounts, build journal entries, and call `private.post_journal_transaction`. Their public wrappers delegate to the private routine and require `service_role`.
+- Callback events and conversions are 0/0 in production and 0/0 in staging. No callback was invoked.
+
+**Action / owner boundary:**
+- The staging record-only source is already merged to the integration branch. After independent review, Claude may apply the staging migration first, deploy the matching staging Edge Function second, and verify the live routine contains no ledger/journal write path. The owner has authorized staging changes without per-action approval.
+- Production remains separate: no production migration/function deployment, secret change, callback, reward issuance, or money movement is authorized by this staging task. The owner must choose the production containment approach.
+
+This check changed no settings, secrets, functions, migrations, schema, data, callbacks, or financial records.
