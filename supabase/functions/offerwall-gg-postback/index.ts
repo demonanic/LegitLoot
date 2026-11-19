@@ -104,7 +104,11 @@ Deno.serve(async (request: Request) => {
         || (status === "reversed" && payoutNumber > 0)) {
       return response("INVALID PAYOUT", 400);
     }
-    payoutUsdValue = payoutUsd;
+    // Store the original provider payout as a positive amount; reversal state is
+    // tracked separately on the conversion row. Preserve decimal text exactly.
+    payoutUsdValue = status === "reversed" && payoutUsd.startsWith("-")
+      ? payoutUsd.slice(1)
+      : payoutUsd;
   }
 
   let providerTimestamp: string | null = null;
