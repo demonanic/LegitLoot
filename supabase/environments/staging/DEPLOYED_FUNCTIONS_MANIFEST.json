@@ -3,17 +3,17 @@
   "captured_at": "2026-11-19",
   "project_ref": "scmnxcsggquwtuyyjnnj",
   "source": "Supabase deployed Edge Function API",
-  "note": "Exact source files returned by the deployed-function API. This is a source snapshot, not proof that GitHub is canonical. Secret values are not included.",
+  "note": "Exact source files returned by the deployed-function API. Updated after staging offerwall-gg-postback v8 deployment; secret values are not included.",
   "functions": [
     {
       "id": "9c3c7391-09cb-489f-8cf7-6e3c7122c4e8",
       "slug": "offerwall-gg-postback",
       "status": "ACTIVE",
-      "version": 7,
+      "version": 8,
       "created_at": 1794218444294,
-      "updated_at": 1794425098381,
+      "updated_at": 1795100036897,
       "verify_jwt": false,
-      "ezbr_sha256": "6248f3c1e21796d6055ca9d221fa5e7b43bb90ac1a73c04240e0b2a32e5c34f0",
+      "ezbr_sha256": "d17c18d7ca2643b9fac2fd8c336e741f27edea63e7bb819764b8927e796c321e",
       "files": [
         {
           "name": "index.ts"
