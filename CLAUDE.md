@@ -21,7 +21,7 @@ The owner has selected **launch LegitLoot** as the primary direction. Do not int
 
 The current milestone and exact active task are defined only by `docs/MASTER_EXECUTION_CONTROL.md`. The M1 audit is historical and accepted with qualifications. The active milestone is now **M2 — Launch Blocker Closure and Basic-Operable Release**.
 
-Current active task: **M2-T5 — Earn → Hustle public naming and launch-copy reconciliation**. Claude is active again; work from the latest dated assignment in `docs/MASTER_EXECUTION_CONTROL.md`. Create a separate feature branch from current integration, audit all public labels/navigation/page titles/homepage copy/tests/docs, and rename public Earn-facing language to Hustle without changing provider/technical identifiers or inventing routes. Correct any copy implying provider offers award LC: provider points remain separate from LC. Keep incomplete systems clearly labeled. Add regression tests and verify the preview. Do not implement Taplayad callbacks until signature, transaction identity, retry/reversal semantics and incentivized-traffic permission are verified.
+Current active task: **M2-T4 — verify and integrate Zombies vs Heavy Metal and Rocket 2 Nowhere**. `docs/MASTER_EXECUTION_CONTROL.md` is authoritative and currently assigns ChatGPT as acting lead; Claude may resume when available. Do not treat M2-T5 public-copy reconciliation as still active: PR #20 has been independently reviewed at head `ad21bbe`, its latest Actions run passed, and no blocking defect was found in the scoped copy diff. It has not been merged; after the latest coordination-document commit, it requires a documentation-only sync and CI rerun before final owner review. Continue M2-T4 by locating the exact source repositories and playable URLs for both approved games. Exact-title GitHub repository searches returned no matches. Do not invent links or substitute unrelated games. Do not implement live Taplayad callbacks until the account generation, applicable callback contract, payload authentication, transaction/reversal identity, retries and permission are confirmed.
 
 Continue the supporting PR #12/#14/#15 review work and AUTH-03 design as recorded in the Master Execution Control. Do not wait for routine owner approval for independently reviewed integration merges or staging deployments; the owner has granted standing authority. If your own connector lacks staging write access, hand off the exact reviewed artifact to ChatGPT rather than asking the owner to relay permissions.
 
@@ -250,3 +250,33 @@ Next tasks:
 5. Do not change production Offerwall.GG: production v3 and its SQL routine still permit provider-to-LC journal issuance. Production containment remains owner-gated.
 
 Production containment/deployment, main branch protection, provider agreements/live activation, paid commitments, destructive data changes, legal/business approval and final launch remain owner-controlled. Do not change Supabase settings/secrets/schema/data or invoke callbacks.
+
+
+## 2026-11-19 16:54 America/New_York — Sync Watch handoff: M2-T4 authority, PR #20 review, Taplayad new/legacy protocol split
+
+Read the latest Master Execution Control entry and all four working records before acting.
+
+### Current active task
+- M2-T4 is active: identify and integrate the exact playable/source builds for Zombies vs Heavy Metal and Rocket 2 Nowhere. ChatGPT is acting lead per Master Execution Control. Exact-title GitHub repository searches returned no matches; do not substitute unrelated projects or invent URLs. The owner must provide the exact source repo/playable URL for each title if no connected source reveals them.
+- M2-T5 public Earn-to-Hustle copy reconciliation is now a supporting PR candidate, not the active milestone. PR #20 is open at head ad21bbe, base integration 3db61c0, mergeable and synchronized at audit time. Its 15-file diff is limited to public labels/copy and tests. Actions run 44609090382 passed the workflow's install, Node test and patch-whitespace steps. Claude reports 58/58 local; the exact Actions test count was not independently retrieved. Python/Playwright remains outside CI.
+- ChatGPT's formal PR COMMENT review is ID 5984053898: no blocking defect in the scoped diff. It is not an APPROVE review. No merge occurred. The latest documentation commit will make PR #20 one commit behind; sync and rerun CI before final owner review.
+
+### New Taplayad integration finding — do not guess the account protocol
+The official public docs now expose two separate systems:
+- New/current docs: https://tplayad.com/docs. The macro names match the owner's screenshots. Signature is md5(app_id . user_id . api_secret); no transaction-ID macro is listed; the example dedupe key is offer_id + user_id. The signature does not bind reward, payout, offer ID or status.
+- Legacy docs: https://www.tplayad.com/doc/postback. It lists subId, transId (unique), reward, payout, status, campaign_id, uuid, and signature md5(subId . transId . reward . secret); it documents retries and OK/DUP. Status is still outside the signature.
+- The new docs link separate new and old dashboard systems. Owner URL https://offerwall.tplayad.com/10066/{user_id} differs from the new iframe https://app.tplayad.com/app/iframe/{APP_ID}/{USER_ID}. The screenshot macros resemble the new system, but App ID 10066's account generation and URL alias are not confirmed.
+- Obtain written account-specific confirmation of system/version, wall URL, signed fields, stable transaction ID, reversal semantics, retries/idempotency, and authoritative transaction verification. No live callback code until this is resolved. Keep any permitted staging work record-only and never issue LC from provider events.
+- Terms updated 2026-10-29 require 18+, prohibit fraud, make publisher payments subject to dashboard terms and include indemnification; they do not establish account-specific approval for LegitLoot's exact use. No agreement accepted.
+
+### Fresh environment state
+- Production Offerwall.GG v3 remains ACTIVE (verify_jwt=false) and live private.process_offerwall_gg_postback calls private.post_journal_transaction: critical owner-gated LC-policy violation.
+- Staging Offerwall.GG v8 is ACTIVE (verify_jwt=false) and record-only. Deployed source exactly matches integration (6,990 bytes). Staging provider row is disabled but stale LC/LootCoins metadata and null terms/approval remain; Taplayad absent.
+- PR #20's config matches integration and targets staging. Cloudflare reports successful branch previews in both Pages projects; dashboard-level bindings are unverified.
+- Offerwall.GG currencyName casing remains unresolved: internal guide says Loot coins; staging handler requires Loot Coins; public docs call the name publisher-defined. Confirm the actual placement value before any source/doc/test change.
+
+### Next actions and boundaries
+1. Sync PR #20 after the new integration docs commit and rerun CI; ask ChatGPT for independent re-review before any integration merge.
+2. Continue M2-T4 source discovery; no guessed game URLs.
+3. Keep Taplayad record-only until the exact account protocol and permission are confirmed.
+4. No production containment, production merge/deploy, setting/secret change, schema/data mutation, live callback, payment, provider agreement, security weakening or legal/business commitment without the existing owner gate.
