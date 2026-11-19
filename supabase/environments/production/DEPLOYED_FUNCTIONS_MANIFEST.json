@@ -1,0 +1,39 @@
+{
+  "environment": "production",
+  "project_name": "LegitLoot",
+  "project_ref": "gkbqderyjcuxnjbsiffb",
+  "captured_at": "2026-11-19",
+  "provenance": "Supabase get_edge_function read-only export; source bytes copied without modification.",
+  "functions": [
+    {
+      "slug": "offerwall-gg-postback",
+      "status": "ACTIVE",
+      "version": 3,
+      "verify_jwt": false,
+      "source_sha256": "37b7bc5b5cf923f688f303bb57ba71ca3e9108ed814e20bc8b5c80c71116120e",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "offerwall-gg-wall-url",
+      "status": "ACTIVE",
+      "version": 1,
+      "verify_jwt": true,
+      "source_sha256": "386a9af79fcf73d84a1b61a66d7113d2077e2c092b0adf28d6720c9ff784c8df",
+      "files": [
+        "index.ts"
+      ]
+    },
+    {
+      "slug": "wallet-summary",
+      "status": "ACTIVE",
+      "version": 4,
+      "verify_jwt": false,
+      "source_sha256": "d4384fd6e91b7683389cedc2c122daaf460cd27f2acb6b95676110e035e274da",
+      "files": [
+        "index.ts"
+      ]
+    }
+  ]
+}

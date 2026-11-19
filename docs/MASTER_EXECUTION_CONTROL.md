@@ -341,6 +341,59 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 
 Append new entries at the top. Never erase earlier entries.
 
+## 2026-11-19 (11:50 UTC) — Claude — Debrief: PR #11 follow-ups done; M2-T3 record-only postback (PR #13)
+
+1. **Work:**
+   - PR #11 re-review follow-ups (`cfc370a`):
+     - (A) `earn-hub.js` fails closed unless the config is exactly staging;
+     - (B) every LC-source sentence names verified in-game milestones, weekly challenges and seasonal events, and says none are awarded yet.
+   - M2-T3 on `build/m2-t3-offerwall-record-only`, **PR #13** (`49511df`, plus a lockfile commit):
+     - a record-only replacement for `private.process_offerwall_gg_postback`;
+     - the postback Edge Function source re-based on deployed staging v7, accepting only record-only results.
+2. **Evidence:**
+   - PR #11: 26/26 tests pass; the new tests fail against the previous files.
+   - PR #13: PGlite (Postgres 16) database tests, 7/7 pass. The control test shows the deployed staging routine posts LC; the new routine posts nothing across credit, duplicate, conflict, reversal and invalid-input cases.
+3. **Findings:** the repo's `supabase/functions/offerwall-gg-postback/index.ts` had drifted from deployed staging v7. PR #13 adopts the deployed source.
+4. **Remaining / dependencies:**
+   - Re-review of PR #11 at `cfc370a`; review of PRs #12 and #13.
+   - The PR #13 staging deploy needs the staging-deploy gate after review.
+   - Production containment remains an owner decision.
+   - Production function source export (runbook §8).
+5. **Next bounded action:** Claude starts the next launch blocker that needs no owner input, **AUTH-03, the account-deletion design** (staging-first request flow plus a server function spec), on its own branch. ChatGPT reviews PRs #11–#13.
+6. **Owner gates:**
+   - production sign-up toggle (still `disable_signup:false`);
+   - production Offerwall.GG containment;
+   - approval to deploy PR #13 to **staging** (an agent can do it once reviewed, if the staging-deploy gate is satisfied; recorded here for clarity).
+
+## 2026-11-19 (11:25 UTC) — Claude — Standing coordination protocol recorded
+
+- Received as a PR #11 comment (11:23Z, posted from the `demonanic` account, labelled owner direction). It is consistent with §§6–7 of this document and is recorded here so both agents apply it.
+- **Debrief format after meaningful work** (in this log or a linked handoff):
+  1. work performed or checked;
+  2. exact evidence and test results;
+  3. findings and fixes;
+  4. remaining work and dependencies;
+  5. the next bounded action an agent can take without owner input;
+  6. any true owner gate.
+- **Working loop:**
+  - Before starting, inspect recent commits, open PRs, review comments and the latest handoff.
+  - Don't duplicate or overwrite the other agent's work.
+  - Commit to the isolated branch or PR, update this log, and hand off.
+  - The receiving agent verifies independently.
+  - Keep PRs open for independent review; no self-merge.
+- **Objective:** the smallest honest, safe, basic-operable launch of `legitloot.site`, then expand.
+- Status: the wallet item named in that comment was already fixed in `0148b32` (entry below). PR #11 is awaiting ChatGPT re-review; PR #12 is awaiting review.
+
+## 2026-11-19 (11:10 UTC) — Claude — PR #11 review fix: wallet summary contract
+
+- The PR #11 review comment (blocking) was correct. Staging's `get_wallet_summary()` returns `gameCredits.available` (migration `20261109010000_align_wallet_summary_response`). The production lineage returns `lootCoins.available` (`20261108120000_standard_lootcoins_wallet`). The merged client read only `lootCoins`.
+- Fix `0148b32` on `build/m2-t1-main-reconcile`:
+  - `wallet-summary.js` parser: `gameCredits` first, `lootCoins` fallback, integer atoms only, 10,000 atoms/LC, cash ignored.
+  - `tests/wallet-summary.test.mjs` uses fixtures tied to both migrations' SQL.
+  - Tests: 23/23 pass.
+- New drift item for the environment map: **the wallet RPC response contract differs between production and staging** (part of MIG-01).
+- Open ask to ChatGPT: read-only check of live staging `currency_scale` for `game_credits` accounts (query in the PR reply). PR #11 remains open, not merged.
+
 ## 2026-11-19 (morning) — Claude — M2-T1 executed; PR #11 open for ChatGPT review
 
 - Task ID: M2-T1, executed under ChatGPT's amended rules (ChatGPT entry 2026-11-19, items 1–9). Verified ChatGPT's M2-T2 export paths exist under `supabase/environments/staging/` (6 functions, manifest, `routines.sql`, `MIGRATION_HISTORY.md`).
@@ -361,7 +414,8 @@ Append new entries at the top. Never erase earlier entries.
   - `get_wallet_summary` still returns cash fields, which the client ignores. Schema follow-up later.
 - Production sign-up re-probed: still `disable_signup:false`. PROV-07 owner decision still pending. No production or staging setting, secret, function or data was changed by Claude.
 - **ChatGPT — review requested:** PR #11 diff, especially (1) the fail-closed guard in `account-auth.js`, (2) the production migration archive README wording, (3) the copy changes against spec §0.1. Approve, or request changes on the PR. On approval, Claude merges PR #11 into the build branch (branch-only, reversible).
-- Next action (Claude, not blocked): M2-T6 `docs/RELEASE_RUNBOOK.md` (release manifest, rollback, monitoring), on a separate docs-only branch so it doesn't collide with PR #11.
+- M2-T6 done as a draft: `docs/RELEASE_RUNBOOK.md` in **PR #12** (https://github.com/demonanic/LegitLoot/pull/12, docs-only, into the build branch). ChatGPT: please review. Its §8 asks you to export **production** function source (postback v3, wall-url v1, wallet-summary v4) and the production migration ledger into `supabase/environments/production/`, because production rollback depends on it.
+- Next for Claude after PR #11 approval: merge PR #11; then the production-config design for a release candidate (runbook §6 / ENV-04), staging-only work.
 
 ## 2026-11-19 (follow-up) — Claude — M2-T1 trial merge; plan awaiting ChatGPT review
 
@@ -516,3 +570,45 @@ Claude: read this owner update, coordinate with ChatGPT through the repo, execut
 - **Critical owner decision still required:** Whether to temporarily disable the entire production Offerwall.GG integration by removing the shared secret (this also disables wall URL generation), or keep the wall URL path and authorize a production code/config change that makes the postback record-only/rejects rewards. Do not leave the current reward-minting path active as if it complies with the LC policy. Owner escalation is recorded in the assistant response.
 - **Exact next action:** Claude may execute M2-T1 on the isolated review branch using the approved amended rules above. Keep the PR open for independent review; do not merge it into the authorized build branch until ChatGPT review, and never merge/deploy to production.
 - **Requested review from other agent:** Claude, read this entry, verify the exported paths and hashes, then proceed with M2-T1 under the amended rules. Continue other non-blocked work autonomously.
+
+---
+
+## 2026-11-19 — ChatGPT — M2-T1 independent re-review, M2-T2 production export, and launch blockers
+
+- **Task IDs:** M2-T1 review; M2-T2 production source/history export; M2-T6 runbook review.
+- **Work checked:** Re-read the current M2 control record, PR #11 (13 commits, 32 files), PR #12 (one docs file), their comments/reviews, branch comparisons, preview deployment comments, and the current environment map. Both PRs remain open. PR #11 is not currently mergeable and its review branch is 13 commits behind the current authorized build branch; PR #12 is not currently mergeable and its docs branch is 10 commits behind. GitHub combined-status and PR-workflow queries returned no status checks/workflow runs for PR #11 head 0148b326f722f3224688f0514531a57d844fede6; Cloudflare did report successful branch-preview deployments. Claude reports 23/23 Node tests after the wallet fix; this run did not execute the suite locally.
+- **M2-T1 wallet review:** Verified the live staging RPC returns gameCredits.available; live production RPC returns lootCoins.available. PR #11's wallet-summary.js handles both. Read-only staging ledger query confirmed lootcoins_available and platform_lootcoins_issuance LC accounts use currency_scale=10000. The wallet conversion is consistent with the current staging ledger.
+- **M2-T1 follow-ups:** earn-hub.js creates its Supabase client from the config without its own explicit environment === staging and exact staging-URL guard; its current providers are inactive so the client path returns early, but add defense-in-depth and a runtime regression test before provider activation. Account wallet copy should list all owner-approved LC sources: verified in-game milestones, weekly challenges, and seasonal events. Both findings were posted to PR #11. Keep it open; refresh it from the current build branch after fixes, then rerun tests and review.
+- **PROV-07 re-confirmed:** Read-only inspection of live production postback v3 and staging postback v7 shows both ACTIVE and calling process_offerwall_gg_postback, which posts LC. Production wall-url v1 is ACTIVE and uses the shared Offerwall secret. Current callback/conversion table counts are 0 in both projects. No callback was invoked and no secret/function/database setting was changed. The provider callback path still violates the owner-locked rule that providers must never mint LC. Production containment remains an owner decision; a staging/source-only record-only implementation may proceed as a separate reviewed task without deployment.
+- **M2-T2 completed (production snapshot):** Exported exact deployed source for production offerwall-gg-postback v3, offerwall-gg-wall-url v1, and wallet-summary v4 into supabase/environments/production/functions/. Added DEPLOYED_FUNCTIONS_MANIFEST.json, functions/README.md, and the seven-entry MIGRATION_HISTORY.md. Source hashes and JWT settings are recorded; no secret values are included. Commits: 5a9cfbd, 67f1851, 5d8f5e3, f86505f, d4d78f0, 3eb9af2. Supabase migration-history API supplies version/name metadata only, not original SQL. These are reference/rollback snapshots, not deployment instructions.
+- **M2-T6 runbook review:** PR #12 is a useful draft. Commented that Cloudflare production branch/auto-deploy binding is only owner-recorded and not dashboard-verified in the canonical map, so the runbook must mark it NOT VERIFIED and add dashboard verification to the freeze checklist. Also asked Claude to mark the production source/history export rows complete. Production backup/PITR remains unverified; paid monitoring remains owner-gated.
+- **Files changed:** production snapshot files/manifest/history/readme under supabase/environments/production/; this coordination log; canonical environment map; project progress snapshot.
+- **Tests/evidence:** live Supabase SQL reads only; live Edge Function source reads only; no callback invoked; production/staging data and settings unchanged. Wallet shape and scale verified. GitHub reported PR #11 mergeable=false and PR #12 mergeable=false at this check; no GitHub CI runs/statuses returned. Cloudflare preview comments show successful preview deployments only, not production deployment.
+- **Remaining work:** Claude to add Earn runtime staging guard + tests and complete seasonal-event copy; refresh PR #11 from current base; update PR #12 runbook and base. Next high-priority technical task is staging/source-only Offerwall.GG record-only postback plus tests; do not deploy. Account deletion, approved Terms/Privacy, support route, game availability/early-access scope, production registration pause, and monitoring/backup evidence remain launch blockers or gates.
+- **Exact next bounded action:** Claude: complete the two PR #11 follow-ups, synchronize both open PR branches with the latest authorized build branch without merging either PR, then implement the staging-only record-only callback change on a separate review branch/PR. ChatGPT: independently re-review each resulting diff and continue schema/source inventory.
+- **Owner gates:** Production registration pause is still unverified/not applied; PROV-07 production containment requires the owner's choice because removing the shared secret also disables wall URL generation. Production merge/deploy, provider agreements, live reward issuance/money movement, paid monitoring/backup, and irreversible legal/business decisions remain owner-gated.
+---
+
+## 2026-11-19 — ChatGPT — PR #11 follow-up re-review
+
+- **Claude work verified in GitHub:** commit cfc370adab762576fca83a91656e04cd92c0c146 adds the exact staging URL + environment guard to earn-hub.js. The new runtime test uses an active provider and fake DOM, verifies the valid staging config creates the client, and verifies missing/production/mislabelled/empty-key configs do not. The copy updates now explicitly name verified in-game milestones, weekly challenges, and seasonal events and state that no LC are awarded yet. These resolve the two findings from ChatGPT's prior PR #11 review.
+- **Test evidence:** Claude reports 26/26 Node tests pass, all JS syntax checks pass, and git diff --check is clean. The new test code was independently inspected; this run did not execute the suite locally. GitHub status/workflow queries for cfc370a returned no checks/runs. The prior Cloudflare preview success was for 0148b32; no preview deployment for cfc370a was present in the PR timeline at this check.
+- **Current PR state:** PR #11 remains open and mergeable=false. Compare now shows the review branch is 16 commits behind build/legitloot-neon-synthwave (14 ahead / 16 behind). PR #12 remains unchanged at c6dfb09; its runbook still has the unverified Pages-binding assertion and old production-export open items. Its branch is 13 commits behind and mergeable=false.
+- **Next bounded actions:** Claude should refresh PR #11 from the latest authorized build branch, rerun the suite, and provide a preview deployment for the new head if available; then proceed with M2-T3 on a separate branch/PR as acknowledged. Claude should update PR #12's runbook facts and export checklist, then refresh that branch. ChatGPT will re-review the refreshed diffs and staging record-only implementation.
+- **Owner gates unchanged:** no merge/deploy to production; production registration pause remains unverified; PROV-07 production containment still needs the owner decision. No settings, secrets, functions, database objects/data, callbacks, or reward records changed in this follow-up review.
+---
+
+## 2026-11-19 — ChatGPT — PR #12 runbook correction and synchronization status
+
+- **PR #11:** Claude's commit cfc370a resolves the Earn client staging guard and full LC-source copy findings. ChatGPT independently inspected the updated guard and runtime tests. Claude reports 26/26 Node tests pass; GitHub Actions returned no status checks/workflow runs for the head, and no new Cloudflare preview deployment for cfc370a was visible. PR remains open and non-mergeable.
+- **PR #12:** ChatGPT committed bounded runbook corrections directly to docs/m2-t6-release-runbook in 0e826a252694043d0a421ad200a8d95c3894ff96. The production Pages binding/trigger is now explicitly marked NOT dashboard-verified, dashboard verification is added to the freeze checklist, production function snapshots and migration metadata are marked complete, the metadata-only/no-original-SQL limitation is explicit, and §6 includes both account-auth.js and earn-hub.js guards.
+- **Current branch drift after these documentation commits:** PR #11 review branch is 18 commits behind the current authorized build branch (14 ahead / 18 behind); PR #12 docs branch is 15 behind (2 ahead / 15 behind). Both remain open and report mergeable=false. The base branch has advanced because of the production export and shared status/debrief updates.
+- **Next bounded action:** Claude refreshes both PR branches from the latest authorized build branch without merging either PR, reviews ChatGPT's PR #12 documentation commit, reruns checks, and proceeds with the separate staging-only record-only postback task. ChatGPT re-reviews refreshed diffs and the M2-T3 implementation.
+- **Owner gates:** unchanged — production registration pause not yet verified; production Offerwall.GG containment requires the owner's decision; no production merge/deploy, live reward issuance, or money movement.
+---
+
+## 2026-11-19 — ChatGPT — PR descriptions synchronized
+
+- Updated PR #11 and PR #12 descriptions to match their current heads and review evidence. PR #11 now distinguishes Claude-reported 26/26 tests from the earlier 0148b32 preview/browser checks and records that cfc370a has no returned CI status or preview deployment yet. PR #12 now reflects the production source/history exports and remaining backup/PITR, Pages dashboard, and monitoring items.
+- Both PRs remain open and mergeable=false. No code, Supabase setting, deployed function, database object/data, secret, callback, or production resource was changed in this step.
+- Next: Claude refreshes both branches from the latest authorized build branch, re-runs tests and provides current-head preview evidence, then continues the separate staging-only record-only postback task. ChatGPT reviews the refreshed diffs.
