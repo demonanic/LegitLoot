@@ -251,3 +251,40 @@ Read-only `pg_get_functiondef` checks in both projects still show `private.proce
 - AUTH-03 D1–D4, support-email verification, Terms/Privacy publication, game/early-access scope, and final production release remain open.
 
 This recheck used read-only GitHub and Supabase queries. No settings, secrets, functions, migrations, schema, data, callbacks, or financial records were changed.
+
+
+## 15. Independent environment and publisher recheck — 2026-11-19
+
+### GitHub / preview environment
+- Integration branch `build/legitloot-neon-synthwave` @ `1a8be57e9e4152b746fe1023f92bd77d486243a8`; production `main` @ `3fa7ca58992f786f7b59f22b8fb758149a873d6b`. Compare: 311 commits ahead / 0 behind.
+- PRs #12/#14/#15 remain 7 commits behind integration and need refresh. Their Pages preview deployments are static previews only; GitHub statuses/workflow runs were empty for the checked heads.
+- `supabase-config.js` currently targets `https://scmnxcsggquwtuyyjnnj.supabase.co` and labels the environment staging.
+- `account-auth.js` and `earn-hub.js` have exact staging-project checks. ENV-06 remains for `admin.js:boot()` and `payout-simulator.js:boot()`, which check only the staging label before using the configured URL. Current config is staging; no current production target was observed. Runtime tests for these two pages are still missing.
+
+### Fresh Supabase inventory — read-only
+| Item | Production `gkbqderyjcuxnjbsiffb` | Staging `scmnxcsggquwtuyyjnnj` |
+|---|---:|---:|
+| Applied migrations | 7 | 20 |
+| `offerwall-gg-postback` | ACTIVE v3, `verify_jwt=false` | ACTIVE v7, `verify_jwt=false` |
+| `offerwall-gg-wall-url` | ACTIVE v1 | ACTIVE v5 |
+| `wallet-summary` | ACTIVE v4 | — |
+| `cpagrip-attribution` | — | ACTIVE v4 |
+| `payout-simulator` | — | ACTIVE v6 |
+| `admin-dashboard` | — | ACTIVE v7 |
+| `provision-initial-owner` | — | ACTIVE v7 |
+| Record-only migration `20261119120000_offerwall_gg_record_only` | Not applied | **Not applied** |
+
+- Read-only live SQL definitions in both projects still select/lock LC ledger accounts and call `private.post_journal_transaction` in `private.process_offerwall_gg_postback`. Callback events/conversions are 0/0 in both projects. No callback was invoked.
+- **PROV-07 remains active in both environments.** The record-only source in GitHub has not been applied to staging. Production containment remains owner-gated.
+
+### Taplayad selection and current integration status
+- Owner selected Taplayad as the initial Hustle publisher target. Screenshots show Legitloot App ID 10066, Web platform, Rewarding category, “Legit loot” reward label, a $1 = 1 point display and a test-postback widget showing 1 Legit loot; a staging Supabase URL prefix is visible.
+- No evidence from the screenshots that the form was saved, publisher approval is complete, or callbacks work. No setting was changed and no test postback was sent.
+- Current `earn-providers.js` contains Offerwall.GG and CPAGrip entries but no Taplayad; staging has no Taplayad Edge Function. Keep Taplayad points separate from LC and do not treat the multiplier as a USD peg or wallet conversion. Provider terms, incentive eligibility, macros/signature, test mode, account approval and any binding agreement/paid/settlement commitments must be checked before live use.
+- Owner-designated support address is `payouts@legitloot.site`; public pages still show `hello@legitloot.site`. Verify mailbox delivery/reply/monitoring before updating live contact copy.
+
+### Deployed-state and launch boundaries
+- Production sign-up pause's last recorded probe was `disable_signup:false` at 12:18 UTC; not freshly re-probed here.
+- GitHub reports `main` `protected:false`; no rulesets returned and detailed branch protection could not be read (403). Do not claim the branch is protected.
+- Cloudflare production Pages branch binding/trigger and production backup/PITR remain unverified.
+- No Supabase setting, secret, function, migration, schema, data, callback, or financial record was changed. No deployment or PR merge occurred in this check.
