@@ -1,7 +1,9 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
+// Staging-only function: the production origin is intentionally not allowed
+// (audit ENV-03). Canonical source derived from the deployed staging v4
+// snapshot in supabase/environments/staging/functions/cpagrip-attribution/.
 const allowedOrigins = new Set([
-  "https://legitloot.site",
   "https://build-legitloot-neon-synthwa.legitloot.pages.dev",
 ]);
 
