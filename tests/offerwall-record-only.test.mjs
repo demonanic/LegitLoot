@@ -4,7 +4,7 @@
 // Uses the real table DDL from the staging-lineage migration and the real routines:
 // - "deployed": private.process_offerwall_gg_postback as exported from staging
 //   (supabase/environments/staging/schema-snapshot/routines.sql)
-// - "record-only": supabase/migrations/20261119120000_offerwall_gg_record_only.sql
+// - "record-only": supabase/migrations/20261119145340_offerwall_gg_record_only.sql
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -57,7 +57,7 @@ const deployedRoutine = () => {
   const snapshot = read("supabase/environments/staging/schema-snapshot/routines.sql");
   return between(snapshot, "CREATE OR REPLACE FUNCTION private.process_offerwall_gg_postback", "-- private.provision_initial_owner_admin");
 };
-const recordOnlyMigration = () => read("supabase/migrations/20261119120000_offerwall_gg_record_only.sql");
+const recordOnlyMigration = () => read("supabase/migrations/20261119145340_offerwall_gg_record_only.sql");
 
 const call = async (db, { user = USER, tx = "txn-00000001", status = "credited", atoms = 50000, digest = "d1" } = {}) =>
   (await db.query(
