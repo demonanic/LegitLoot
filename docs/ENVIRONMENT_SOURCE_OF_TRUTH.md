@@ -314,3 +314,13 @@ This recheck used read-only GitHub and Supabase queries. No settings, secrets, f
 - Post-deploy counts: callback events 0, conversions 0, Offerwall.GG journal transactions 0, Offerwall.GG journal entries 0. No callback was invoked; no provider secret was read or changed. Production was not touched.
 - Additional source defect fixed before deployment: reversed provider callbacks carry a negative `payoutUsd`, while the metadata routine accepts only nonnegative original payout amounts. The Edge Function now stores the absolute textual amount for reversal metadata (without floating-point conversion); reversal state remains separately recorded. Added a regression test and updated migration-path references. Source-level checks passed. The full npm suite was not rerun in this session; Claude's prior 8/8 PGlite report applies to the earlier source head.
 - **Result:** PROV-07 is contained in staging. Production Offerwall.GG v3 remains on its legacy LC-posting path and is still an explicit owner decision/blocker. Do not infer staging containment is production containment.
+
+## 2026-11-19 10:10 ET — staging provider isolation and record-only deployment
+
+- Staging project `scmnxcsggquwtuyyjnnj` only.
+- `offerwall-gg-postback`: ACTIVE v8, `verify_jwt=false` (existing setting preserved; HMAC validation is performed by the function). Live source hash `d17c18d7ca2643b9fac2fd8c336e741f27edea63e7bb819764b8927e796c321e`.
+- Applied migration `20261119145340_offerwall_gg_record_only`; live private routine has no ledger or journal write path. Grants verified: service_role can execute; anon and authenticated cannot.
+- `cpagrip-attribution`: ACTIVE v5, `verify_jwt=true`; live source hash `4c06e6d542eaa267d01956148426e456231144f085ea3825371316a905a24e5c`. Production origin absent; bearer token and server-side `auth.getUser` validation verified. Canonical source and deployed snapshot match.
+- `offerwall-gg-wall-url` remains ACTIVE v5 with `verify_jwt=true` and staging-only CORS origin.
+- Counts after record-only deploy: callback events 0, conversions 0, Offerwall.GG journal transactions 0, Offerwall.GG journal entries 0. No provider callback invoked and no secrets changed.
+- Production project was not touched. Production postback remains a separate owner decision.
