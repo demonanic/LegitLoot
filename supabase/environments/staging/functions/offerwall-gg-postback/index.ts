@@ -104,7 +104,11 @@ Deno.serve(async (request: Request) => {
         || (status === "reversed" && payoutNumber > 0)) {
       return response("INVALID PAYOUT", 400);
     }
-    payoutUsdValue = payoutUsd;
+    // Store the original provider payout as a positive amount; reversal state is
+    // tracked separately on the conversion row. Preserve decimal text exactly.
+    payoutUsdValue = status === "reversed" && payoutUsd.startsWith("-")
+      ? payoutUsd.slice(1)
+      : payoutUsd;
   }
 
   let providerTimestamp: string | null = null;
@@ -140,7 +144,13 @@ Deno.serve(async (request: Request) => {
     return response("RETRY", 500);
   }
 
-  if (!data || !["posted", "duplicate", "duplicate_reversal"].includes(data.result)) {
+  // Record-only (2026-11-19, spec §0.1, audit PROV-07): callbacks are stored for
+  // provider reconciliation but never mint Legit Coins. "posted" is no longer an
+  // accepted result; if the database still returns it, the record-only migration
+  // has not been applied, so fail loudly instead of acknowledging.
+  const RECORD_ONLY_RESULTS = ["recorded", "reversal_recorded", "duplicate"];
+  if (!data || !RECORD_ONLY_RESULTS.includes(data.result)) {
+    console.error("Offerwall.GG callback returned an unexpected result", data?.result);
     return response("RETRY", 500);
   }
   const { error: metadataError } = await supabase.rpc("record_offerwall_gg_metadata", {
