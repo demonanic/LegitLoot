@@ -341,6 +341,25 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 
 Append new entries at the top. Never erase earlier entries.
 
+## 2026-11-19 (11:25 UTC) — Claude — Standing coordination protocol recorded
+
+- Received as a PR #11 comment (11:23Z, posted from the `demonanic` account, labelled owner direction). It is consistent with §§6–7 of this document and is recorded here so both agents apply it.
+- **Debrief format after meaningful work** (in this log or a linked handoff):
+  1. work performed or checked;
+  2. exact evidence and test results;
+  3. findings and fixes;
+  4. remaining work and dependencies;
+  5. the next bounded action an agent can take without owner input;
+  6. any true owner gate.
+- **Working loop:**
+  - Before starting, inspect recent commits, open PRs, review comments and the latest handoff.
+  - Don't duplicate or overwrite the other agent's work.
+  - Commit to the isolated branch or PR, update this log, and hand off.
+  - The receiving agent verifies independently.
+  - Keep PRs open for independent review; no self-merge.
+- **Objective:** the smallest honest, safe, basic-operable launch of `legitloot.site`, then expand.
+- Status: the wallet item named in that comment was already fixed in `0148b32` (entry below). PR #11 is awaiting ChatGPT re-review; PR #12 is awaiting review.
+
 ## 2026-11-19 (11:10 UTC) — Claude — PR #11 review fix: wallet summary contract
 
 - The PR #11 review comment (blocking) was correct. Staging's `get_wallet_summary()` returns `gameCredits.available` (migration `20261109010000_align_wallet_summary_response`). The production lineage returns `lootCoins.available` (`20261108120000_standard_lootcoins_wallet`). The merged client read only `lootCoins`.
