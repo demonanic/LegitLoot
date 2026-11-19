@@ -37,7 +37,7 @@ Owner approval: <quote + date>   <- required before any step in §3
 
 ## 3. Release procedure
 
-1. **Freeze.** Note the current production state: `main` SHA, the latest Pages production deployment, function versions, applied migration list, and `GET /auth/v1/settings`. Also verify in the Cloudflare dashboard that Pages project `legitloot` is bound to production branch `main` and confirm the actual auto-deploy trigger; this binding/trigger is currently owner-recorded but **NOT independently verified** in `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`.
+1. **Freeze.** Note the current production state: `main` SHA, the latest Pages production deployment, function versions, applied migration list, and `GET /auth/v1/settings`. Also verify in the Cloudflare dashboard that Pages project `legitloot` is bound to production branch `main` and confirm the actual auto-deploy trigger; this binding/trigger is currently owner-recorded but **NOT independently verified** in `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`. Also verify GitHub protection on `main`: the last API check reported `protected:false`, no rulesets, and the detailed branch-protection endpoint was inaccessible to this integration. Until an authorized admin confirms PR-only changes, required independent review and required checks are enabled, treat direct pushes to `main` as a production-release risk. Do not claim branch protection exists before verification.
 2. **Registration precondition:** before any release that exposes public account onboarding, verify production `disable_signup:true` with `email:true` (owner-approved pause; keep existing sign-in). It stays paused until approved Terms/Privacy (LEGAL-01) and the account-deletion path (AUTH-03) are live. A release that would reopen sign-up is itself an owner gate.
 3. **Pre-checks on the candidate commit:**
    - `node --test tests/*.test.mjs` passes;
@@ -60,7 +60,7 @@ Owner approval: <quote + date>   <- required before any step in §3
 | Auth setting | Toggle back in the dashboard (e.g. `disable_signup`). | Minutes | Owner action. Verify via `/auth/v1/settings`. |
 | Provider secret | Re-add the secret value from the provider dashboard. | Minutes | Owner action. Removing `OFFERWALL_GG_SECRET` also disables wall URLs (PROV-07). |
 
-**Rollback trigger:** any §5 check fails, any player-visible claim is wrong (cash, LC awards, provider availability), or any unexpected write appears in ledger/callback tables.
+**Rollback trigger:** any §5 check fails, any player-visible claim is wrong (cash, LC awards, provider availability), or any provider-sourced LC journal transaction or ledger posting appears; a provider callback is mismatched to a journal posting; or malformed/unexpected callback state is detected. Record-only callback-event and conversion rows, including valid reversals, are expected audit records and are not rollback triggers by themselves.
 
 ## 5. Monitoring (free tooling)
 
@@ -70,10 +70,10 @@ Owner approval: <quote + date>   <- required before any step in §3
 |---|---|---|
 | Site up | `curl -sSL -o /dev/null -w '%{http_code}' https://legitloot.site/` (repeat for `/games`, `/earn`, `/account`) | `200` |
 | Served = `main` | Compare served HTML to `main` | Identical (ignore Cloudflare `mailto` obfuscation) |
-| Auth setting | `GET https://gkbqderyjcuxnjbsiffb.supabase.co/auth/v1/settings` with the production publishable key | `"disable_signup":true` and `"email":true` (sign-up paused, existing users can sign in) **until** approved Terms/Privacy and the account-deletion path are live. This is the owner-approved pause, not a new decision. It was **still unapplied** at the 2026-11-19 12:18 UTC probe (`disable_signup:false`). |
+| Auth setting | `GET https://gkbqderyjcuxnjbsiffb.supabase.co/auth/v1/settings` with the production publishable key | `"disable_signup":true` and `"email":true` (sign-up paused, existing users can sign in) **until** approved Terms/Privacy and the account-deletion path are live. This is the owner-approved pause, not a new decision. Last verified at 2026-11-19 12:18 UTC as `disable_signup:false`; re-probe during the release freeze because no later production auth-setting verification is recorded. |
 | Anonymous isolation | anon `GET /rest/v1/profiles` and `POST /rest/v1/rpc/get_wallet_summary` | `401` |
 | No LC minted by providers (**hard invariant**) | Agent with connector access: `select count(*) from private.journal_transactions where source_system in ('offerwall_gg','cpagrip') or event_type like 'offerwall_gg_%' or event_type like 'cpagrip_%'`, plus the count of `private.journal_entries` on `currency_code = 'LC'` accounts belonging to those transactions. Extend the provider list when a provider is added. | **`0`, always** (spec §0.1). Any non-zero value is an incident (§7). |
-| Provider callback activity (reconcile, **not** required to be zero) | Same access: counts of `private.offerwall_gg_callback_events` by `result`, and `private.offerwall_gg_conversions` by `status` | Reported each check. Once the record-only migration `20261119120000_offerwall_gg_record_only.sql` is deployed, non-zero counts are expected. Before then, any non-zero count means the old LC-posting path may have run: check the invariant above at once. |
+| Provider callback activity (reconcile, **not** required to be zero) | Same access: counts of `private.offerwall_gg_callback_events` by `result`, and `private.offerwall_gg_conversions` by `status` | Reported each check. Once the record-only migration `20261119145340_offerwall_gg_record_only.sql` is deployed, non-zero counts are expected. Before then, any non-zero count means the old LC-posting path may have run: check the invariant above at once. |
 | Callback ↔ posting mismatch | Same access: any callback event whose `transaction_id` matches a provider journal transaction's `source_event_id` prefix | **None.** Any match is an incident (§7). |
 | Supabase advisors | Security and performance advisors via connector | No new ERROR-level items |
 | Function errors | Supabase dashboard → Edge Functions → Logs, last 24 hours | No 5xx spikes |
@@ -109,4 +109,6 @@ Owner approval: <quote + date>   <- required before any step in §3
 | Production applied migration version/name metadata under `supabase/environments/production/MIGRATION_HISTORY.md` | MIG-01 | **COMPLETE 2026-11-19** |
 | Confirm production Supabase backup/PITR tier | OPS-03 | Owner or ChatGPT (read-only) |
 | Production config + test for the release candidate (§6) | ENV-04 | Claude, after PR #11 |
+| Verify `main` branch protection and required checks (last API evidence: `protected:false`, no rulesets) | GOV-01 | Owner / GitHub admin |
 | Choose an uptime monitor | OPS-01 | Owner |
+| Verify and enable PR-only branch protection, independent review and required checks on `main` | GOV-01 | Owner / GitHub admin |
