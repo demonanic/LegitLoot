@@ -136,3 +136,11 @@ test("Edge Function accepts only record-only results and never 'posted'", () => 
   assert.deepEqual(JSON.parse(`[${list[1]}]`).sort(), ["duplicate", "recorded", "reversal_recorded"]);
   assert.ok(!/"posted"/.test(source.replace(/(^|[\s;{}])\/\/.*$/gm, "$1"))); // strip comments, not URLs
 });
+
+test("Edge Function stores the original payout as positive metadata for reversals", () => {
+  const source = read("supabase/functions/offerwall-gg-postback/index.ts");
+  assert.match(
+    source,
+    /payoutUsdValue = status === "reversed" && payoutUsd\.startsWith\("-"\)\s*\?\s*payoutUsd\.slice\(1\)\s*:\s*payoutUsd;/,
+  );
+});
