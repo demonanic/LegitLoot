@@ -1,11 +1,14 @@
 # LegitLoot — Launch Readiness Audit
 
-**Milestone:** M1 — Launch Readiness Baseline and Blocker Plan
-**Task:** M1-T1 — Repository, environment, and launch-surface inventory
+**Original milestone:** M1 — Launch Readiness Baseline and Blocker Plan  
+**Current milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
+**Original task:** M1-T1 — Repository, environment, and launch-surface inventory
 **Author:** Claude (task owner) · **Reviewer:** ChatGPT
 **Date:** 2026-11-19
-**Audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (clean working tree, up to date with origin)
-**Mode:** Read-only. No application code, schema, Edge Function, secret, provider dashboard, deployment or production resource was changed. No accounts were created and no write requests were sent to any backend.
+**Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
+**Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
+
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections (especially §19) together with the current Master Control and Environment Source of Truth for present status; the original audited branch and earlier status tables are historical.
 
 ---
 
@@ -580,3 +583,36 @@ This check changed no settings, secrets, functions, migrations, schema, data, ca
 - Offerwalls remain a separate user-task/discovery feature; advertising is permitted with privacy/consent/disclosure controls. No paid features at launch. Production signup remains paused. Final production release requires explicit owner approval.
 - Intended support address is `payouts@legitloot.site`; deliverability/monitoring are not yet verified.
 - No deployment, provider activation, legal publication, paid commitment, production setting/secret change, real reward issuance or financial action was performed as part of this documentation update.
+
+
+## 19. Independent coordination and launch-readiness check — 2026-11-19 (08:10 ET)
+
+### Repository, branches, PRs and handoffs
+- Integration head at check start: `build/legitloot-neon-synthwave` @ `c5525d0b9ac8b507eb7c242d166c2e369d70487d`. Production `main` remains `3fa7ca58992f786f7b59f22b8fb758149a873d6b`; no production merge occurred.
+- Open PRs: #12 runbook @ `9a1f136` (11 ahead / 0 behind), #14 ENV-03 @ `38715b4` (6 ahead / 0 behind), #15 AUTH-03 @ `e32c2fa` (7 ahead / 0 behind). Older draft #9 remains open. No PR was merged.
+- Claude's latest verifiable handoff is the PR #12 conversation comment at 12:27 UTC. It reports 34/34 tests for #12, 37/37 for #14, and 34/34 for #15, with clean diff checks. These are local reports, not CI, and were not rerun independently by ChatGPT.
+- Cloudflare Pages preview check runs succeeded for the integration head and the three PR heads in both Pages projects. These checks prove static preview deployment only. The repository has no automated test workflow; the only workflow is the older artwork-extraction workflow. No formal review submissions or inline review threads were present for #12/#14/#15; review discussion is in PR conversation comments.
+
+### Owner-policy and code review
+- **LC policy:** the build branch's current player-facing Earn copy and provider registry say partner offers do not award LC. The authoritative live database state still violates the policy: production postback v3 and staging v7 remain ACTIVE and both deployed `private.process_offerwall_gg_postback` routines still lock LC ledger accounts and call `private.post_journal_transaction`.
+- **Staging record-only state:** production has 7 applied migrations; staging has 20. Staging does not contain `20261119120000_offerwall_gg_record_only`. Both projects have 0 callback events, 0 conversions, and 0 provider-sourced journal transactions at this check. No callback was invoked. The source-only migration/function does not change live behavior.
+- **ENV-06 (MEDIUM, defense-in-depth):** `admin.js:boot()` and `payout-simulator.js:boot()` check only `config.environment === "staging"` before calling `createClient(config.url, config.publishableKey)`. Their active pages (`admin.html`, `payout-simulator.html`) load the staging config. Existing `tests/environment-isolation.test.mjs` exercises `account-auth.js` and `earn-hub.js`, but not these two clients. Current `supabase-config.js` points to the exact staging project, so no current production misrouting was observed. Comment posted on PR #14: **7010372122**. Requested exact staging URL checks and runtime tests for missing, production, mislabelled, and valid configs.
+- **GOV-01 (HIGH, release governance):** GitHub branch listing reports `protected:false` for `main`; repository rulesets query returned an empty list. The branch-protection detail endpoint returned 403, so the integration could not inspect detailed rules. This contradicts the old Master Control header's “main — protected” claim. If the owner-recorded Cloudflare production binding to `main` is correct, direct pushes may bypass the documented owner approval. Comment posted on PR #12: **7010370851**. Release runbook must not claim protection exists until verified; branch-protection/required-check setup remains outstanding.
+- **PR #12:** the provider monitoring invariant is now correctly split: callback/conversion records may be nonzero after record-only deployment; provider-sourced LC journal/ledger postings must remain zero.
+- **PR #14:** canonical CPAGrip source removes the production origin while preserving the deployed staging snapshot. Source-level review found no new blocker; the separate ENV-06 runtime guard gap was posted.
+- **PR #15:** deletion design marks `hello@legitloot.site` UNVERIFIED and removes the obsolete per-action staging gate. D1–D4 remain owner/legal decisions; no deletion implementation or schema change is present.
+
+### Environment and launch disposition
+- Current `supabase-config.js` uses the exact staging project URL and labels it staging. `account-auth.js` and `earn-hub.js` enforce both environment and exact URL. No evidence from this check that a staging preview targets production.
+- Production Auth sign-up pause was last verified `disable_signup:false` at 12:18 UTC; this run did not re-probe the public Auth settings endpoint.
+- Production Cloudflare Pages binding/trigger and production backup/PITR remain NOT VERIFIED.
+- **PROV-07 remains a critical financial-policy blocker** in both deployed environments. Production containment remains owner-gated because the same project-level Offerwall secret also supports wall URL signing. No secret, function, migration, setting, schema, data, or financial record was changed.
+- AUTH-03 D1–D4, verified support route, Terms/Privacy publication, game availability/early-access truth, monitoring, backup/recovery, and final production release remain unresolved launch requirements or owner gates.
+
+### Next owner-independent actions
+1. Claude implements ENV-06 exact-URL guards and runtime regression tests, then reports the exact commit and test results.
+2. Claude keeps #12/#14/#15 descriptions and handoffs current; ChatGPT independently reviews the next changed heads.
+3. In a separate authorized implementation run, ChatGPT may apply the already-reviewed record-only migration to staging first, deploy the matching staging function second, and verify the live routine/version. Do not invoke a real callback.
+4. Production branch protection, production sign-up pause, Offerwall containment, production release, live financial activity, legal publication, paid commitments, provider agreements, and irreversible business decisions remain owner-gated.
+
+This check was read-only apart from GitHub review comments and documentation commits. No PR was merged and no staging or production deployment occurred.
