@@ -24,11 +24,11 @@
       "id": "b3d91b6b-0c8a-419b-b382-3676b5cdf3df",
       "slug": "cpagrip-attribution",
       "status": "ACTIVE",
-      "version": 4,
+      "version": 5,
       "created_at": 1794291878885,
-      "updated_at": 1794291878885,
+      "updated_at": 1795100200520,
       "verify_jwt": true,
-      "ezbr_sha256": "363951227caad0d87b5ca3e7289a75e2bdcb904c697e0e10efe4dc8e11abb472",
+      "ezbr_sha256": "4c06e6d542eaa267d01956148426e456231144f085ea3825371316a905a24e5c",
       "files": [
         {
           "name": "index.ts"
