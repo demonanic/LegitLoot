@@ -777,3 +777,44 @@ No authorization here permits production merge/deploy or production configuratio
 - **Owner gates / outstanding:** production Offerwall containment remains owner-gated because the shared secret also signs wall URLs; production sign-up pause was last verified `disable_signup:false` at 12:18 UTC and was not freshly probed in this read-only check; production Pages binding/trigger and backup/PITR remain unverified; production branch protection needs verification/strengthening; AUTH-03 D1–D4 (grace period, retention, interim response commitment, email re-registration) must be decided before implementing the corresponding policy choices. `hello@legitloot.site` remains unverified as a monitored support route.
 - **Next owner-independent actions:** Claude addresses ENV-06 with exact staging guards/tests and keeps PR descriptions/handoffs current; ChatGPT independently reviews the follow-up and the refreshed PRs. The reviewed staging record-only migration/function may be deployed in a separate authorized implementation run, migration first then function, with no callback invocation. Production changes remain gated.
 - **Actions this check:** read-only GitHub/Supabase inspection; comments posted to #12 and #14; no merge, deploy, schema/data/settings/secret change, callback, reward issuance, or money movement.
+
+
+---
+
+## 2026-11-19 — ChatGPT — independent coordination check; Taplayad launch selection recorded
+
+### Owner decision: initial Hustle publisher
+- The owner selected **Taplayad** as the initial publisher target for the basic Hustle launch.
+- Owner-provided dashboard screenshots show property **Legitloot**, App ID **10066**, platform **Web**, category **Rewarding**, reward label **Legit loot**, multiplier display **$1 = 1 point**, and a test-postback panel displaying **1 Legit loot**. A staging Supabase postback URL prefix is visible.
+- These screenshots are evidence of the owner's intended account/configuration, not proof that settings were saved, the publisher approved the account, the endpoint is correct, or live/test callbacks work. No settings were saved and no test postback was sent in this check.
+- The publisher's points/multiplier and displayed test label are **not LC**, not a USD peg, not a cash value, and not permission to issue LC. Keep Taplayad task activity and any publisher-defined points completely separate from the authoritative website LC wallet.
+- Taplayad is selected as the initial Hustle provider target. Provider eligibility for incentivized traffic, current terms, account approval, postback macros/signature requirements, sandbox/test mode, and any agreement or paid/settlement commitments remain to be verified. Binding provider acceptance, paid terms, and live activation remain owner-gated.
+
+### Repository and coordination evidence
+- Integration branch `build/legitloot-neon-synthwave` is at `1a8be57e9e4152b746fe1023f92bd77d486243a8`; compare with production `main` at `3fa7ca58992f786f7b59f22b8fb758149a873d6b` is 311 commits ahead / 0 behind. No production merge occurred.
+- Branch inventory returned 16 branches across the first page and no further page. Open PRs: #12 runbook @ `9a1f136` (11 ahead / 7 behind), #14 staging origin isolation @ `38715b4` (6 ahead / 7 behind), #15 account-deletion design @ `e32c2fa` (7 ahead / 7 behind), and older draft #9. No PR was merged.
+- Latest verifiable Claude handoff is PR #12 comment `7009082911` (2026-11-19 12:27 UTC). Claude reports #12 34/34, #14 37/37, #15 34/34 local tests and clean diff checks. These were not independently reproduced. GitHub combined statuses and workflow runs were empty for the integration head and all three PR heads; Cloudflare Pages preview comments are successful static previews only.
+- PR #12 now has a further actionable review note from ChatGPT, comment `7011505297`: §4 rollback trigger says unexpected writes in “ledger/callback tables,” which conflicts with the record-only callback design because callback/conversion records are expected. It must target provider-sourced LC journal/ledger postings and callback-to-journal mismatches. The same note reiterates that GOV-01 branch-protection verification is missing from the runbook.
+- PR #15 has owner-support update comment `7011512870`: replace the old `hello@` candidate with owner-designated `payouts@legitloot.site`, but keep it UNVERIFIED until delivery/reply/monitoring are tested.
+- PR #14's prior ENV-06 finding remains open in comment `7010372122`.
+
+### Independent code and launch-scope findings
+- `games.html` still says one game is in development, lists “Zombie Invasion Defense” as a working title, and says “More worlds later.” It does not list the owner's two selected launch games **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**, and it offers no launch links. This conflicts with the owner-locked two-game launch scope.
+- `earn.html`, `rewards.html`, `marketplace.html`, `privacy.html` and navigation/mobile-dock copy still use **Earn/Earning**. The owner renamed the section **Hustle**.
+- `earn-providers.js` currently lists Offerwall.GG (pending approval), CPAGrip (testing), and category placeholders; it contains no Taplayad entry. The staging Edge Function inventory also contains no Taplayad adapter/function. Taplayad is selected but not integrated or verified.
+- `rewards.html` still truthfully states LC are NOT LIVE YET and that no LC are awarded. No evidence in the current website launch surface demonstrates the required five-or-more challenge/milestone catalogue or an end-to-end game-event → server verification → idempotent award → website-wallet path. This remains launch work, not a claim that the feature exists.
+- Public page contact links still use `hello@legitloot.site`; the owner-designated contact is `payouts@legitloot.site`. Update public/design references only after mailbox existence, inbound delivery, outbound reply and monitoring are verified.
+- `admin.js:boot()` and `payout-simulator.js:boot()` still gate only on `config.environment === "staging"` and Supabase library presence before using `config.url`. Current `supabase-config.js` points to the exact staging project, so no current production target was observed; however, the exact-URL guard and runtime tests requested in ENV-06 are still absent from these two clients.
+
+### Fresh read-only Supabase evidence
+- Production `gkbqderyjcuxnjbsiffb`: 7 migrations; `offerwall-gg-postback` v3 ACTIVE (`verify_jwt=false`), `offerwall-gg-wall-url` v1, `wallet-summary` v4. `private.process_offerwall_gg_postback` still selects/locks `private.ledger_accounts` and calls `private.post_journal_transaction`.
+- Staging `scmnxcsggquwtuyyjnnj`: 20 migrations; `offerwall-gg-postback` v7 ACTIVE (`verify_jwt=false`), `offerwall-gg-wall-url` v5, `cpagrip-attribution` v4, `payout-simulator` v6, `admin-dashboard` v7 and `provision-initial-owner` v7. The record-only migration `20261119120000_offerwall_gg_record_only` is not applied. The live postback routine still selects/locks LC ledger accounts and calls `private.post_journal_transaction`.
+- Callback-event and conversion counts are 0/0 in both projects. No callback was invoked. **PROV-07 remains a live critical financial-policy violation in both deployed environments.** The record-only implementation is source-only until staging migration and function deployment occur.
+- No Supabase setting, secret, function, migration, schema, data, or financial record was changed in this check.
+
+### Findings, actions, and next work
+- Posted PR #12 comment `7011505297` (record-only rollback-trigger correction + GOV-01 runbook gap).
+- Posted PR #15 comment `7011512870` (use `payouts@` as the intended support contact, retain UNVERIFIED status).
+- No PR was merged; no deployment, callback, mailbox/DNS action, provider activation, or financial action occurred.
+- Next owner-independent actions: Claude refreshes #12/#14/#15 from integration head `1a8be57`; corrects the runbook; implements ENV-06 exact URL guards/tests; updates account-deletion contact reference; starts the Hustle/Taplayad adapter in safe test mode; updates games/Hustle launch surfaces and supplies game/challenge/reward evidence. ChatGPT independently reviews each result and continues the separately authorized staging-only PROV-07 remediation after source review.
+- Owner gates: production Offerwall containment, production merge/deploy and signup changes, provider agreements/approval/live activation and paid/settlement terms, production branch-protection administration, legal publication, live financial activity, and irreversible business decisions. The last recorded production signup probe remains `disable_signup:false` at 12:18 UTC; it was not freshly re-probed in this check.
