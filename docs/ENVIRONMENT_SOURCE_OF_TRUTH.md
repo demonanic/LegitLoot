@@ -472,3 +472,22 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 - Publisher-side points/revenue/withdrawal are not LC, user cash value, USD peg, or user withdrawal.
 
 No live callback was invoked; no project setting/secret, schema/data, publisher dashboard, or production resource was changed.
+
+
+## 2026-11-19 14:42 ET — Current environment snapshot: PR #20 and fresh read-only Supabase check
+
+### GitHub / Cloudflare
+- Integration `build/legitloot-neon-synthwave`: `3fa518ee27c987a58f3196f682c7e13de483b6a8`; main: `3fa7ca58992f786f7b59f22b8fb758149a873d6b`. Integration 375 ahead / 0 behind.
+- 21 branches listed; every branch reports `protected:false`, including main.
+- Open PR #20 head `04e40161a033d8f0e0ae63b2ec51aba7fc5bc2ce`, base integration `3fa518ee`; compare 2 ahead / 2 behind. PR #9 is draft, 12 ahead / 166 behind. PR #16–18 merged into integration only; #19 closed unmerged.
+- Integration Actions run 44590656627: 50/50 Node tests, success. PR #20 run 44591660747: 54/54 Node tests, success. Workflow runs `npm ci`, `npm test` (`node --test tests/*.test.mjs`), and submitted-patch `git diff --check`; Python/Playwright browser tests are not part of CI.
+- PR #20 bot comments report preview success for both Pages projects. Its `supabase-config.js` explicitly names staging project `scmnxcsggquwtuyyjnnj`; Cloudflare dashboard-level project bindings/custom-domain routing were not checked.
+
+### Supabase
+- Production `gkbqderyjcuxnjbsiffb`: 7 migrations; Offerwall.GG postback v3 ACTIVE, `verify_jwt=false`. Live SECURITY DEFINER routine `private.process_offerwall_gg_postback` locks the user's LC ledger account and platform issuance account, then calls `private.post_journal_transaction`. This is still a live provider-to-LC issuance path.
+- Staging `scmnxcsggquwtuyyjnnj`: 21 migrations; Offerwall.GG postback v8 ACTIVE, `verify_jwt=false`. Live database routine is record-only and contains no ledger/journal operations.
+- Staging v8 Edge Function `index.ts` matches integration file `supabase/functions/offerwall-gg-postback/index.ts` byte-for-byte (6,990 bytes); it has record-only result handling and no `post_journal_transaction` reference.
+- Staging `private.providers`: CPAGrip disabled, no approval metadata; Offerwall.GG disabled but stale `approved_reward_model` still says LC/LootCoins and terms/verification/approval reference are null. Taplayad absent. Staging Edge Function inventory has no Taplayad function.
+- Production function inventory includes Offerwall.GG postback v3 (`verify_jwt=false`), Offerwall.GG wall URL v1 (`verify_jwt=true`), wallet summary v4 (`verify_jwt=false`). Staging inventory includes Offerwall.GG postback v8, CPAGrip attribution v5, owner provisioning v7, admin dashboard v7, Offerwall.GG wall URL v5, and payout simulator v6; Taplayad absent.
+
+No callbacks, data changes, schema changes, settings/secrets changes, provider activation, or deployment were performed.
