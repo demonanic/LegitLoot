@@ -895,3 +895,49 @@ This evidence does not authorize saving dashboard changes, sending test postback
 - Qualified the production sign-up state with its last verified timestamp (2026-11-19 12:18 UTC; `disable_signup:false`) rather than presenting it as a fresh probe.
 - Added GOV-01 to the release freeze: `main` must have verified PR-only protection, independent review and required checks before a production release. Current API evidence reports `protected:false`, no rulesets, and inaccessible detailed protection settings; do not claim protection exists.
 - Ported reviewed `docs/RELEASE_RUNBOOK.md` to integration branch commit `53ba77a`; closed stale-base PR #12 as superseded. No production setting, backup tier, DNS, release or deployment was changed.
+
+
+---
+
+## 2026-11-19 10:20 ET — Independent Sync Watch debrief
+
+### Work checked
+- Read current Master Control, Project Progress, Launch Readiness Audit, Environment Source of Truth, CLAUDE.md and the legacy M1 Claude handoff.
+- Checked integration history, all 16 branches, open/closed PR state, review comments, GitHub statuses/workflows, Claude-authored commits/handoffs, current website/provider code, migration tree, and read-only Supabase staging/production state.
+- Integration branch at start: `7cf82eea2a313bde49fcc1e304729ae3a7dab957`, 349 commits ahead of `main`, 0 behind. All 16 branch API entries report `protected:false`.
+- Only open PR is #9, an old draft design PR last updated 2026-11-12; no formal reviews and only old Cloudflare preview comments. #12 is closed unmerged/superseded by the runbook port on integration; #14 is merged into integration; #15 is closed unmerged/superseded by the account-deletion design port. No open PR covers Taplayad, the two selected games, challenges, or Hustle.
+- Latest Claude-authored commit found: `5ab48bd` (documentation debrief, 2026-11-19 11:41Z). Latest verifiable Claude PR handoff: #12 comment `7009082911` (2026-11-19 12:27Z). No later Claude commit/handoff was found in the inspected branch history/comments. Subsequent integration commits were authored by `demonanic`; do not attribute them to Claude.
+- Current integration head has no GitHub combined statuses and no workflow runs. The only workflow in `.github/workflows` is the artwork-extraction workflow; no automated test workflow exists. `npm test` is defined, but no current-head test run was independently executed in this audit. Claude's prior 34/34, 37/37 and 34/34 reports apply to older PR heads, not current head.
+- Read-only live verification: staging has 21 migrations including `20261119145340_offerwall_gg_record_only`; `offerwall-gg-postback` is ACTIVE v8, `verify_jwt=false`, with HMAC validation in the function; the live SQL routine records callback/conversion events only and has no ledger/journal posting path; EXECUTE is service_role-only. Production has 7 migrations; `offerwall-gg-postback` is ACTIVE v3 and its live SQL routine still calls `private.post_journal_transaction` to credit/reverse LC. No callback was invoked.
+- Staging currently has one `public.game_registry` row: `zombie-invasion-defense`, status `development`, `is_listed=false`, `launch_url=null`. `private.game_events` has 0 rows. The provider registry contains only Offerwall.GG and CPAGrip, both disabled, with no approval reference or verified terms. No Taplayad provider row or Taplayad/game Edge Function exists.
+- The applied staging migration `20261118080655_game_platform_foundation` is recorded in Supabase migration history, but no matching migration file or game-platform path exists in the current integration Git tree. This is a source-control/migration reproducibility gap.
+- Website source now lists the two owner-selected game titles but provides no playable links and labels both integration-in-progress. The public earning page/navigation still says “Earn,” not the owner-selected “Hustle.” Public pages still link to `hello@legitloot.site`; the owner-designated `payouts@legitloot.site` remains unverified.
+- `earn-providers.js` still contains Offerwall.GG (pending approval), CPAGrip (testing), and category placeholders; no Taplayad. Publisher points/callbacks are not mapped to LC. Public Rewards/Account copy still states the LC-only/no-cash/no-transfer model.
+
+### Findings and status
+1. **PROD-PROV-07 — CRITICAL, still active:** production Offerwall.GG callback SQL can post LC through `private.post_journal_transaction`. Staging is contained; production is not. Production containment remains owner-gated. No production change made.
+2. **GOV-01 — HIGH, reconfirmed:** all 16 branches, including `main` and integration, report `protected:false`; prior ruleset query returned none and detailed protection endpoint returned 403. Do not claim production PR protection is enforced. Owner/admin action is required.
+3. **ENV-06 — HIGH, still open:** `admin.js:boot()` line 31 and `payout-simulator.js:boot()` line 62 check only `environment === "staging"` before `createClient(config.url,...)`; they do not assert the exact staging URL. `tests/environment-isolation.test.mjs` tests account-auth and earn-hub fail-closed behavior but does not runtime-test either internal page. Current config is staging; no current production target was observed.
+4. **MIG-02 — HIGH, new:** staging's applied game-platform migration is absent from the integration repository. Recover/commit the exact migration source from authoritative history or a reviewed schema reconstruction before further schema work; do not replay or change staging data as part of this audit.
+5. **M2-T4 — BLOCKER:** neither official launch game's exact source repository nor playable URL was found in the connected GitHub inventory or prior handoff context. Existing repos include Aegis Rogue, Demonanic, Zombie Invasion Defense, Gauntlet's Survival and Harvest//Zero; none is to be substituted without evidence. Staging registry still contains only the unlisted Zombie Invasion Defense placeholder with no launch URL.
+6. **HUSTLE-01 — HIGH:** Taplayad is owner-selected but absent from the website provider registry, staging provider registry and Edge Function inventory. The current public section still says Earn. No task attribution/history or Taplayad integration is evidenced. Provider terms, incentive eligibility, exact signature formula and transaction/reversal semantics remain unverified.
+7. **SUPPORT-01 — MEDIUM:** public pages still link to `hello@legitloot.site`; selected `payouts@legitloot.site` is not yet verified. Do not claim either mailbox is operational without delivery/reply/monitoring evidence.
+8. **CI-01 — MEDIUM:** no GitHub test workflow or current-head status checks exist. Local test claims are stale relative to current head.
+
+### Fixes/actions made
+- No source code, database schema/data, settings, secrets, provider dashboard, callback, financial record, deployment or branch protection was changed.
+- This dated evidence and the next work order are being added to the shared control documents and CLAUDE handoff only.
+
+### Next owner-independent actions
+1. Claude: implement ENV-06 exact staging URL guards in admin and payout-simulator plus negative runtime tests.
+2. Claude: recover the missing game-platform migration source from authoritative SQL/history; compare it with current staging schema and add source-level regression coverage without applying schema changes.
+3. Claude: add Taplayad as a test-only Hustle adapter only after confirming the full provider signature, transaction identity, retry and reversal contract; never map provider points/revenue/callbacks to LC.
+4. Claude: consistently rename public Earning labels to Hustle, keeping provider tasks separate from LC.
+5. Claude: prepare the five-plus challenge/milestone definitions and server-authoritative reward contract, but do not invent LC values or connect unverified game events.
+6. ChatGPT: independently review the changed files/tests and re-check staging/production isolation before any authorized staging deployment.
+7. Game integration remains blocked until the actual playable URLs or source repository links for both selected games are identified.
+
+### Genuine owner gates
+- Production Offerwall.GG containment choice; production merge/deploy/configuration and sign-up settings; GitHub branch protection administration; provider terms/traffic approval, binding agreements, paid/settlement commitments and live activation; legal/account-deletion decisions; live financial/reward activity; final production release.
+- Required owner input for M2-T4: exact playable URL or source repository for **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**. Do not substitute Zombie Invasion Defense or another existing game.
+- This audit performed read-only environment checks and documentation writes only. No callback, deployment, production setting/secret change, schema/data mutation or money movement occurred.
