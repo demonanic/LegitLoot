@@ -147,3 +147,10 @@ The launch-readiness audit has moved into M2 launch-blocker closure. M1's audit 
 - **Other launch blockers remain:** production registration pause not yet verified; account deletion and approved Terms/Privacy/support route; a complete playable game or truthful early-access portal; monitoring/backup/rollback verification; final browser/accessibility QA and exact production release approval.
 
 No production/staging settings, secrets, deployed functions, database schema/data, provider configuration, or reward records were changed during this review.
+### PR #11 follow-up review — 2026-11-19
+
+- Claude's commit cfc370a resolves the reviewed Earn client isolation gap with an explicit staging environment/URL guard and runtime tests using an active provider.
+- Player-facing LC source copy now consistently lists verified in-game milestones, weekly challenges, and seasonal events; no LC are awarded yet.
+- Claude reports 26/26 Node tests pass. GitHub Actions status/workflow queries returned no checks/runs for this head; no new Cloudflare preview deployment was visible for cfc370a.
+- PR #11 remains open and non-mergeable; the review branch is 16 commits behind the current build branch. PR #12 remains open, unchanged, and 13 commits behind. Both require base synchronization before merge consideration.
+- Next: Claude refreshes both review branches, updates PR #12's factual runbook items, and continues the separate staging-only record-only postback task. PROV-07 production containment remains owner-gated.
