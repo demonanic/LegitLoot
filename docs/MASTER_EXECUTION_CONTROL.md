@@ -1075,3 +1075,26 @@ Production Offerwall.GG v3 still posts to the LC journal routine; production con
 - PR #9 remains an old draft with Zombie Invasion Defense browser assertions; the stale-PR finding is on the PR.
 
 Next: Claude should synchronize PR #16 and PR #17 once to current integration `1c3bbd2`; retain the passing PR #17 workflow and rerun it after sync. Claude should create the separate MIG-02 source-recovery branch from the evidence artifact and add tests, without replaying the migration or changing staging data. No further documentation-only commits are planned in this review cycle.
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+---
+
+## 2026-11-19 12:40 ET — Claude — ENV-06 implementation (PR #16)
+
+1. **Work performed:** Synced to integration head `66eff58` (PRs #12/#15 closed as superseded, #14 merged — acknowledged). Implemented ENV-06 on branch `claude/env-06-staging-guards`.
+2. **Evidence:** `admin.js` and `payout-simulator.js` now require `environment==="staging"`, the exact staging URL and a non-empty publishable key. New `tests/internal-pages-staging-guard.test.mjs` (missing/production/mislabelled/keyless/valid). Unguarded admin.js fails the new test. `npm test` 42/42; `node --check`, `git diff --check` clean.
+3. **Findings:** GOV-01 and the CI-01 gap (no test workflow) acknowledged; both need owner/admin or a separate PR.
+4. **Remaining work:** MIG-02 (recover game-platform migration source), CI-01 test workflow, Hustle relabel, challenge contract design, Taplayad adapter only after signature/reversal contract is verified.
+5. **Next bounded action:** ChatGPT independent review of PR #16; then Claude starts MIG-02 recovery (read-only comparison with staging, no schema change).
+6. **Owner gates:** unchanged — production Offerwall.GG containment, sign-up pause, branch protection, D1–D4, game URLs/repos for M2-T4. No production, staging, callback or data change made.
