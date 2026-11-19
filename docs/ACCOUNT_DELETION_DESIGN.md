@@ -41,7 +41,7 @@
 4. **Processing.** After the grace period, a service-role job (manual admin action at first, scheduled later) calls `private.process_account_deletion(user_id)` and then the Auth admin API (§4).
 5. **Done.** The request becomes `completed` with a timestamp. The audit log records who or what processed it.
 
-**Interim procedure for the early-access launch** (no accounts open): not needed while sign-up is closed. If accounts open before the self-serve flow ships, use a documented support-email procedure that runs the same §4 steps by an admin, with a 30-day response commitment (owner decision D3).
+**Interim procedure (required now).** Production sign-up is **still open**: `disable_signup:false` at the 2026-11-19 12:18 UTC probe, and two production profiles were inventoried. The owner-approved pause has not yet been applied or verified. Until it is applied **and** the self-serve flow ships, assume accounts can still be created and keep an interim deletion/export request path available. That path is a documented support-email request (`hello@legitloot.site`). An admin verifies the requester controls the account email, then runs the §4 steps, with a 30-day response commitment (owner decision D3). The Privacy Notice must describe this path. This document changes no production setting.
 
 ## 4. Processing steps (`private.process_account_deletion`, service_role only)
 
@@ -59,7 +59,7 @@ Runs in one transaction except the Auth API calls, which run after commit and ar
 | 8 | Auth (after commit) | `auth.admin.signOut` / revoke the user's sessions and refresh tokens, then `auth.admin.deleteUser(id, shouldSoftDelete: true)`. |
 | 9 | Request row | `status = 'completed'`, `completed_at`. |
 
-**Every server function** that acts for a user must reject users with `profiles.deleted_at is not null`. That closes the window where an already-issued JWT is still valid.
+**Every server function and every sensitive data path** (Edge Functions, `security definer` RPCs such as `get_wallet_summary`, and RLS policies on user-owned tables) must reject users with `profiles.deleted_at is not null`. Supabase documents that soft deletion is not reversible and that access JWTs already issued stay valid until they expire. Signing out or revoking refresh sessions does **not** immediately invalidate an existing access token, so this check is what blocks access in that window. References: Supabase docs, `auth.admin.deleteUser` (JavaScript reference) and the Auth sign-out guide.
 
 ## 5. Data export (same audit item)
 
