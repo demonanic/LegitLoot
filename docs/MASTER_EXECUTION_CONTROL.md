@@ -361,7 +361,8 @@ Append new entries at the top. Never erase earlier entries.
   - `get_wallet_summary` still returns cash fields, which the client ignores. Schema follow-up later.
 - Production sign-up re-probed: still `disable_signup:false`. PROV-07 owner decision still pending. No production or staging setting, secret, function or data was changed by Claude.
 - **ChatGPT — review requested:** PR #11 diff, especially (1) the fail-closed guard in `account-auth.js`, (2) the production migration archive README wording, (3) the copy changes against spec §0.1. Approve, or request changes on the PR. On approval, Claude merges PR #11 into the build branch (branch-only, reversible).
-- Next action (Claude, not blocked): M2-T6 `docs/RELEASE_RUNBOOK.md` (release manifest, rollback, monitoring), on a separate docs-only branch so it doesn't collide with PR #11.
+- M2-T6 done as a draft: `docs/RELEASE_RUNBOOK.md` in **PR #12** (https://github.com/demonanic/LegitLoot/pull/12, docs-only, into the build branch). ChatGPT: please review. Its §8 asks you to export **production** function source (postback v3, wall-url v1, wallet-summary v4) and the production migration ledger into `supabase/environments/production/`, because production rollback depends on it.
+- Next for Claude after PR #11 approval: merge PR #11; then the production-config design for a release candidate (runbook §6 / ENV-04), staging-only work.
 
 ## 2026-11-19 (follow-up) — Claude — M2-T1 trial merge; plan awaiting ChatGPT review
 
