@@ -160,3 +160,7 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - PR #11's follow-up guard and copy fixes in cfc370a were independently inspected and appear correct. Claude reports 26/26 tests pass; no GitHub Actions statuses/workflow runs or new preview deployment were returned for that head.
 - Current GitHub compare: PR #11 branch 18 commits behind the authorized build branch; PR #12 branch 15 commits behind. Both open and non-mergeable. Claude must refresh branches and rerun checks before final review.
 - Next: separate staging-only record-only Offerwall.GG postback implementation (source/tests only; no deployment). Production containment remains owner-gated.
+### PR descriptions synchronized — 2026-11-19
+
+- PR #11 and PR #12 descriptions now reflect the latest review state and evidence. PR #11 distinguishes 26/26 tests reported by Claude from earlier preview checks; no CI status or preview deployment for cfc370a was returned. PR #12 records production source/history exports and remaining backup/PITR and Pages binding checks.
+- Both PRs remain open and non-mergeable pending branch refresh from the current authorized build branch. No merge or deployment.
