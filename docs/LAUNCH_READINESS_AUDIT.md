@@ -894,3 +894,25 @@ No production release is ready. No production deployment, merge, provider activa
 7. All 21 Git branches report unprotected; main branch protection remains a release gate. Cloudflare project-level preview bindings remain unverified.
 
 No production merge/deploy, settings/secrets, schema/data, callback, publisher dashboard, money, or provider agreement was changed. No PR was merged during this check.
+
+## 2026-11-19 15:23 America/New_York — New launch-readiness findings
+
+### HUSTLE-COPY-20261119-01 — MEDIUM / VERIFIED
+Evidence: PR #20 head 20a8203, index.html lines 7 and 84 use broad “earned by playing” copy. Fine print at line 92 correctly names verified in-game milestones, weekly challenges and seasonal events. tests/hustle-public-copy.test.mjs lines 49–63 checks the steps but not the meta description/headline.
+Impact: homepage headline/search snippet can imply LC is awarded for ordinary play, broader than owner-approved sources.
+Smallest correction: state the three approved sources in headline/meta, consider replacing generic “Play games” with “Complete verified in-game milestones”, and add assertions.
+Owner approval: not required for copy/tests.
+
+### PROV-CURRENCY-CASE-20261119-01 — MEDIUM / VERIFIED
+Evidence: docs/OFFERWALL_GG_INTEGRATION.md says exact currencyName “Loot coins”; staging supabase/functions/offerwall-gg-postback/index.ts line 82 accepts only “Loot Coins”. tests/offerwall-record-only.test.mjs does not assert this literal.
+Impact: a callback matching the written setup may be rejected by the staging record-only handler.
+Smallest correction: verify exact provider callback casing, then align staging handler, docs and regression test. No callback or publisher setting change.
+Owner approval: not required for staging code/docs/test after provider evidence; any dashboard change remains owner-gated.
+
+### PROV-07 — CRITICAL / VERIFIED
+Production Offerwall.GG postback v3 is ACTIVE (verify_jwt=false) and production private.process_offerwall_gg_postback still calls private.post_journal_transaction. Provider-to-LC issuance remains possible and violates owner policy. Staging v8 is record-only. Production containment remains owner-gated.
+
+Governance:
+- PR #20 head 20a8203, Actions run 44601788773: 57/57 tests pass; PR is 5 ahead / 5 behind current integration 04ff43e and requires synchronization.
+- PR #9 remains a stale draft and is non-mergeable; compare reports 171 commits on integration side and 12 on draft side from merge base.
+- GitHub explicitly reports main and integration branch as unprotected.

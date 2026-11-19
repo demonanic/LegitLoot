@@ -101,3 +101,13 @@ The Supabase Edge Function is a public webhook and must be deployed with JWT ver
 - The Edge Function and migrations are committed on an isolated GitHub branch only; they are not deployed.
 - The Earn page continues to show the provider as not connected.
 - No LC issuance, cash conversion, withdrawals or production provider traffic is enabled.
+
+## 2026-11-19 15:23 America/New_York — Current-state correction: legacy Offerwall.GG instructions are superseded
+
+The legacy “Standard reward model” and “Remaining setup and release gates” below are historical. Do not follow instructions to configure LC per USD, set provider units per USD, enable an Offerwall.GG LC wall, or issue LC from provider callbacks. The owner-locked policy permits LC only from verified in-game milestones, weekly challenges and seasonal events; provider offerwall activity must never credit LC.
+
+Fresh read-only verification:
+- Production offerwall-gg-postback v3 is ACTIVE (verify_jwt=false); production private.process_offerwall_gg_postback still calls private.post_journal_transaction. This is a known owner-gated production violation.
+- Staging offerwall-gg-postback v8 is ACTIVE (verify_jwt=false) and record-only. Staging provider row remains disabled but has stale LC/LootCoins reward-model metadata and null terms/approval evidence.
+- This guide says callback currencyName must be exactly “Loot coins”; staging handler supabase/functions/offerwall-gg-postback/index.ts line 82 accepts only “Loot Coins”. Confirm actual provider value and align staging source, documentation and tests before any permitted test-mode validation. No callback has been invoked.
+- Do not activate this provider, alter publisher settings, send a callback, or change production without required owner approval.
