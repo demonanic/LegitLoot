@@ -547,3 +547,7 @@ Read-only Cloudflare API inspection of both Pages projects confirms the current 
 - Both projects have empty project-level preview and production `env_vars`; both inspected deployment objects have empty deployment `env_vars`. No Cloudflare environment-variable override was found.
 - `supabase-config.js` in integration and PR #20 is byte-identical (blob SHA `8504420e1daec988198c5ea3cb0dfcb32b195a09`) and explicitly sets environment `staging` with URL `https://scmnxcsggquwtuyyjnnj.supabase.co`.
 - At query time, the two latest PR deployments were queued/in progress; this check verifies their environment classification and configuration, not successful completion. No Cloudflare settings, bindings, domains or deployments were changed.
+
+
+### 2026-11-19 17:51 ET — Preview deployment completion
+The two PR #20 branch previews queried above subsequently completed successfully: `legitloot` deployment `d34ac518` and `legitloot-preview` deployment `44b52782` both reached Cloudflare Pages stage `deploy: success`, both remain `environment=preview`, and both are on branch `claude/hustle-rename` / commit `00d48d0`. Their URLs are random `*.pages.dev` preview URLs; neither has a custom-domain alias. The `legitloot` canonical production deployment remains on `main` at `3fa7ca5`. No production deployment or configuration change occurred.
