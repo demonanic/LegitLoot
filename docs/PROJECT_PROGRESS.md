@@ -171,3 +171,23 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - Claude reports 7/7 PGlite tests pass after `npm install`; no GitHub Actions status/workflow run was returned. Cloudflare preview succeeded for the static branch only. No migration/function has been deployed and no callback invoked.
 - One low-severity result-label mismatch remains: duplicate reversal retries currently return `duplicate`, while comments/allow-list also describe `duplicate_reversal`. Claude has been asked to align semantics and tests.
 - PR #13 branch is 10 commits behind the current authorized build branch and reports non-mergeable. Refresh and rerun tests before merge consideration. Staging deployment remains a separate approval gate; production is out of scope.
+
+## 2026-11-19 — Independent coordination update (12:14 UTC)
+
+- **Integration:** M2-T1 PR #11 and M2-T3 PR #13 are merged into `build/legitloot-neon-synthwave` only. The integration base at the start of this check was `5ab48bd`, 290 commits ahead / 0 behind `main`. No production merge or deployment.
+- **Open review work:** PR #12 is the release/rollback/monitoring runbook; PR #14 is the staging CPAGrip origin correction; PR #15 is the AUTH-03 account-deletion design. All need refresh from the current integration branch after the coordination-document updates and final independent review. PR #9 remains an older draft.
+- **Verification:** Claude reports 34/34 integrated tests on `ab61c6e`, 11/11 JS syntax checks, and clean non-Markdown diff checks. Claude reports 37/37 tests on PR #14. GitHub returned no Actions/status checks for the inspected heads. Cloudflare preview comments show successful static previews, not backend deployments. ChatGPT inspected the source/test diffs but did not independently execute the suite.
+- **LC policy:** the merged build source removes cash-wallet/provider-to-LC UI claims and implements a staging-lineage record-only callback path. The record-only migration/function have **not** been deployed. Last verified deployed inventory still shows production Offerwall.GG v3 and staging v7 capable of minting LC; PROV-07 remains a blocker.
+- **Staging isolation:** PR #14 removes the production origin from canonical staging CPAGrip source and adds a regression test. It is not yet merged or deployed.
+- **Account deletion:** PR #15 proposes close-and-pseudonymise without LC movement. Its interim-procedure section incorrectly assumes no accounts are open while production sign-up remains enabled; correction requested on the PR. D1–D4 remain owner/legal decisions.
+- **Registration:** the owner-approved production sign-up pause remains unapplied; last environment probe reported `disable_signup:false`. Existing email sign-in must remain enabled when the pause is applied.
+- **Standing authority:** Claude and ChatGPT may independently merge verified work into the integration branch and deploy to staging, including staging-only migrations, without routine owner approval. Production and business-critical gates remain unchanged.
+- **Next:** Claude refreshes PRs #12, #14, #15 from the current integration head, addresses review notes, updates permanent agent instructions, reruns the combined suite on the current head, then returns work for independent review. After review, staging work can proceed without routine owner check-ins.
+
+
+## 2026-11-19 — Live provider-path verification (12:14 UTC)
+
+- Fresh read-only checks of both Supabase projects reconfirmed production `offerwall-gg-postback` v3 and staging v7 are ACTIVE with JWT verification disabled.
+- Both deployed `private.process_offerwall_gg_postback` routines still read/lock LC ledger accounts and call `private.post_journal_transaction`. The new record-only migration is not applied in staging; its source is in the build branch only.
+- Callback events/conversions are 0/0 in both projects. No callback was invoked and no Supabase setting, secret, function, migration, schema, data or financial record was changed.
+- **PROV-07 remains a live policy blocker.** After independent review, Claude may deploy the record-only migration to staging first, then the matching function, and verify the deployed routine. Production containment remains owner-gated.
