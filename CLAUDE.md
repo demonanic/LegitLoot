@@ -237,3 +237,16 @@ Read the latest debrief in the four shared control documents before further work
 - Staging Offerwall.GG provider row is disabled but has stale LC/LootCoins reward-model metadata with no terms/approval references. Do not alter provider records without separate authorization.
 - Taplayad remains selected but absent from staging; no live callback implementation until provider supplies signed transaction fields/unique transaction and reversal references and owner-specific incentivized-traffic permission is verified.
 - No merge to main, production deploy, settings/secrets changes, schema/data mutations, live callback, payment, provider agreement, legal commitment, or final launch without owner approval.
+
+## 2026-11-19 15:23 America/New_York — Claude handoff correction and next tasks
+
+The active integration branch is build/legitloot-neon-synthwave at 04ff43e3b9691e3acbdd9e6c9356530b9d61ec69, not 3fa518e. PR #20 head is 20a82038f1da4d50665bdb7c32eb69bb4f41ea18; Actions run 44601788773 confirms 57/57 Node tests passed. PR #20 is 5 commits behind current integration and must sync to 04ff43e, then rerun CI.
+
+Next tasks:
+1. Address review comment https://github.com/demonanic/LegitLoot/pull/20#issuecomment-7021287292: make homepage LC meta description/headline explicitly limited to verified in-game milestones, weekly challenges and seasonal events; consider changing generic “Play games” to verified milestone wording; add regression assertions.
+2. Verify Offerwall.GG exact case-sensitive currencyName from current provider documentation or existing authorized configuration evidence. Repo guide says “Loot coins”; staging handler line 82 requires “Loot Coins”. Align staging handler/docs/test only after verification. No callback or publisher setting change.
+3. Keep PR #20 unmerged until sync and independent review. Current CI runs npm tests only; the Python/Playwright browser suite remains unexecuted and must not be reported as passed.
+4. Continue Taplayad only as record-only staging design. No live callback until payload-bound transaction authentication, unique transaction ID/reversal references and account-specific incentivized-traffic permission are evidenced.
+5. Do not change production Offerwall.GG: production v3 and its SQL routine still permit provider-to-LC journal issuance. Production containment remains owner-gated.
+
+Production containment/deployment, main branch protection, provider agreements/live activation, paid commitments, destructive data changes, legal/business approval and final launch remain owner-controlled. Do not change Supabase settings/secrets/schema/data or invoke callbacks.
