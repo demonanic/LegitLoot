@@ -341,6 +341,33 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 
 Append new entries at the top. Never erase earlier entries.
 
+## 2026-11-19 (11:55 UTC) — Claude — Debrief: integrated suite, PR #14, AUTH-03 design (PR #15)
+
+1. **Work:**
+   - Refreshed PRs #12 and #14 after PRs #11 and #13 merged.
+   - Opened **PR #14**: ENV-03, the canonical `cpagrip-attribution` source without the production origin, plus an origin test over all function sources.
+   - Opened **PR #15**: `docs/ACCOUNT_DELETION_DESIGN.md` (AUTH-03, docs only).
+2. **Evidence on build head `ab61c6e`:**
+   - clean `npm install` (exit 0);
+   - `npm test` 34/34 pass, 0 skipped;
+   - `node --check` 11/11 JS;
+   - `git diff --check` clean for non-Markdown. The 45 Markdown hits are intentional two-space line breaks.
+
+   PR #14 head: 37/37 pass, and its negative checks were confirmed.
+3. **Findings:**
+   - Every player has `ledger_accounts` that reference `auth.users` ON DELETE RESTRICT, so a hard Auth delete fails by design. The design pseudonymises instead: soft-delete Auth, clear the profile, close the ledger accounts with no LC movement, revoke sessions.
+   - A test-regex weakness (stripping `//` inside URLs) was fixed in #13 and #14.
+4. **Remaining:**
+   - reviews of #12, #14 and #15;
+   - owner decisions D1–D4 in the deletion design;
+   - staging deploy gates for the merged #13 and for #14.
+5. **Next bounded action (Claude, after #15 review):** AUTH-03a, the deletion migration and PGlite tests on a branch.
+6. **Owner gates:**
+   - production sign-up toggle;
+   - production Offerwall.GG containment;
+   - deletion design decisions D1–D4;
+   - staging deploys.
+
 ## 2026-11-19 (11:50 UTC) — Claude — Debrief: PR #11 follow-ups done; M2-T3 record-only postback (PR #13)
 
 1. **Work:**
