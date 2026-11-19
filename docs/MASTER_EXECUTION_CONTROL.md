@@ -717,3 +717,49 @@ Claude: read this owner update, coordinate with ChatGPT through the repo, execut
 - **No changes:** no secrets, settings, functions, migrations, schema, data, callbacks, or financial records were changed.
 
 Current integration head after the coordination-document updates: `f8f54f7`. PRs #12, #14, and #15 each compare as 4 commits ahead / 4 behind this base and must refresh before merge consideration.
+
+---
+
+## 2026-11-19 13:09 UTC — OWNER DECISION CHARTER — launch scope and Hustle authorization
+
+This entry records the owner's explicit decisions in the 2026-11-19 conversation. It supersedes older conflicting launch-scope assumptions (including the earlier one-game minimum) but does not override any production, financial, legal, provider-agreement, security, or irreversible-action gate.
+
+### Locked initial-launch decisions
+- Initial launch must be one complete, basic-operable LegitLoot platform. The selected launch games are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**. These are the official public names supplied by the owner. The owner states both games are currently playable; agents must independently verify the actual integration, routes, mobile usability, account linkage, and playable experience rather than treating the statement as test evidence.
+- Retain offerwalls as a separate user-task/discovery/advertising feature. They must remain completely disconnected from LC issuance. No provider offerwall task, conversion, callback, attribution, publisher event, or provider balance may create, credit, promise, or alter LC.
+- Advertising is allowed at launch, subject to privacy, consent, truthful disclosures, user safety, and no interference with reward verification.
+- Production registration remains paused until the owner approves launch. Do not enable it or claim it is paused until the production setting is independently verified.
+- No paid features at initial launch.
+- Support contact selected by owner: `payouts@legitloot.site`. This is the intended address, not evidence that the mailbox exists, receives mail, is monitored, or is authorized for support. Verify routing and deliverability in a non-destructive way; do not change DNS, purchase service, or make external commitments. Do not publish as operational until verified.
+- Final production release always requires explicit owner approval.
+
+### LC and wallet rules reaffirmed
+- Website wallet is authoritative; games do not maintain separate spendable wallets.
+- LC may be earned only from server-verified in-game milestones, weekly challenges, and seasonal events.
+- At least five launch challenges/milestones must be authored and configured by Claude, integrated with the central reward system, and covered by tests. This is a minimum. The exact challenge definitions and LC values must follow existing owner-approved LC economics; agents may author non-economic objectives and propose values but must not change reward values/economic policy without the required specialist/owner approval.
+- Reward integration must be server-authoritative, idempotent, auditable, abuse-resistant, and tested with synthetic staging identities. Prove that each eligible event credits the website wallet once and only once; prove invalid, replayed, client-forged, and provider-originated events cannot credit LC.
+- No cash, withdrawals, user-to-user transfers, USD peg, provider-offerwall-to-LC issuance, or other cash-equivalent promise.
+
+### Games and Hustle implementation authorization
+- Claude is authorized to integrate the two selected games under the exact public names above and to build the launch challenge/milestone catalogue and verified in-game LC reward wiring, subject to the LC policy and owner gates.
+- The former **Earning** platform section is renamed **Hustle**. ChatGPT and Claude are authorized to design and code the framework and make it function as a real, clearly scoped task-discovery/user-task section. This includes UI, task catalogue contracts, provider adapters, attribution, task-status tracking, admin controls, test fixtures, staging configuration, and documentation within the active launch milestone.
+- Select and evaluate at least one publisher/provider that actually offers user tasks. Research provider eligibility, incentive-traffic rules, technical integration, test/sandbox availability, settlement model, fees, and agreement requirements. Configure and validate a staging/test integration where permitted. Do not claim a publisher is launch-ready merely because a provider is selected or a dashboard exists.
+- The owner requires at least one publisher account offering tasks to be selected and completely configured/working for launch. However, creating/activating an external publisher account, accepting terms, agreeing to incentivized traffic, signing or accepting a provider agreement, making a representation on the owner's behalf, paying fees, or committing to spend/revenue terms remains owner-gated. Agents must complete all independent research and technical preparation, then escalate only the exact binding step and provide the terms/options. Until owner approval and provider authorization are evidenced, use sandbox/test mode and do not expose provider tasks as live.
+- Provider tasks are not LC earning events. Any third-party reward or payment offered by a publisher must be kept distinct from the LegitLoot LC wallet and must not be described as a LegitLoot cash withdrawal or LC redemption. Do not add cash handling, withdrawal, transfer, USD peg, or a second wallet.
+
+### Existing owner gates remain unchanged
+No authorization here permits production merge/deploy or production configuration/secrets/schema/data changes; live financial activity or reward issuance; cash movement; paid commitments; provider agreements or binding publisher activation; destructive real-data changes; weakening security/privacy; legal publication/commitments; or irreversible business decisions. Staging-only, reversible implementation/testing and integration-branch work may proceed under the standing authorization already recorded above. No real reward callback or financial transaction may be invoked for testing.
+
+### Required implementation sequence and acceptance evidence
+1. Continue the existing PROV-07 containment task: independently verify and deploy the reviewed record-only callback path to staging only, then prove the live staging SQL routine has no LC ledger/journal posting path. Never invoke a real provider callback. Production containment remains owner-gated.
+2. Claude inventories the two game repositories/routes and proves both selected games launch, authenticate/link to the same LegitLoot account, preserve game-specific saves, and emit only signed/server-verified milestone events.
+3. Claude proposes at least five launch challenges/milestones with objective eligibility, event source, anti-replay rule, completion state, and test cases. Existing approved LC values must be reused; unresolved values are escalated as an LC-economy decision, not invented.
+4. Build and test the central reward path end-to-end in staging using synthetic users: game event -> server verification -> idempotent award -> authoritative website wallet -> transaction history. Negative tests must prove clients and provider callbacks cannot mint LC.
+5. Build Hustle as a distinct task-discovery system. Choose a provider through documented research, complete sandbox/test configuration, test attribution/completion callbacks without issuing LC, and identify any owner-gated legal/account step precisely.
+6. Verify the intended support mailbox, ad disclosures/consent, account recovery/deletion, monitoring, mobile flows, and launch runbook.
+7. Keep production signup paused. Prepare the final release package and request owner approval only when the complete evidence-backed release candidate is ready.
+
+### Agent ownership
+- Claude: implementation lead for both game integrations, challenge/milestone catalogue, Hustle framework, publisher technical research/configuration, tests, and progress/handoff notes.
+- ChatGPT: independent architecture/security/reward-policy reviewer, coordination lead, staging operator where connected access permits, and verification of Claude's evidence.
+- Both agents: update the shared progress and launch-readiness records, maintain isolated branches/PRs, and report only verifiable artifacts. No agent may claim external provider approval, mailbox readiness, game integration, reward wiring, or a successful launch without direct evidence.
