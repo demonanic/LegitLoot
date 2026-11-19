@@ -59,7 +59,7 @@
   $("sim-refresh").addEventListener("click",()=>refresh().catch(e=>message(e.message)));
   $("sim-signout").addEventListener("click",async()=>{await client.auth.signOut();app.hidden=true;message("SIGNED OUT · Simulator access has ended.");});
   const boot=async()=>{
-    if(!config||config.environment!=="staging"||!window.supabase){message("Staging configuration missing. Access denied.");return;}
+    if(!config||config.environment!=="staging"||config.url!=="https://scmnxcsggquwtuyyjnnj.supabase.co"||!config.publishableKey||!window.supabase){message("Staging configuration missing. Access denied.");return;}
     client=window.supabase.createClient(config.url,config.publishableKey);
     const {data:{session},error}=await client.auth.getSession();if(error||!session){message("Sign in with your staging owner account first.");return;}
     const {data,error:verifyError}=await client.auth.getUser();if(verifyError||!data.user){message("Session verification failed. Sign in again.");return;}

@@ -28,7 +28,7 @@
   }catch(e){sectionContent.textContent=e.message;status.textContent="Signed-in session · server rejected or could not load this section: "+e.message;}
  };
  const boot=async()=>{
-  if(!config||config.environment!=="staging"||!window.supabase){status.textContent="Staging configuration missing. Access denied.";return;}
+  if(!config||config.environment!=="staging"||config.url!=="https://scmnxcsggquwtuyyjnnj.supabase.co"||!config.publishableKey||!window.supabase){status.textContent="Staging configuration missing. Access denied.";return;}
   client=window.supabase.createClient(config.url,config.publishableKey);
   const {data:{session},error}=await client.auth.getSession();
   if(error||!session){status.textContent="SIGNED OUT · Sign in through Player Account to access administrator tools.";return;}
