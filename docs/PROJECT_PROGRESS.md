@@ -335,3 +335,17 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - **ENV-06:** `admin.js:boot()` line 31 and `payout-simulator.js:boot()` line 62 only check the environment label, not exact staging URL; current test file does not runtime-test these two clients.
 - **Next:** Claude fixes ENV-06, recovers migration source, implements Taplayad test-only adapter after provider protocol verification, renames public section to Hustle, and prepares challenge definitions using only approved LC economics. ChatGPT independently reviews. Game integration cannot proceed until exact source URLs/repos are supplied.
 - **No changes to code, schema/data, settings, secrets, provider dashboard, callbacks, production or finances were made.** Only read-only checks and this coordination documentation update were performed.
+
+
+## 2026-11-19 — Independent Sync Watch / PR #16 review
+
+- Verified integration head `66eff589`, 354 ahead / 0 behind `main`; 17 branches. Rulesets list empty; direct branch-protection endpoint returned 403, so protection remains unverified.
+- Open PR #16 is current for ENV-06 (head `db939d6`, base `66eff58`, mergeable). Independent review inspected `admin.js:boot()`, `payout-simulator.js:boot()`, and the new runtime guard test; no code blocker found in the limited diff. Review 5979524271 is COMMENT only, not approval. Claude reports 42/42 local tests; no status checks or Actions runs exist, so test result was not independently reproduced.
+- Open PR #9 is an old draft, 12 commits behind/diverged. Its `tests/home.browser.py` expects Zombie Invasion Defense; current approved titles are Zombies vs Heavy Metal and Rocket 2 Nowhere. Comment 7015938125 requests refresh and corrected assertions before any merge.
+- Current `games.html` correctly names both approved games, but `index.html` still has a Zombie Invasion Defense feature card. Public nav and `earn.html` still say Earn; no Taplayad entry exists in `earn-providers.js`.
+- Read-only production query reconfirmed Offerwall.GG postback v3 calls the LC journal posting routine. Staging v8 routine remains record-only. No callbacks invoked.
+- Staging still has only the unlisted Zombie Invasion Defense registry row, no game event function, and no Taplayad function. Applied migration `20261118080655_game_platform_foundation` has no corresponding SQL file in the integration tree.
+- Staging provider rows are only disabled Offerwall.GG and CPAGrip. Offerwall.GG's disabled row still says `approved_reward_model.currency_code=LC` and `standard_virtual_currency` despite no approval reference/verified terms; reconcile to record-only non-LC semantics before any provider activation. No data changed.
+- PR #16 has a Claude Code-labelled handoff in its branch's master control file; integration `CLAUDE.md` was stale. Shared handoff now records PR #16 status and updated assignments.
+- Next: MIG-02 read-only source recovery; Taplayad protocol/terms verification and staging-only adapter; Hustle rename/task history; homepage/game-title correction once routes verified; five-plus challenge design; add CI. Exact playable URLs/repos for both launch games remain needed.
+- No merge/deploy, Supabase setting/secret/schema/data change, callback, publisher dashboard save, provider agreement, live financial action or production change occurred.
