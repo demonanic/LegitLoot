@@ -61,8 +61,8 @@ Read-only connector inventory on 2026-11-19:
 
 - Never use production project ref in staging instructions or vice versa.
 - No service-role or secret values in GitHub, docs, chat, logs, or screenshots. Record secret names and presence only where safely verified.
-- No schema changes, Edge Function deployment, provider activation, reward posting, or production deploy without the applicable approval gate.
-- `main` is the current production website source branch. `build/legitloot-neon-synthwave` is the authorized integration/work branch. No merge/deploy without owner approval.
+- Production settings/secrets/schema/data changes, provider activation, reward posting, live financial activity, and production deployment remain owner-gated. Staging-only migrations, Edge Function deployments, and reversible staging tests are authorized under `docs/MASTER_EXECUTION_CONTROL.md` after independent review and exact-project verification.
+- `main` is the owner-recorded production website source branch; its GitHub API `protected` field currently reports `false` (see §14). `build/legitloot-neon-synthwave` is the authorized integration branch. Agents may merge independently verified work into the integration branch and deploy to staging under standing owner authorization; production merge/deploy remains owner-gated.
 - Production public sign-up pause has been approved by the owner. Preserve existing sign-in. Execution is pending a dashboard-capable authorized operator and must be verified afterward.
 - Legit Coins are awarded only by the future server-authoritative game milestone/challenge/event pipeline; provider offerwall callbacks must not mint LC under the current owner decision.
 
@@ -212,3 +212,42 @@ Read-only Supabase recheck after PR #13 was merged into the GitHub build branch:
 - Standing owner authority now permits the agents to deploy the reviewed record-only migration to staging first, then the matching Edge Function, and verify the deployed routine. Production containment remains an explicit owner gate.
 
 Integration branch head after this check's coordination-document commits: `f8f54f7`. PRs #12, #14, and #15 are each 4 commits behind the current integration base (and 4 commits ahead on their own branches); refresh before merge consideration.
+
+
+## 14. Independent coordination and environment recheck — 2026-11-19 (08:10 ET)
+
+### GitHub and Cloudflare
+- Integration branch `build/legitloot-neon-synthwave`: `c5525d0b9ac8b507eb7c242d166c2e369d70487d`.
+- Production branch `main`: `3fa7ca58992f786f7b59f22b8fb758149a873d6b`; no production merge occurred.
+- Current open PRs: #12 @ `9a1f136` (11 ahead / 0 behind), #14 @ `38715b4` (6 ahead / 0 behind), #15 @ `e32c2fa` (7 ahead / 0 behind); old draft #9 remains open.
+- GitHub branch listing reports `protected:false` for `main` and the integration branch. The repository rulesets query returned no rulesets. The branch-protection detail endpoint returned 403 to the connected integration, so detailed rules could not be inspected. **Do not describe `main` as protected until verified.** This is GOV-01; see Master Control and PR #12 comment 7010370851.
+- Cloudflare Pages checks succeeded for the integration head and PR #12/#14/#15 heads in both `legitloot` and `legitloot-preview`. These are static branch-preview deployments. They are not unit-test CI, Supabase Edge Function deployments, or database migrations. The production Pages binding/trigger remains dashboard-unverified.
+- The repository contains only the older `.github/workflows/extract-game-artwork.yml`; there is no automated test workflow. Claude's local test reports (34/34, 37/37, 34/34 on #12/#14/#15) are not GitHub CI and were not independently rerun by ChatGPT.
+
+### Browser-to-Supabase isolation
+- `supabase-config.js` currently points to `https://scmnxcsggquwtuyyjnnj.supabase.co` and labels the environment `staging`.
+- `account-auth.js` and `earn-hub.js` both require the exact staging URL, the staging label, and a non-empty publishable key before creating a client.
+- **ENV-06:** `admin.js:boot()` and `payout-simulator.js:boot()` only verify the staging label and Supabase library before creating a client from `config.url`. `admin.html` and `payout-simulator.html` load these scripts. `tests/environment-isolation.test.mjs` does not runtime-test these two clients. Current configuration is correctly staging; no current production target was observed. Add exact URL checks and runtime tests. Review comment 7010372122 is on PR #14.
+- `offerwall-launch.js` also uses an environment-label-only guard but is not loaded by the current `earn.html`; review its use before reactivating that legacy script.
+
+### Live Supabase state — read-only
+| Item | Production | Staging |
+|---|---|---|
+| `offerwall-gg-postback` | ACTIVE v3, `verify_jwt=false` | ACTIVE v7, `verify_jwt=false` |
+| `offerwall-gg-wall-url` | ACTIVE v1 | ACTIVE v5 |
+| Applied migrations | 7 | 20 |
+| Record-only migration `20261119120000_offerwall_gg_record_only` | Not applicable / not applied | **Not applied** |
+| Callback events | 0 | 0 |
+| Conversions | 0 | 0 |
+| Provider-sourced journal transactions | 0 | 0 |
+
+Read-only `pg_get_functiondef` checks in both projects still show `private.process_offerwall_gg_postback` selecting/locking LC ledger accounts, constructing journal entries, and calling `private.post_journal_transaction`. Thus PROV-07 remains a live policy violation in both deployed environments despite the record-only source being merged into the integration branch. No callback was invoked and no database object/data was changed.
+
+### Outstanding owner gates
+- Production Offerwall containment: owner decision remains necessary because removing the shared `OFFERWALL_GG_SECRET` also disables Offerwall wall-URL signing.
+- Production sign-up pause: last known `disable_signup:false` at 12:18 UTC; not freshly re-probed in this check.
+- GitHub `main` branch protection and required checks: not verified; GitHub reports `protected:false`.
+- Cloudflare production branch binding/trigger and production backup/PITR: NOT VERIFIED.
+- AUTH-03 D1–D4, support-email verification, Terms/Privacy publication, game/early-access scope, and final production release remain open.
+
+This recheck used read-only GitHub and Supabase queries. No settings, secrets, functions, migrations, schema, data, callbacks, or financial records were changed.
