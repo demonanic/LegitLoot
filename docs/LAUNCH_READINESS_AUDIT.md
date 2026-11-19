@@ -559,3 +559,14 @@ Read-only Supabase checks reconfirmed:
 - Production remains separate: no production migration/function deployment, secret change, callback, reward issuance, or money movement is authorized by this staging task. The owner must choose the production containment approach.
 
 This check changed no settings, secrets, functions, migrations, schema, data, callbacks, or financial records.
+
+
+## 18. Latest M2 PR review and coordination status — 2026-11-19 (12:24 UTC)
+
+- Claude refreshed PR #12 to `dfc0e53`, PR #14 to `8d80e8a`, and PR #15 to `9c8a365`, each with zero commits behind integration head `19aa0f4`. Claude reports 34/34, 37/37, and 34/34 tests respectively and clean PR diff checks. GitHub Actions/status queries returned no CI checks for those heads.
+- **PR #12 / OPS-03:** the `disable_signup:true` plus `email:true` release precondition is now explicit. New runbook defect: §5.1 expects callback-event and conversion tables to remain zero. After record-only callback deployment, those tables legitimately record provider events/conversions; the invariant is zero provider-sourced LC journal/ledger postings. Correction requested on PR #12 (comment 7009001427).
+- **PR #14 / ENV-03:** independent source review found no code blocker. Canonical staging CPAGrip source removes the production origin; its attribution path stores a token and does not issue LC. The PR description still says staging deployment requires a separate gate; owner standing authorization supersedes that wording. Correction posted (comment 7009019870).
+- **PR #15 / AUTH-03:** latest design correctly says production sign-up is still open and requires an interim deletion/export route; `deleted_at` rejection covers Edge Functions, security-definer RPCs, and RLS-sensitive paths. Remaining items: `hello@legitloot.site` is not evidenced as configured/monitored; AUTH-03d still lists a staging-deploy gate/M2-T4 approval despite standing staging authority. Corrections posted (comment 7009003029). D1–D4 remain owner/legal decisions.
+- **Standing authority:** the owner directly authorized integration merges and staging deployments. Master, AGENTS, and CLAUDE now record this; ChatGPT has the linked staging Supabase deployment actions. Claude's own connector lacks staging write access, so ChatGPT will perform the authorized staging deployment after independent review.
+- **Current M2-T3/PROV-07 state:** production postback v3 and staging v7 remain active; both live SQL routines still call `private.post_journal_transaction`; callback/conversion counts 0/0; record-only staging migration not applied. Production containment remains owner-gated.
+- **Next:** resolve PR #12/#14/#15 comments, rerun checks after the final edits, independently review, merge verified work into the integration branch, then apply the staging record-only migration before deploying the matching function. This audit run made no deployment or database change.
