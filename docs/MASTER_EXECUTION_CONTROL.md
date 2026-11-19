@@ -38,67 +38,55 @@ The first release should be deliberately narrow. Finish and verify the minimum c
 
 There is exactly one active milestone at a time.
 
-## Active milestone M1: LAUNCH READINESS BASELINE AND BLOCKER PLAN
+## Active milestone M2: LAUNCH BLOCKER CLOSURE AND BASIC-OPERABLE RELEASE
 
-**Status:** READY TO EXECUTE  
+**Status:** IN PROGRESS  
 **Priority:** P0  
-**Owner:** Claude — primary repository investigator and implementation lead  
-**Partner:** ChatGPT — architecture reviewer, risk reviewer, and independent second set of eyes  
-**Owner involvement:** Not required for routine inspection, documentation, or safe staging work.
+**Owner:** Claude — platform implementation lead  
+**Partner:** ChatGPT — independent reviewer, architecture/risk reviewer, and staging deployment operator where connector access is available  
+**Owner involvement:** Not required for routine integration merges, staging deployments, staging-only migrations, reversible staging tests, or implementation work already inside this milestone.
 
 ### Objective
 
-Establish the verified current state of the actual repository, deployed website, development backend, authentication, account experience, wallet/reward systems, provider integrations, game entry points, admin operations, and legal/trust surfaces.
+Deliver the smallest complete, honest, basic-operable version of `legitloot.site`. Do not expand the platform or add unrelated products until the minimum user journey is complete and verified.
 
-Then produce one evidence-based launch blocker list, ordered by dependency and severity, and recommend the smallest viable public launch scope.
+The release candidate must truthfully provide:
+- Public website/navigation and mobile usability.
+- Central account sign-in, recovery, and a working deletion/export path before public account onboarding.
+- The website as the authoritative LC wallet; no game-side spendable wallet.
+- LC earned only from verified in-game milestones, weekly challenges, and seasonal events.
+- No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance.
+- A verified playable game, or an honestly labelled early-access portal.
+- Approved Terms, Privacy, support route, monitoring, backup/recovery expectations, and rollback plan.
+- No live financial activity or provider activation without the applicable owner gate.
 
-This milestone is an audit and launch-plan milestone. Do not start unrelated feature development during it.
+### Current active task — M2-T3a: staging record-only callback containment
 
-### Exact execution steps
+**Status:** READY FOR STAGING DEPLOYMENT after final review of the merged source.  
+**Implementation:** Claude authored the migration and matching Edge Function in PR #13; both are merged into the authorized build branch.  
+**Staging deployment operator:** ChatGPT (linked staging Supabase connection has the required deployment actions).  
+**Independent review:** ChatGPT inspected the migration, Edge Function, PGlite tests, live routine definitions, and grants.
 
-1. Read `README.md`, `AGENTS.md`, `CLAUDE.md`, `docs/CODEX_EXECUTION_CONSTITUTION.md`, `docs/PLATFORM_BUILD_SPEC.md`, `docs/PROJECT_PROGRESS.md`, `docs/LEGITLOOT_CREATIVE_BIBLE.md`, and this document.
-2. Confirm current branch, HEAD commit, working-tree state, and whether the branch contains uncommitted or unreviewed work. Do not overwrite another agent's work.
-3. Inspect all public routes and their actual user-visible states. Check navigation, mobile behavior from source, forms, buttons, links, status labels, and dead ends. Distinguish source inspection from rendered/browser testing.
-4. Inspect authentication implementation and configuration without exposing or copying secrets. Verify registration, email verification, login, logout, password recovery, session persistence, and account deletion status. Mark anything not actually tested as NOT VERIFIED.
-5. Inspect the development Supabase project: schema, RLS, functions, triggers, auth configuration, wallet/ledger structures, provider registry, and relevant migrations. Read-only by default. Do not touch production.
-6. Inspect provider integration status using current code and dashboard evidence already available. Distinguish publisher approval, placement approval, technical integration, test verification, and production activation.
-7. Inspect game registry, game links, game-specific integration state, account linking, save architecture, and actual game launch availability. Do not treat planned integrations as implemented.
-8. Inspect legal, privacy, terms, support, fraud, and account-deletion disclosures. Identify contradictions between public copy and actual functionality.
-9. Run available static checks and tests. Record exact commands and results. Do not claim browser QA unless a real browser session was used.
-10. Compare observed facts with the governing specifications. Record conflicts explicitly; do not silently choose whichever document is convenient.
-11. Produce/update `docs/LAUNCH_READINESS_AUDIT.md` with evidence, findings, severity, and file/function references.
-12. Update this document's status and next milestone only after the audit is complete and reviewed by the other agent.
+Acceptance criteria:
+1. Confirm the target is staging project `scmnxcsggquwtuyyjnnj`, never production.
+2. Apply `supabase/migrations/20261119120000_offerwall_gg_record_only.sql` to staging first.
+3. Deploy the matching `supabase/functions/offerwall-gg-postback/index.ts` second.
+4. Verify the staging function version changed and the live `private.process_offerwall_gg_postback` no longer reads/locks LC ledger accounts or calls `private.post_journal_transaction`.
+5. Verify the public wrapper still requires `service_role` and no anon/authenticated execute grant was introduced.
+6. Do not invoke a real callback. Callback/conversion records may be nonzero after record-only operation; provider-sourced LC journal/ledger postings must remain zero.
+7. Record exact migration/function versions and verification evidence. Do not touch production.
 
-### Required audit output
+This audit run did not perform the deployment because its execution instructions explicitly required a read-only check. The standing owner authorization permits this staging task in a normal implementation turn without another owner prompt.
 
-Every finding must have:
-- ID (e.g. `AUTH-01`, `WALLET-02`, `PROVIDER-03`).
-- Severity: BLOCKER / HIGH / MEDIUM / LOW.
-- Status: VERIFIED / NOT VERIFIED / FAIL / DEFERRED.
-- Evidence: exact file, function, database object, test, URL, or provider documentation.
-- User/business impact.
-- Smallest safe corrective action.
-- Dependencies.
-- Whether owner approval is required.
+### Supporting M2 work
 
-### M1 acceptance criteria
+- **PR #12 / M2-T6:** finish release/rollback/monitoring runbook; correct the provider monitoring invariant and retain the explicit production sign-up pause precondition.
+- **PR #14 / ENV-03:** remove the production origin from canonical staging CPAGrip source; after review, merge and deploy only to staging.
+- **PR #15 / AUTH-03:** finalize account-deletion design; verify the support route, remove obsolete staging approval language, and keep D1–D4 owner/legal decisions explicit before implementing those choices.
+- **AUTH-02:** the owner-approved production sign-up pause remains unapplied; verify `disable_signup:true` while preserving email sign-in before public account onboarding.
+- **LEGAL-01 / GAME-02 / OPS-01 / OPS-03:** complete accurate Terms/Privacy/support, the playable-game vs early-access scope, monitoring, backup/PITR verification, and release/rollback readiness.
 
-M1 is complete only when:
-
-- The current branch and repository state are recorded.
-- Every public route has an implementation/status inventory.
-- Authentication capabilities and gaps are evidenced.
-- Development backend schema, RLS, and Edge Functions are inventoried.
-- Wallet and reward architecture is mapped without changing economic policy.
-- Each provider has a truthful status: account approval, placement approval, integration, test, and launch state.
-- Game/account/save integration status is evidenced.
-- Legal/trust/account-deletion launch gaps are identified.
-- Available automated checks have been run and results recorded.
-- Conflicts between current code, specifications, and recent owner decisions are listed.
-- A smallest-viable-launch recommendation and sequenced blocker backlog are written.
-- ChatGPT has reviewed the audit and either approved it or posted specific evidence-based corrections in the shared log.
-
-**Do not declare M1 complete merely because a report exists. It must be grounded in repository/backend evidence.**
+M1 audit and environment inventory are historical completed work, accepted with qualifications. Current implementation status is recorded in `docs/PROJECT_PROGRESS.md`, `docs/LAUNCH_READINESS_AUDIT.md`, and `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`.
 
 # 3. LAUNCH SCOPE — WHAT WE ARE TRYING TO FINISH
 
@@ -274,21 +262,31 @@ If two specialists disagree, the domain owner decides within that domain, subjec
 
 # 8. CHANGE CONTROL AND PRODUCTION SAFETY
 
-Authorized:
+Authorized without per-action owner approval:
 - Read-only audits of production and development.
-- Repository documentation changes on the authorized build branch.
-- Code changes on the authorized build branch that satisfy the active milestone.
-- Development/staging inspection and reversible tests within existing approved access.
-- Updating this document, the progress report, and specialist interface documentation.
+- Repository documentation and code changes on the authorized build branch.
+- Merge independently reviewed and verified work into `build/legitloot-neon-synthwave`.
+- Deploy to staging, including documented staging-only migrations and reversible staging database changes.
+- Create and clean up dedicated staging-only test identities/data when required by the active milestone.
+- Run staging E2E tests with a documented test identity and cleanup plan.
+- Update this document, progress reports, environment records, and specialist interface documentation.
 
-Not authorized by this document:
-- Merge to `main`.
-- Production deployment or DNS/domain changes.
-- Production database/schema/data changes.
-- Live reward issuance, real user payouts, or movement of money.
-- Paid infrastructure, subscriptions, provider agreements, or new account creation.
-- Enabling provider campaigns or production callbacks.
-- Destructive data migrations or deletion of real user data.
+For every integration merge or staging deployment:
+- Confirm the exact target branch/project/ref; fail closed against production.
+- Obtain independent review for shared account, wallet, provider, security, or release-boundary changes.
+- Run relevant tests and static checks.
+- Preserve rollback options and record exact commit/migration/function versions.
+- Append a dated coordination-log debrief.
+
+Owner approval remains required before:
+- Merge to `main`, production deployment, production DNS/domain/Cloudflare changes, or replacing the live site.
+- Production Auth settings, secrets, database/schema/data, or production function changes.
+- Spending money, paid infrastructure/subscriptions, provider agreements, or external business commitments.
+- Enabling live provider campaigns/callbacks, issuing real rewards, payouts, deposits, withdrawals, stored value, or moving real funds.
+- Destructive/irreversible changes to real user/account/game-save/ledger data.
+- Weakening authentication, RLS, authorization, signature verification, fraud controls, or privacy protections.
+- Changing LC economic policy, reward values, redemption rules, or making legally consequential/irreversible business decisions.
+- Creating production user/provider/service accounts or any external account that creates a legal or paid commitment.
 
 Never expose secrets in repository files, logs, screenshots, issue comments, or agent notes. Use placeholders for secret names only.
 
@@ -307,39 +305,49 @@ A task is not done because a code change was made or a page renders.
 
 # 10. CURRENT EXECUTION STATUS
 
-**Active milestone:** M1 — Launch Readiness Baseline and Blocker Plan  
-**Active task:** M1-T1 — Repository, environment, and launch-surface inventory  
-**Task owner:** Claude  
-**Reviewer:** ChatGPT  
-**Status:** M1-T1 ACCEPTED WITH QUALIFICATIONS (ChatGPT, audit §12). Environment reconciliation delivered 2026-11-19 (audit §15, `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` §7–10). Proposed next milestone tasks: audit §15.4 (M2-T1…T7), pending ChatGPT review. Open owner items: production sign-up toggle (BLOCKED on dashboard sign-in), PROV-07 containment.
+**Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release  
+**Active task:** M2-T3a — Staging record-only Offerwall.GG callback containment  
+**Task owner:** ChatGPT — staging deployment and live verification  
+**Implementation partner:** Claude — source, tests, handoff, and supporting fixes  
+**Reviewer:** ChatGPT — independent source review already completed; Claude confirms implementation/test evidence  
+**Status:** Source is merged to the integration branch, but the deployed staging function/database routine still use the legacy LC-posting path. Ready for staging deployment in a normal implementation turn; this scheduled audit did not deploy.
 
-### M1-T1 exact deliverable
+### Current verified state
+- PR #11 (M2-T1) merged to the build branch at `2824563`.
+- PR #13 (M2-T3 source) merged to the build branch at `1faf854`; record-only migration/function not deployed.
+- PR #12 (M2-T6 runbook), PR #14 (ENV-03), and PR #15 (AUTH-03 design) were refreshed onto integration head `19aa0f4` with zero commits behind.
+- Claude reports 34/34 tests on PR #12 head `dfc0e53`, 37/37 on PR #14 head `8d80e8a`, and 34/34 on PR #15 head `9c8a365`; all report clean PR diff checks. GitHub Actions/status queries returned no CI checks. These are Claude-reported local results, not GitHub CI.
+- Fresh read-only Supabase evidence: production postback v3 and staging v7 remain ACTIVE; both deployed SQL routines still call `private.post_journal_transaction`; callback events/conversions are 0/0 in both environments; staging has not applied the record-only migration.
+- PR #12 has an outstanding runbook monitoring correction; PR #15 has outstanding support-route and staging-authority wording corrections; PR #14's PR description still needs its obsolete staging-deploy gate wording removed.
 
-Create the initial sections of `docs/LAUNCH_READINESS_AUDIT.md` covering:
+### Immediate sequence
+1. Claude resolves the remaining PR #12/#14/#15 review comments and updates the affected PR descriptions.
+2. ChatGPT completes the authorized staging migration-first/function-second deployment of M2-T3a in a non-audit execution turn, then verifies the live routine and function version without invoking callbacks.
+3. Claude and ChatGPT complete independent final reviews and merge verified PR #12/#14/#15 into the integration branch.
+4. Continue AUTH-03 implementation after D1–D4 owner/legal decisions are resolved; use a dedicated staging-only test identity and cleanup plan.
+5. Close the remaining launch blockers: production sign-up pause, approved Terms/Privacy/support route, playable-game or truthful early-access scope, monitoring, backup/PITR, mobile/accessibility QA, and release manifest.
 
-- Branch/commit/working-tree state.
-- Public route inventory and current state.
-- Current frontend architecture and entry points.
-- Existing authentication UI and backend connection points.
-- Existing game listing/launch links and current availability claims.
-- Existing admin entry points and operational tools.
-- Static checks that can be run immediately.
+### Owner gates
+Production Offerwall.GG containment; production sign-up pause execution where dashboard access is needed; AUTH-03 D1–D4 and legal/privacy choices; paid monitoring/backup commitments; production merge/deploy/config/data changes; provider agreements and all live financial activity.
 
-Do not modify application code during M1-T1. This is a read-only inventory. Do not expose secrets. Mark untested behavior NOT VERIFIED.
-
-After M1-T1, ChatGPT reviews the evidence and adds a bounded next task for the backend/auth/provider audit. Continue through M1 in the same manner. Do not wait for owner confirmation between routine subtasks.
-
-### Next milestone after M1
-
-**M2 — Launch Blocker Closure**
-
-M2 will be defined only from the verified M1 audit. It will contain the smallest ordered set of changes required to make the approved launch scope work. No speculative features.
-
----
+M1 audit remains accepted with qualifications. Its original task details and findings remain in the dated audit/history above; M2 is the active milestone now.
 
 # 11. AGENT COORDINATION LOG
 
 Append new entries at the top. Never erase earlier entries.
+
+## 2026-11-19 (12:24 UTC) — ChatGPT — Claude handoff review and M2 authority correction
+
+1. **Claude work verified:** PR #12 refreshed to `dfc0e53`, PR #14 to `8d80e8a`, and PR #15 to `9c8a365`; all three compare 0 commits behind integration head `19aa0f4`. Claude reports 34/34, 37/37, and 34/34 tests respectively, plus clean PR diff checks. GitHub status/workflow queries return no CI runs; these remain local test reports.
+2. **PR #12:** Claude added the explicit production registration precondition (`disable_signup:true`, `email:true`) until Terms/Privacy and deletion are ready. New independent finding posted (comment 7009001427): §5.1 must not require callback-event/conversion tables to remain zero after record-only deployment; only provider-sourced LC journal/ledger postings must remain zero. Callback/conversion rows are valid reconciliation records.
+3. **PR #14:** canonical staging CPAGrip source removes the production origin and has no LC posting path. No code-level blocker found. PR description still says staging deployment needs a separate gate; correction requested (comment 7009019870). Claude's lack of staging write access is a connector limitation, not a missing owner approval. The owner directly authorized staging deployment in this conversation and the instruction is recorded in PR #11 comment 7008248171. ChatGPT has the linked staging Supabase deployment actions.
+4. **PR #15:** Claude corrected the false “no accounts open” assumption and expanded `deleted_at` enforcement to Edge Functions, security-definer RPCs, and RLS-sensitive paths; it correctly notes existing access JWTs remain valid until expiry. Remaining findings posted (comment 7009003029): `hello@legitloot.site` is not verified as configured/monitored, and the AUTH-03d staging approval gate is superseded by standing owner authorization. D1–D4 remain owner/legal decisions.
+5. **Live deployed state:** production postback v3 and staging v7 remain ACTIVE; live routines in both projects still call `private.post_journal_transaction`; callback events/conversions remain 0/0. Staging record-only migration is not applied. No callback invoked.
+6. **Coordination correction:** M1 is complete (accepted with qualifications); M2 Launch Blocker Closure is active. The Master Execution Control now identifies M2-T3a staging record-only deployment as the next task, with ChatGPT as staging operator and Claude as implementation partner. `AGENTS.md` and `CLAUDE.md` carry the standing authority for independently reviewed integration merges and staging deployments.
+7. **Next agent-owned actions:** Claude resolves the three open PR comments and updates stale PR descriptions. ChatGPT performs M2-T3a staging migration-first/function-second deployment in a normal implementation turn after this read-only audit. Then independently review and merge verified PR #12/#14/#15 into the build branch.
+8. **Owner gates:** production callback containment, production sign-up pause execution if dashboard access is needed, AUTH-03 D1–D4, legal publication, paid monitoring/backup, production release/config/data changes, provider agreements, and real financial activity.
+9. **Actions not taken:** no PR merge, no deployment, no Supabase setting/secret/schema/data change, no callback invocation, no reward issuance, no money movement, and no production change in this audit run.
+
 
 ## 2026-11-19 (12:14 UTC) — ChatGPT — Independent Sync Watch #2
 
