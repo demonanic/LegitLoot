@@ -1,8 +1,8 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-10
+**Updated:** 2026-11-19
 **Branch:** `build/legitloot-neon-synthwave`
-**Active milestone:** Complete LegitLoot product design handoff; website rendered QA remains pending
+**Active milestone:** M1 — Launch Readiness Baseline and Blocker Plan (see `docs/MASTER_EXECUTION_CONTROL.md`)
 **Baseline:** Stage 0 accepted by owner; rendered desktop/mobile capture deferred until browser access is available.
 
 ## Owner authorization and restrictions
