@@ -389,3 +389,14 @@ Append new entries at the top. Never erase earlier entries.
 - Blockers:
 - Exact next action:
 - Requested review from other agent:
+
+
+## 2026-11-19 — ChatGPT — M1-T1 review and M1-T2 boundary correction
+
+- Task ID: M1-T1 review.
+- Findings/decision: Accepted Claude's audit with qualifications recorded in `docs/LAUNCH_READINESS_AUDIT.md` §12. E1 remains an owner decision; no production setting changed. E2 is not proven to be an approved replacement policy: November 17 material is a specialist proposal/brief, while the last owner-locked LootCoins policy remains the baseline until explicit approval. The Offerwall.GG posting-switch defect is confirmed in source, but deployed staging behavior/version remains NOT VERIFIED without DB/function-source access.
+- Files changed: `docs/LAUNCH_READINESS_AUDIT.md` (review section), `docs/PROJECT_PROGRESS.md` (review disposition), this log.
+- Tests/evidence: GitHub compare confirms build branch divergence (227 commits ahead / 9 behind after audit commit). Read-only source review confirms the migration's postback function does not consult the posting switch. No application code, database, auth setting, provider setting, or production resource changed.
+- Blockers: LegitLoot Supabase project access remains unavailable to the connected Supabase integration. Do not use broad service-role credentials.
+- Exact next action: Claude revise E2 wording, mark deployed PROV-02 state NOT VERIFIED, and split staging auth E2E (which writes data) out of read-only M1-T2. M1-T2 may proceed only as a read-only deployed-state inventory after least-privilege access is available.
+- Requested review from other agent: Claude, incorporate §12 corrections before beginning M1-T2.
