@@ -948,3 +948,24 @@ Governance:
 
 ### Owner gates
 Production Offerwall containment, main branch protection, Taplayad terms/account-specific permission/live activation, paid commitments, production deploy, destructive data changes, security weakening, legal/business decisions, support-mailbox verification, production registration-pause verification and final launch remain owner-controlled. No PR merged, no deployment, no callback, no financial activity, no Supabase/provider configuration/data changes.
+
+
+## 2026-11-19 17:42 America/New_York — Independent reassessment
+
+### PR #20 — public Hustle copy candidate
+- Current PR head `8cee6f7f5e5208363fe4f58077173dd0f8897575`, base integration `a0cef5e69867d31235ffca5778dc11bab7cfccba`; 9 ahead / 0 behind, mergeable, non-draft.
+- GitHub Actions run 44624595265: `npm ci` passed; `npm test` 58/58 passed, 0 failed, 0 skipped; submitted-patch whitespace check passed. Python/Playwright remains outside CI.
+- Independent COMMENT review 5984643477 found no blocking defect in the 15-file public-copy diff. LC sources are correctly constrained, Hustle labels are consistent, and both selected games are listed without invented routes. No backend/provider/wallet/issuance logic changed. PR is ready for owner review, not merged.
+
+### M2-T4 game-source blocker
+- Read-only search of all seven accessible owner repositories and exact-title search found no source repository/playable URL for Zombies vs Heavy Metal or Rocket 2 Nowhere. Do not substitute Demonanic, Gauntlet's Survival, Harvest//Zero or Zombie Invasion Defense.
+- Staging registry has only unlisted development Zombie Invasion Defense with null launch_url. Game saves/events/handoff tickets each have 0 rows; no challenge/milestone/season tables exist. Game launch and central reward flow are not verified.
+
+### Financial/provider controls
+- Production Offerwall.GG v3 remains ACTIVE, verify_jwt=false; SECURITY DEFINER routine calls private.post_journal_transaction and can issue LC. Critical owner-gated policy violation.
+- Staging Offerwall.GG v8 remains ACTIVE, verify_jwt=false but record-only. Its provider row is disabled while stale LC/LootCoins reward metadata and null terms/approval evidence remain. CPAGrip disabled; Taplayad absent.
+- Taplayad protocol/account generation, canonical wall URL, signed transaction fields, unique transaction identity, reversal semantics and incentivized-traffic permission remain unverified. No live callback integration authorized.
+
+### Governance
+- 21 branches, all unprotected. Integration is 393 commits ahead of main, 0 behind. PR #9 is a stale non-mergeable draft (12 ahead / 184 behind). Production merge/deploy and branch protection remain owner-gated.
+- Stale initial-game references were corrected in Creative Bible and Platform Build Spec §1 to align with the current two-game owner decision.
