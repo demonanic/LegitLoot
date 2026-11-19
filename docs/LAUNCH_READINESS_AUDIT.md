@@ -666,3 +666,13 @@ Read-only `pg_get_functiondef` in both projects confirms `private.process_offerw
 - The four documentation updates for this check advanced integration from `1a8be57` to `150d7a4`. This final batched documentation correction is being committed now; PR branches must be refreshed from the live integration branch tip when Claude resumes, not from either historical SHA.
 - Immediately before this closeout correction, PR #12/#14/#15 were 11 commits behind integration (11/6/7 commits ahead respectively). The earlier branch-refresh instruction is superseded: use the current integration branch head at pickup and report exact compare counts after refresh.
 - No PR merge, deployment, callback, provider activation, Supabase mutation, production action or financial activity occurred.
+
+
+## 2026-11-19 09:40 America/New_York — Taplayad launch evidence and integration requirements
+
+- Taplayad is the owner's selected initial Hustle publisher. Owner screenshots show app ID 10066, an Active dashboard badge, Web/Rewarding configuration, offerwall URL template `https://offerwall.tplayad.com/10066/{user_id}`, 2,899 offer entries (Web/Worldwide filters), publisher point multiplier `$1 = 1 points`, and postback macros `{user_id}`, `{payout}`, `{reward}`, `{offer_id}`, `{country}`, `{user_ip}`, `{status}`, `{sig}`.
+- Screenshot documentation identifies `{sig}` as an MD5 security signature and lists postback source IP `176.97.212.58`; full signature formula and transaction/reversal semantics are not visible. They must be confirmed from current provider documentation/support before implementation is treated as secure.
+- Launch acceptance: authenticated server-side opaque user attribution; independent task/event history; signature validation; provider source validation as defense-in-depth; idempotent/replay-resistant transaction handling; reversal/chargeback tracking; fail-closed behavior; staging-only synthetic tests; explicit proof provider events never access LC wallet/ledger/journal.
+- The publisher's multiplier and withdrawal panel are publisher-account concepts only, not LegitLoot user value, LC conversion, USD peg or user withdrawals. Provider offers and callbacks cannot issue LC.
+- Offerwall embed is preferred for smallest launch if current provider terms allow. Offers API/custom catalogue is optional later.
+- Do not infer account approval or incentivized-traffic permission from the Active badge. Owner must approve binding terms, paid commitments, live activation and any dashboard changes. No test postback or dashboard save is authorized by screenshot submission.
