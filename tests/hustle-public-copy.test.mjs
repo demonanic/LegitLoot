@@ -59,5 +59,14 @@ test("homepage LC steps list only the approved sources, in order", () => {
   assert.ok(block, "LC steps list not found");
   const steps = [...block[1].matchAll(/<li>[\s\S]*?<span>([\s\S]*?)<\/span>[\s\S]*?<\/li>/g)]
     .map((m) => m[1].replace(/<[^>]*>/g, "").replace(/&amp;/g, "&").trim());
-  assert.deepEqual(steps, ["Play games", "Earn Legit Coins", "Weekly challenges & seasonal events"]);
+  assert.deepEqual(steps, ["Complete verified in-game milestones", "Earn Legit Coins", "Weekly challenges & seasonal events"]);
+});
+
+test("homepage meta description and LC headline limit LC to the approved sources", () => {
+  const html = read("index.html");
+  const approved = "verified in-game milestones, weekly challenges and seasonal events";
+  assert.ok(!/earned by playing/i.test(html), "broad 'earned by playing' wording remains");
+  const meta = html.match(/<meta name="description" content="([^"]*)"/);
+  assert.ok(meta && meta[1].includes(`earned only through ${approved}`), "meta description must limit LC to approved sources");
+  assert.ok(html.includes(`<p>Earned only through ${approved}. Never cash.</p>`), "LC headline must limit LC to approved sources");
 });
