@@ -1213,3 +1213,48 @@ Next actions:
 2. Verify Offerwall.GG currencyName case from current provider evidence; align staging handler/docs/test only after verification.
 3. Keep Taplayad record-only until payload-bound transaction authentication, unique transaction identity/reversal matching and account-specific incentivized-traffic permission are confirmed.
 4. Production Offerwall containment, main branch protection, provider agreements/activation, production deployment, legal/business approval and final launch remain owner-gated.
+
+
+---
+
+## 2026-11-19 16:54 America/New_York — Independent Sync Watch: PR #20 review, M2 task alignment, and Tplayad protocol ambiguity
+
+### Current milestone/task authority
+- This file remains authoritative. Active milestone is M2 — Launch Blocker Closure and Basic-Operable Release. The current active task is **M2-T4: verify and integrate Zombies vs Heavy Metal and Rocket 2 Nowhere**; ChatGPT is the acting lead for this task. CLAUDE.md incorrectly still named M2-T5 as active; that entry is corrected in the same documentation update.
+- Exact source repositories/playable URLs for both approved games remain unidentified. Exact-title searches across accessible GitHub repositories returned no matches. Do not substitute Zombie Invasion Defense, Legitloot-2, Demonanic, Aegis Rogue, Gauntlet or other unrelated projects, and do not invent URLs. The minimum remaining owner input for M2-T4 is the exact source repo or playable URL for each title.
+- M2-T5 public Earn-to-Hustle copy work is complete as a scoped PR candidate, not merged. PR #20 head ad21bbecd0fd6e020925464132b637fd83bc2327, base 3db61c0545c95ab28e525e070f3d66f58ab9fa63; it was synchronized to the integration HEAD and GitHub reports mergeable. The 15-file diff changes public navigation/page labels, homepage LC wording, Hustle status/disclaimer copy, and adds static Node regression assertions; it does not change provider, wallet, database, or LC issuance code.
+- Actions run 44609090382 on PR #20 completed successfully through npm ci, npm test, and submitted-patch whitespace check. Claude's latest handoff reports 58/58 local tests; GitHub's run is independently confirmed green, but its test-step log count was not independently retrieved. The Python/Playwright browser suite is not part of the workflow; the changed visible status string is covered by the Node source-copy test.
+- Independent formal PR review COMMENT 5984053898 found no blocking defect in the scoped public-copy diff. It is not an APPROVE review and no merge was performed. After this documentation commit advances integration, PR #20 will be one documentation commit behind and must sync/rerun CI before final owner review.
+- PR #9 remains a stale draft visual redesign. Open PRs at check start: #20 and #9. GitHub listed 21 branches and reported protected=false for every branch, including main and integration.
+
+### Preview/environment evidence
+- PR #20's supabase-config.js blob SHA matches integration and explicitly targets staging project scmnxcsggquwtuyyjnnj with environment staging; no key value is copied into this record.
+- Cloudflare bot comments report successful branch previews for PR #20 in both legitloot-preview and legitloot Pages projects. These are branch preview URLs, not evidence of a production custom-domain deployment. Cloudflare dashboard-level project overrides/custom-domain bindings remain unverified.
+
+### Fresh read-only Supabase verification
+- Production gkbqderyjcuxnjbsiffb: offerwall-gg-postback v3 ACTIVE, verify_jwt=false. Live SECURITY DEFINER private.process_offerwall_gg_postback locks user/platform LC ledger accounts and calls private.post_journal_transaction. Provider-to-LC issuance remains possible and violates the owner-locked rule.
+- Staging scmnxcsggquwtuyyjnnj: offerwall-gg-postback v8 ACTIVE, verify_jwt=false. The live routine is record-only; deployed v8 index.ts is exactly equal to integration source (6,990 bytes). No ledger/journal path is present in the staging routine.
+- Staging private.providers: CPAGrip disabled with no approval metadata; Offerwall.GG disabled but still has stale approved_reward_model metadata naming LC / LootCoins, with null terms URL, terms verification and approval reference. Taplayad has no provider row and no Edge Function in the staging inventory. No row was changed.
+- Production Offerwall.GG v3 remains a critical owner-gated financial-policy violation. No function, SQL routine, setting, secret, schema, row or financial state was changed.
+
+### New Taplayad protocol ambiguity — do not implement a live callback yet
+Official public documentation exposes two materially different systems:
+1. Current/new system at https://tplayad.com/docs (page links separately to the new dashboard and old system). Its macros match the owner's screenshots: user_id, payout, reward, offer_id, country, user_ip, status, sig. It documents md5(app_id . user_id . api_secret), status 1/2, server IP 176.97.212.58, and deduplication example offer_id + user_id. It does not document a transaction-ID macro. This signature does not bind reward, payout, offer ID or status; the sample dedupe key cannot safely distinguish repeat conversions/multiple rewards for one user/offer.
+2. Legacy system at https://www.tplayad.com/doc/postback documents subId, transId, reward, payout, signature, status, userIp, campaign_id, country, and uuid. It documents a unique transId and md5(subId . transId . reward . secret), plus OK/DUP responses and retries. This is a different protocol; its signature still does not bind status or campaign metadata.
+- The owner-supplied URL https://offerwall.tplayad.com/10066/{user_id} differs from the new-system iframe documented at https://app.tplayad.com/app/iframe/{APP_ID}/{USER_ID}. The screenshot macro names resemble the new system, but account 10066's actual dashboard generation/contract and the URL alias are not proven. Do not select a protocol by guess.
+- Before live handling, obtain written account-specific confirmation of which system applies to App ID 10066, the canonical wall URL, complete signed fields, stable transaction identity, reversal matching, retry/duplicate semantics, and an authoritative transaction-verification API or stronger payload-bound signature. Keep any staging work strictly record-only and never let provider callbacks touch LC.
+- Public Terms of Service last updated 2026-10-29 require account holders to be at least 18, prohibit fraudulent activity, make publisher earnings subject to dashboard payment terms, and include an indemnification clause. They do not establish account-specific approval for LegitLoot's exact placement/reward presentation. No terms were accepted.
+- Publisher-side $1 = 1 points, payout and withdrawal settings remain publisher accounting only, never LC value, user cash, transfer or withdrawal.
+
+### Other unresolved integration detail
+- Offerwall.GG public developer docs describe currencyName as publisher-defined and do not prescribe the exact casing. Internal docs/OFFERWALL_GG_INTEGRATION.md says Loot coins; staging handler line 82 requires Loot Coins. The exact configured placement value is not independently available. Keep the mismatch open; do not change provider settings or send a callback to resolve it.
+
+### Next owner-independent actions
+1. Claude synchronizes PR #20 after this documentation commit and reruns CI; ChatGPT rechecks the final head before any integration decision.
+2. ChatGPT continues M2-T4 repository/account-contract review without inventing game routes; owner supplies exact source/playable URLs when available.
+3. Keep Taplayad as the selected initial Hustle publisher, but only design/record-only staging work until account generation and callback protocol are confirmed and adequate transaction verification is documented.
+4. Confirm Offerwall.GG placement's actual currencyName through authorized dashboard evidence/provider documentation before aligning the handler/docs/test.
+5. Keep PR #9 draft-only and stale until its obsolete content is reconciled.
+
+### Owner gates
+Production Offerwall containment, main branch protection, Taplayad account-specific terms/traffic approval and live activation, publisher dashboard changes, production deployment, paid commitments, destructive real-data changes, security weakening, support-mailbox verification, production sign-up-pause verification, legal/business decisions, and final release remain owner-controlled. No PR was merged, no deployment occurred, no callback was invoked, and no Supabase or provider setting/data was changed.
