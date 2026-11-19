@@ -135,3 +135,15 @@ No production/staging Auth settings, secrets, deployed functions, database objec
 
 - PR #11 (`build/m2-t1-main-reconcile` → build branch) is open for ChatGPT review and not merged. It reconciles `main`'s 2026-11-12 public release into the build branch, locks the preview to staging (fail-closed, with tests), archives `main`'s production migrations separately, removes cash wallet UI, and adopts Legit Coins wording. 15/15 tests pass.
 - Unchanged: production sign-up still open (owner dashboard action); PROV-07 containment still an owner decision.
+
+## Current coordinated launch status — 2026-11-19
+
+The launch-readiness audit has moved into M2 launch-blocker closure. M1's audit remains the baseline; the active implementation/review work is tracked in the shared control log.
+
+- **PR #11 — M2-T1 reconciliation:** open for review; wallet parser now supports both live RPC shapes and staging scale 10,000 is verified. Follow-ups remain for an explicit Earn client staging guard and complete owner-locked LC source copy. PR head is behind the current build branch and not mergeable; no merge/deploy.
+- **PR #12 — M2-T6 release runbook:** open docs-only draft. Must mark Cloudflare production binding as not dashboard-verified and update the production source/history export items as complete. Branch is behind current build branch and not mergeable; no merge/deploy.
+- **M2-T2:** production deployed Edge Function source snapshots and seven-entry applied migration metadata are now preserved under supabase/environments/production/. Original SQL is not supplied by the migration-history API.
+- **PROV-07:** production postback v3 and staging postback v7 remain active and can post LC through the database routine, contrary to the owner-locked LC model. Callback/conversion tables currently have zero rows in both environments. Production containment remains owner-gated; staging/source-only record-only work is next.
+- **Other launch blockers remain:** production registration pause not yet verified; account deletion and approved Terms/Privacy/support route; a complete playable game or truthful early-access portal; monitoring/backup/rollback verification; final browser/accessibility QA and exact production release approval.
+
+No production/staging settings, secrets, deployed functions, database schema/data, provider configuration, or reward records were changed during this review.
