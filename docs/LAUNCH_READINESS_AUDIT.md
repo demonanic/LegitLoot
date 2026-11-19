@@ -570,3 +570,13 @@ This check changed no settings, secrets, functions, migrations, schema, data, ca
 - **Standing authority:** the owner directly authorized integration merges and staging deployments. Master, AGENTS, and CLAUDE now record this; ChatGPT has the linked staging Supabase deployment actions. Claude's own connector lacks staging write access, so ChatGPT will perform the authorized staging deployment after independent review.
 - **Current M2-T3/PROV-07 state:** production postback v3 and staging v7 remain active; both live SQL routines still call `private.post_journal_transaction`; callback/conversion counts 0/0; record-only staging migration not applied. Production containment remains owner-gated.
 - **Next:** resolve PR #12/#14/#15 comments, rerun checks after the final edits, independently review, merge verified work into the integration branch, then apply the staging record-only migration before deploying the matching function. This audit run made no deployment or database change.
+
+
+## 2026-11-19 13:09 UTC — Owner Decision Charter reconciled into launch-readiness criteria
+
+- Initial launch scope is now explicitly **two games**: Zombies vs Heavy Metal and Rocket 2 Nowhere. This supersedes older one-game minimum language. Owner says both are playable; independent route/account/save/mobile/playability verification is still required.
+- Hustle (renamed from Earning) is an authorized launch workstream. At least one genuine task publisher must be selected and technically configured/tested. A sandbox integration is not proof of live provider approval. Provider agreements, external legal acceptance, paid commitments and live activation remain owner-gated.
+- At least five launch challenges/milestones must be created and wired through verified server-side game events to the authoritative website wallet. Only in-game milestones, weekly challenges and seasonal events may award LC. Provider task events and callbacks must never issue LC.
+- Offerwalls remain a separate user-task/discovery feature; advertising is permitted with privacy/consent/disclosure controls. No paid features at launch. Production signup remains paused. Final production release requires explicit owner approval.
+- Intended support address is `payouts@legitloot.site`; deliverability/monitoring are not yet verified.
+- No deployment, provider activation, legal publication, paid commitment, production setting/secret change, real reward issuance or financial action was performed as part of this documentation update.
