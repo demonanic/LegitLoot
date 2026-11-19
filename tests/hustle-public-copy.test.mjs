@@ -25,3 +25,14 @@ test("homepage feature card names the owner-approved launch titles, not the plac
   assert.ok(html.includes("Zombies vs Heavy Metal"));
   assert.ok(html.includes("Rocket 2 Nowhere"));
 });
+
+test("earn.html title, description and accessible labels use Hustle terminology", () => {
+  const html = read("earn.html");
+  assert.match(html, /<title>Hustle — LegitLoot<\/title>/);
+  assert.match(html, /<meta name="description" content="[^"]*Hustle providers[^"]*"/);
+  assert.ok(html.includes('aria-label="Hustle categories"'));
+  assert.ok(html.includes('aria-label="Hustle providers"'));
+  assert.ok(!/<title>[^<]*earn/i.test(html), "title still says Earn");
+  assert.ok(!/aria-label="[^"]*earning/i.test(html), "an accessible label still says Earning");
+  assert.ok(!/<meta name="description" content="[^"]*earning/i.test(html), "description still says earning");
+});
