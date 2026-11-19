@@ -191,3 +191,14 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - Both deployed `private.process_offerwall_gg_postback` routines still read/lock LC ledger accounts and call `private.post_journal_transaction`. The new record-only migration is not applied in staging; its source is in the build branch only.
 - Callback events/conversions are 0/0 in both projects. No callback was invoked and no Supabase setting, secret, function, migration, schema, data or financial record was changed.
 - **PROV-07 remains a live policy blocker.** After independent review, Claude may deploy the record-only migration to staging first, then the matching function, and verify the deployed routine. Production containment remains owner-gated.
+
+
+## 2026-11-19 — M2 handoff and PR re-review update (12:24 UTC)
+
+- **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release. **Active next task:** M2-T3a, deploy the reviewed record-only Offerwall.GG migration to staging first, then its matching Edge Function, and verify the live routine has no LC ledger/journal path. ChatGPT has staging deployment access; Claude authored the source. This audit run did not deploy.
+- **Claude's latest verified PR artifacts:** #12 head `dfc0e53` (34/34 tests), #14 head `8d80e8a` (37/37), #15 head `9c8a365` (34/34). Claude reports clean PR diff checks and that all three branches were refreshed onto integration head `19aa0f4`. GitHub returned no Actions/status checks; these are local test reports, not CI.
+- **PR #12:** release runbook now explicitly requires production `disable_signup:true` and `email:true` until Terms/Privacy and deletion are ready. Remaining correction: callback-event/conversion tables may be nonzero after record-only operation; only provider-sourced LC journal/ledger postings must remain zero.
+- **PR #14:** canonical staging CPAGrip source removes the production origin; independent source review found no code blocker. PR description still contains obsolete staging-deploy-gate wording.
+- **PR #15:** design now correctly includes an interim deletion/export path while production sign-up remains open and covers `deleted_at` checks across Edge Functions, security-definer RPCs, and RLS. Remaining corrections: verify that `hello@legitloot.site` is actually configured/monitored before presenting it as the support route, and remove obsolete per-action staging approval language. D1–D4 remain owner/legal decisions.
+- **PROV-07:** fresh read-only Supabase evidence still shows production v3 and staging v7 active on the legacy LC-posting routine; 0 callback events/conversions in each project; record-only migration not applied to staging.
+- **Next:** Claude resolves the remaining PR comments and updates stale PR descriptions. ChatGPT performs the staging-only M2-T3a deployment in a normal implementation turn after this read-only audit. Production containment and release remain owner-gated.
