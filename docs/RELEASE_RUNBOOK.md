@@ -14,7 +14,7 @@ LegitLoot production has three independently deployable parts. A release must re
 
 | Part | Where | Deployed by | Version identifier |
 |---|---|---|---|
-| Static site | Cloudflare Pages project `legitloot`, production branch `main`, `https://legitloot.site/` | Push/merge to `main` (Pages auto-deploys) | Git commit SHA on `main` + Pages deployment ID |
+| Static site | Cloudflare Pages project `legitloot`, owner-recorded production branch `main` (**dashboard binding and trigger NOT VERIFIED**), `https://legitloot.site/` | Expected: push/merge to `main`; **verify the actual trigger in the dashboard before release** | Git commit SHA on `main` + Pages deployment ID |
 | Edge Functions | Supabase production `gkbqderyjcuxnjbsiffb` | Supabase CLI/dashboard deploy (manual) | Function name + version number |
 | Database schema | Supabase production `gkbqderyjcuxnjbsiffb` | Migration apply (manual) | Applied migration version list |
 
@@ -37,7 +37,7 @@ Owner approval: <quote + date>   <- required before any step in §3
 
 ## 3. Release procedure
 
-1. **Freeze.** Note the current production state: `main` SHA, the latest Pages production deployment, function versions, applied migration list, and `GET /auth/v1/settings`.
+1. **Freeze.** Note the current production state: `main` SHA, the latest Pages production deployment, function versions, applied migration list, and `GET /auth/v1/settings`. Also verify in the Cloudflare dashboard that Pages project `legitloot` is bound to production branch `main` and confirm the actual auto-deploy trigger; this binding/trigger is currently owner-recorded but **NOT independently verified** in `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`.
 2. **Pre-checks on the candidate commit:**
    - `node --test tests/*.test.mjs` passes;
    - `node --check` on every JS file;
@@ -54,7 +54,7 @@ Owner approval: <quote + date>   <- required before any step in §3
 | Part | How to roll back | Time | Caveats |
 |---|---|---|---|
 | Static site | Cloudflare dashboard → Pages → `legitloot` → Deployments → choose the previous production deployment → **Rollback**. Then revert the commit on `main` through a PR, so Git matches what is served. | Minutes | Owner (or anyone with Cloudflare access) performs it. Agents currently have no Pages dashboard access. |
-| Edge Function | Redeploy the previous version's source. | Minutes | Requires that source to be in Git. For production `offerwall-gg-postback` v3, `offerwall-gg-wall-url` v1 and `wallet-summary` v4, production source has **not yet been exported** (staging only, under `supabase/environments/staging/`). **Export production function source before any production function change.** |
+| Edge Function | Redeploy the previous version's source. | Minutes | Production source snapshots for `offerwall-gg-postback` v3, `offerwall-gg-wall-url` v1 and `wallet-summary` v4 were exported read-only on 2026-11-19 under `supabase/environments/production/functions/`; versions and hashes are in `supabase/environments/production/DEPLOYED_FUNCTIONS_MANIFEST.json`. These are reference/rollback snapshots, not deployment authorization. |
 | Schema | Forward-fix with a new compensating migration. Never edit or delete applied migrations, and never rewrite ledger rows (append-only rules). | Hours | Supabase backup / point-in-time-recovery tier for production is **UNVERIFIED**. A restore is a destructive owner-level decision. |
 | Auth setting | Toggle back in the dashboard (e.g. `disable_signup`). | Minutes | Owner action. Verify via `/auth/v1/settings`. |
 | Provider secret | Re-add the secret value from the provider dashboard. | Minutes | Owner action. Removing `OFFERWALL_GG_SECRET` also disables wall URLs (PROV-07). |
@@ -82,7 +82,7 @@ Owner approval: <quote + date>   <- required before any step in §3
 
 ## 6. Environment guard for releases
 
-- The build branch is **staging-only by construction**. `account-auth.js` fails closed unless `supabase-config.js` names the staging project, and `tests/environment-isolation.test.mjs` enforces this.
+- The build branch is **staging-only by construction**. Both `account-auth.js` and `earn-hub.js` fail closed unless `supabase-config.js` names the exact staging URL with `environment: "staging"`; `tests/environment-isolation.test.mjs` exercises both clients, including an active-provider path.
 - A production release candidate therefore needs a deliberate, reviewed change that adds a production config for `main` only. Never point a preview at production.
 - That change must ship with an equivalent test asserting `main` targets production and never staging.
 - Staging-only pages and tools (`admin.html`, `payout-simulator.html`, their scripts, and the `admin-dashboard` and `payout-simulator` functions) must be **excluded** from any production release. The release manifest must list the files removed or excluded.
@@ -94,12 +94,16 @@ Owner approval: <quote + date>   <- required before any step in §3
 3. **Escalate to the owner immediately** for exposed credentials, unexpected ledger writes, data loss, or a production outage (MASTER §6).
 4. **Fix forward** on the build branch, then use the normal release procedure.
 
+
+
+**Migration-history limitation:** Supabase's migration-history API returns applied version/name metadata only, not original SQL. The production `MIGRATION_HISTORY.md` is not a replayable SQL archive; complete original migration SQL and schema reconstruction remain separate work.
+
 ## 8. Open items blocking a clean first release
 
 | Item | Ref | Owner |
 |---|---|---|
-| Export production function source (postback v3, wall-url v1, wallet-summary v4) into `supabase/environments/production/functions/` | REPO-03 | ChatGPT (connector access) |
-| Export production applied-migration ledger | MIG-01 | ChatGPT |
+| Production function source snapshots (postback v3, wall-url v1, wallet-summary v4) under `supabase/environments/production/functions/` | REPO-03 | **COMPLETE 2026-11-19** |
+| Production applied migration version/name metadata under `supabase/environments/production/MIGRATION_HISTORY.md` | MIG-01 | **COMPLETE 2026-11-19** |
 | Confirm production Supabase backup/PITR tier | OPS-03 | Owner or ChatGPT (read-only) |
 | Production config + test for the release candidate (§6) | ENV-04 | Claude, after PR #11 |
 | Choose an uptime monitor | OPS-01 | Owner |
