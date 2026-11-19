@@ -481,3 +481,34 @@ A trial `git merge --no-commit origin/main` on a throwaway branch (aborted; noth
 7. Migrations (MIG-01): do **not** add `main`'s duplicate files into `supabase/migrations/`. Store them unchanged under `supabase/environments/production/migrations/` as the production-applied record, alongside ChatGPT's M2-T2 staging export under `supabase/environments/staging/`, until a single forward lineage is designed. Deciding which lineage becomes canonical is a schema decision for review, not part of this merge.
 8. Follow-up commit in the same PR: remove cash-wallet UI and provider→LC copy (WALLET-01) per spec §0.1.
 9. Checks before PR: `node --check` all JS, `node --test tests/*.test.mjs`, HTMLParser route audit, `git diff --check`, headless Chrome render of `/`, `/games`, `/earn`, `/account` on the PR preview, and confirm the preview's account page calls the **staging** project.
+
+
+## 15.6 ChatGPT independent review — 2026-11-19
+
+### PROV-07 containment correction
+
+ChatGPT independently inspected deployed production `offerwall-gg-postback` v3, production `offerwall-gg-wall-url` v1, staging `offerwall-gg-postback` v7, and the deployed staging PostgreSQL routines.
+
+- Both deployed postback functions require `OFFERWALL_GG_SECRET` and call `process_offerwall_gg_postback`.
+- The deployed staging routine writes balanced journal entries to the LC ledger. Production postback calls the corresponding public RPC wrapper.
+- Production `offerwall-gg-wall-url` also requires `OFFERWALL_GG_SECRET` to sign player wall URLs.
+- Therefore deleting the project-level secret disables **both** postback processing and player wall URL generation. It is a temporary full Offerwall.GG shutdown, not a postback-only switch.
+- No production secret was changed. No production or staging callback was invoked. The observed callback/conversion records were zero at the last inventory.
+
+The owner must choose between a temporary full Offerwall.GG shutdown (remove shared secret) and a separately authorized production change that prevents the postback from issuing LC while preserving the wall URL flow. The current postback path must not be treated as compliant with the owner-locked LC policy.
+
+### M2-T2 export status
+
+ChatGPT exported all six deployed staging Edge Function source files and a version/hash manifest into `supabase/environments/staging/functions/`. It also exported 16 deployed PostgreSQL routine definitions to `supabase/environments/staging/schema-snapshot/routines.sql`, and the 20-entry applied migration version/name ledger to `supabase/environments/staging/MIGRATION_HISTORY.md`.
+
+**Limitation:** Supabase migration history exposes version/name metadata, not original SQL. The original `game_platform_foundation` migration SQL remains unavailable in the inspected branches and was not recovered. The routine file is a live schema snapshot, not an original migration or replayable migration. Full table/constraint/index/policy/grant/trigger reconstruction remains outstanding.
+
+### M2-T1 merge rules review
+
+ChatGPT approves the proposed conflict-resolution strategy for an isolated review branch and PR into `build/legitloot-neon-synthwave`, with amendments recorded in `docs/MASTER_EXECUTION_CONTROL.md` (2026-11-19 entry):
+
+- Remove the production origin from the staging `offerwall-gg-wall-url` allow-list.
+- Verify the preview's Supabase config fails closed to staging and add a test that prevents preview auth from targeting production.
+- Keep production and staging migration histories separate; do not combine incompatible histories into a replayable migration directory.
+- Treat browser render checks as NOT VERIFIED if no real browser is available.
+- Keep the PR open for review; no merge to `main` or production deployment is authorized.
