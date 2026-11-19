@@ -1174,3 +1174,42 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 
 ### Owner gates
 Production Offerwall containment is still critical and owner-gated. Main branch protection, Taplayad binding terms/traffic permission and any live activation, production deployment, paid commitments, destructive data changes, support mailbox verification, production registration pause, legal/business decisions, and final launch remain owner-controlled.
+
+---
+## 2026-11-19 15:23 America/New_York — Independent coordination check: PR #20, LC copy and provider callback
+
+Repository evidence:
+- Integration HEAD 04ff43e3b9691e3acbdd9e6c9356530b9d61ec69; main HEAD 3fa7ca58992f786f7b59f22b8fb758149a873d6b.
+- 21 branches discovered. GitHub explicitly reports main and integration as unprotected.
+- Two open PRs: #20 (Hustle/public copy) and #9 (old visual redesign, draft). PR #9 remains divergent/non-mergeable: compare shows 171 commits on integration side and 12 on draft side from merge base.
+- PR #20 head 20a82038f1da4d50665bdb7c32eb69bb4f41ea18. Actions run 44601788773 is green; inspected job log confirms 57 Node tests passed, 0 failed; whitespace check passed.
+- PR #20 base is 3fa518ee27c987a58f3196f682c7e13de483b6a8. Current integration and PR head have each advanced five commits from that merge base: PR is 5 ahead / 5 behind current integration. It must sync to 04ff43e and rerun CI before approval.
+- Independent review comment posted: https://github.com/demonanic/LegitLoot/pull/20#issuecomment-7021287292.
+
+New finding HUSTLE-COPY-20261119-01:
+- index.html line 7 says “Legit Coins are earned by playing”; line 84 says “Earned by playing. Never cash.”
+- Fine print at line 92 correctly limits LC to verified in-game milestones, weekly challenges and seasonal events, but headline/meta wording is broader.
+- tests/hustle-public-copy.test.mjs lines 49–63 validates the step list but not the headline/meta description.
+- Correct the headline/meta to explicitly state the three approved LC sources; consider changing generic “Play games” to “Complete verified in-game milestones”; add regression assertions.
+
+Fresh read-only Supabase evidence:
+- Production gkbqderyjcuxnjbsiffb: Offerwall.GG postback v3 ACTIVE, verify_jwt=false. private.process_offerwall_gg_postback still locks LC ledger accounts and calls private.post_journal_transaction. Provider-to-LC issuance remains possible and violates owner policy.
+- Staging scmnxcsggquwtuyyjnnj: Offerwall.GG postback v8 ACTIVE, verify_jwt=false; database routine is record-only with no ledger/journal call.
+- Staging private.providers: CPAGrip disabled; Offerwall.GG disabled but stale approved_reward_model names LC/LootCoins and terms URL, terms verification and approval reference are null. Taplayad is absent from provider rows and Edge Function inventory.
+- No callback or database/configuration change was made.
+
+New finding PROV-CURRENCY-CASE-20261119-01:
+- docs/OFFERWALL_GG_INTEGRATION.md says exact callback currencyName is “Loot coins”.
+- Staging supabase/functions/offerwall-gg-postback/index.ts line 82 rejects unless currencyName is exactly “Loot Coins”.
+- tests/offerwall-record-only.test.mjs has no assertion for the exact value.
+- Confirm the provider’s actual case-sensitive value, then align staging handler, docs and regression test. Do not change publisher settings or send a callback.
+
+Preview check:
+- PR #20 and integration supabase-config.js have the same blob SHA and explicitly point to staging project scmnxcsggquwtuyyjnnj with environment “staging”.
+- Cloudflare bot reported branch previews in both legitloot-preview and legitloot Pages projects. Checked-in config points to staging; project-level Cloudflare overrides were not independently verified.
+
+Next actions:
+1. Claude syncs PR #20 to 04ff43e, tightens homepage LC source wording, adds tests and reruns Actions.
+2. Verify Offerwall.GG currencyName case from current provider evidence; align staging handler/docs/test only after verification.
+3. Keep Taplayad record-only until payload-bound transaction authentication, unique transaction identity/reversal matching and account-specific incentivized-traffic permission are confirmed.
+4. Production Offerwall containment, main branch protection, provider agreements/activation, production deployment, legal/business approval and final launch remain owner-gated.
