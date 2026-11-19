@@ -941,3 +941,40 @@ This evidence does not authorize saving dashboard changes, sending test postback
 - Production Offerwall.GG containment choice; production merge/deploy/configuration and sign-up settings; GitHub branch protection administration; provider terms/traffic approval, binding agreements, paid/settlement commitments and live activation; legal/account-deletion decisions; live financial/reward activity; final production release.
 - Required owner input for M2-T4: exact playable URL or source repository for **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**. Do not substitute Zombie Invasion Defense or another existing game.
 - This audit performed read-only environment checks and documentation writes only. No callback, deployment, production setting/secret change, schema/data mutation or money movement occurred.
+
+
+---
+
+## 2026-11-19 — Independent Sync Watch / PR #16 review
+
+### Repository and PR state
+- Integration branch head verified as `66eff589c132402bb1adf294279467124642dff9`; comparison with `main` (`3fa7ca58992f786f7b59f22b8fb758149a873d6b`) is 354 commits ahead and 0 behind.
+- 17 repository branches were returned (no further page). Rulesets endpoint returned an empty list. Direct `main` branch-protection endpoint returned 403, so enforceable protection could not be independently verified; do not state that protection is configured.
+- Open PRs: #16 (ENV-06 guards, head `db939d6`, base integration `66eff58`, mergeable=true) and #9 (old draft design, head `046019f`). #16 has no GitHub status checks or Actions runs; Cloudflare posted two successful Pages preview deployments, which are deployment-preview evidence, not CI. Claude's PR body reports 42/42 local tests plus syntax/diff checks; these results were not independently reproduced in this run.
+- PR #16 source review: `admin.js:boot()` and `payout-simulator.js:boot()` now require the staging label, exact staging URL, and a nonempty publishable key before client creation. `tests/internal-pages-staging-guard.test.mjs` exercises valid staging and negative/mislabelled/production/keyless configurations. No code-level blocker found in this limited diff. A COMMENT review (not approval) was posted as review 5979524271, recording the CI/test limitation and stale-handoff correction.
+- PR #9 remains a stale draft and is diverged from current integration (12 commits not in integration). Its `tests/home.browser.py` still asserts Zombie Invasion Defense as the homepage/game-page title. A comment was posted (7015938125): do not merge as-is; refresh and align the homepage/tests to the owner-approved Zombies vs Heavy Metal and Rocket 2 Nowhere.
+
+### Current code and launch findings
+- `games.html` correctly names Zombies vs Heavy Metal and Rocket 2 Nowhere and says integration is in progress. `index.html` still displays a Zombie Invasion Defense feature card. This is a public launch-scope inconsistency; update the homepage and browser tests to the two approved launch titles when the real playable routes are verified.
+- Public navigation and `earn.html` still say **Earn**; `earn-providers.js` has no Taplayad entry. The website provider registry contains Offerwall.GG pending approval and CPAGrip testing; the public copy correctly states partner offers do not award LC.
+- The designated `payouts@legitloot.site` is not verified. Public pages still link to `hello@legitloot.site`.
+- PR #16 contains a new Claude Code-labelled handoff in its branch copy of the master control document. The integration-branch `CLAUDE.md` was stale (still listed ENV-06 as work to implement and referred to the old PR/branch count); this entry updates the shared handoff. PR #16 is not merged.
+
+### Read-only Supabase verification
+- Production project `gkbqderyjcuxnjbsiffb`: 7 migrations; `offerwall-gg-postback` v3 active; `private.process_offerwall_gg_postback` still selects LC ledger accounts and calls `private.post_journal_transaction`. This remains a critical production violation of the no-provider-to-LC rule. No callback was invoked.
+- Staging project `scmnxcsggquwtuyyjnnj`: 21 migrations; `offerwall-gg-postback` v8 active; the live SQL routine is record-only and has no ledger/journal posting path. Staging migration history still contains `20261118080655_game_platform_foundation`, but no matching source migration exists in the integration Git tree. Do not replay or alter the schema.
+- Staging game registry still contains only `zombie-invasion-defense`, unlisted, development, with no launch URL.
+- Staging Edge Function inventory contains no Taplayad or game-event function. `private.providers` contains only disabled Offerwall.GG and CPAGrip rows. The disabled Offerwall.GG row nevertheless has `approved_reward_model.currency_code = LC` and `reward_mode = standard_virtual_currency`, with no approval reference or verified terms. This is stale/contradictory metadata against the owner-locked policy; do not activate it or alter data during this audit. Reconcile the model to a non-LC, record-only task model before any future provider activation.
+- Taplayad app 10066 remains owner-selected but not integrated. Its screenshot-supplied multiplier and callback reward must never be mapped to LC. Exact signature, transaction, retry and reversal semantics and incentivized-traffic permission remain unverified.
+
+### Next owner-independent actions
+1. Claude: continue MIG-02 source recovery through read-only comparison only; do not alter/replay staging schema.
+2. Claude: implement Taplayad only in staging/test mode after provider protocol and permitted traffic model are verified; provider events must be record-only and never touch LC.
+3. Claude: rename public Earn labels/navigation to Hustle and add task-history UI with no LC wallet coupling.
+4. Claude: correct the homepage's Zombie Invasion Defense card and update browser assertions to the two approved titles once their real routes are known.
+5. Claude: prepare at least five challenge definitions using existing approved LC values only; do not connect unverified game events.
+6. Add a GitHub Actions test workflow as a separate bounded task; current PR previews do not provide CI.
+7. ChatGPT: independently review the next source/test changes and keep the coordination log current.
+
+### Owner gates and actions not taken
+Production Offerwall containment, production settings/merge/deploy, branch protection administration, provider terms/traffic approval and binding agreements, paid/settlement commitments, live provider activation, live financial/reward activity, legal/account-deletion decisions, and final production release remain owner-gated. The exact playable URL/source repo for each selected game remains required to complete M2-T4. This check did not deploy, merge, alter Supabase settings/secrets/schema/data, invoke callbacks, save publisher settings, accept terms, move money, or modify production.
