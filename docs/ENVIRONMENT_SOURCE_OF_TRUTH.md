@@ -502,3 +502,28 @@ No callbacks, data changes, schema changes, settings/secrets changes, provider a
 - Staging private.providers: CPAGrip disabled; Offerwall.GG disabled but stale reward metadata names LC/LootCoins and terms/approval references are null. No Taplayad provider record or function.
 - Staging Edge Function supabase/functions/offerwall-gg-postback/index.ts line 82 requires currencyName “Loot Coins”; docs/OFFERWALL_GG_INTEGRATION.md says “Loot coins”. Exact provider value is unverified; no callback sent.
 - No project settings, secrets, schema, rows, functions, provider state or financial records were changed.
+
+
+## 2026-11-19 16:54 America/New_York — Environment verification and provider protocol update
+
+### GitHub / Cloudflare
+- Integration build/legitloot-neon-synthwave at audit start: 3db61c0545c95ab28e525e070f3d66f58ab9fa63; production main: 3fa7ca58992f786f7b59f22b8fb758149a873d6b.
+- 21 branches; every branch reports protected=false. Open PR #20 and stale draft #9.
+- PR #20 head ad21bbecd0fd6e020925464132b637fd83bc2327, base 3db61c0; mergeable, synchronized, 0 behind. Actions run 44609090382 completed successfully through npm ci, npm test, and patch whitespace check. Formal independent COMMENT review ID 5984053898 found no blocking defect in the scoped copy diff. No merge.
+- PR #20 and integration supabase-config.js have identical blob SHA 8504420e...; the checked-in config explicitly targets staging project scmnxcsggquwtuyyjnnj. Cloudflare bot reports successful branch previews in legitloot-preview and legitloot projects; these are not production deployments. Dashboard-level bindings remain unverified.
+- The coordination-document updates advance integration; PR #20 must sync to the latest integration HEAD and rerun CI before final owner review.
+
+### Supabase
+- Production project gkbqderyjcuxnjbsiffb: postback v3 ACTIVE, verify_jwt=false; 7 migrations. Read-only SQL confirms live SECURITY DEFINER private.process_offerwall_gg_postback still calls private.post_journal_transaction and operates LC ledger accounts.
+- Staging project scmnxcsggquwtuyyjnnj: postback v8 ACTIVE, verify_jwt=false; 21 migrations. Read-only SQL confirms private.process_offerwall_gg_postback is record-only with no ledger/journal call. Retrieved deployed v8 index.ts and compared it to integration source: exact content match, 6,990 bytes.
+- Staging private.providers: CPAGrip disabled; Offerwall.GG disabled but stale approved_reward_model still names LC/LootCoins and terms URL, verification and approval reference are null. Taplayad absent. No row changed.
+- No settings, secrets, schema, rows, migrations, functions, callbacks or financial records were changed.
+
+### Taplayad protocol sources — conflicting new vs legacy system
+- New/current docs: https://tplayad.com/docs. Macro set matches owner screenshots; signature md5(app_id . user_id . api_secret); status 1/2; server IP 176.97.212.58; no transaction-ID macro; example dedupe offer_id + user_id. Signature does not bind reward/payout/offer/status.
+- Legacy docs: https://www.tplayad.com/doc/postback. Macros include transId (unique), reward, status, campaign_id, uuid; signature md5(subId . transId . reward . secret); retries up to five times and OK/DUP response guidance. Status is still outside the documented signature.
+- New docs link separate new and old dashboard systems. Owner-supplied URL https://offerwall.tplayad.com/10066/{user_id} differs from the new docs iframe https://app.tplayad.com/app/iframe/{APP_ID}/{USER_ID}. The owner's screenshot macros resemble the new system, but App ID 10066's account generation and route alias require provider confirmation.
+- Do not implement live callback handling until the applicable account contract, payload authentication, transaction/reversal identity, retries and authoritative verification API are confirmed. Publisher-side points remain separate from LC. No terms accepted or settings changed.
+
+### Offerwall.GG currencyName
+Internal guide says Loot coins; staging handler requires Loot Coins. Public Offerwall.GG docs describe the name as publisher-defined, so exact case must be confirmed from the placement's authorized configuration. No callback sent.
