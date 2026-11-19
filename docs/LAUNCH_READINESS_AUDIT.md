@@ -696,3 +696,35 @@ This addendum supersedes conflicting historical recommendations in this audit wh
 
 ### Current active task — M2-T4
 Identify the actual source repositories/playable URLs for the two selected games, then verify routes, mobile usability, account/session handoff, game-specific save persistence, and signed/server-verified event integration. The connected repository `demonanic/Legitloot-2` is Zombie Invasion Defense and is not a substitute for either selected launch title.
+
+
+## 18. Current independent verification — 2026-11-19 10:20 ET
+
+### Repository and coordination
+- Integration head at start: `7cf82eea2a313bde49fcc1e304729ae3a7dab957`, 349 ahead of `main`, 0 behind. All 16 branches report `protected:false`.
+- Only open PR: #9, draft visual-design PR, stale since 2026-11-12, no formal review submissions. PR #12 closed unmerged/superseded by the runbook port; PR #14 merged to integration; PR #15 closed unmerged/superseded by the account-deletion design port.
+- Latest Claude-authored commit found: `5ab48bd` at 11:41Z; latest verifiable Claude handoff: PR #12 comment `7009082911` at 12:27Z. No later Claude commit/handoff found.
+- No combined status checks or workflow runs on current integration head. Only GitHub workflow is artwork extraction; no automated test workflow. Prior local test reports on old PR heads are not current-head evidence.
+
+### Verified findings
+- **PROD-PROV-07 — CRITICAL / FAIL:** Production Supabase project `gkbqderyjcuxnjbsiffb` has Offerwall.GG postback v3 ACTIVE. Read-only `pg_get_functiondef` confirms `private.process_offerwall_gg_postback` selects LC ledger accounts and calls `private.post_journal_transaction`. It can still mint provider-sourced LC, contrary to owner policy. Production remains owner-gated; no callback invoked.
+- **STG-PROV-07 — CONTAINED / VERIFIED:** Staging project `scmnxcsggquwtuyyjnnj` has migration `20261119145340_offerwall_gg_record_only`, postback v8 ACTIVE, and record-only SQL. The live routine stores callback/conversion records and contains no ledger/journal path; EXECUTE is service_role-only. This is staging containment only, not production containment.
+- **GOV-01 — HIGH / FAIL:** All 16 branch API entries report `protected:false`, including `main` and integration. The prior ruleset query returned none; detailed protection endpoint returned 403. Production PR/review protection is not evidenced.
+- **ENV-06 — HIGH / FAIL:** `admin.js:boot()` line 31 and `payout-simulator.js:boot()` line 62 check only `config.environment === "staging"` and then create a client from `config.url`. They do not reject the production URL when mislabeled as staging. `tests/environment-isolation.test.mjs` tests account-auth and earn-hub but does not execute these two scripts. Current config points to staging; no current production target was observed.
+- **MIG-02 — HIGH / FAIL:** Staging migration history includes `20261118080655_game_platform_foundation`, but the integration Git tree has no matching migration file or game-platform path. This leaves the applied staging schema without a reproducible source migration.
+- **M2-T4 — BLOCKER / NOT VERIFIED:** Staging `public.game_registry` has only `zombie-invasion-defense`, title Zombie Invasion Defense, `launch_url=null`, `status=development`, `is_listed=false`. `private.game_events` is empty; no game Edge Function or challenge/milestone catalogue exists. The two owner-selected titles appear in `games.html` as integration-in-progress but have no playable links. Repository inventory/search did not identify exact source repositories or URLs for Zombies vs Heavy Metal or Rocket 2 Nowhere. Existing games (Aegis Rogue, Demonanic, Zombie Invasion Defense, Gauntlet's Survival, Harvest//Zero) must not be substituted without explicit evidence.
+- **HUSTLE-01 — HIGH / NOT IMPLEMENTED:** `earn-providers.js` still contains Offerwall.GG pending and CPAGrip testing; no Taplayad entry. Staging `private.providers` contains only Offerwall.GG and CPAGrip, both disabled with no approval reference, terms URL or terms verification. Staging function inventory contains no Taplayad adapter. Public nav/page titles still use “Earn,” not owner-selected “Hustle.”
+- **TAPLAYAD protocol — NOT VERIFIED:** Owner-supplied screenshots show app 10066 and the URL template, but do not expose the full signature formula, transaction identity, retry or reversal contract. No callback or test postback was invoked; no publisher setting changed.
+- **SUPPORT-01 — MEDIUM / NOT VERIFIED:** Public pages still link to `hello@legitloot.site`. The owner-designated `payouts@legitloot.site` remains unverified; do not publish it as operational until inbound, outbound and monitoring tests pass.
+- **LC public copy — PASS (copy only):** Rewards/Account pages state LC is non-cash, non-transferable, non-withdrawable and awarded only by verified in-game milestones/challenges/events; partner offers do not award LC. This is not evidence that the backend reward pipeline is implemented.
+
+### Next owner-independent actions
+1. Claude: exact staging URL checks and runtime negative tests for admin/payout-simulator.
+2. Claude: recover and commit the exact game-platform migration source, reconciled to staging schema; do not reapply or mutate staging.
+3. Claude: implement Taplayad adapter/task history in test mode only after provider protocol confirmation; provider callbacks must remain outside LC.
+4. Claude: rename public Earning labels to Hustle and prepare five-plus challenge definitions using existing approved LC values only.
+5. ChatGPT: independently review code/tests and staging isolation.
+6. M2-T4 remains blocked until the owner supplies the playable URL or source repository for each selected game.
+
+### Owner gates
+Production Offerwall containment, production settings/merge/deploy, branch-protection administration, provider agreement/traffic eligibility/paid terms/live activation, legal/account-deletion decisions, live financial activity, and final production release remain owner-gated. No settings, secrets, schema/data, callbacks, deployments or funds were changed in this verification.
