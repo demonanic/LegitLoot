@@ -676,3 +676,23 @@ Read-only `pg_get_functiondef` in both projects confirms `private.process_offerw
 - The publisher's multiplier and withdrawal panel are publisher-account concepts only, not LegitLoot user value, LC conversion, USD peg or user withdrawals. Provider offers and callbacks cannot issue LC.
 - Offerwall embed is preferred for smallest launch if current provider terms allow. Offers API/custom catalogue is optional later.
 - Do not infer account approval or incentivized-traffic permission from the Active badge. Owner must approve binding terms, paid commitments, live activation and any dashboard changes. No test postback or dashboard save is authorized by screenshot submission.
+
+## 2026-11-19 10:20 ET — Current launch-readiness reconciliation
+
+This addendum supersedes conflicting historical recommendations in this audit where later owner decisions or verified staging work changed the facts. Historical findings remain as dated evidence.
+
+### Current owner-locked scope
+- Initial launch titles: **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**. The owner states both are playable, but exact source repositories/playable URLs have not been located in connected GitHub repositories or prior handoffs. Integration, account linkage, mobile behavior and saves remain unverified. The current `games.html` lists both titles as integration-in-progress and publishes no guessed links.
+- One LegitLoot account; each game retains its own save; website LC wallet remains authoritative. Games may send authenticated milestone events; only the server validates and awards LC once.
+- At least five launch challenges/milestones are authorized. Use only existing owner-approved LC values; do not invent values. A challenge without a verified approved value remains award-disabled/pending.
+- The former Earning section is renamed **Hustle**. Provider tasks remain separate from LC issuance. Taplayad is the selected initial publisher target, but provider eligibility/terms and a permitted test integration remain to be verified. Provider agreement, paid terms and binding activation remain owner-gated.
+
+### Verified implementation since the original audit
+- Staging PROV-07 containment is complete: migration `20261119145340_offerwall_gg_record_only` applied; `offerwall-gg-postback` ACTIVE v8; live routine records provider events without LC ledger/journal posting; service-role-only private execution verified. No callback was invoked and all staging provider callback/conversion/journal counts were zero at post-deploy verification.
+- ENV-03 is complete in staging: PR #14 merged; `cpagrip-attribution` ACTIVE v5 with `verify_jwt=true`; deployed source matches canonical source, production origin absent, bearer token and server-side user validation retained.
+- AUTH-03 design is recorded in `docs/ACCOUNT_DELETION_DESIGN.md`; it is not implemented. Intended support contact `payouts@legitloot.site` remains UNVERIFIED. D1–D4 owner/legal decisions remain open.
+- OPS-01/OPS-03 runbook is recorded in `docs/RELEASE_RUNBOOK.md`. Production backup/PITR tier remains UNVERIFIED. GOV-01: GitHub API last reported `main protected:false`, no rulesets, detailed protection endpoint inaccessible; do not claim production branch protection exists.
+- Production was not modified. The last recorded production Auth settings probe (2026-11-19 12:18 UTC) returned `disable_signup:false`; re-probe at release freeze. Production launch remains owner-approved only.
+
+### Current active task — M2-T4
+Identify the actual source repositories/playable URLs for the two selected games, then verify routes, mobile usability, account/session handoff, game-specific save persistence, and signed/server-verified event integration. The connected repository `demonanic/Legitloot-2` is Zombie Invasion Defense and is not a substitute for either selected launch title.
