@@ -183,3 +183,11 @@ No production/staging settings, secrets, deployed functions, database schema/dat
 - **Registration:** the owner-approved production sign-up pause remains unapplied; last environment probe reported `disable_signup:false`. Existing email sign-in must remain enabled when the pause is applied.
 - **Standing authority:** Claude and ChatGPT may independently merge verified work into the integration branch and deploy to staging, including staging-only migrations, without routine owner approval. Production and business-critical gates remain unchanged.
 - **Next:** Claude refreshes PRs #12, #14, #15 from the current integration head, addresses review notes, updates permanent agent instructions, reruns the combined suite on the current head, then returns work for independent review. After review, staging work can proceed without routine owner check-ins.
+
+
+## 2026-11-19 — Live provider-path verification (12:14 UTC)
+
+- Fresh read-only checks of both Supabase projects reconfirmed production `offerwall-gg-postback` v3 and staging v7 are ACTIVE with JWT verification disabled.
+- Both deployed `private.process_offerwall_gg_postback` routines still read/lock LC ledger accounts and call `private.post_journal_transaction`. The new record-only migration is not applied in staging; its source is in the build branch only.
+- Callback events/conversions are 0/0 in both projects. No callback was invoked and no Supabase setting, secret, function, migration, schema, data or financial record was changed.
+- **PROV-07 remains a live policy blocker.** After independent review, Claude may deploy the record-only migration to staging first, then the matching function, and verify the deployed routine. Production containment remains owner-gated.
