@@ -464,3 +464,20 @@ See `docs/MASTER_EXECUTION_CONTROL.md` §13 for the authoritative owner decision
 | M2-T5 Draft Terms, Privacy, deletion procedure, Support page | ChatGPT | Claude | Docs → owner approval |
 | M2-T6 `docs/RELEASE_RUNBOOK.md`: release manifest, rollback, monitoring | Claude | ChatGPT | Docs |
 | M2-T7 Early-access release candidate from reconciled branch → owner approval | Claude | ChatGPT | **Owner gate** |
+
+### 15.5 M2-T1 trial merge result and resolution plan (Claude, 2026-11-19)
+
+A trial `git merge --no-commit origin/main` on a throwaway branch (aborted; nothing pushed) produced **25 conflicts** (`404, account, earn, games, how-it-works, index, marketplace, privacy, rewards, terms, trust` HTML; `public*.css`, `portal.js`, `account-auth.js`; 6 docs; `README.md`; `offerwall-gg-wall-url/index.ts`) and would add `earn-hub.js`, `earn-providers.js`, `site-nav.js`, `assets/skuz-arcade-neon.webp`, 3 tests, and **two migrations that duplicate branch migrations under different filenames**.
+
+**New finding MIG-01 — DEFECT, HIGH:** the Offerwall.GG callback migration exists in two lineages. `main` `20261108130000_offerwall_gg_callback_pipeline.sql` (production lineage) contains an extra legacy **LLC → LC 1:1 balance conversion** block (posts journal transactions; adds `platform_legacy_llc_clearing`); branch `20261109130000_*` (staging lineage) does not. `…140000` files are identical apart from name. One `supabase/migrations/` folder cannot represent both environments, so neither environment can be rebuilt reliably from GitHub.
+
+**Proposed resolution rules for M2-T1 (for ChatGPT review before Claude executes):**
+1. Do the merge on review branch `build/m2-t1-main-reconcile` and open a PR into `build/legitloot-neon-synthwave`; never into `main`.
+2. Public pages, CSS, `portal.js`, `site-nav.js`, earn registry, tests, `skuz-arcade-neon.webp`: **take `main`** (published and owner-approved 2026-11-12; newer than the branch's 2026-11-10 redesign; correct ZID lineup). The branch's 2026-11-10 visual system stays in history. *If ChatGPT or the owner considers the branch's Creative-Bible redesign the intended design, say so before execution — that is a design-direction choice.*
+3. `account-auth.js`: take `main`'s logic (includes wallet-timeout fixes) but **replace the hard-coded production URL/key with `window.LEGITLOOT_SUPABASE_CONFIG` + the `environment` guard**, and load `supabase-config.js` on `account.html` and `earn.html`. Otherwise the branch preview would register accounts in **production**. This also fixes ENV-02.
+4. Branch-only backend tooling (`admin*`, `payout-simulator*`, `offerwall-launch.js`, `supabase-config.js`, staging functions): keep.
+5. Governing docs (spec v1.2, Constitution, README, Offerwall.GG doc): keep branch; port any factual lines from `main`'s doc versions into them by hand.
+6. `offerwall-gg-wall-url`: keep branch allow-list for now; ENV-03 tracked separately.
+7. Migrations (MIG-01): do **not** add `main`'s duplicate files into `supabase/migrations/`. Store them unchanged under `supabase/environments/production/migrations/` as the production-applied record, alongside ChatGPT's M2-T2 staging export under `supabase/environments/staging/`, until a single forward lineage is designed. Deciding which lineage becomes canonical is a schema decision for review, not part of this merge.
+8. Follow-up commit in the same PR: remove cash-wallet UI and provider→LC copy (WALLET-01) per spec §0.1.
+9. Checks before PR: `node --check` all JS, `node --test tests/*.test.mjs`, HTMLParser route audit, `git diff --check`, headless Chrome render of `/`, `/games`, `/earn`, `/account` on the PR preview, and confirm the preview's account page calls the **staging** project.

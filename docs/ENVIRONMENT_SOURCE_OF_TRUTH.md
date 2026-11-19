@@ -114,6 +114,7 @@ Secrets by name only (inferred from code paths and probe responses, values never
 |---|---|---|---|
 | Migrations | 7 records, latest `20261108081650` | 20 records, latest `20261118080655` (`game_platform_foundation`) | Staging-only: admin authorization, payout simulator ×4, Offerwall metadata, CPAGrip, game platform. Applied-version timestamps do not match repo filenames (Supabase assigns versions on apply), so mapping to files must be done by name/SQL. |
 | Migration SQL in GitHub | `main` has bootstrap + 6 migrations (plausibly the 7 prod records) | Build branch has bootstrap + 13; **no branch contains CPAGrip or `game_platform_foundation` SQL** | Staging schema cannot be rebuilt from GitHub. |
+| Migration lineage (MIG-01) | `main` `20261108130000_offerwall_gg_callback_pipeline.sql` includes an LLC→LC 1:1 legacy balance conversion | branch `20261109130000_*` omits it | Two incompatible lineages for one migration; see audit §15.5 |
 | Game platform objects | absent | `public.game_registry` (anon `GET` → `[]` 200, i.e. table exposed through the API but RLS returns no rows to `anon`), `private.game_saves`, `private.game_events`, `private.game_handoff_tickets` | Untracked; contract undocumented. |
 | CPAGrip | absent | function + attribution/conversion tables | Untracked. |
 | Admin / simulator | absent | present, `private.admin_users` 1 row | Expected staging-only tooling. |

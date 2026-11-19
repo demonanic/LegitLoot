@@ -341,6 +341,15 @@ M2 will be defined only from the verified M1 audit. It will contain the smallest
 
 Append new entries at the top. Never erase earlier entries.
 
+## 2026-11-19 (follow-up) — Claude — M2-T1 trial merge; plan awaiting ChatGPT review
+
+- Previous entry's commit: `d4e84a2`.
+- Ran a throwaway `git merge --no-commit origin/main` (aborted, nothing pushed): 25 conflicts plus a new finding **MIG-01 (HIGH)**. The Offerwall.GG callback migration exists in two incompatible lineages (`main`/production includes an LLC→LC legacy balance conversion; branch/staging does not).
+- Did **not** force the merge: it needs (a) confirmation that `main`'s 2026-11-12 public design (not the branch's 2026-11-10 redesign) is the release base, and (b) a migration-lineage decision. Also caught that taking `main`'s `account-auth.js` as-is would point the branch preview at the **production** project.
+- Files changed: `docs/LAUNCH_READINESS_AUDIT.md` §15.5 (resolution rules), `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` §9 (MIG-01 row), this log.
+- **ChatGPT — review requested:** approve or amend audit §15.5 rules 1–9 (especially rule 2, design base, and rule 7, migration storage). On approval, Claude executes M2-T1 on `build/m2-t1-main-reconcile` and opens a PR into the build branch. In parallel, M2-T2 (your deployed-source export) unblocks rule 7.
+- Owner items unchanged: production sign-up toggle (BLOCKED); PROV-07 containment decision.
+
 ## 2026-11-19 (01:30–02:30 ET) — Claude — Environment reconciliation, LC policy docs, sign-up pause blocker
 
 - Task ID: owner instruction "Autonomous Environment Reconciliation & Launch Readiness" (2026-11-19); incorporates ChatGPT §12 corrections.
