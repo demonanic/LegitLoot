@@ -1,8 +1,8 @@
 # LegitLoot — Platform Build Specification
 
-**Version:** 1.2  
+**Version:** 1.3  
 **Date:** 2026-11-19 (v1.1 2026-11-10)  
-**v1.2 change:** Section 0 records the owner-locked Legit Coins policy and current game lineup. Where any later section conflicts with Section 0, **Section 0 governs**. Superseded passages are marked inline and retained only as history.  
+**v1.3 change:** Adds the later 2026-11-19 owner launch decisions in §0.4, which supersede conflicting earlier launch-game and challenge-catalogue assumptions. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — untouched; no production deployment authorized.  
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
@@ -18,7 +18,7 @@ Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2)
 - **No offerwall, survey, CPA, affiliate, ad or other provider callback may mint LC.** Provider integrations are kept separate from the LC award path unless the owner later explicitly authorizes otherwise.
 - The **website LC wallet is the only authoritative balance.** Games must not mint LC or keep a spendable duplicate balance. A game may show a short notice such as "Milestone completed — check your LC wallet" and send a trusted completion event; the platform decides and posts the award.
 - LC are not cash, not withdrawable, not transferable, never eligible for cash/payout requests, and have no LC↔USD peg or cash-equivalent claim.
-- **Not yet approved (do not implement or infer):** challenge catalogue, award amounts, caps, expiry, event rules, anti-cheat evidence, appeals, reversals, and any spending/redemption use (including merchandise or events). The LC economy itself is **not authorized for implementation** yet.
+- **Not yet approved (do not implement or infer):** challenge catalogue, award amounts, caps, expiry, event rules, anti-cheat evidence, appeals, reversals, and any spending/redemption use (including merchandise or events). The full LC economy is not authorized for expansion. The later owner decision in §0.4 authorizes the minimum launch challenge catalogue and verified award wiring using only existing approved LC values.
 
 ### 0.2 Games
 - The three earlier titles (Demonanic, Gauntlet's Survival, Harvest//Zero) are **not** part of the LegitLoot portal. They remain independent projects.
@@ -29,6 +29,29 @@ Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2)
 - §2A "LootCoins: games only" spend rules are **superseded** by 0.1: spending uses are undecided.
 - §6 game list is **superseded** by 0.2.
 - Cash rewards remain deferred exactly as before (§2, §13).
+
+## 0.4 Later owner decisions — launch games and minimum challenges (2026-11-19 13:09 UTC)
+
+This later owner decision supersedes earlier conflicting statements in §§0.1–0.2 and older one-game launch assumptions.
+
+### Selected launch games
+- The official initial-launch titles are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**.
+- The owner states both are playable as-is. This is a product decision, not independent technical evidence; each still requires verification of its actual playable URL/source, mobile behavior, central account integration, and save persistence.
+- The earlier reference title Zombie Invasion Defense (repository `demonanic/Legitloot-2`) is not a substitute for either selected launch title. Do not list it as a launch game unless the owner changes the selection.
+- Exact source repositories and playable hosting URLs remain UNLOCATED in the connected GitHub account and handoffs. Do not invent URLs or wire unrelated projects.
+
+### Launch challenges and LC awards
+- The owner authorizes creation of **at least five** launch challenges/milestones and integration with the central reward system.
+- Agents may author objective definitions, event sources, anti-replay conditions, completion states, and tests.
+- **Use only existing owner-approved LC award values. Do not invent, increase, or infer award amounts.** If no approved value can be located for a challenge, keep its award disabled/pending rather than inventing a number.
+- Every award must be triggered by a server-verified, authenticated, idempotent game event and posted to the authoritative website wallet once. Client-forged events, replayed events, and provider-originated events must not issue LC.
+- This authorization does not approve new LC exchange rates, cash value, redemption/spending uses, transferability, expiry, caps, seasonal economics, or provider-to-LC issuance. Those remain unapproved unless separately decided.
+
+### Shared account and save contract
+- One LegitLoot account/session across the platform.
+- Each game retains its own game-specific save data; do not create a spendable duplicate wallet or move game saves into a central wallet system.
+- The LegitLoot website remains the only authoritative LC wallet and reward-history surface.
+- Game events may request an award; only the server verifies eligibility and records it.
 
 ## 1. Product definition
 
