@@ -288,3 +288,9 @@ This recheck used read-only GitHub and Supabase queries. No settings, secrets, f
 - GitHub reports `main` `protected:false`; no rulesets returned and detailed branch protection could not be read (403). Do not claim the branch is protected.
 - Cloudflare production Pages branch binding/trigger and production backup/PITR remain unverified.
 - No Supabase setting, secret, function, migration, schema, data, callback, or financial record was changed. No deployment or PR merge occurred in this check.
+
+
+### Coordination closeout — 2026-11-19
+- The four documentation updates for this check advanced integration from `1a8be57` to `150d7a4`. This final batched documentation correction is being committed now; PR branches must be refreshed from the live integration branch tip when Claude resumes, not from either historical SHA.
+- Immediately before this closeout correction, PR #12/#14/#15 were 11 commits behind integration (11/6/7 commits ahead respectively). The earlier branch-refresh instruction is superseded: use the current integration branch head at pickup and report exact compare counts after refresh.
+- No PR merge, deployment, callback, provider activation, Supabase mutation, production action or financial activity occurred.

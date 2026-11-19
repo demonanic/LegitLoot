@@ -658,5 +658,11 @@ Read-only `pg_get_functiondef` in both projects confirms `private.process_offerw
 ### Actions and next work
 - Added PR #12 comment `7011505297` for rollback-trigger wording and missing GOV-01 runbook step.
 - Added PR #15 comment `7011512870` for the owner-designated `payouts@` contact, retaining UNVERIFIED status.
-- Next owner-independent work: Claude refreshes #12/#14/#15 from `1a8be57`; addresses runbook and support comments; implements ENV-06 exact URL guards/tests; builds the Hustle/Taplayad adapter in test mode; updates the two-game catalog and supplies verified game/challenge/wallet evidence. ChatGPT independently reviews and proceeds with staging-only PROV-07 containment in a separate authorized implementation run.
+- Next owner-independent work: Claude refreshes #12/#14/#15 from the latest integration branch head at task pickup; addresses runbook and support comments; implements ENV-06 exact URL guards/tests; builds the Hustle/Taplayad adapter in test mode; updates the two-game catalog and supplies verified game/challenge/wallet evidence. ChatGPT independently reviews and proceeds with staging-only PROV-07 containment in a separate authorized implementation run.
 - Owner gates: production Offerwall containment, production branch protection administration, production signup/settings/merge/deploy, provider agreements/approval/live activation and paid/settlement terms, legal publication, live financial activity, destructive real-data changes, security weakening and irreversible decisions. Last recorded production signup state remains `disable_signup:false` at 12:18 UTC; not re-probed in this check.
+
+
+### Coordination closeout — 2026-11-19
+- The four documentation updates for this check advanced integration from `1a8be57` to `150d7a4`. This final batched documentation correction is being committed now; PR branches must be refreshed from the live integration branch tip when Claude resumes, not from either historical SHA.
+- Immediately before this closeout correction, PR #12/#14/#15 were 11 commits behind integration (11/6/7 commits ahead respectively). The earlier branch-refresh instruction is superseded: use the current integration branch head at pickup and report exact compare counts after refresh.
+- No PR merge, deployment, callback, provider activation, Supabase mutation, production action or financial activity occurred.
