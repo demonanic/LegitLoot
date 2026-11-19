@@ -38,16 +38,17 @@ Owner approval: <quote + date>   <- required before any step in §3
 ## 3. Release procedure
 
 1. **Freeze.** Note the current production state: `main` SHA, the latest Pages production deployment, function versions, applied migration list, and `GET /auth/v1/settings`. Also verify in the Cloudflare dashboard that Pages project `legitloot` is bound to production branch `main` and confirm the actual auto-deploy trigger; this binding/trigger is currently owner-recorded but **NOT independently verified** in `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`.
-2. **Pre-checks on the candidate commit:**
+2. **Registration precondition:** before any release that exposes public account onboarding, verify production `disable_signup:true` with `email:true` (owner-approved pause; keep existing sign-in). It stays paused until approved Terms/Privacy (LEGAL-01) and the account-deletion path (AUTH-03) are live. A release that would reopen sign-up is itself an owner gate.
+3. **Pre-checks on the candidate commit:**
    - `node --test tests/*.test.mjs` passes;
    - `node --check` on every JS file;
    - HTML id/link audit and `git diff --check`;
    - rendered pass at 390px and 1366px of every public route;
    - the candidate's `supabase-config.js`/client config targets **production** only if this release intends that (see §6).
-3. **Owner approval** recorded with the manifest.
-4. **Apply in dependency order:** schema → functions → site. Skip parts that don't change.
-5. **Post-release verification (within 15 minutes):** run §5 checks; record the results in the log.
-6. **Hold window:** 24 hours of extra monitoring. No second release in the same window unless it's a rollback.
+4. **Owner approval** recorded with the manifest.
+5. **Apply in dependency order:** schema → functions → site. Skip parts that don't change.
+6. **Post-release verification (within 15 minutes):** run §5 checks; record the results in the log.
+7. **Hold window:** 24 hours of extra monitoring. No second release in the same window unless it's a rollback.
 
 ## 4. Rollback
 
@@ -69,7 +70,7 @@ Owner approval: <quote + date>   <- required before any step in §3
 |---|---|---|
 | Site up | `curl -sSL -o /dev/null -w '%{http_code}' https://legitloot.site/` (repeat for `/games`, `/earn`, `/account`) | `200` |
 | Served = `main` | Compare served HTML to `main` | Identical (ignore Cloudflare `mailto` obfuscation) |
-| Auth setting | `GET https://gkbqderyjcuxnjbsiffb.supabase.co/auth/v1/settings` with the production publishable key | `disable_signup` matches the release decision |
+| Auth setting | `GET https://gkbqderyjcuxnjbsiffb.supabase.co/auth/v1/settings` with the production publishable key | `"disable_signup":true` and `"email":true` (sign-up paused, existing users can sign in) **until** approved Terms/Privacy and the account-deletion path are live. This is the owner-approved pause, not a new decision. It was **still unapplied** at the 2026-11-19 12:18 UTC probe (`disable_signup:false`). |
 | Anonymous isolation | anon `GET /rest/v1/profiles` and `POST /rest/v1/rpc/get_wallet_summary` | `401` |
 | No LC minted by providers | Agent with connector access: count rows in `private.offerwall_gg_callback_events`, `private.offerwall_gg_conversions` and provider-sourced `private.journal_transactions` | `0` while PROV-07 is open |
 | Supabase advisors | Security and performance advisors via connector | No new ERROR-level items |
