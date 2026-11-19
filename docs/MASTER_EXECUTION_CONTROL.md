@@ -86,7 +86,7 @@ The release candidate must truthfully provide:
 
 ### Supporting M2 work
 
-- **PR #12 / M2-T6:** finish release/rollback/monitoring runbook; correct the provider monitoring invariant and retain the explicit production sign-up pause precondition.
+- **M2-T6 / OPS-01 / OPS-03 / GOV-01:** COMPLETE FOR RUNBOOK — `docs/RELEASE_RUNBOOK.md` is on the integration branch. It distinguishes expected record-only callback/conversion rows from forbidden provider LC journal postings, uses the actual staging migration version, and adds `main` branch-protection verification to the release freeze. Production backup/PITR tier and branch-protection configuration still require verification.
 - **PR #14 / ENV-03:** COMPLETE — merged as `f8780a0`; staging `cpagrip-attribution` deployed as ACTIVE v5 with `verify_jwt=true`; production origin absent and bearer/JWT validation preserved.
 - **AUTH-03 design:** COMPLETE FOR DESIGN REVIEW — `docs/ACCOUNT_DELETION_DESIGN.md` is now on the integration branch. `payouts@legitloot.site` remains UNVERIFIED; D1–D4 owner/legal decisions remain open. No deletion implementation or production change has occurred.
 - **AUTH-02:** the owner-approved production sign-up pause remains unapplied; verify `disable_signup:true` while preserving email sign-in before public account onboarding.
@@ -887,3 +887,11 @@ This evidence does not authorize saving dashboard changes, sending test postback
 - **Platform spec:** updated to v1.3, reconciling the later owner decision for two launch games and at least five challenges using only existing approved LC values. No new LC amounts or redemption rules were created.
 - **Games page:** replaced the obsolete Zombie Invasion Defense placeholder with the two owner-selected launch titles. It truthfully labels both as integration-in-progress and publishes no unverified links.
 - **M2-T4:** active task advanced to game integration verification. Connected GitHub repo inventory and prior handoffs did not reveal source repositories or playable URLs for either selected game. `demonanic/Legitloot-2` is explicitly Zombie Invasion Defense and is not a substitute. Exact game URLs/repositories are the sole immediate dependency for completing the integration audit.
+
+## 2026-11-19 10:15 ET — ChatGPT — M2-T6 release runbook closeout
+
+- Independently reviewed PR #12's release/rollback/monitoring runbook and corrected the rollback trigger so expected record-only callback/conversion writes do not trigger rollback; provider-sourced LC journal/ledger postings, callback-to-journal mismatches, or malformed callback state remain incident conditions.
+- Updated the migration reference to the actual staging-applied version `20261119145340_offerwall_gg_record_only.sql`.
+- Qualified the production sign-up state with its last verified timestamp (2026-11-19 12:18 UTC; `disable_signup:false`) rather than presenting it as a fresh probe.
+- Added GOV-01 to the release freeze: `main` must have verified PR-only protection, independent review and required checks before a production release. Current API evidence reports `protected:false`, no rulesets, and inaccessible detailed protection settings; do not claim protection exists.
+- Ported reviewed `docs/RELEASE_RUNBOOK.md` to integration branch commit `53ba77a`; closed stale-base PR #12 as superseded. No production setting, backup tier, DNS, release or deployment was changed.
