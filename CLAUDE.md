@@ -211,3 +211,29 @@ Read the latest shared debrief in docs/MASTER_EXECUTION_CONTROL.md, docs/PROJECT
 
 ### Owner gates — unchanged
 No production merge/deploy, production setting/secret changes, real callbacks, live financial activity, paid commitments, provider terms/agreements or live activation, destructive real-data changes, security weakening, legal/business commitments, or final production release. Production Offerwall containment, branch protection, publisher permission, support-mailbox verification, registration pause verification, and final release remain owner-controlled. Do not claim a game source/route is known without a real repo/URL artifact.
+
+
+## 2026-11-19 14:42 ET — Claude handoff: PR #20 public-copy follow-up
+
+Read the latest debrief in the four shared control documents before further work.
+
+### Verifiable latest Claude work
+- Claude-authored PR #20 commits `4a0db7a` and `04e4016`, branch `claude/hustle-rename`, update public navigation, `earn.html` title/description/accessibility labels to Hustle; remove “Complete offers” from homepage LC steps; replace the Zombie Invasion Defense homepage card with the two owner-approved launch titles without inventing playable URLs; add four Node tests.
+- GitHub Actions run [44591660747](https://github.com/demonanic/LegitLoot/actions/runs/44591660747) passed 54/54 Node tests, zero skips, and patch whitespace check. The current workflow runs only `npm test` / `tests/*.test.mjs`; Python/Playwright browser tests are not run in CI.
+- PR #20 has successful Cloudflare branch-preview bot comments for both Pages projects. The PR branch config explicitly targets staging.
+- PR #20 is 2 commits ahead / 2 behind integration head `3fa518ee`. Review comment [7020270626](https://github.com/demonanic/LegitLoot/pull/20#issuecomment-7020270626) is outstanding; do not merge before it is addressed and CI reruns.
+- PR #16, #17 and #18 were merged into integration only. PR #19 was closed unmerged. PR #9 remains a stale draft, 12 ahead / 166 behind.
+
+### Required PR #20 follow-up
+1. In `earn-hub.js`, change the user-visible summary “No earning provider is open…” to Hustle terminology. Keep internal identifiers (`earn-hub-summary`, filenames, provider keys, `earn.html` route) unchanged.
+2. Add a Node test in `tests/hustle-public-copy.test.mjs` for the summary copy. Updating `tests/earn-hub.browser.py` alone is insufficient because CI does not run it.
+3. Replace homepage LC step 3 “Uses announced later” with a clear accurate step for weekly challenges and seasonal events. Add regression coverage that LC steps reflect only approved sources.
+4. Reword Hustle fine print to avoid implying LegitLoot user cash earnings/settlement. State clearly that provider activity does not credit LC or create a LegitLoot cash payout/wallet credit; provider terms remain provider-side.
+5. Sync the branch to integration `3fa518ee`, rerun the GitHub Actions workflow, and post verifiable evidence.
+
+### Do not cross these gates
+- Production Offerwall.GG v3 still calls `private.post_journal_transaction`; production provider-to-LC issuance remains a critical owner-gated violation. Do not modify production.
+- Staging Offerwall.GG v8 is record-only and matches integration exactly. Do not reapply migrations or invoke callbacks.
+- Staging Offerwall.GG provider row is disabled but has stale LC/LootCoins reward-model metadata with no terms/approval references. Do not alter provider records without separate authorization.
+- Taplayad remains selected but absent from staging; no live callback implementation until provider supplies signed transaction fields/unique transaction and reversal references and owner-specific incentivized-traffic permission is verified.
+- No merge to main, production deploy, settings/secrets changes, schema/data mutations, live callback, payment, provider agreement, legal commitment, or final launch without owner approval.
