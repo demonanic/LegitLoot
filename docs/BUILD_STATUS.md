@@ -63,7 +63,7 @@
 - Added clearly marked draft `terms.html` and `privacy.html` placeholders. These are not launch-ready legal policies.
 - Connected the V2 site navigation and footer to the new guide and legal placeholder pages.
 - Added the password-reset completion step: reset links now switch to a new-password form and call Supabase `updateUser`.
-- Offerwall.GG verification meta tag remains present in the homepage head.
+- The Offerwall.GG verification meta tag was removed from the homepage head in the M2 release candidate (provider permanently retired; origin inferred from the tag name and its introduction in the 2026-11-08 release commit, not independently confirmed with the provider).
 - Supabase security hardening was applied in project `gkbqderyjcuxnjbsiffb`: RLS enabled on all 10 private-schema financial/provider tables, with no client policies. The matching migration is inherited in V2 from the foundation branch.
 - No Offerwall.GG integration, reward issuance, cash payouts, withdrawal API, admin console, or production wallet summaries are active yet.
 

@@ -152,3 +152,11 @@ test('proposed SQL and contract do not claim EXECUTE is revoked from literally e
     assert.match(text, /postgres function owner retains inherent owner execution/);
   }
 });
+
+test('no public page carries an Offerwall.GG verification artifact after retirement', () => {
+  for (const f of readdirSync('.').filter((n) => n.endsWith('.html'))) {
+    const html = readFileSync(f, 'utf8');
+    assert.doesNotMatch(html, /name=["']offerwall-verification["']/i, f);
+    assert.doesNotMatch(html, /ow-decc1febbb799f89f1c7/, f);
+  }
+});
