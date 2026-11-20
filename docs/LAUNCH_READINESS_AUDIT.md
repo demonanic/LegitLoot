@@ -1168,7 +1168,7 @@ PR #23 discussion comment `7028436334` keeps the RXT2 game PR limited to game fi
 - The pure-handler split is therefore test-verified. The run validates only the inert handler and test isolation; it does not verify deployed production containment, SQL grants, callback behavior, provider dashboard settings, or preview auth.
 - PR comment `7029857955` was updated with the successful run. PR #24 remains a draft and owner-gated. No merge, deploy, Supabase change, callback, or publisher setting change occurred.
 
-## 2026-11-19 23:02 ET ET — Independent Sync Watch: launch blockers reconfirmed
+## 2026-11-19 23:02 ET — Independent Sync Watch: launch blockers reconfirmed
 
 - GitHub integration head is `87a28c5`; production `main` is `4e0f533`. PR #20 (58/58) and PR #22 (64/64) retain the previously reviewed application diffs; intervening changes are documentation-only. PR #23 remains a main-based draft with no CI; PR #24 remains a main-based draft whose exact head `fb2e890` passed 3/3 Deno tests. No PR was merged.
 - Production Offerwall.GG v3 remains ACTIVE/`verify_jwt=false`; its deployed source calls the live SECURITY DEFINER callback wrapper. The private/public wrappers grant EXECUTE to `service_role`, and the private routine calls the journal writer. The disabled provider row still carries LC reward metadata. This remains a critical violation of the owner-locked no-provider-to-LC rule.

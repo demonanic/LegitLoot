@@ -3,7 +3,7 @@
 **Updated:** 2026-11-19 23:02 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate the two owner-selected launch games; both have early-access candidates, ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` @ `87a28c5`; PR #20's base `387d035` is 31 commits behind, with changes limited to the five shared documentation files
+**Integration branch:** `build/legitloot-neon-synthwave` — this run's control-record refresh is documentation-only; PR #20's base `387d035` is 31+ commits behind in shared documentation only
 **Production branch:** `main` @ `4e0f533`
 **Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI; reviewed application diff unchanged); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI; reviewed application diff unchanged); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `fb2e890`, Deno 2.9.8 tests 3/3 pass, not deployed); #9 stale non-mergeable visual redesign draft. PR #21 is merged to main.
 
