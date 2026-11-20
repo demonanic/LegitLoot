@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 10:30 ET
+**Updated:** 2026-11-20 11:21 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. Both games are LIVE on legitloot.site (early access, device-local saves, no account/LC connection). ZVHM = `demonanic/Legitloot-2` (owner-approved, identity resolved). Remaining: shared account/session handoff, cloud saves, server-verified idempotent LC events. Offerwall.GG containment/source alignment remains the owner's stated security focus.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (as of 2026-11-20 11:30 ET):** #9 stale draft (`046019f`); #20 Hustle/public copy (head `6e2e51b`, 58/58 Actions run 44661202504); #22 game integration (head `332ca07`, 64/64 Actions run 44661225287, stacked on #20; ZVHM identity blocker withdrawn, see PR #22 comment 7041463948); #25 Offerwall.GG wall-URL source alignment (draft, head `135607e`, Node and Deno workflows passed); #26 Taplayad-only pending Hustle registry (head `30f5dbf`, 59/59 Actions run 44729695582, stacked on #20); #27 documentation reconciliation and charter acknowledgement (this PR). PR #23 merged as main `801f3e7`; PR #21 and #24 were merged by the owner account. Older per-PR evidence in the log below is historical.
+**Current open PRs (as of 2026-11-20 11:21 ET):** #9 stale draft (`046019f`); #20 Hustle/public copy (head `6e2e51b`, 58/58 Actions run 44661202504); #22 game integration (head `332ca07`, 64/64 Actions run 44661225287, stacked on #20; ZVHM identity blocker withdrawn, see PR #22 comment 7041463948); #25 Offerwall.GG wall-URL source alignment (draft, head `135607e`, Node and Deno workflows passed); #26 Taplayad-only pending Hustle registry (head `30f5dbf`, 59/59 Actions run 44729695582, stacked on #20); #27 documentation reconciliation and charter acknowledgement (this PR). PR #23 merged as main `801f3e7`; PR #21 and #24 were merged by the owner account. Older per-PR evidence in the log below is historical.
 
 ## Current owner-locked operating rules
 
@@ -32,7 +32,7 @@
 - **GAME-02 — RESOLVED 2026-11-20:** `demonanic/Legitloot-2` is the owner-approved Zombies vs Heavy Metal (renamed from the Zombie Invasion Defense working title; owner decision 2026-11-19 19:40 ET, re-confirmed 2026-11-20; DaVinci withdrew the blocker in comment `7041463948`). Platform Build Spec §0.4 corrected. Remaining game work is shared account/save handoff and server-verified LC events.
 - **ENV-07 — CRITICAL (open, owner decision pending):** `main` `account-auth.js` hardcodes production Supabase and exposes signup; main-based `pages.dev` previews (including `main.legitloot-preview.pages.dev`, commit `801f3e7`) can therefore reach production Supabase from the Account route. PR #23 (Rocket 2 Nowhere) merged without touching this file. A separate owner-approved PR against main is needed to fail closed on preview hosts, with a regression test. Do not use Account/auth routes on main-based previews.
 - **HUSTLE/TAPLAYAD — HIGH:** Owner App 10066 template remains https://offerwall.tplayad.com/10066/{user_id}. Current docs use md5(app_id . user_id . api_secret), status 1/2 and any-2xx acknowledgement; no transaction-ID macro or retry schedule is documented. The sample parameter mismatch remains; direct legacy postback page returns 404. Current Terms do not establish App-10066-specific incentivized-traffic permission. No publisher settings or terms were accepted; never map provider points/reward/payout to LC.
-- **GOV-01 — HIGH:** GitHub branch API reports all 26 refs, including main and integration, as protected:false. Do not treat owner gates as technically enforced.
+- **GOV-01 — HIGH:** GitHub branch API reports main, integration and every other ref checked as protected:false (26 refs checked at 05:13 ET; 28 enumerated at 11:14 ET, the two newer refs not protection-checked). Do not treat owner gates as technically enforced.
 - **LEGAL/SUPPORT/OPS:** Terms/Privacy, monitored support, account deletion/export, signup-pause verification, monitoring, backup/PITR, and rollback evidence remain incomplete or owner-gated.
 
 ## Current verification status
