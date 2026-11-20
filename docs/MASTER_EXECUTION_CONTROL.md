@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 05:15 ET
+**Last updated:** 2026-11-20 05:16 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub's branch API reports `protected:false` for all 26 branches as of 2026-11-20 05:13 ET. Do not describe `main` as technically protected.
@@ -1717,4 +1717,4 @@ Owner explicitly authorized preparation and testing of production containment, p
 
 ## 2026-11-20 05:15 ET — Documentation CI follow-up
 
-- Docs-only run 44719451991 passed npm test but failed the whitespace check because each of the five updated records had an extra blank line at EOF. This follow-up trims all five files to one final newline; verify the new run before marking the shared-record update green.
+- Docs-only run 44719451991 passed npm test but failed the whitespace check because each of the five updated records had an extra blank line at EOF. The follow-up documentation commit 46be8d7 removed those EOF blanks; Actions run 44719817398 passed npm test and the whitespace check.

@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 05:15 ET
+**Updated:** 2026-11-20 05:16 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
@@ -788,4 +788,4 @@ Owner explicitly authorized preparation and testing of production containment, p
 
 ## 2026-11-20 05:15 ET — Documentation CI follow-up
 
-- Run 44719451991 passed npm test and failed only the whitespace check because all five updated records had an extra blank line at EOF. This follow-up removes those EOF blanks; the next Actions run is the final verification for this documentation update.
+- Run 44719451991 passed npm test and failed only the whitespace check because all five updated records had an extra blank line at EOF. Follow-up commit 46be8d7 removed those EOF blanks; Actions run 44719817398 passed npm test and whitespace checks.

@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 05:15 ET
+**Last verified:** 2026-11-20 05:16 ET
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -933,4 +933,4 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 
 ## 2026-11-20 05:15 ET — Documentation CI follow-up
 
-- The previous two docs-only Actions runs passed npm test but failed whitespace checks. This follow-up normalizes the final newline in each updated shared record; the next Actions run is the final whitespace verification.
+- The previous two docs-only Actions runs passed npm test but failed whitespace checks. Follow-up commit 46be8d7 normalized the final newline in each updated shared record; Actions run 44719817398 passed npm test and whitespace checks.

@@ -1386,4 +1386,4 @@ The earlier statement that ZVHM is live on production as early access is correct
 
 ## 2026-11-20 05:15 ET — Documentation CI follow-up
 
-- Run 44719451991 passed npm test and failed only the whitespace check because the five updated records had an extra blank line at EOF. This follow-up trims each updated record to a single final newline. Verify the next run before marking the shared-record update green.
+- Run 44719451991 passed npm test and failed only the whitespace check because the five updated records had an extra blank line at EOF. Follow-up commit 46be8d7 trimmed each updated record to a single final newline; Actions run 44719817398 passed npm test and whitespace checks.
