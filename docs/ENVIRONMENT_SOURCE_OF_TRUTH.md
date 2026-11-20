@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 18:36 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:36 ET.
+**Last verified:** 2026-11-20 18:38 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:38 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1180,3 +1180,14 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 - Account sign-up UI is now closed, but the Supabase Auth `disable_signup` setting was not read/changed in this run; last recorded production probe was false. Backend registration remains owner-gated/unverified.
 - PR #27 is at `e1146ff`, Actions `44837816280` passed. PR #30 contains docs through `e199df3`, one docs commit behind. Its live PR body still cites `9f2c9a0` and old Actions even though Claude comment `7053199149` says it was refreshed. No preview result for the latest candidate SHA is verified.
 - No Auth setting, Supabase secret/grant/schema/data, callback, provider setting, agreement, payment, reward issuance or money movement occurred; all database queries were SELECT-only.
+
+
+## 2026-11-20 18:38 ET — Sync Watch #17 follow-up 3: source fixes verified
+
+- PR #30 latest head `38a9406fd2f1314b41c5a4a032539cca621a9b02`, draft, 56 files / 80 commits. Node/whitespace `44838085850` and Deno `44838085857` pass. The last Claude-reported local 80/80 result was on `7f1e1c61`; browser test remains unrun; no preview status for this SHA has been returned.
+- Proposed RPC SQL now matches journal entries to accounts by account_id, wallet_kind and currency_code, and counts only posted transactions. ACL precondition now inspects PUBLIC grantee via `aclexplode`; fresh live ACL in both projects matches authenticated + service_role EXECUTE, anon/PUBLIC absent. Static tests assert these checks. File remains DO NOT APPLY.
+- Edge Function source filters account/entry currency to LC and joins posted transactions; PostgREST relationship is supported by the FK in both projects but remains unexecuted. Do not deploy without staging validation.
+- Live `public.get_wallet_summary()` remains cash/USD-bearing in both environments; production wallet-summary v4 remains active with the old cash response. No SQL or Edge Function source is applied/deployed.
+- Candidate UI registration is closed and copy corrected; Supabase Auth `disable_signup` remains unverified/owner-gated. No Auth setting changed.
+- PR #27 current head `26768972`, Actions `44838133420` passed. PR #30 still includes docs only through `e1146ff`, one docs commit behind. Its current-state header still cites `7f1e1c6` and old Actions; exact head is `38a9406`, 56 files / 80 commits, current Actions `44838085850/44838085857`. No preview result for the latest SHA is verified.
+- No secrets, grants, schema, data, callbacks, provider settings, agreements or financial activity were changed.

@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up 2 (2026-11-20 18:36 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up 3 (2026-11-20 18:38 ET). Earlier status tables are historical.
 
 ---
 
@@ -1598,3 +1598,15 @@ No PR merge, deployment, SQL application, Supabase setting/secret/grant/schema/d
 - The PR #30 body is still stale at `9f2c9a0` / old Actions, despite Claude comment `7053199149` claiming it was refreshed. Exact current head is `7f1e1c61`; update the body and current-state records. PR #27 is `e1146ff` with Actions `44837816280` passed; PR #30 remains one docs commit behind (`e199df3`).
 - Live wallet RPCs remain cash/USD-bearing; source-only proposal and Edge Function change are not deployed. Main-based ENV-07, Taplayad permission/protocol, legal/account deletion/export and game-event integration remain open.
 - No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 18:38 ET — Sync Watch #17 follow-up 3: latest proposed wallet SQL review
+
+- PR #30 is draft at `38a9406` (56 files / 80 commits). Node/whitespace `44838085850` and Deno `44838085857` pass. The last Claude-reported local 80/80 result was on prior head `7f1e1c61`; no fresh local count is attached to `38a9406`. Browser test remains unrun; no preview result for the latest SHA has been returned.
+- The latest source commit fixes the prior RPC SQL findings: the journal-entry join now checks matching wallet_kind/currency, posted transactions remain required, and the ACL precondition checks PUBLIC via `aclexplode`. The static test asserts both. The proposed SQL remains under `supabase/proposed/staging`, outside migrations, and DO NOT APPLY.
+- The Edge Function source filters accounts/entries to LC and uses a posted-transaction relationship. The PostgREST nested embed is not runtime-verified; the underlying transaction FK exists in both projects. No Edge Function deployment occurred.
+- Live production/staging wallet RPCs still return cash/USD fields; production wallet-summary v4 remains deployed with cash/USD response. The candidate source proposal does not alter deployed state.
+- Candidate Account closes the Create Account UI/client handler and now uses accurate registration-closed copy. Supabase Auth `disable_signup` remains unverified/owner-gated; no setting was read or changed.
+- PR #30 current-state header is one commit stale at `7f1e1c6` / 77 commits / old Actions; current head is `38a9406`, 56 files / 80 commits, Actions `44838085850/44838085857`. The last local test count belongs to the previous SHA. PR #27 is at `26768972`, Actions `44838133420` passed; PR #30 includes docs through `e1146ff`, one docs commit behind. Latest-head preview remains unverified.
+- ENV-07, Taplayad permission/protocol, Terms/Privacy, account deletion/export, and shared game/save/verified-event integration remain open.
+- No Auth setting, Supabase secret/grant/schema/data, SQL application, function deployment, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
