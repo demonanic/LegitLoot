@@ -5,7 +5,7 @@
 -- Deliberately outside supabase/migrations/ so no `db push` can pick it up, and never
 -- for production (production has a separate lineage and owner-gated cleanup).
 --
--- What it does (reversible, no data deleted):
+-- What it does (non-destructive, no data deleted; forward-only):
 --   1. Replaces both callback routines (private + public wrappers) with bodies that
 --      always raise, so no Offerwall.GG traffic can be processed or recorded.
 --   2. Revokes EXECUTE on all four from every role, including service_role.

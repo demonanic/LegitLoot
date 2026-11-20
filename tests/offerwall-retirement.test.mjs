@@ -85,6 +85,8 @@ test("proposed staging SQL retires the routines without deleting data or touchin
 
 test("proposed SQL recovery plan is forward-only and never restores the callback path", () => {
   const header = read("supabase/proposed/staging/20261120160000_offerwall_gg_retirement.sql").split("begin;")[0];
+  assert.ok(!/\breversible\b/i.test(header), "header must not call the retirement reversible (forward-only, no rollback)");
+  assert.match(header, /non-destructive, no data deleted; forward-only/);
   assert.match(header, /FORWARD-ONLY, FAIL-CLOSED/);
   assert.match(header, /Do NOT re-apply the record-only callback migration/);
   assert.ok(!/\bRollback:/i.test(header), "no rollback-to-old-path instructions");
