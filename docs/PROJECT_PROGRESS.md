@@ -1,10 +1,10 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 06:41 ET
+**Updated:** 2026-11-20 10:30 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
+**Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. Both games are LIVE on legitloot.site (early access, device-local saves, no account/LC connection). ZVHM = `demonanic/Legitloot-2` (owner-approved, identity resolved). Remaining: shared account/session handoff, cloud saves, server-verified idempotent LC events. Offerwall.GG containment/source alignment remains the owner's stated security focus.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
-**Production branch:** main @ bcc19d6; Cloudflare production deployment 75207a07 succeeded at 2026-11-20 04:11:50 UTC.
+**Production branch:** main @ 801f3e7 (PR #23, Rocket 2 Nowhere, owner-approved); previous bcc19d6 (PR #24). Cloudflare production deployment confirmed for 801f3e7, alias https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
 
@@ -39,7 +39,7 @@
 
 - Integration application baseline is 56b98e4; Actions run [44715079355](https://github.com/demonanic/LegitLoot/actions/runs/44715079355) passed for that baseline. Docs-only run [44719170874](https://github.com/demonanic/LegitLoot/actions/runs/44719170874) passed npm test but failed whitespace checks; follow-up run [44719451991](https://github.com/demonanic/LegitLoot/actions/runs/44719451991) also passed npm test and failed only because the five updated files had extra blank lines at EOF. This follow-up trims them. Production main is bcc19d6; production Pages deployment 75207a07 succeeded and aliases https://legitloot.site.
 - PR #20 head 6e2e51b: 58/58 pass (run 44661202504). PR #22 head 332ca07: 64/64 pass (run 44661225287), but its ZVHM identity assertion is invalid under §0.4. PR #22 is two commits ahead of PR #20.
-- PR #23 head 33a5240: draft, no Actions run. Cloudflare deployment 5c3dd1bf is preview-only, pages.dev alias, empty environment variables; inherited account/auth still targets production.
+- PR #23: merged to main as `801f3e7`; production deployment confirmed. Main-based previews (e.g. main.legitloot-preview.pages.dev) still inherit `account-auth.js` targeting production Supabase (ENV-07); do not use Account/auth routes there. Older draft-era evidence (head 33a5240, preview 5c3dd1bf) is historical.
 - PR #25 head 135607e: 54/54 Node tests and Deno type-check/handler tests passed (runs 44713338718, 44713338856). Its test guard excludes environment snapshots; new PR comment 7037024928 records the active staging-source gap. Its behind-side integration changes are docs/README-only.
 - PR #20's behind-side integration changes are docs/README-only; its application diff remains the 15-file Hustle/public-copy change. Its description remains stale; comment 7036351593 records the correction.
 - PR #21 (Claude-authored head 970dbbf) and PR #24 (head 6cb0a36) were merged by owner account demonanic. PR #21's production Pages deployment 6598c4c6 succeeded at 00:24:36 UTC; PR #24's production deployment 75207a07 succeeded at 04:11:50 UTC.

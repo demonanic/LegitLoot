@@ -1424,3 +1424,10 @@ No PR was merged and no deployment, Supabase setting/secret/grant/schema/data ch
 - Open PRs are #9, #20, #22, #23, #25 and #26. Branch count is 27; every branch still reports `protected=false`. PR #23 remains draft/no CI with production-targeted Account/auth on its preview. PR #22 retains the ZVHM identity/test blocker. No new standalone Claude handoff was found; PR #26 is the new verified Claude-authored artifact.
 - The documentation-only update sequence passed GitHub Actions through run [44729867195](https://github.com/demonanic/LegitLoot/actions/runs/44729867195), including npm tests and whitespace checks; no application code changed. PR #26's branch previews are not production deployments.
 - No PR was merged, no production/staging deploy was initiated, and no Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
+## 2026-11-20 10:30 ET — Status update (history above preserved)
+
+- **GAME-02 resolved:** `demonanic/Legitloot-2` is the owner-approved Zombies vs Heavy Metal (owner decision 2026-11-19 19:40 ET, re-confirmed 2026-11-20; blocker withdrawn in PR #22 comment 7041463948).
+- **Rocket 2 Nowhere is live:** production `main` `801f3e7` (PR #23, owner-approved); production deployment confirmed. Early access, device-local saves, no account/LC connection.
+- **ENV-07 open (owner decision):** main-based previews inherit `account-auth.js` that targets production Supabase and exposes signup; see `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` 2026-11-20 10:30 ET. Do not use Account/auth routes on them.
+- **M2-T4 remains IN PROGRESS:** shared account/session handoff, cloud saves and server-verified idempotent LC-event ingestion are not implemented.

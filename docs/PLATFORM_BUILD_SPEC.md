@@ -38,7 +38,7 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 - The official initial-launch titles are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**.
 - The owner states both are playable as-is. This is a product decision, not independent technical evidence; each still requires verification of its actual playable URL/source, mobile behavior, central account integration, and save persistence.
 - **Corrected 2026-11-20 (owner decision, supersedes the earlier exclusion sentence):** `demonanic/Legitloot-2` (https://demonanic.github.io/Legitloot-2/) **is** the owner-approved Zombies vs Heavy Metal build. Its working title was Zombie Invasion Defense; the repository was renamed in commit `fcf4000` and the player-facing title is Zombies vs Heavy Metal. The owner identified it on 2026-11-19 19:40 ET (see Master Execution Control) and re-confirmed it on 2026-11-20. It is a launch game. Do not treat the old working title as a separate game.
-- Exact source repositories and playable hosting URLs remain UNLOCATED in the connected GitHub account and handoffs. Do not invent URLs or wire unrelated projects.
+- **Sources now located (2026-11-20):** Zombies vs Heavy Metal = `demonanic/Legitloot-2`, played at https://demonanic.github.io/Legitloot-2/ and embedded at `/zombies-vs-heavy-metal`. Rocket 2 Nowhere = the in-repository build `games/rocket-2-nowhere/index.html`, played at `/rocket-2-nowhere`. Still unverified: shared account/session handoff, cloud saves, server-verified LC events, and independent mobile-control testing.
 
 ### Implementation status — 2026-11-20 (supersedes the 04:55 ET recheck, which is withdrawn)
 
