@@ -1,9 +1,9 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 01:56 ET
+**Updated:** 2026-11-20 01:57 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate the two owner-selected launch games; both have early-access candidates, ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` @ `42cf97c`; PR #20's base `387d035` is 45 commits behind by ancestry, but compare shows only the five shared control documents differ
+**Integration branch:** `build/legitloot-neon-synthwave` @ `c25df5c`; PR #20's base `387d035` is 47 commits behind by ancestry, but compare shows only the five shared control documents differ
 **Production branch:** `main` @ `bcc19d` (PR #24 merged; Cloudflare production deployment succeeded)
 **Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, 58/58 CI; application diff unchanged); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI; application diff unchanged); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #25 Offerwall.GG wall-URL source alignment (draft/mergeable, head `61f9ca8`, 54/54 Node plus Deno checks); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
 
@@ -726,4 +726,10 @@ Owner explicitly authorized preparation and testing of production containment, p
 
 ## 2026-11-20 01:56 ET — Documentation CI correction
 
-- The push workflow for documentation commit `5236e7e` ran the full Node suite successfully (50/50) but failed `git diff --check` because the updated `Last updated` and `Last verified` metadata lines retained Markdown trailing spaces. Those two added trailing spaces were removed in this follow-up. No application files or tests changed; the correction is documentation-only. Verify the next push run before treating the coordination update as CI-clean.
+- The push workflow for documentation commit `5236e7e` ran the full Node suite successfully (50/50) but failed `git diff --check` on trailing spaces in the updated `Last updated` and `Last verified` metadata lines. Follow-up documentation commit `c25df5c` removed those spaces; Actions run [44692358619](https://github.com/demonanic/LegitLoot/actions/runs/44692358619) then passed 50/50 and the whitespace check. No application files or tests changed.
+
+
+## 2026-11-20 01:57 ET — Documentation CI verified
+
+- Follow-up commit `c25df5c` is the current integration head. Actions run [44692358619](https://github.com/demonanic/LegitLoot/actions/runs/44692358619) completed successfully: Node suite 50/50 and `git diff --check` passed. The prior run [44692216892](https://github.com/demonanic/LegitLoot/actions/runs/44692216892) had the same 50/50 tests but failed only on the two metadata trailing-space lines now corrected.
+- PR #25 remains draft and integration-only; its base `e868121` is now eight documentation-only commits behind integration. Application files did not change in the follow-up; no resync is needed solely for documentation.
