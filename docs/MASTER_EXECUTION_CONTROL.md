@@ -1,7 +1,7 @@
 # LEGITLOOT — MASTER EXECUTION CONTROL
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
-**Status:** ACTIVE — owner-authorized  
+**Last updated:** 2026-11-20 16:23 ET
 **Last updated:** 2026-11-20 15:20 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
@@ -92,7 +92,7 @@ The release candidate must truthfully provide:
 6. PR #23 published with owner approval (main `801f3e7`). Before any account testing on main-based previews, a separate owner-approved PR must make main's auth target fail closed or staging-only (ENV-07).
 7. Record exact evidence and unresolved dependencies. No production release without separate owner approval.
 
-**Immediate next action (as of 2026-11-20 14:45 ET):** Offerwall.GG stays retired/inert; no merge/deploy without the owner gate. PR #29 is ACCEPTED source-only at `0014d3a`; do not deploy tombstones or apply the proposed SQL until the exact staging ref and live routine grants/state are independently re-checked and a separate staging gate is recorded. PR #28 (ENV-07 guard) awaits owner review. Claude: (1) get PR #27 accepted and keep records current; (2) next bounded M2-T4b-R1 step is staging registry rows (`development`/unlisted/no launch URL) after DaVinci accepts it; (3) combined Hustle/LC-only release shape (#20 + #26 registry) per Sync Watch #12 once assigned. DaVinci reviews exact SHAs.
+**Immediate next action (as of 2026-11-20 16:23 ET):** Keep Offerwall.GG permanently retired. PR #29 exact head `230b7bf` remains CHANGES REQUIRED for the historical-test header/source-label/guard gaps and the proposed SQL's inaccurate `reversible` label despite its forward-only, no-rollback recovery plan. Claude fixes tests and records only; DaVinci re-reviews the exact resulting SHA. The proposed SQL remains unapplied and staging callback functions remain untouched. PR #27's documentation branch now includes the Sync Watch #14 debrief at `c16a01a`; its two Pages previews succeeded, while CI run `44819645801` is still in progress after `npm test` succeeded and the whitespace check remains pending. Claude must refresh `CLAUDE.md`'s verified-state block, `PROJECT_PROGRESS.md`, `ENVIRONMENT_SOURCE_OF_TRUTH.md`, and `LAUNCH_READINESS_AUDIT.md`, then hand off exact SHAs. ENV-07 remains critical: main-based preview `fdf6b609` is `main@801f3e7` and loads production Supabase auth; PR #28 is draft to `main` and owner-gated. Keep Account/auth routes off that preview. M2-T4 remains in progress: staging has only the placeholder registry row and no verified game-event/LC path. Once these blockers are closed, review #20 + #22 + #26 as one release unit; do not release #20 alone. No production merge/deploy, staging SQL/deploy, provider activation, financial activity, or other owner-gated changes without explicit authorization.
 
 ### Supporting M2 work
 
@@ -1881,3 +1881,9 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Launch scope:** Zombies vs Heavy Metal and Rocket 2 Nowhere remain early access on the website, but staging registry/session/save/event integration is not complete; no verified game-event LC path exists. Cash/withdrawal wallet contract, legal/support/account-deletion items, and signup-state verification remain launch blockers.
 - **Boundaries:** no PR merge, deployment, SQL apply, callback, publisher setting, provider agreement, secret/config/grant change, schema/data change, financial action, or money movement. Only read-only checks and the two actionable PR comments plus this coordination debrief were performed.
 - **Next action:** Claude to correct PR #29’s historical-only test framing and synchronize PR #27’s current-state headers/next-action plus Environment Source of Truth and Launch Readiness Audit. DaVinci re-reviews exact resulting SHAs. Keep ENV-07 Account/auth routes unused on the main preview; production merge/deploy remains owner-gated.
+
+## 2026-11-20 16:23 ET — DaVinci follow-up (PR #29 risk-label correction; PR #27 documentation commit)
+
+- **Additional PR #29 finding:** `supabase/proposed/staging/20261120160000_offerwall_gg_retirement.sql:9` calls the retirement “reversible,” contradicting the later forward-only/no-rollback recovery plan and requirement for a new owner decision before restoring prior behavior. Requested “non-destructive, no data deleted; forward-only” plus a regression assertion in the updated PR comment [7050917438](https://github.com/demonanic/LegitLoot/pull/29#issuecomment-7050917438).
+- **PR #27 debrief commit:** DaVinci appended Sync Watch #14 at `c16a01a` on `claude/log-ack-charter`. Cloudflare built that documentation commit successfully in both Pages projects as `environment=preview` with pages.dev aliases and no deployment env vars (deployments `d9d00dce` and `8d34c3da`). Actions run `44819645801` was still in progress at this check: `npm test` succeeded; whitespace check had not yet completed. No merge/deploy occurred.
+- **Current handoff:** Claude to close the PR #29 test/SQL wording findings and refresh the PR #27 current-state headers and working environment/launch records. DaVinci re-reviews exact SHAs. All production, provider, financial, SQL-application and deployment gates remain unchanged.
