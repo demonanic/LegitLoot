@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-19 22:52 ET  
+**Last updated:** 2026-11-19 23:02 ET  
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API reports `protected:false`; branch-protection details returned 403 and no repository rulesets were returned (2026-11-19). Do not describe `main` as technically protected until verified.  
@@ -1537,7 +1537,7 @@ Owner explicitly authorized preparation and testing of production containment, p
 - PR #20 remains non-draft at `6e2e51b`, based on `387d035`; Actions run `44661202504` passed 58/58. Comparing its current head with the previously reviewed `2081d0f` shows only the five shared documentation files changed; its 15-file application/test diff is unchanged. Its base is now 31 commits behind integration, and the compare reports changes only in those five documentation files. Do not resync or merge without a new integration disposition.
 - PR #22 remains at `332ca07`, stacked on PR #20 head `6e2e51b`; Actions run `44661225287` passed 64/64. Comparing it with the previously reviewed `c70c3d3` likewise shows only the five shared documentation files changed; the reviewed game application diff is unchanged.
 - PR #23 remains a draft on `main` at `33a5240`, with no Actions run. Its Cloudflare previews succeeded, but its Account page inherits main's production-targeting `account-auth.js`.
-- PR #24 remains a draft on `main` at `fb2e890`. Actions run `44670475596` ran on this exact head and passed all 3 Deno 2.9.8 tests. The candidate handler returns HTTP 410 for every method; the SQL revocation remains documentation only. Its preview also inherits main's production-targeting Account auth.
+- PR #24 remains a draft on `main` at `fb2e890`. Actions run `44670475596` ran on this exact head and passed all 3 Deno 2.9.8 tests. Independent COMMENT review `5987368371` confirms the inert handler/test scope and re-verifies the live production issuer path; the candidate handler returns HTTP 410 for every method, while SQL revocation remains documentation only. Its preview also inherits main's production-targeting Account auth.
 - PR #9 remains an old non-mergeable draft. No new standalone Claude handoff file was found; the current handoff is in `CLAUDE.md`, Master Control, and the PR comments.
 - Twelve consecutive commits between `a263cfaf` and `87a28c5` were documentation-only updates. No application code changed in that burst. Batch future multi-document debriefs into one commit where practical to reduce synchronization churn.
 
