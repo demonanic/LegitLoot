@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 18:20 ET by DaVinci (read-only GitHub and Supabase review; Cloudflare preview evidence from PR deployment comments). Record edited 2026-11-20 18:20 ET.
+**Last verified:** 2026-11-20 18:31 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:31 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1154,3 +1154,16 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 ### Migration-provenance discrepancy
 - Candidate `tests/wallet-summary.test.mjs:4–6,31–35,81–85` names repository files `20261109010000_align_wallet_summary_response.sql` and `20261108120000_standard_lootcoins_wallet.sql` as the applied staging/production migrations. Live Supabase migration history lists `20261109050922 align_wallet_summary_response_with_staging_frontend` and `20261108081619 standard_lootcoins_wallet`. The source-to-applied mapping is not established; correct the provenance or label the test as static source/fixture coverage.
 - No Supabase auth setting, secret, function, grant, schema, data, migration or provider configuration was changed. All SQL calls were SELECT-only.
+
+
+## 2026-11-20 18:31 ET — Sync Watch #17 follow-up: source-only wallet proposal and account UI gate
+
+- PR #30 latest head is `ab5052250db976ceb7f2274ed5a8d79d45ec7bac`, draft. It adds an LC-only response shape to `supabase/functions/wallet-summary/index.ts`, a proposed staging RPC file at `supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql` (DO NOT APPLY), removes the candidate Create Account UI/client handler, and clarifies the wallet test as static fixture/parser coverage. Node/whitespace `44837137548` and Deno `44837137501` pass; Claude reports local 79/79. Browser test unrun; no new Pages preview status returned for this SHA.
+- **No deployed change:** production/staging `public.get_wallet_summary()` remain cash/USD-bearing; production `wallet-summary` v4 remains active with its old cash response. The proposed SQL is outside `supabase/migrations` and was not applied; the Edge Function source was not deployed.
+- **Ledger-account confirmation:** fresh aggregate SELECTs found `lootcoins_available` rows with `wallet_kind=game_credits,currency_code=LC` in both projects. Production also has legacy `game_credits_available/provisional/deferred` accounts with `currency_code=LLC`. The candidate's new `lootcoins_*` response keys align with the LC-coded account family.
+- **Edge Function parity defect:** `supabase/functions/wallet-summary/index.ts:41–67` still selects all non-system accounts and all journal entries, does not filter `currency_code='LC'`, does not check entry currency against account currency, and does not filter journal transactions to `status='posted'`. The proposed RPC does those checks. Align the Edge Function with the RPC or retire it before any deployment; account page currently calls the RPC directly.
+- **Proposed SQL ACL wording:** `supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql:3–5,57–58` claims no grant change but includes REVOKE/GRANT statements. Current live RPC ACLs are authenticated + service_role EXECUTE; anon/public false. Preserve and assert this exact ACL or accurately document the intended change. File remains DO NOT APPLY.
+- **Account onboarding UI:** candidate removes the Create Account tab/form and client `auth.signUp()`, but `account.html:5` still says “Sign in or create an account”; line 9 says no personal information is collected while sign-in/reset fields remain. Test title “public sign-up stays closed” is UI-only; Auth `disable_signup` was not read or changed and the last recorded production probe was false. `wallet-summary.js:4–8` still has stale migration-applied wording.
+- **Migration provenance:** `tests/wallet-summary.test.mjs` now correctly labels its fixtures static and lists staging applied version `20261109050922` / production `20261108081619`; equivalence to the differently-prefixed repository SQL remains unproven. Do not treat the test as live DB verification.
+- **Docs/candidate alignment:** PR #27 is at `aae268f`, Actions `44837195049` passed. PR #30 contains docs through `e199df3` only, so it is one docs commit behind. Current PR #30 body still cites `9f2c9a0` and old Actions even though Claude's comment `7053199149` says it was refreshed. New candidate preview status is unverified.
+- All Supabase calls were SELECT-only. No Auth settings, secrets, grants, functions, migrations, schema, data, callbacks, provider settings or financial activity changed.
