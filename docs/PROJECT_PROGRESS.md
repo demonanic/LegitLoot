@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 17:50 ET
+**Updated:** 2026-11-20 17:58 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on `legitloot.site` in early access with device-local saves and no account/LC connection. Remaining: shared account/session handoff, cloud saves, trusted server-verified LC events. Offerwall.GG permanent retirement is a security subtask; the owner reports postback URL removal from all attempted/successful placements, but technical retirement and placement disable/delete are not verified.
 **Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6` (last commit 14:28 ET). PR #27 is a separate documentation branch based on this integration head.
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-20 17:50 ET):** #9 stale draft; #20 head `6e2e51b` (58/58, 15 ahead/119 behind); #22 head `332ca07` (64/64, 17 ahead/119 behind, stacked on #20); #25 superseded draft; #26 head `30f5dbf` (59/59, stacked on #20; its three registry/test blobs are identical to #29); #27 docs branch `4c7dfc3` (Actions `44831567538` passed; `legitloot-preview` succeeded and `legitloot` preview remains active/no alias); #28 draft `93f62ac` against main (guard, Actions `44791797759` passed, owner-gated); #29 head `cfe9f0a` (Node `44831268131` and Deno `44831268125` pass; source-only owner review accepted; browser test unrun); #30 consolidated draft `272a1c1` (30 ahead/0 behind integration, 43 files; Node `44831521863` and Deno `44831521848` pass; both Pages previews success; review-only, not for merge/deploy).
+**Current open PRs (2026-11-20 17:58 ET):** #9 stale draft; #20 head `6e2e51b` (58/58); #22 head `332ca07` (64/64, stacked on #20); #25 superseded draft; #26 head `30f5dbf` (59/59, stacked on #20); #27 docs branch head `ca346ff` (latest DaVinci debrief; no GitHub CI status attached to the preceding docs-only head `46c1ffc`; previews succeeded); #28 head `93f62ac` DRAFT against main (Actions `44791797759` passed; owner-gated); #29 head `cfe9f0a` (Node `44831268131` and Deno `44831268125` pass; accepted for source-only owner review; SQL unapplied and functions undeployed); #30 head `b85aa8b` consolidated DRAFT (52 changed files; Node/whitespace `44832985972` and Deno `44832985927` pass; both Pages previews succeeded as `environment=preview`; browser test unrun; review only, not for merge/deploy).
 
 ## Current owner-locked operating rules
 
@@ -900,3 +900,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **PR #30 current head `b773274`** (supersedes `272a1c1`, `9f2c9a0`): merged PR #27 `4c7dfc3` (production `main@801f3e7`, owner ZVHM-source decision in README/Platform Build Spec), removed the `offerwall-verification` meta from `index.html` with a regression test (origin inferred from tag name and the 2026-11-08 release commit, not provider-confirmed), and documented the internal-tool access boundary. Local `npm test` 76/76; Actions Node `44832701771` and Deno `44832701665` pass; browser test `tests/earn-hub.browser.py` unrun. DaVinci withdrew the ZVHM source blocker (PR #22 comment 7052568879, PR #30 comment 7052569293). Re-review requested. The candidate carries PR #27's records as of the merge point; a further sync to this PR #27 head follows.
 - **Internal-tool access boundary (Master Control §630):** `/admin.html` and `/payout-simulator.html` are static Pages routes whose HTML shells are publicly fetchable (not linked from other pages or `sitemap.xml`; no `noindex`). Access is gated at the **data/action level** only: exact-staging-URL guards (ENV-06), authenticated Edge Functions and owner/admin-role RPCs; no production payout-simulator function and no PayPal/Venmo call. This is **not** URL-level denial. A URL-level gate (e.g. Cloudflare Access) or `noindex` needs separate owner approval; no Cloudflare/security setting was changed.
 - No merge, deploy, SQL application, callback, provider setting or financial action occurred.
+
+
+## 2026-11-20 17:58 ET — Sync Watch #16 independent debrief
+
+- PR #30 is at `b85aa8b` (52 files); exact-head Node/Deno Actions pass and both Cloudflare previews succeeded as preview deployments. PR description and several current-state documentation blocks remain stale.
+- Production `main@801f3e7` still exposes cash/withdrawal UI and signup; production wallet RPC/Edge Function return USD cash fields. The main-based preview remains production-auth-connected. Owner-approved signup pause is not independently verified.
+- Staging Offerwall.GG wall-url v5 remains active/JWT and postback v8 active/no-JWT record-only; disabled Offerwall.GG row retains LC reward metadata. Game registry has one placeholder row; private game events/saves/handoff tickets are empty.
+- Candidate is LC-only and Taplayad-pending with the exact owner template, but its wallet parser does not validate the staging `LLC` response label against LC. Terms/Privacy, deletion/export, trusted game events and browser validation remain incomplete.
+- Current and legacy Tplayad docs define incompatible signature and retry/transaction contracts; neither is confirmed for App 10066, and incentivized-traffic permission is not established. Keep the publisher pending.
+- Admin and payout-simulator static shells are publicly fetchable although §630 says inaccessible to anonymous/public users; URL-level restriction/noindex needs an owner decision.
+- No merge, deploy, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
