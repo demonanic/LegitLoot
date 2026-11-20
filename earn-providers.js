@@ -58,33 +58,20 @@
 
   const providers = Object.freeze([
     Object.freeze({
-      id: "offerwall-gg",
+      id: "taplayad",
       kind: "provider",
-      name: "Offerwall.GG",
+      name: "Taplayad",
       symbol: "◈",
       categories: Object.freeze(["offerwall"]),
       kicker: "Offerwall",
-      description: "Third-party offerwall. Offers and eligibility are set by the provider and will only be shown once the integration is approved and verified. Partner offers do not award Legit Coins.",
+      description: "Planned initial Hustle partner. Offers and eligibility are set by the provider and will only be shown once the integration is approved and verified. Partner offers do not award Legit Coins.",
       state: "pending_approval",
-      stateDetail: "Publisher approval is pending. The wall stays unavailable until approval, server secrets, callback verification and ledger tests are complete.",
-      launch: Object.freeze({
-        type: "server-wall-url",
-        functionName: "offerwall-gg-wall-url",
-        allowedOrigins: Object.freeze(["https://offerwall.gg"]),
-        pathPrefix: "/wall/"
-      })
-    }),
-    Object.freeze({
-      id: "cpagrip",
-      kind: "provider",
-      name: "CPAGrip",
-      symbol: "◆",
-      categories: Object.freeze(["offerwall", "cpa"]),
-      kicker: "Offerwall · CPA network",
-      description: "Third-party CPA network offerwall. Offers and eligibility are set by the provider and will only be shown once the integration is verified. Partner offers do not award Legit Coins.",
-      state: "testing",
-      stateDetail: "The callback receiver is being built and tested on our staging system. Not open to players.",
-      // No launch endpoint until the server-side wall-link function is built and verified.
+      stateDetail: "Not open. Waiting on written provider confirmation and our own verification. Nothing can be opened or earned here yet.",
+      // Recorded wall template (owner-supplied, App 10066). Descriptive only: never opened or
+      // fetched by the browser. No launch endpoint until incentivized-traffic permission, the
+      // exact wall URL, signature coverage, transaction identity, reversal linkage and
+      // retry/duplicate behavior are confirmed in writing and verified server-side.
+      recordedTemplate: "https://offerwall.tplayad.com/10066/{user_id}",
       launch: null
     }),
     Object.freeze({
