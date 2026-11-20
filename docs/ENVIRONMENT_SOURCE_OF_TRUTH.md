@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-19 22:52 ET  
+**Last verified:** 2026-11-19 23:02 ET  
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -37,11 +37,11 @@ Read-only connector inventory on 2026-11-19:
 
 - Project status: ACTIVE_HEALTHY
 - Database engine: PostgreSQL 17
-- Applied migration history: 21 entries, latest version `20261118080655` (`game_platform_foundation`)
+- Applied migration history: 21 entries, latest version `20261119145340` (`offerwall_gg_record_only`)
 - Deployed Edge Functions:
   - `offerwall-gg-wall-url` v5, verify_jwt=true
-  - `cpagrip-attribution` v4, verify_jwt=true
-  - `offerwall-gg-postback` v7, verify_jwt=false
+  - `cpagrip-attribution` v5, verify_jwt=true
+  - `offerwall-gg-postback` v8, verify_jwt=false
   - `provision-initial-owner` v7, verify_jwt=true
   - `admin-dashboard` v7, verify_jwt=true
   - `payout-simulator` v6, verify_jwt=true
@@ -50,7 +50,7 @@ Read-only connector inventory on 2026-11-19:
 
 ## 3. Immediate differences and drift to reconcile
 
-1. Staging has 20 migration records; production has 7. Staging includes admin/payout-simulator, CPAGrip, Offerwall metadata, and game-platform migrations absent from production's migration history.
+1. Staging has 21 migration records (latest `20261119145340 offerwall_gg_record_only`); production has 7. Staging includes admin/payout-simulator, CPAGrip, Offerwall metadata, and game-platform migrations absent from production's migration history.
 2. Staging has six deployed functions; production has three. `cpagrip-attribution`, admin, payout simulator, and owner provisioning are staging-only at this observation point.
 3. Production has `wallet-summary` deployed even though the current production public account client may use a direct RPC; determine whether it is live dependency or orphaned.
 4. Production and staging function versions differ substantially. Export source for each deployed function and compare against GitHub before any update.
@@ -734,3 +734,12 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - PR #24 remains draft at head `fb2e890`. GitHub Actions run [`44670475596`](https://github.com/demonanic/LegitLoot/actions/runs/44670475596) completed successfully on PR merge commit `f54fc1e`; Deno `2.9.8` ran `index_test.ts`: **3 passed, 0 failed** (GET, POST, OPTIONS; 410/no-store; POST body not read).
 - The pure-handler split is therefore test-verified. The run validates only the inert handler and test isolation; it does not verify deployed production containment, SQL grants, callback behavior, provider dashboard settings, or preview auth.
 - PR comment `7029857955` was updated with the successful run. PR #24 remains a draft and owner-gated. No merge, deploy, Supabase change, callback, or publisher setting change occurred.
+
+## 2026-11-19 23:02 ET — Independent read-only verification
+
+- Both Supabase projects are ACTIVE_HEALTHY. Production has 7 migrations and functions `offerwall-gg-postback` v3 ACTIVE/`verify_jwt=false`, `wallet-summary` v4 ACTIVE, and `offerwall-gg-wall-url` v1 ACTIVE/`verify_jwt=true`. Staging has 21 migrations through `20261119145340 offerwall_gg_record_only`; functions are `payout-simulator` v6, `provision-initial-owner` v7, `cpagrip-attribution` v5, `offerwall-gg-postback` v8, `offerwall-gg-wall-url` v5, and `admin-dashboard` v7 (all ACTIVE; JWT verification remains enabled except the postback functions).
+- Production `private.providers` still has Offerwall.GG disabled with stale LC/LootCoins reward metadata and null terms/approval fields. Live private/public `process_offerwall_gg_postback(uuid,text,text,bigint,text,text,text,text)` routines are SECURITY DEFINER and grant EXECUTE to `service_role`; the private routine calls `private.post_journal_transaction`. Production postback v3 still invokes the public wrapper. Staging providers contain only disabled Offerwall.GG and CPAGrip rows; Taplayad is absent.
+- Staging `public.game_registry` has one row: `zid` / `zombie-invasion-defense`, development, unlisted, null launch URL. `private.game_saves`, `private.game_events`, and `private.game_handoff_tickets` each have zero rows; no challenge/milestone/season tables exist.
+- The owner-supplied Taplayad App-10066 template remains `https://offerwall.tplayad.com/10066/{user_id}`. Current docs use `md5(app_id . user_id . api_secret)` without a transaction-ID macro; legacy docs use `transId` and `md5(subId . transId . reward . secret)`. Current docs describe status 1/2 and `offer_id + user_id` deduplication; legacy docs describe `OK`/`DUP` and up to five retries after 60 seconds. These remain incompatible and neither authenticates the full callback payload. Current Terms do not establish app-specific incentivized-traffic permission.
+- No database settings, secrets, grants, schema, data, functions, callbacks, or publisher settings were changed.
+

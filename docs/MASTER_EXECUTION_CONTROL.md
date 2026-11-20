@@ -1529,3 +1529,36 @@ Owner explicitly authorized preparation and testing of production containment, p
 - PR #24 remains draft at head `fb2e890`. GitHub Actions run [`44670475596`](https://github.com/demonanic/LegitLoot/actions/runs/44670475596) completed successfully on PR merge commit `f54fc1e`; Deno `2.9.8` ran `index_test.ts`: **3 passed, 0 failed** (GET, POST, OPTIONS; 410/no-store; POST body not read).
 - The pure-handler split is therefore test-verified. The run validates only the inert handler and test isolation; it does not verify deployed production containment, SQL grants, callback behavior, provider dashboard settings, or preview auth.
 - PR comment `7029857955` was updated with the successful run. PR #24 remains a draft and owner-gated. No merge, deploy, Supabase change, callback, or publisher setting change occurred.
+
+## 2026-11-19 23:02 ET — Independent Sync Watch: current PRs, production controls, games, and Taplayad
+
+### Repository, branches, PRs, and CI
+- Integration branch is `87a28c5`; production `main` remains `4e0f533`. The branch inventory contains 25 refs. Open PRs are #9, #20, #22, #23, and #24; PR #21 is merged.
+- PR #20 remains non-draft at `6e2e51b`, based on `387d035`; Actions run `44661202504` passed 58/58. Comparing its current head with the previously reviewed `2081d0f` shows only the five shared documentation files changed; its 15-file application/test diff is unchanged. Its base is now 31 commits behind integration, and the compare reports changes only in those five documentation files. Do not resync or merge without a new integration disposition.
+- PR #22 remains at `332ca07`, stacked on PR #20 head `6e2e51b`; Actions run `44661225287` passed 64/64. Comparing it with the previously reviewed `c70c3d3` likewise shows only the five shared documentation files changed; the reviewed game application diff is unchanged.
+- PR #23 remains a draft on `main` at `33a5240`, with no Actions run. Its Cloudflare previews succeeded, but its Account page inherits main's production-targeting `account-auth.js`.
+- PR #24 remains a draft on `main` at `fb2e890`. Actions run `44670475596` ran on this exact head and passed all 3 Deno 2.9.8 tests. The candidate handler returns HTTP 410 for every method; the SQL revocation remains documentation only. Its preview also inherits main's production-targeting Account auth.
+- PR #9 remains an old non-mergeable draft. No new standalone Claude handoff file was found; the current handoff is in `CLAUDE.md`, Master Control, and the PR comments.
+- Twelve consecutive commits between `a263cfaf` and `87a28c5` were documentation-only updates. No application code changed in that burst. Batch future multi-document debriefs into one commit where practical to reduce synchronization churn.
+
+### Game and staging state
+- PR #22 still contains the two owner-selected early-access game routes: Zombies vs Heavy Metal and Rocket 2 Nowhere. Both are device-save only; neither has shared LegitLoot account/session handoff, cloud saves, or verified LC-event ingestion.
+- Read-only staging SQL confirms `public.game_registry` still has only the unlisted `zid` / `zombie-invasion-defense` development row with null launch URL. `private.game_saves`, `private.game_events`, and `private.game_handoff_tickets` each contain 0 rows. No challenge, milestone, or season tables were found.
+- Staging `offerwall-gg-postback` v8 is ACTIVE with `verify_jwt=false`, but its current source accepts only record-only results and writes provider metadata; it does not post journal entries. Staging providers contain disabled Offerwall.GG and CPAGrip rows; Taplayad is absent.
+
+### Critical production policy and preview findings
+- Production Supabase `gkbqderyjcuxnjbsiffb` still has `offerwall-gg-postback` v3 ACTIVE with `verify_jwt=false`. Its deployed source calls `process_offerwall_gg_postback`. Live private and public routines have the exact signature documented in PR #24, are SECURITY DEFINER, and grant EXECUTE to `service_role`; the private routine calls `private.post_journal_transaction`. The production provider row is marked disabled but retains stale LC/LootCoins reward metadata and has no terms/approval evidence. The prohibited provider-to-LC path remains technically callable. No containment was deployed or applied.
+- Production `main` still violates the owner-locked rewards model in its public pages: `rewards.html` says Offerwall.GG completions credit LC and describes cash rewards/withdrawal states; `account.html` renders cash wallet and withdrawal-reserved fields; `earn.html` still uses Earn terminology and says provider completions credit LC. `account-auth.js` hardcodes the production Supabase URL and has an active `auth.signUp` path. Terms and Privacy remain placeholders. PR #20 corrects some public copy and removes cash UI, but its client config is staging-only and is not a production release artifact.
+- PR #23/#24 previews are classified as Cloudflare previews, but their inherited `account-auth.js` still targets production and exposes sign-up. Do not use Account, sign-in, sign-up, or recovery on those previews. PR #22 is different: it requires the exact staging config and fails closed.
+- The production sign-up pause remains NOT VERIFIED; no Auth setting change was made.
+
+### Taplayad App 10066 protocol check
+- Preserve the owner-supplied wall template exactly: `https://offerwall.tplayad.com/10066/{user_id}`. The current public docs list `user_id,payout,reward,offer_id,status,sig`, status 1=credited and 2=reversed, and signature `md5(app_id . user_id . api_secret)`; they provide no unique transaction-ID macro and show deduplication by `offer_id + user_id`. The current example accepts any 2xx response.
+- Legacy docs instead list `transId` and signature `md5(subId . transId . reward . secret)`, expect `OK`/`DUP`, and describe retries up to five times after 60 seconds. The protocols are incompatible; neither signature binds the complete status/reward/payout/offer/transaction payload. Current public Terms do not establish App-10066-specific permission for LegitLoot's incentivized traffic model.
+- Keep Taplayad unintegrated and record-only. Do not save publisher settings, send callbacks, accept terms, or map the publisher's $1=1 points multiplier or `{reward}`/`{payout}` into LC or cash.
+
+### Actions and next gates
+- PR #24's inert-handler tests are now independently verified on the exact head. The candidate is ready for an owner decision on two separate production actions: (1) revoke service_role EXECUTE on the exact private/public callback wrappers, and (2) deploy the HTTP 410 handler. Neither action has occurred; each remains separately owner-gated. The SQL revokes block the current callback-wrapper path, not every possible privileged owner/service-role action elsewhere in the database.
+- The main-based preview-auth guard remains a separate owner decision. The game account/save/event pipeline and LC challenge pipeline remain incomplete. Taplayad needs written confirmation of the active App-10066 protocol, complete signed transaction/reversal semantics, and incentivized-traffic permission.
+- No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting save/removal, provider agreement, payment, reward issuance, or money movement occurred in this check.
+

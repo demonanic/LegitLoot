@@ -1,11 +1,11 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-19 22:52 ET
+**Updated:** 2026-11-19 23:02 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T4 — both owner-selected game titles have playable early-access candidates; ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` — latest Sync Watch documentation head; PR #20 base remains `387d035` and the intervening changes are documentation-only
+**Active task:** M2-T4 — integrate the two owner-selected launch games; both have early-access candidates, ZVHM is live, RXT2 is preview-only
+**Integration branch:** `build/legitloot-neon-synthwave` @ `87a28c5`; PR #20's base `387d035` is 31 commits behind, with changes limited to the five shared documentation files
 **Production branch:** `main` @ `4e0f533`
-**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI, application diff unchanged; base behind integration only by documentation-only Sync Watch commits); #22 game integration (head `332ca07`, base PR #20 head `6e2e51b`, 2 ahead / 0 behind, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `7a31165`, Deno tests unrun); #9 stale visual redesign draft.
+**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI; reviewed application diff unchanged); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI; reviewed application diff unchanged); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `fb2e890`, Deno 2.9.8 tests 3/3 pass, not deployed); #9 stale non-mergeable visual redesign draft. PR #21 is merged to main.
 
 ## Current owner-locked operating rules
 
@@ -670,3 +670,15 @@ Owner explicitly authorized preparation and testing of production containment, p
 - PR #24 remains draft at head `fb2e890`. GitHub Actions run [`44670475596`](https://github.com/demonanic/LegitLoot/actions/runs/44670475596) completed successfully on PR merge commit `f54fc1e`; Deno `2.9.8` ran `index_test.ts`: **3 passed, 0 failed** (GET, POST, OPTIONS; 410/no-store; POST body not read).
 - The pure-handler split is therefore test-verified. The run validates only the inert handler and test isolation; it does not verify deployed production containment, SQL grants, callback behavior, provider dashboard settings, or preview auth.
 - PR comment `7029857955` was updated with the successful run. PR #24 remains a draft and owner-gated. No merge, deploy, Supabase change, callback, or publisher setting change occurred.
+
+## 2026-11-19 23:02 ET — Independent Sync Watch update
+
+- Integration is `87a28c5`; production remains `4e0f533`. PR #20 and #22 application diffs are unchanged since their independent reviews; their CI runs remain green (58/58 and 64/64). PR #20 is 31 documentation-only commits behind integration; do not resync until an owner-approved integration disposition.
+- PR #24 head `fb2e890` is now test-verified: Actions run `44670475596` passed 3/3 Deno 2.9.8 tests. It remains draft and undeployed. The prepared SQL is not applied.
+- Production Offerwall.GG v3 remains active and can still call the SECURITY DEFINER journal-posting path despite the provider row being disabled. This is a critical owner-gated policy violation.
+- Production main still contains provider-to-LC copy, cash/withdrawal wallet fields, public sign-up code, and placeholder Terms/Privacy. The PR #20 candidate is staging-configured and cannot be treated as a production release.
+- Main-based PR #23/#24 previews inherit production-targeting Account auth; never use their Account/auth flows. PR #22 remains staging-only/fail-closed.
+- Staging still has only the unlisted ZID registry placeholder, no game saves/events/handoff tickets, no challenge/milestone/season tables, and no Taplayad provider row. The two selected games remain device-save early access without shared account/save or LC-event integration.
+- Taplayad current and legacy docs remain incompatible on signature fields, transaction identity, reversal/retry semantics, and response contract; no App-10066-specific incentivized-traffic permission is verified. Keep it record-only and outside LC.
+- No production/staging changes or financial/provider actions occurred. See the matching Master Control and Environment Source of Truth debriefs for exact evidence.
+
