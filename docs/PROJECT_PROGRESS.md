@@ -1,11 +1,11 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-19 20:10 ET
+**Updated:** 2026-11-19 21:29 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T4 — integrate the owner-selected launch games; Zombies vs Heavy Metal is live on production, while Rocket 2 Nowhere remains unresolved
-**Integration branch:** `build/legitloot-neon-synthwave` @ `4e2a1f6` (latest debrief commit)
-**Production branch:** `main` @ `4e0f533`; PR #21 was specifically owner-approved for the first public game release
-**Current open PRs:** #20 Hustle/public-copy (head `c6dc85b`, 14 ahead / 0 behind, 58/58 CI); #9 stale visual redesign draft (non-mergeable)
+**Active task:** M2-T4 — both owner-selected game titles have playable early-access candidates; ZVHM is live, RXT2 is preview-only
+**Integration branch:** `build/legitloot-neon-synthwave` @ `387d035`
+**Production branch:** `main` @ `4e0f533`
+**Current open PRs:** #20 Hustle/public-copy (head `c6dc85b`, 58/58 CI, 7 docs-only commits behind current integration); #22 game integration (head `c70c3d3`, stacked on #20, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `7a31165`, Deno tests unrun); #9 stale visual redesign draft.
 
 ## Current owner-locked operating rules
 
@@ -17,23 +17,30 @@
 
 ## Current launch blockers and evidence
 
-- **PROV-07:** production Offerwall.GG postback v3 and staging v7 remain active on the old LC-journaling routine. The record-only migration is in the build branch but is not applied to staging. Callback events/conversions/provider transactions were 0/0/0 in both projects at this check; no callback was invoked.
-- **AUTH-02:** the last production Auth probe (12:18 UTC) reported `disable_signup:false`; the approved sign-up pause is not yet verified as applied.
-- **AUTH-03:** PR #15 is a design only. The support address `hello@legitloot.site` is unverified; owner/legal decisions D1–D4 remain open before the related deletion policy is implemented.
-- **LEGAL-01 / GAME-02 / OPS-01 / OPS-03:** accurate approved Terms/Privacy, verified support, playable-game versus early-access scope, monitoring, backup/PITR, and release/rollback readiness still need evidence.
-- **GOV-01:** GitHub reports `protected:false` for `main`; no repository rulesets were returned. The branch-protection detail endpoint was inaccessible (403). Do not describe `main` as protected until verified.
-- **ENV-06:** current `supabase-config.js` correctly targets staging; `admin.js` and `payout-simulator.js` have weaker environment-label-only guards that need exact staging URL checks and runtime tests. Review comment 7010372122 is on PR #14.
+- **PROV-07 — CRITICAL:** live production Offerwall.GG postback v3 remains ACTIVE (`verify_jwt=false`). Its handler calls the public SECURITY DEFINER callback RPC; both public/private process routines still grant EXECUTE to `service_role`; the private routine calls `private.post_journal_transaction` and posts LC journal entries. The provider row is disabled but retains stale LC/LootCoins reward metadata and has no approval/terms reference. The endpoint does not enforce the provider row's disabled state. No callback was invoked and no production containment was applied.
+- **WALLET-01 — HIGH:** production `wallet-summary` v4 remains ACTIVE and its SECURITY DEFINER RPC returns cash and LC fields. Production Rewards/Account source still advertises Offerwall.GG-to-LC, cash/withdrawal states, and account creation. Terms and Privacy still say they are incomplete.
+- **AUTH-02:** production sign-up pause was previously owner-approved but remains unverified as applied. The main-branch Account page exposes Create Account and hardcodes the production Supabase target; no auth form was submitted during this check.
+- **GAME-02:** PR #22 contains the integration candidate for both games and passes 64/64 CI; PR #23 contains the production RXT2 candidate and its preview browser check passed. Neither PR is merged. RXT2 is not on production. Staging `game_registry` still contains only the unlisted ZID development row; saves/events/handoff tickets are 0; no challenge/milestone/season tables exist. Shared login/session handoff, cloud saves, and verified LC event ingestion remain incomplete.
+- **ENV-07 — CRITICAL:** PR #23 and PR #24 Cloudflare deployments are classified as preview, but their inherited main-branch `account-auth.js` targets production Supabase. The Pages preview env-var maps are empty, so the preview classification does not isolate backend traffic. PR #22's account auth is staging-only and fails closed. Comments were added to #23 and #24; do not use their Account pages for testing until fixed.
+- **PR24-TEST — HIGH:** `index_test.ts` imports `index.ts`, whose top-level `Deno.serve` starts a listener on import. Extract a pure handler module for tests and run Deno tests in CI. Deno tests remain unrun; no Deno runtime was available in this run.
+- **HUSTLE/TAPLAYAD — HIGH:** owner-selected App ID 10066 and template `https://offerwall.tplayad.com/10066/{user_id}` are recorded, but Taplayad is absent from staging `private.providers` and no integration exists. Current docs use `md5(app_id . user_id . api_secret)` and no transaction-ID macro; legacy docs use `transId` and `md5(subId . transId . reward . secret)`. Neither establishes the app-10066 payload-binding, transaction identity, reversal/retry contract, or incentivized-traffic permission. No mapping of publisher points, `{reward}`, or `{payout}` to LC/cash is allowed.
+- **GOV-01 — HIGH:** GitHub reports `protected:false` for every listed branch and no repository rulesets. Owner approval is not technically enforced on `main`.
+- **LEGAL/SUPPORT/OPS:** Terms/Privacy, monitored support, account deletion/export, sign-up pause verification, monitoring, backup/PITR, and rollback evidence remain incomplete or owner-gated.
 
 ## Current verification status
 
-- Claude's latest verifiable handoff (PR #12 comment, 12:27 UTC) reports 34/34 tests on #12, 37/37 on #14, and 34/34 on #15, with clean diff checks. These are local test reports, not GitHub CI; ChatGPT did not rerun the suite.
-- Cloudflare Pages preview checks succeeded for the integration head and PR heads in both Pages projects. These prove static preview deployments only, not Supabase deployment or unit-test CI.
-- The repository has no automated test workflow; the only workflow present is the older artwork-extraction workflow.
-- No merge, deployment, Supabase setting/secret/schema/data change, callback invocation, reward issuance, or money movement occurred during this read-only check.
+- PR #20 Actions: 58/58 pass, 0 failures, 0 skips. It is 7 documentation-only commits behind current integration; comment requests a single sync and rerun.
+- PR #22 Actions: 64/64 pass, 0 failures, 0 skips; whitespace check passes. Independent COMMENT review found no blocker in the scoped game changes.
+- PR #23: Cloudflare preview deployed successfully in both Pages projects; read-only browser QA confirmed the Games page and embedded RXT2 start screen. No GitHub Actions run exists for this PR.
+- PR #24: no Actions run; Deno tests are authored but not executed. Import-side-effect defect and preview-isolation finding were posted to the PR.
+- Production Cloudflare canonical deployment remains `main` @ `4e0f533`. PR #23/#24 are preview-only; no production deployment occurred.
+- Supabase production and staging projects were re-queried read-only at 2026-11-19 21:29 ET. Production Offerwall callback still posts LC; staging callback routine remains record-only. No callbacks, writes, migrations, grants, settings, secrets, schema, or data were changed.
+- No merge, deployment, publisher setting, provider agreement, payment, reward issuance, or money movement occurred during this check.
 
 ---
 
 ## Historical M1 visual-rebuild baseline (retained for context)
+ (retained for context)
 
 ## Completed
 
