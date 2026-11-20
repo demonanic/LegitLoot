@@ -91,6 +91,13 @@ test("proposed SQL recovery plan is forward-only and never restores the callback
   assert.ok(!/re-grant EXECUTE to\s+service_role only|restore the provider row from the staging snapshot/i.test(header));
 });
 
+test("the staging routine snapshot is never described as current deployment state", () => {
+  const t = read("tests/offerwall-record-only.test.mjs");
+  assert.ok(!/currently deployed|deployedRoutine/i.test(t), "snapshot must be named historical, not current/deployed");
+  assert.match(t, /historicalPreRecordOnlyRoutine/);
+  assert.match(t, /HISTORICAL pre-record-only snapshot/);
+});
+
 test("the proposed retirement SQL is not in an auto-applied migrations directory", () => {
   const migrations = readdirSync(new URL("supabase/migrations/", root));
   assert.ok(!migrations.some((m) => /retire/i.test(m)));

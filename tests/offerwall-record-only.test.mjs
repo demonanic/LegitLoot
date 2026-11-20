@@ -53,7 +53,9 @@ async function newDb() {
   return db;
 }
 
-const deployedRoutine = () => {
+// HISTORICAL pre-record-only snapshot (forensic evidence). It is NOT the live staging runtime:
+// live staging postback v8 and its routine are record-only, and Offerwall.GG is retired.
+const historicalPreRecordOnlyRoutine = () => {
   const snapshot = read("supabase/environments/staging/schema-snapshot/routines.sql");
   return between(snapshot, "CREATE OR REPLACE FUNCTION private.process_offerwall_gg_postback", "-- private.provision_initial_owner_admin");
 };
@@ -65,16 +67,16 @@ const call = async (db, { user = USER, tx = "txn-00000001", status = "credited",
     [user, tx, status, atoms, digest])).rows[0].r;
 const count = async (db, table) => Number((await db.query(`select count(*)::int as n from ${table}`)).rows[0].n);
 
-test("control: the currently deployed staging routine posts an LC journal entry", needsDb, async () => {
+test("control: the HISTORICAL pre-record-only snapshot routine posted an LC journal entry (not current staging state)", needsDb, async () => {
   const db = await newDb();
-  await db.exec(deployedRoutine());
+  await db.exec(historicalPreRecordOnlyRoutine());
   assert.equal((await call(db)).result, "posted");
   assert.equal(await count(db, "private.journal_canary"), 1);
 });
 
 test("record-only: a verified credit is recorded and posts no LC", needsDb, async () => {
   const db = await newDb();
-  await db.exec(deployedRoutine());
+  await db.exec(historicalPreRecordOnlyRoutine());
   await db.exec(recordOnlyMigration());
   assert.equal((await call(db)).result, "recorded");
   assert.equal(await count(db, "private.journal_canary"), 0);
