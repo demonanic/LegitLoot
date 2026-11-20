@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 01:57 ET
+**Last verified:** 2026-11-20 03:31 ET
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -837,3 +837,25 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 
 - Follow-up commit `c25df5c` is the current integration head. Actions run [44692358619](https://github.com/demonanic/LegitLoot/actions/runs/44692358619) completed successfully: Node suite 50/50 and `git diff --check` passed. The prior run [44692216892](https://github.com/demonanic/LegitLoot/actions/runs/44692216892) had the same 50/50 tests but failed only on the two metadata trailing-space lines now corrected.
 - PR #25 remains draft and integration-only; its base `e868121` is now eight documentation-only commits behind integration. Application files did not change in the follow-up; no resync is needed solely for documentation.
+
+
+## 2026-11-20 03:31 ET — Live environment recheck
+
+### Production — `gkbqderyjcuxnjbsiffb`
+- `offerwall-gg-wall-url` v2 ACTIVE/JWT returns inert HTTP 410; `offerwall-gg-postback` v4 ACTIVE/no-JWT returns inert HTTP 410.
+- Read-only SQL confirms private/public `process_offerwall_gg_postback` are SECURITY DEFINER but EXECUTE is false for service_role, anon and authenticated. Callback-event and conversion counts are both zero.
+- The provider row is disabled with null approval/terms references but still has stale `standard_virtual_currency / LC / LootCoins` metadata.
+- GitHub `main` @ `bcc19d` has an inert postback entrypoint but the old active wall-url source remains in `supabase/functions/offerwall-gg-wall-url/index.ts`.
+
+### Staging — `scmnxcsggquwtuyyjnnj`
+- `offerwall-gg-wall-url` v5 ACTIVE/JWT still authenticates users, reads service-role/provider keys and creates wall URLs. Its CORS allow-list includes `https://legitloot.site` and the integration preview origin.
+- `offerwall-gg-postback` v8 ACTIVE/no-JWT is record-only. Its HMAC covers only `userId:transactionId:currencyAmount`; unsigned payout/timestamp metadata is passed to `record_offerwall_gg_metadata` even after a duplicate result. The live process routine has no ledger/journal writes. Callback-event and conversion counts are both zero.
+- Both provider registries have disabled Offerwall.GG rows with null approval/terms fields but stale LC reward metadata; staging has no Taplayad row.
+
+### Source and snapshot alignment
+- Integration branch `build/legitloot-neon-synthwave` @ `0bcd3cb` still has an active record-only `supabase/functions/offerwall-gg-postback/index.ts`; production `main` has the inert handler. PR #25 changes only the integration wall-url source. Do not promote integration until both function sources align with containment.
+- `supabase/environments/staging/schema-snapshot/routines.sql` contains the pre-record-only journal-posting callback routine, while applied migration history includes `20261119145340_offerwall_gg_record_only` and the live staging routine is record-only. The README now warns that the snapshot is stale for this routine and must not be replayed.
+- Current Tplayad docs specify `md5(app_id . user_id . api_secret)`, status 1/2 and any-2xx acknowledgement, but no transaction-ID macro or retry schedule. Both legacy postback URLs return 404. Preserve the owner's exact App-10066 template and require written confirmation of URL, full callback contract and incentivized-traffic permission.
+
+### No mutations
+- This check used GitHub reads, Supabase read-only project/function inspection and SELECT queries, and public documentation fetches. Only shared documentation and a PR #20 clarification comment were updated. No Edge Function deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
