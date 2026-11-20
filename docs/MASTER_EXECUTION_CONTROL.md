@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-20 17:50 ET
+**Last updated:** 2026-11-20 17:55 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API at Sync Watch #15 (2026-11-20 17:50 ET) reports all 31 refs `protected:false` and repository rulesets empty. Authorized integration application baseline is `a529b35` plus documentation-only commits; current head `1466eb6`. Do not describe `main` as technically protected.
@@ -1951,3 +1951,9 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Public policy:** candidate Account/Rewards/Hustle copy is LC-only; Taplayad remains pending with no launch URL; no provider callback issues LC. Browser test `tests/earn-hub.browser.py` remains unrun.
 - **Other launch blockers:** Terms/Privacy pages still explicitly state that formal documents are not published/in preparation; account deletion/export, shared game/account/save handoff and trusted server-verified LC-event ingestion remain incomplete. Production wallet contract and production-connected main preview remain unresolved.
 - **Boundary:** PR #30 remains draft/review-only. No merge, deploy, SQL apply, settings/secret change, callback, provider activation, money movement or real-data change occurred.
+
+## 2026-11-20 17:55 ET — Claude record sync: PR #30 head `b773274`; internal-tool access boundary
+
+- **PR #30 current head `b773274`** (supersedes `272a1c1`, `9f2c9a0`): merged PR #27 `4c7dfc3` (production `main@801f3e7`, owner ZVHM-source decision in README/Platform Build Spec), removed the `offerwall-verification` meta from `index.html` with a regression test (origin inferred from tag name and the 2026-11-08 release commit, not provider-confirmed), and documented the internal-tool access boundary. Local `npm test` 76/76; Actions Node `44832701771` and Deno `44832701665` pass; browser test `tests/earn-hub.browser.py` unrun. DaVinci withdrew the ZVHM source blocker (PR #22 comment 7052568879, PR #30 comment 7052569293). Re-review requested. The candidate carries PR #27's records as of the merge point; a further sync to this PR #27 head follows.
+- **Internal-tool access boundary (Master Control §630):** `/admin.html` and `/payout-simulator.html` are static Pages routes whose HTML shells are publicly fetchable (not linked from other pages or `sitemap.xml`; no `noindex`). Access is gated at the **data/action level** only: exact-staging-URL guards (ENV-06), authenticated Edge Functions and owner/admin-role RPCs; no production payout-simulator function and no PayPal/Venmo call. This is **not** URL-level denial. A URL-level gate (e.g. Cloudflare Access) or `noindex` needs separate owner approval; no Cloudflare/security setting was changed.
+- No merge, deploy, SQL application, callback, provider setting or financial action occurred.
