@@ -1,11 +1,11 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-19 21:33 ET
+**Updated:** 2026-11-19 22:39 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected game titles have playable early-access candidates; ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` — latest Sync Watch documentation head; PR #20 base remains `387d035`
+**Integration branch:** `build/legitloot-neon-synthwave` @ `7b240b2`; PR #20 base `387d035` is eight documentation-only commits behind current integration
 **Production branch:** `main` @ `4e0f533`
-**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI); #22 game integration (head `332ca07`, base PR #20 head `6e2e51b`, 2 ahead / 0 behind, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `7a31165`, Deno tests unrun); #9 stale visual redesign draft.
+**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI, eight docs-only commits behind integration); #22 game integration (head `332ca07`, base PR #20 head `6e2e51b`, 2 ahead / 0 behind, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `7a31165`, Deno tests unrun); #9 stale visual redesign draft.
 
 ## Current owner-locked operating rules
 
@@ -643,3 +643,15 @@ Owner explicitly authorized preparation and testing of production containment, p
 
 - PR #23 discussion comment `7028436334` confirms its production-targeting Account script is inherited from `main`; the game-only PR remains unchanged. A separate owner-approved PR is needed to add a preview-host fail-closed guard without changing production behavior.
 - Until that decision is resolved, Account/auth routes on PR #23 and #24 previews must not be used. PR #22's integration preview remains staging-only.
+
+
+## 2026-11-19 22:39 ET — Sync Watch verification update
+
+- Integration is `7b240b2`; production `main` remains `4e0f533`. The current branch inventory contains 25 refs. PR #20 is still `6e2e51b` based on `387d035`, eight docs-only commits behind current integration; its 15-file app diff is unchanged and Actions run `44661202504` passes 58/58. PR #22 is `332ca07`, stacked on PR #20, 2 ahead / 0 behind; Actions run `44661225287` passes 64/64. PR #23 (`33a5240`) and #24 (`7a31165`) remain draft/preview-only; #9 is stale. No merge or deployment.
+- Cloudflare production remains `main` / `4e0f533`; integration and PR previews deployed successfully. Main-based PR #23/#24 Account pages still target production Supabase through inherited `account-auth.js`. Do not use auth routes on those previews; a separate owner-approved guard PR is required.
+- Production Offerwall.GG v3 remains active and the service-role SECURITY DEFINER path can post LC despite the disabled provider row. Staging callback v8 remains record-only. Staging wall-URL CORS still permits the production origin. No settings, secrets, callbacks, or database changes were made.
+- Staging wallet RPC still returns cash buckets and `currency.cash=USD` even though the staging client ignores them; its metadata labels game credits `LLC`, not `LC`. This is a wallet-contract mismatch to resolve before describing the platform as LC-only.
+- Staging game registry remains a single unlisted ZID development row; saves/events/handoff tickets are 0 and there are no challenge/milestone/season tables. ZVHM is live; RXT2 is preview-only. Both game candidates are device-save early access without shared account/save/LC-event integration.
+- Taplayad remains unintegrated and absent from staging provider registry. Current `tplayad.com/docs` and legacy `tplayad.com/doc/postback` conflict on wall URL, callback macros, signature fields, and response/retry semantics. No App-10066-specific incentivized-traffic approval or complete callback contract is verified. Keep record-only; no publisher points or callback reward may map to LC.
+- The only verifiable Claude actions since the prior handoff are PR #20/#22 sync comments `7028471600` and `7028471854`; no PR #23 auth fix or PR #24 Deno-test fix exists yet.
+- No production or staging mutation, callback, provider agreement, money movement, PR merge, or deployment occurred.
