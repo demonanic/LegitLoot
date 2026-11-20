@@ -1,9 +1,9 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 01:57 ET
+**Updated:** 2026-11-20 03:31 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T4 — integrate the two owner-selected launch games; both have early-access candidates, ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` @ `c25df5c`; PR #20's base `387d035` is 47 commits behind by ancestry, but compare shows only the five shared control documents differ
+**Active task:** M2-T3 — Offerwall.GG containment/source alignment; keep all provider paths disabled and no provider-to-LC issuance
+**Integration branch:** `build/legitloot-neon-synthwave` @ `0bcd3cb`; PR #25 base `e868121` is 9 commits behind by ancestry (five shared control documents only); PR #20 base `387d035` is 48 commits behind by ancestry (same five documents only)
 **Production branch:** `main` @ `bcc19d` (PR #24 merged; Cloudflare production deployment succeeded)
 **Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, 58/58 CI; application diff unchanged); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI; application diff unchanged); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #25 Offerwall.GG wall-URL source alignment (draft/mergeable, head `61f9ca8`, 54/54 Node plus Deno checks); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
 
@@ -733,3 +733,13 @@ Owner explicitly authorized preparation and testing of production containment, p
 
 - Follow-up commit `c25df5c` is the current integration head. Actions run [44692358619](https://github.com/demonanic/LegitLoot/actions/runs/44692358619) completed successfully: Node suite 50/50 and `git diff --check` passed. The prior run [44692216892](https://github.com/demonanic/LegitLoot/actions/runs/44692216892) had the same 50/50 tests but failed only on the two metadata trailing-space lines now corrected.
 - PR #25 remains draft and integration-only; its base `e868121` is now eight documentation-only commits behind integration. Application files did not change in the follow-up; no resync is needed solely for documentation.
+
+
+## 2026-11-20 03:31 ET — Sync Watch #6
+
+- Production Offerwall.GG runtime remains contained: wall-url v2 and postback v4 are inert HTTP 410; checked callback EXECUTE privileges are revoked for service_role/anon/authenticated; production callback and conversion tables both have zero rows.
+- Staging remains not fully contained: wall-url v5 is active/JWT and allows the production site in CORS; postback v8 is active/no-JWT and record-only. PROV-09 remains a reconciliation-integrity defect because the HMAC omits payout/timestamp/offer metadata and the metadata RPC runs even for duplicate callbacks. No LC ledger/journal write exists in the live staging routines; both callback tables have zero rows.
+- Integration source still has an active record-only postback handler, while production `main` has an inert 410 handler. Production `main` wall-url source also remains the old active launcher; PR #25 only aligns the integration wall-url source. Do not promote integration until both function sources are aligned.
+- Corrected `supabase/environments/staging/schema-snapshot/README.md`: its routines export contains the pre-record-only journal-posting implementation and is stale for Offerwall.GG despite the applied record-only migration. Live staging remains the current truth.
+- Current Taplayad docs have no transaction-ID macro or retry schedule; signature is `md5(app_id . user_id . api_secret)`; both legacy postback URLs now return 404. PR #20 comment [7034570945](https://github.com/demonanic/LegitLoot/pull/20) corrects the earlier legacy-protocol note. App 10066 remains unintegrated pending written provider clarification and permission.
+- PR #20/#22 CI remains green (58/64); PR #23 remains draft/no CI; PR #25 remains draft with 54/54 Node tests and passing Deno checks. No merge/deploy or financial/provider/database mutation occurred.
