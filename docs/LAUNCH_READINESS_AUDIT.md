@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent recheck is Sync Watch #15 (2026-11-20 17:30 ET). The original audited branch and earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #15 (2026-11-20 17:50 ET). Earlier status tables are historical.
 
 ---
 
@@ -1514,3 +1514,15 @@ Current state is NOT COMPLETE: production runtime containment (inert v2/v4, call
 Exact current head `cfe9f0a` was independently re-reviewed. The commit changes only the proposed SQL header, retirement contract wording and a static test; no executable SQL or runtime code changed. It now accurately states the four application roles whose EXECUTE grants are revoked and the inherent postgres-owner exception. Node/whitespace `44831268131` and Deno `44831268125` pass. **ACCEPTED for source-only owner review.** The browser test remains unrun; SQL is unapplied and functions are undeployed.
 
 The owner-provided Offerwall.GG recording shows all five visible placements with postback fields cleared, including a successful save on the remaining Pending placement. It is not an independent dashboard readback; placement disable/delete remains PARTIAL/UNVERIFIED.
+
+## PR #30 consolidated candidate review — 2026-11-20 17:50 ET
+
+**Disposition: DRAFT / REVIEW ONLY — NOT READY FOR OWNER APPROVAL.**
+
+- PR #30 `272a1c1` is based on current integration `1466eb6`, 30 commits ahead/0 behind, 43 files. It consolidates #20/#22/#29/#26 with duplicate registry/test blobs present once. Node/whitespace `44831521863` and Deno `44831521848` pass; both Cloudflare previews succeeded as `environment=preview`.
+- The owner-approved ZVHM source is `demonanic/Legitloot-2`, confirmed in Master Control §13/E2 and owner correction [PR #22 comment 7041463948](https://github.com/demonanic/LegitLoot/pull/22#issuecomment-7041463948). The earlier exclusion was withdrawn. Candidate code/test match; candidate PR description, README and Platform Build Spec remain stale and must be synchronized.
+- Candidate `index.html:8` retains an unexplained `offerwall-verification` meta token. Confirm origin; remove and test if Offerwall.GG, or document another owner-approved purpose.
+- Internal admin/payout simulator is permitted by Master Control §630 as staging-only. Exact staging URL checks and server-side owner/admin RPC checks are present; production has no simulator function and no real payment calls exist. Keep it out of public navigation.
+- Candidate public Account/Rewards/Hustle copy is LC-only; Taplayad is pending with no launch URL. Browser test `tests/earn-hub.browser.py` remains unrun.
+- Terms/Privacy remain placeholders; account deletion/export, shared account/session, cloud saves and trusted server-verified LC-event ingestion remain incomplete. Production wallet still returns cash USD fields and production Account/Rewards still expose cash/withdrawal UI. ENV-07 main-based preview remains production-auth-connected.
+- No merge, deployment, SQL application, schema/data change, provider setting, callback, agreement, money movement or real payout occurred.
