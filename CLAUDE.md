@@ -396,3 +396,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Test execution is pending an environment with Deno/Supabase CLI. Source review confirms the handler contains no database/client/secret/RPC path; tests are authored but not yet executed.
 - Next: restore Supabase connector access; independently inspect live production function/RPC definitions and effective grants; run Deno tests; review PR #24. Only after those pass should a separate production maintenance plan be presented for explicit owner approval. Consider removing the publisher dashboard URL only after verifying other configured products do not depend on it.
 - Owner gate: production database privilege revocation and Edge Function deployment each require separate explicit approval. Dashboard changes and any provider-side contract changes remain separately gated.
+
+
+## 2026-11-19 21:29 ET — Sync Watch handoff update
+
+- Current game artifacts: PR #22 (integration candidate, 64/64 CI, COMMENT review only) and PR #23 (draft production publish, preview browser pass, no CI, owner approval required). RXT2 is preview-only; production remains ZVHM only.
+- PR #23/#24 preview Account pages inherit main's production Supabase target. Do not use account flows on these previews until guarded; comments are on both PRs.
+- PR #24 needs a pure handler module because tests import the entrypoint that starts `Deno.serve`. Deno tests are still unrun.
+- Live production Offerwall.GG v3 still posts LC through the SECURITY DEFINER RPC; provider disabled status is not checked. Staging callback is record-only. No callbacks or writes occurred.
+- Taplayad current/legacy docs disagree on signature and transaction identity; incentivized-traffic permission remains unverified. Keep App ID 10066 unintegrated and record-only.
+- Immediate task: sync PR #20 to integration head `387d035`, rerun CI, fix PR #24's test import side effect, and make all previews fail closed against production. Do not merge or deploy production without owner approval.
+- No PR merge, deployment, settings/secret/schema/data change, provider agreement, callback, payment, reward issuance, or money movement occurred.
