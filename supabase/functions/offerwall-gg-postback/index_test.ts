@@ -1,21 +1,24 @@
-import { assertEquals } from "jsr:@std/assert@1";
 import { handleRequest } from "./index.ts";
 
-Deno.test("Offerwall.GG callback endpoint rejects GET without processing", () => {
+function assert(condition: boolean, message: string): void {
+  if (!condition) throw new Error(message);
+}
+
+Deno.test("GET callbacks are disabled without processing", () => {
   const response = handleRequest(new Request("https://example.test/callback?userId=synthetic"));
-  assertEquals(response.status, 410);
-  assertEquals(response.headers.get("cache-control"), "no-store");
+  assert(response.status === 410, "expected HTTP 410");
+  assert(response.headers.get("cache-control") === "no-store", "expected no-store");
 });
 
-Deno.test("Offerwall.GG callback endpoint rejects POST without reading or processing body", () => {
+Deno.test("POST callbacks are disabled without processing the body", () => {
   const response = handleRequest(new Request("https://example.test/callback", {
     method: "POST",
     body: "userId=synthetic&currencyAmount=999&status=credited",
   }));
-  assertEquals(response.status, 410);
+  assert(response.status === 410, "expected HTTP 410");
 });
 
-Deno.test("Offerwall.GG callback endpoint rejects OPTIONS", () => {
+Deno.test("OPTIONS requests are disabled", () => {
   const response = handleRequest(new Request("https://example.test/callback", { method: "OPTIONS" }));
-  assertEquals(response.status, 410);
+  assert(response.status === 410, "expected HTTP 410");
 });
