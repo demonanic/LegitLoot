@@ -70,3 +70,11 @@ test("homepage meta description and LC headline limit LC to the approved sources
   assert.ok(meta && meta[1].includes(`earned only through ${approved}`), "meta description must limit LC to approved sources");
   assert.ok(html.includes(`<p>Earned only through ${approved}. Never cash.</p>`), "LC headline must limit LC to approved sources");
 });
+
+test("provider registry and hub never reference LC or open a Taplayad wall", () => {
+  const reg = readFileSync(new URL("../earn-providers.js", import.meta.url), "utf8");
+  const hub = readFileSync(new URL("../earn-hub.js", import.meta.url), "utf8");
+  assert.doesNotMatch(reg, /launch:\s*Object\.freeze/);
+  assert.doesNotMatch(reg + hub, /journal|ledger|\.rpc\(/i);
+  assert.doesNotMatch(hub, /recordedTemplate/);
+});
