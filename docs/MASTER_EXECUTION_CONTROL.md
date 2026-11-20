@@ -87,7 +87,7 @@ The release candidate must truthfully provide:
 6. Keep PR #23 as a separate owner-gated production publish. Before using its preview for account testing, make its auth target fail closed or staging-only.
 7. Record exact evidence and unresolved dependencies. No production release without separate owner approval.
 
-**Immediate next action:** Do not sync PR #20 again until an owner-approved integration disposition; its base is behind current integration only by documentation-only Sync Watch updates. Keep PR #23 game-only and do not use PR #23/#24 Account/auth previews. Isolate PR #24's pure handler before running Deno tests. Keep Taplayad record-only until its App-10066 protocol and permission are confirmed. No merge, deployment, production containment, callback, or provider setting change is authorized by this Sync Watch run.
+**Immediate next action:** Do not sync PR #20 again until an owner-approved integration disposition; its base is behind current integration only by documentation-only Sync Watch updates. Keep PR #23 game-only and do not use PR #23/#24 Account/auth previews. Verify the PR #24 Deno test workflow when a run becomes available; the pure handler has been isolated in the draft PR. Keep Taplayad record-only until its App-10066 protocol and permission are confirmed. No merge, deployment, production containment, callback, or provider setting change is authorized by this Sync Watch run.
 
 ### Supporting M2 work
 
@@ -1487,7 +1487,7 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Open PRs: #20, #22, #23, #24, and stale draft #9. PR #20 remains open/non-draft at `6e2e51b`, base `387d035`; integration is now `7b240b2`, eight documentation-only commits ahead of that base. The 15-file application diff is unchanged. Actions run `44661202504` passed 58/58 tests, 0 failures/skips, plus the patch whitespace check. Existing independent COMMENT review remains applicable because the sync did not change application files; PR #20 is for owner review for integration acceptance only, not production release.
 - PR #22 remains open at `332ca07`, stacked on PR #20 head `6e2e51b`, 2 commits ahead / 0 behind. Actions run `44661225287` passed 64/64 tests, 0 failures/skips, plus whitespace check. Independent COMMENT review `5986626725` found no blocker in the scoped game change. The latest Claude sync artifacts are comments `7028471600` and `7028471854`; no subsequent implementation fix was found.
 - PR #23 remains a draft on `main` at `33a5240`, preview-only, with no Actions run. Its game diff is seven files and does not modify auth; its preview inherits main's production-targeting `account-auth.js`. Keep it game-only and owner-gated.
-- PR #24 remains a draft on `main` at `7a31165`, preview-only, with no verified Deno test run. Its test imports `index.ts`, which calls top-level `Deno.serve(handleRequest)`; extract the pure handler before tests. Existing actionable findings remain in PR comment `7028431331`.
+- PR #24 remains a draft on `main` at `fb2e890`, preview-only. The test-import side effect is fixed in the candidate: tests import pure `handler.ts`, while only `index.ts` starts `Deno.serve`. A Deno workflow is added; no Actions run has surfaced yet. Local Node smoke passed 3/3 but is not a Deno result. Preview auth remains production-targeting and blocked. Findings are in PR comments `7028431331` and `7029857955`.
 - PR #9 remains a stale visual redesign draft; no merge or review disposition changed. No PR was merged.
 
 ### Code review and game readiness
@@ -1514,3 +1514,11 @@ Owner explicitly authorized preparation and testing of production containment, p
 ### Owner gates and actions not taken
 - Critical unresolved owner decisions: production Offerwall.GG containment (SQL grants and Edge Function deployment separately gated); preview-host auth guard PR; provider-specific Taplayad permission/protocol; public sign-up pause/legal readiness; final production release. No automatic action was taken on any of them.
 - This check made no PR merge, deployment, Supabase/Cloudflare setting or secret change, SQL/grant/schema/data change, callback invocation, publisher dashboard save/removal, provider agreement, payment, reward issuance, or money movement.
+
+
+## 2026-11-19 22:51 ET — PR #24 pure-handler testability fix prepared (NOT DEPLOYED)
+
+- PR #24 remains draft on `main`; candidate head is now `fb2e890`. The original test-import side effect is fixed in the PR branch: new `handler.ts` contains only the inert HTTP 410 handler; `index.ts` alone imports it and starts `Deno.serve`; `index_test.ts` imports the pure handler and checks GET/POST/OPTIONS, `410`, `no-store`, and that POST bodies remain unread.
+- Added `.github/workflows/offerwall-gg-containment-tests.yml` to run the Deno test file. No GitHub Actions run has surfaced for the new head yet, so the Deno suite is **not verified**. A local Node 22.16 smoke test against the actual handler passed 3/3 methods; this is not a Deno test result.
+- PR comment `7029857955` records the fix and exact test limitation. The endpoint remains inert; no Supabase function was deployed, no SQL grants/settings/secrets/schema/data changed, and no callback was invoked.
+- PR #24's separate preview-auth issue remains: its main-based preview inherits production-targeting `account-auth.js`. Do not use Account/auth routes. Production containment still requires separate owner approval.
