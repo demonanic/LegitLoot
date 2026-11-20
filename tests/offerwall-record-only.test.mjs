@@ -129,18 +129,5 @@ test("record-only migration never references the ledger", () => {
   assert.ok(!/post_journal_transaction|ledger_accounts|journal_entries/i.test(sql));
 });
 
-test("Edge Function accepts only record-only results and never 'posted'", () => {
-  const source = read("supabase/functions/offerwall-gg-postback/index.ts");
-  const list = source.match(/RECORD_ONLY_RESULTS = \[([^\]]*)\]/);
-  assert.ok(list, "RECORD_ONLY_RESULTS list missing");
-  assert.deepEqual(JSON.parse(`[${list[1]}]`).sort(), ["duplicate", "recorded", "reversal_recorded"]);
-  assert.ok(!/"posted"/.test(source.replace(/(^|[\s;{}])\/\/.*$/gm, "$1"))); // strip comments, not URLs
-});
-
-test("Edge Function stores the original payout as positive metadata for reversals", () => {
-  const source = read("supabase/functions/offerwall-gg-postback/index.ts");
-  assert.match(
-    source,
-    /payoutUsdValue = status === "reversed" && payoutUsd\.startsWith\("-"\)\s*\?\s*payoutUsd\.slice\(1\)\s*:\s*payoutUsd;/,
-  );
-});
+// The two Edge Function source assertions that used to follow were retired with the
+// functions themselves (owner decision 2026-11-20). See tests/offerwall-retirement.test.mjs.

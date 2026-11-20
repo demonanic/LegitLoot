@@ -58,23 +58,6 @@
 
   const providers = Object.freeze([
     Object.freeze({
-      id: "offerwall-gg",
-      kind: "provider",
-      name: "Offerwall.GG",
-      symbol: "◈",
-      categories: Object.freeze(["offerwall"]),
-      kicker: "Offerwall",
-      description: "Third-party offerwall. Offers and eligibility are set by the provider and will only be shown once the integration is approved and verified. Partner offers do not award Legit Coins.",
-      state: "pending_approval",
-      stateDetail: "Publisher approval is pending. The wall stays unavailable until approval, server secrets, callback verification and ledger tests are complete.",
-      launch: Object.freeze({
-        type: "server-wall-url",
-        functionName: "offerwall-gg-wall-url",
-        allowedOrigins: Object.freeze(["https://offerwall.gg"]),
-        pathPrefix: "/wall/"
-      })
-    }),
-    Object.freeze({
       id: "cpagrip",
       kind: "provider",
       name: "CPAGrip",

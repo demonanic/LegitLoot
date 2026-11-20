@@ -1,0 +1,101 @@
+// Run: node --test tests/*.test.mjs
+// Offerwall.GG permanent retirement guard (docs/security/OFFERWALL_GG_RETIREMENT.md).
+// Static checks over canonical sources, snapshots/manifests, the proposed staging SQL and
+// the frontend. They prove nothing about what is deployed; deployment is verified separately.
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
+import { join } from "node:path";
+
+const root = new URL("../", import.meta.url);
+const read = (name) => readFileSync(new URL(name, root), "utf8");
+const stripComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[\s;{}])\/\/.*$/gm, "$1");
+const FUNCTIONS = ["offerwall-gg-postback", "offerwall-gg-wall-url"];
+
+test("canonical Offerwall.GG functions are inert 410 tombstones", () => {
+  for (const fn of FUNCTIONS) {
+    const dir = `supabase/functions/${fn}/`;
+    assert.deepEqual(readdirSync(new URL(dir, root)).sort(), ["handler.ts", "index.ts", "index_test.ts"], `${fn} file set`);
+    const handler = stripComments(read(`${dir}handler.ts`));
+    assert.match(handler, /status:\s*410/);
+    assert.match(handler, /OFFERWALL_GG_RETIRED/);
+    const index = stripComments(read(`${dir}index.ts`));
+    assert.match(index, /^\s*import \{ handleRequest \} from "\.\/handler\.ts";\s*Deno\.serve\(handleRequest\);\s*$/);
+    for (const [name, src] of [["handler", handler], ["index", index]]) {
+      assert.ok(!/Deno\.env|createClient|supabase|\.rpc\(|\.json\(|\.text\(|\.formData\(|request\.body|URL\(|fetch\(|hmac|crypto|SECRET|serviceRole|SERVICE_ROLE/i.test(src.replace(/from "\.\/handler\.ts"/, "")), `${fn}/${name}.ts must stay side-effect free`);
+    }
+  }
+});
+
+test("no source imports anything else into the tombstones", () => {
+  for (const fn of FUNCTIONS) {
+    for (const file of ["handler.ts", "index.ts"]) {
+      const imports = [...read(`supabase/functions/${fn}/${file}`).matchAll(/^\s*import\s[^;]*from\s+["']([^"']+)["']/gm)].map((m) => m[1]);
+      assert.ok(imports.every((i) => i === "./handler.ts"), `${fn}/${file} imports ${imports}`);
+    }
+  }
+});
+
+test("no active launcher remains in the frontend", () => {
+  assert.ok(!existsSync(new URL("offerwall-launch.js", root)), "offerwall-launch.js must stay deleted");
+  for (const file of readdirSync(root).filter((f) => /\.(html|js)$/.test(f) && f !== "earn-providers.js")) {
+    const src = read(file);
+    assert.ok(!/offerwall-gg-wall-url|offerwall\.gg\/wall|offerwall-launch/i.test(src), `${file} references the retired launcher`);
+  }
+});
+
+test("staging snapshots of the retired functions are marked retired / do-not-deploy", () => {
+  for (const fn of FUNCTIONS) {
+    const marker = `supabase/environments/staging/functions/${fn}/RETIRED.md`;
+    assert.ok(existsSync(new URL(marker, root)), `${marker} missing`);
+    assert.match(read(marker), /DO NOT DEPLOY/);
+  }
+  const manifest = JSON.parse(read("supabase/environments/staging/DEPLOYED_FUNCTIONS_MANIFEST.json"));
+  for (const fn of FUNCTIONS) {
+    const entry = manifest.functions.find((f) => f.slug === fn);
+    if (!entry) continue; // absent from a manifest is fine
+    assert.equal(entry.retired, true, `${fn} manifest entry must be flagged retired`);
+    assert.equal(entry.do_not_deploy_snapshot, true, `${fn} manifest entry must be flagged do_not_deploy_snapshot`);
+  }
+});
+
+test("production snapshot sources of the retired functions are marked do-not-deploy", () => {
+  for (const fn of FUNCTIONS) {
+    const marker = `supabase/environments/production/functions/${fn}/RETIRED.md`;
+    assert.ok(existsSync(new URL(marker, root)), `${marker} missing`);
+    assert.match(read(marker), /DO NOT DEPLOY/);
+  }
+});
+
+test("proposed staging SQL retires the routines without deleting data or touching the ledger", () => {
+  const sql = read("supabase/proposed/staging/20261120160000_offerwall_gg_retirement.sql");
+  assert.match(sql, /DO NOT APPLY/);
+  const code = sql.replace(/--.*$/gm, "");
+  assert.ok(!/\bdrop\s+(table|schema|column)\b|\bdelete\s+from\b|\btruncate\b/i.test(code), "must not delete data");
+  assert.ok(!/post_journal_transaction|ledger_accounts|journal_entries|ledger/i.test(code), "must not reference the ledger");
+  const bodies = [...code.matchAll(/\$function\$([\s\S]*?)\$function\$/g)].map((m) => m[1].trim());
+  assert.equal(bodies.length, 4);
+  for (const body of bodies) assert.match(body, /^begin\s+raise exception 'Offerwall\.GG is permanently retired';\s+end;$/);
+  assert.equal([...code.matchAll(/revoke all on function/g)].length, 4);
+  assert.match(code, /update private\.providers[\s\S]*status = 'retired'[\s\S]*approved_reward_model = null[\s\S]*approval_reference = null[\s\S]*terms_url = null[\s\S]*terms_verified_at = null[\s\S]*where provider_key = 'offerwall_gg'/);
+  assert.equal([...code.matchAll(/update private\./g)].length, 1, "only the provider row may be updated");
+});
+
+test("the proposed retirement SQL is not in an auto-applied migrations directory", () => {
+  const migrations = readdirSync(new URL("supabase/migrations/", root));
+  assert.ok(!migrations.some((m) => /retire/i.test(m)));
+});
+
+test("no deployable manifest or workflow targets the old active snapshots", () => {
+  for (const dir of [".github/workflows"]) {
+    for (const f of readdirSync(new URL(dir + "/", root))) {
+      const src = read(`${dir}/${f}`);
+      assert.ok(!/environments\/(staging|production)\/functions\/offerwall-gg/.test(src), `${f} must not deploy a snapshot of a retired function`);
+    }
+  }
+});
+
+test("provider events in the website registry never launch Offerwall.GG", () => {
+  const registry = read("earn-providers.js");
+  assert.ok(!/launch:\s*Object\.freeze\(\{[^}]*offerwall-gg-wall-url/s.test(registry), "registry must not launch the retired wall-url function");
+});

@@ -45,3 +45,15 @@ Do not merge a PR or deploy to production. Do not change production Supabase set
 - The owner has not confirmed that the LegitLoot placement itself was disabled or deleted. Record dashboard acceptance criterion 8 as **PARTIAL**: postback URL removal is owner-reported; placement disable/delete remains UNVERIFIED.
 - No other publisher-dashboard change was reported. Do not delete the publisher account, alter payout details, or move funds.
 - This dashboard step does not complete technical retirement. Staging functions and snapshots, provider metadata, source/deployment reactivation paths, and production owner-gated cleanup remain outstanding.
+
+## Implementation status — PR on `claude/offerwall-gg-retirement` (2026-11-20, Claude)
+
+Implemented in source only; **nothing deployed, applied or invoked**.
+
+- Canonical `supabase/functions/offerwall-gg-postback/` and `offerwall-gg-wall-url/` are inert HTTP 410 tombstones (`handler.ts` + `index.ts` + Deno test); Deno workflow `.github/workflows/offerwall-gg-retirement-tests.yml`.
+- `offerwall-launch.js` (unreferenced active launcher) deleted; Offerwall.GG removed from `earn-providers.js` and its tests.
+- Staging/production snapshots of both functions are kept unchanged as forensic evidence, each with a `RETIRED.md` (DO NOT DEPLOY); both manifests flag the entries `retired` / `do_not_deploy_snapshot`. The manifests still describe what *was* deployed; live state must be re-verified after the staging tombstone deploy.
+- `supabase/proposed/staging/20261120160000_offerwall_gg_retirement.sql`: DO NOT APPLY until independent review. Replaces the four callback routines with always-raise bodies, revokes EXECUTE from all roles, and marks the `offerwall_gg` provider row `retired` with reward/approval/terms metadata cleared. No data deleted; historical tables untouched. Deliberately outside `supabase/migrations/`.
+- `tests/offerwall-retirement.test.mjs` guards all of the above statically.
+
+Still open: staging deploy of the tombstones and application of the SQL (after DaVinci review, exact-ref/rollback check); production source drift on `main` and production cleanup (owner-gated, separate approval); dashboard placement disable/delete (UNVERIFIED); stale `platform_settings` offerwall reward rows and `index.html` `offerwall-verification` meta tag (left in place, owner/DaVinci to decide); obsolete Supabase secret names for a separate owner decision.

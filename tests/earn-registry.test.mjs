@@ -30,8 +30,9 @@ test("no provider is open to players in this release", () => {
   assert.equal(providers.filter((p) => p.state === "active").length, 0);
 });
 
-test("Offerwall.GG is pending approval; CPAGrip is testing with no launch endpoint", () => {
-  assert.equal(byId["offerwall-gg"].state, "pending_approval");
+test("Offerwall.GG is retired and absent; CPAGrip is testing with no launch endpoint", () => {
+  assert.equal(byId["offerwall-gg"], undefined);
+  assert.ok(!providers.some((p) => /offerwall[-. ]?gg/i.test(`${p.id} ${p.name}`)));
   assert.equal(byId.cpagrip.state, "testing");
   assert.equal(byId.cpagrip.kind, "provider");
   assert.equal(byId.cpagrip.launch, null);
