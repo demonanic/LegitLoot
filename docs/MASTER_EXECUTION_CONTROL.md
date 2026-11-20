@@ -186,12 +186,13 @@ This repository is the shared communication channel. Both agents must use it sys
 Before doing work, each agent must:
 
 1. Read this file.
-2. Read `docs/PROJECT_PROGRESS.md`.
-3. Read the applicable governing specification and specialist handoff.
-4. Check the current branch and latest commit.
-5. Read the latest entries in the Agent Coordination Log below.
-6. Confirm the active milestone and task ID.
-7. Continue the active task rather than starting a new one.
+2. Read `docs/AGENT_OPERATING_CHARTER.md` for standing roles and handoff rules.
+3. Read `docs/PROJECT_PROGRESS.md`.
+4. Read the applicable governing specification and specialist handoff.
+5. Check the current branch and latest commit.
+6. Read the latest entries in the Agent Coordination Log below.
+7. Confirm the active milestone and task ID.
+8. Continue the active task rather than starting a new one.
 
 ## Required session end
 
