@@ -1424,3 +1424,11 @@ No PR was merged and no deployment, Supabase setting/secret/grant/schema/data ch
 - Open PRs are #9, #20, #22, #23, #25 and #26. Branch count is 27; every branch still reports `protected=false`. PR #23 remains draft/no CI with production-targeted Account/auth on its preview. PR #22 retains the ZVHM identity/test blocker. No new standalone Claude handoff was found; PR #26 is the new verified Claude-authored artifact.
 - The documentation-only update sequence passed GitHub Actions through run [44729867195](https://github.com/demonanic/LegitLoot/actions/runs/44729867195), including npm tests and whitespace checks; no application code changed. PR #26's branch previews are not production deployments.
 - No PR was merged, no production/staging deploy was initiated, and no Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
+## 2026-11-20 11:28 ET — Owner decision: Offerwall.GG permanently retired from launch scope
+
+Offerwall.GG is removed from the future LegitLoot provider plan. The owner explicitly chose full retirement rather than further containment/repair. The retirement acceptance contract is docs/security/OFFERWALL_GG_RETIREMENT.md.
+
+Required verification before marking the provider retired: no active UI/registry/launcher or callback path; canonical and staging snapshot functions inert; no staging RPC/privilege path can mint or mutate LC; deployment manifest guard prevents reactivation; LegitLoot placement postback URL removed and placement disabled/deleted in the Offerwall.GG dashboard. Preserve historical evidence and tables. Do not delete the publisher account.
+
+Current state is NOT COMPLETE: production runtime containment (inert v2/v4, callback grants revoked) was previously recorded, but main source drift and active staging wall-url source/deployment require retirement work. Production changes remain owner-gated. Dashboard removal is pending because browser access was unavailable in this session. Taplayad App 10066 remains separate and pending its own permission/protocol checks.
