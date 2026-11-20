@@ -1085,3 +1085,36 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Test execution is pending an environment with Deno/Supabase CLI. Source review confirms the handler contains no database/client/secret/RPC path; tests are authored but not yet executed.
 - Next: restore Supabase connector access; independently inspect live production function/RPC definitions and effective grants; run Deno tests; review PR #24. Only after those pass should a separate production maintenance plan be presented for explicit owner approval. Consider removing the publisher dashboard URL only after verifying other configured products do not depend on it.
 - Owner gate: production database privilege revocation and Edge Function deployment each require separate explicit approval. Dashboard changes and any provider-side contract changes remain separately gated.
+
+
+## 2026-11-19 21:29 ET — Sync Watch: game candidate review, preview isolation, live Supabase and Taplayad recheck
+
+### Repository and PR state
+- Production `main` remains `4e0f533` (PR #21 merge). Integration is `387d035`. All listed branches report `protected:false`; no repository rulesets were returned.
+- Open PRs: #9 stale draft; #20 Hustle/public copy; #22 integration game package; #23 draft RXT2 production publish; #24 draft Offerwall.GG containment. No merge or deployment was performed.
+- PR #20 head `c6dc85b` passes 58/58 Actions tests (0 failures/skips) and is seven documentation-only commits behind integration. A comment asks Claude to sync once and rerun CI.
+- PR #22 head `c70c3d3` passes 64/64 Actions tests (0 failures/skips) plus whitespace check. The scoped game diff is consistent with the owner-locked two titles and honest early-access/device-save/no-account/no-LC copy. The RXT2 game source is identical in PR #22 and #23 (blob `7311b421246c40a672110b134372811985e621ac`). COMMENT review `5986626725` found no blocking defect.
+- PR #23 head `33a5240` is a draft against main with no Actions run. Cloudflare preview deployments succeeded in both Pages projects. Read-only browser QA confirmed the Games page, Rocket 2 Nowhere wrapper and iframe start screen load. It remains unpublished.
+- PR #24 head `7a31165` is a draft; Deno tests are not run. `index_test.ts` imports `index.ts`, which executes top-level `Deno.serve` during module loading. Extract the pure handler and test it separately. Comment `7028431331` records this and the preview-isolation issue.
+
+### Game integration status
+- Zombies vs Heavy Metal is live on production as early access and device-local save only.
+- Rocket 2 Nowhere now has a candidate route in PR #22 and PR #23, but remains preview-only. It is based on the owner-supplied single-HTML prototype, not a separate source repository.
+- PR #22's auth guard is staging-only and fails closed. PR #23 and #24 are main-based previews; their inherited `account-auth.js` hardcodes the production Supabase project and has an active sign-up path. The Pages deployment environment is `preview`, but that does not prevent the browser script from calling production. This is a critical preview-isolation defect; comments were posted to #23 and #24. Do not test account/auth flows on those preview URLs until guarded.
+- Live staging database check: `game_registry` contains only unlisted development row `zombie-invasion-defense`; saves, events and handoff tickets are 0; no challenge, milestone or season tables exist. Shared login/session handoff, cloud saves, and verified LC event ingestion are incomplete.
+
+### Live Supabase state — read-only
+- Production `offerwall-gg-postback` v3 remains ACTIVE with `verify_jwt=false`. Its deployed handler calls `process_offerwall_gg_postback`. Both `private.process_offerwall_gg_postback` and `public.process_offerwall_gg_postback` are SECURITY DEFINER, owned by postgres, and grant EXECUTE to `service_role`. The private routine calls `private.post_journal_transaction`; provider callbacks can still mint LC despite the provider row being disabled.
+- Production provider row `offerwall_gg` is `disabled`, but retains `standard_virtual_currency / LC / LootCoins` reward metadata and has null approval reference, terms URL and verification timestamp. Production `wallet-summary` v4 remains ACTIVE; `public.get_wallet_summary()` is SECURITY DEFINER and returns cash and LC fields.
+- Staging `offerwall-gg-postback` v8 remains ACTIVE with `verify_jwt=false`; its live SQL routine is record-only and contains no journal posting. Staging Offerwall.GG remains disabled with stale LC metadata and no approval/terms; CPAGrip remains disabled; Taplayad is absent. No callback, SQL write, grant change, migration or deployment occurred.
+- PR #24's documented revocation targets the exact live signature `(uuid, text, text, bigint, text, text, text, text)`; however it remains a proposed change only. Separate owner approval is still required for production DB revocation and Edge Function deployment.
+
+### Taplayad protocol and permission
+- Owner-supplied target remains `https://offerwall.tplayad.com/10066/{user_id}`; the dashboard Active badge is not proof of incentivized-traffic permission or successful integration.
+- Current public docs: `https://tplayad.com/docs` describe macros `{user_id}`, `{payout}`, `{reward}`, `{offer_id}`, `{status}`, `{sig}`; status 1=credited and 2=reversed; signature `md5(app_id . user_id . api_secret)`; example deduplication uses `offer_id + user_id`. No transaction-ID macro is listed, and the signature does not bind payout/reward/offer/status/transaction identity.
+- Legacy docs: `https://www.tplayad.com/doc/postback` list `transId`, status 1/2, retries up to five times, and signature `md5(subId . transId . reward . secret)`. The two public protocols conflict and neither establishes a complete authenticated app-10066 contract.
+- Current public Terms (last updated 2026-10-29) require 18+ and prohibit fraud, but do not establish permission for incentivized traffic or the owner's exact game-only LC model. No account-specific permission was verified. Keep Taplayad unintegrated/record-only until provider confirmation; never map publisher points, `{reward}`, or `{payout}` to LC or cash.
+
+### Owner gates and actions not taken
+- Critical owner-gated risks: production Offerwall-to-LC issuance; unprotected `main`; production-targeting branch previews; Taplayad permission and callback contract; public sign-up pause; Terms/Privacy/support and final production release.
+- No production/staging settings or secrets, schema/data, SQL grants, provider dashboard, callback, agreement, payment, reward issuance, or deployment was changed. No PR was merged.
