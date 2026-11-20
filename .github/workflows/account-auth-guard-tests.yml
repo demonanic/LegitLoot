@@ -1,0 +1,36 @@
+name: account-auth-guard-tests
+
+on:
+  pull_request:
+    paths:
+      - "account-auth.js"
+      - "tests/account-auth-host-guard.test.mjs"
+      - ".github/workflows/account-auth-guard-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "account-auth.js"
+      - "tests/account-auth-host-guard.test.mjs"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node --check account-auth.js
+      - run: node --test tests/account-auth-host-guard.test.mjs
+      - name: Patch whitespace check
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git diff --check "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}"
+          else
+            git diff --check "${{ github.event.before }}...${{ github.sha }}"
+          fi

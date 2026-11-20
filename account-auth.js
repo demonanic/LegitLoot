@@ -4,7 +4,7 @@
   // ENV-07: this file targets the PRODUCTION Supabase project. Only the canonical
   // production hostnames may initialize a client; every other host (including
   // *.pages.dev previews and localhost) fails closed before createClient runs.
-  const PRODUCTION_HOSTS = ["legitloot.site", "www.legitloot.site"];
+  const PRODUCTION_HOSTS = ["legitloot.site"];
   const isProductionHost = PRODUCTION_HOSTS.includes(window.location.hostname);
   const client = isProductionHost ? window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
   const $ = (id) => document.getElementById(id);
