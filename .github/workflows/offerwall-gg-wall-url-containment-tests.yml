@@ -1,0 +1,28 @@
+name: Offerwall.GG wall URL containment tests
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/offerwall-gg-wall-url/**"
+      - "tests/staging-function-origins.test.mjs"
+      - ".github/workflows/offerwall-gg-wall-url-containment-tests.yml"
+  push:
+    branches: [build/legitloot-neon-synthwave]
+    paths:
+      - "supabase/functions/offerwall-gg-wall-url/**"
+      - "tests/staging-function-origins.test.mjs"
+      - ".github/workflows/offerwall-gg-wall-url-containment-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  containment-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.8
+      - name: Test inert Offerwall.GG wall URL handler
+        run: deno test supabase/functions/offerwall-gg-wall-url/index_test.ts
