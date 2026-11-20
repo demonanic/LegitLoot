@@ -584,3 +584,25 @@ The two PR #20 branch previews queried above subsequently completed successfully
 - Taplayad App ID 10066 remains selected as the initial Hustle publisher, but account-generation/protocol, canonical URL, payload-bound authentication, transaction identity, reversal matching, retries/idempotency, authoritative verification and incentivized-traffic permission remain unconfirmed. Keep any permitted staging work record-only. Publisher `$1 = 1 point`, `{reward}` and `{payout}` must never map to LC or user cash/withdrawal.
 - Production Offerwall.GG provider-to-LC issuance is the critical owner-gated blocker. Branch protection is disabled on all 21 branches. Support-mailbox verification, sign-up-pause verification, provider agreements/paid commitments and final production release remain owner-controlled.
 - No PR was merged, no deployment performed, no callback invoked, no provider terms accepted, no money moved, and no Supabase/Cloudflare settings, secrets, schema or data changed.
+
+
+---
+
+## 2026-11-19 19:41 ET — Live deployment and environment audit update
+
+### Cloudflare Pages
+- Project `legitloot` production deployment ID `6598c4c6-ecd5-49a1-9122-a55caa892cd8`: environment `production`, branch `main`, commit `4e0f533a1962767d7595f32c9a9bdcb979d31513`, deploy stage success, alias `https://legitloot.site`. Created 2026-11-20T00:24:06Z; completed 00:24:36Z (2026-11-19 19:24 ET). This was the specific owner-authorized PR #21 public-game release; no new production deployment occurred in this audit.
+- Integration preview deployment on project `legitloot`: commit `907f1a6a5cf9cc1db9fda73cd9cd2053c6d8990e`, environment `preview`, successful. Production and preview remain separate Cloudflare environments.
+- Read-only browser check verified production homepage, `/games.html`, `/zombies-vs-heavy-metal.html`, and embedded `https://demonanic.github.io/Legitloot-2/` all returned HTTP 200; game canvas rendered. No interaction/save was performed.
+
+### Supabase
+- Production `gkbqderyjcuxnjbsiffb`: 7 migrations; `wallet-summary` v4 ACTIVE (`verify_jwt=false`, handler performs its own bearer-token user validation); `offerwall-gg-wall-url` v1 ACTIVE/JWT; `offerwall-gg-postback` v3 ACTIVE/`verify_jwt=false`. Production SQL `public.get_wallet_summary()` is SECURITY DEFINER and returns cash pending/available/withdrawal-reserved/paid/held plus LootCoins. Production `account-auth.js` hardcodes this project and implements signup. Production `private.process_offerwall_gg_postback` is SECURITY DEFINER and calls `private.post_journal_transaction`. The disabled Offerwall.GG provider row is not checked by the deployed postback handler before RPC invocation.
+- Staging `scmnxcsggquwtuyyjnnj`: 21 migrations; `offerwall-gg-postback` v8 ACTIVE/`verify_jwt=false`; live database routine record-only, no LC journal path. Staging provider registry: Offerwall.GG disabled with stale LC reward metadata/no approval; CPAGrip disabled; Taplayad absent.
+- Staging `offerwall-gg-wall-url` v5 is JWT-protected and record shows CORS allow-list `https://legitloot.site` plus staging preview origin. Production-origin access to a staging endpoint is a cross-environment exception; review before any production integration. No setting changed.
+- No Supabase rows, migrations, functions, settings or secrets changed during this audit.
+
+### GitHub branch alignment
+- `main` = `4e0f533`; integration = `907f1a6`; compare: integration 404 ahead / 2 behind main, merge base `3fa7ca5`. PR #21's four public files are absent from integration; port before next release.
+- PR #20 head `7912edd`, base `1e950355`; it is 13 ahead / 1 behind current integration. CI run `44637573706` passed 58 tests and whitespace check. Its Supabase config is staging-only; do not treat as production config.
+- 22 branch names returned. Branch protection not independently re-queried this run.
+- PR #21 and game commit `fcf4000` have no GitHub Actions runs/statuses returned; Cloudflare deploy succeeded but does not substitute for game test evidence.
