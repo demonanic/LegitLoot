@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-19 23:02 ET  
+**Last updated:** 2026-11-20 00:28 ET  
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API reports `protected:false`; branch-protection details returned 403 and no repository rulesets were returned (2026-11-19). Do not describe `main` as technically protected until verified.  
@@ -1563,3 +1563,41 @@ Owner explicitly authorized preparation and testing of production containment, p
 - No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting save/removal, provider agreement, payment, reward issuance, or money movement occurred in this check.
 - The four shared control records were refreshed together in one documentation-only commit; no application code changed.
 
+
+## 2026-11-20 00:28 ET — Independent Sync Watch #3: Offerwall.GG containment verified; source drift remains
+
+### Repository, PRs, and handoffs
+- Authorized integration branch is 61e6e2f; production main is bcc19d. The integration branch is 34 commits ahead of PR #20's base 387d035; the compare shows only the five shared control documents changed. PR #20/#22 application diffs are unchanged, so no docs-only resync was performed.
+- Open PRs: #20 (6e2e51b, 58/58 CI), #22 (332ca07, 64/64 CI, stacked on #20), #23 (33a5240, draft, no CI), and stale #9. PR #21 and PR #24 are merged. PR #24's Deno run 44670475596 passed 3/3 tests on its candidate head.
+- Verifiable Claude artifacts remain PR #20 comment 7028471600, PR #22 comment 7028471854, and PR #24 test/review comments 7029857955 / 5987368371. No newer standalone Claude handoff note was found; CLAUDE.md is the current entrypoint and has been refreshed.
+
+### Production deployment and Offerwall.GG containment
+- PR #24 is merged to main as bcc19d. Cloudflare Pages production deployment 75207a07-6306-4461-b115-c6c4a508bd97 was created 2026-11-20 04:10:14Z and completed successfully at 04:11:50Z on branch main, commit bcc19d, with alias https://legitloot.site. This occurred before this check; this run did not merge or deploy.
+- Read-only production Supabase inspection confirms offerwall-gg-postback v4 ACTIVE/verify_jwt=false and offerwall-gg-wall-url v2 ACTIVE/verify_jwt=true. Both deployed sources are inert HTTP 410 handlers; the callback handler does not read request bodies/secrets or call Supabase, and the launcher no longer creates wall URLs.
+- Read-only SQL confirms service_role EXECUTE is false for both private.process_offerwall_gg_postback and public.process_offerwall_gg_postback; the checked anon and authenticated privileges are also false. The functions remain SECURITY DEFINER but the checked callback roles cannot execute them. No callback was invoked.
+- The production provider row remains disabled but retains stale standard_virtual_currency / LC / LootCoins metadata with null terms and approval references. The Offerwall.GG publisher dashboard callback URL was not changed; the endpoint it targets is now inert.
+
+### Critical repository/source drift
+- PROV-08 — CRITICAL: main/supabase/functions/offerwall-gg-wall-url/index.ts still contains the old active launcher: it reads OFFERWALL_GG_PUBLIC_KEY/SECRET, signs parameters, authenticates the user, and constructs https://offerwall.gg/wall/{publicKey}. PR #24 changed eight files but did not change this source file. The deployed production v2 is inert while the canonical repository source remains active; a future redeploy from repository source could re-enable the launcher. The smallest safe correction is to align this source with the deployed 410 behavior and add a regression test/workflow path before any future function redeploy. Production deployment remains owner-gated.
+- PR #24's registry test checks that Offerwall.GG is absent and CPAGrip is testing, but it does not assert that the wall-URL source is inert or that the Rewards/Account cash UI is absent.
+
+### Owner-locked launch blockers
+- Production rewards.html still renders a cash wallet and withdrawal states (lines 20, 25, 27); account.html still shows cash wallet, pending/reserved/paid cash (lines 4, 15–17); account-auth.js requires and formats cash fields (lines 53–70). Production public.get_wallet_summary() remains SECURITY DEFINER and returns cash USD buckets plus LC. This violates the no-cash/no-withdrawal/no-USD-peg rule.
+- Production earn.html says the server credits LC after a provider confirms a completion (line 9); earn-providers.js repeats provider-to-LootCoin issuance language (lines 5, 23). This conflicts with the rule that LC comes only from verified in-game milestones, weekly challenges, and seasonal events.
+- terms.html says formal Terms are not published; privacy.html says the full Privacy Notice is in preparation. account.html exposes Create Account and account-auth.js still calls client.auth.signUp (line 114). The production Auth sign-up pause remains NOT VERIFIED through available read-only tools.
+- Production games.html still lists only Zombies vs Heavy Metal and says more worlds later. Rocket 2 Nowhere is not on production: PR #22 is an integration candidate; PR #23 is a draft main-based preview with no CI. Staging game_registry still contains only the unlisted ZID placeholder; game saves, events, and handoff tickets are all zero. Shared account/session handoff, cloud saves, and verified LC-event ingestion remain incomplete.
+- The integration preview on 61e6e2f is classified preview, has only its build-branch alias, and uses supabase-config.js pinned to staging plus a fail-closed staging-only account-auth.js. PR #23's main-based preview still inherits production-targeting account-auth.js; do not use its Account/auth routes.
+- PR #20 and #22 are respectively 34 commits behind the current integration branch, but all 34 incoming commits are documentation-only across the five shared control files. Their current CI runs passed 58/58 and 64/64. Do not sync solely to chase documentation commits.
+
+### Taplayad App 10066 — fresh public-doc check
+- Preserve the owner-supplied template exactly: https://offerwall.tplayad.com/10066/{user_id}. Current official docs list user_id,payout,reward,offer_id,country,user_ip,status,sig; status 1=credited and 2=reversed; signature md5(app_id . user_id . api_secret); postback IP 176.97.212.58; and any 2xx response marks delivery. There is no transaction-ID macro, and the signature does not bind reward, payout, offer, or status. The example's offer_id + user_id dedupe is not a verified unique transaction/reversal contract.
+- Current docs show an iframe host/template different from the owner's supplied URL. The legacy /doc/postback page now returns 404, so its older transId formula must not be treated as the current contract. Current Terms were last updated 2026-10-29, require publishers to be 18+, and leave payment terms to the dashboard; no App-10066-specific permission for LegitLoot's incentivized traffic model is established.
+- Staging has no Taplayad provider row or integration. Keep it unintegrated/record-only; never map the publisher's $1=1 points multiplier or callback {reward}/{payout} to LC or cash.
+
+### Staging and security snapshot
+- Staging offerwall-gg-postback v8 remains record-only and does not post journal entries. Staging offerwall-gg-wall-url v5 remains active and its CORS allow-list includes https://legitloot.site; review this cross-environment exception before any staging/production integration. Staging providers contain only disabled CPAGrip and Offerwall.GG; Taplayad is absent.
+- Staging wallet RPC still returns cash USD buckets and labels game credits LLC; the game registry remains the unlisted ZID placeholder.
+- Production Security Advisor still reports leaked-password protection disabled and an authenticated SECURITY DEFINER warning for get_wallet_summary(); 12 private RLS/no-policy notices are informational and should not be fixed by adding public policies blindly. No security setting was changed.
+
+### Actions taken
+- This run performed read-only GitHub, Cloudflare, Supabase, and public Taplayad documentation checks, then updated only shared documentation on the authorized integration branch. No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance, or money movement was performed by this run. No live HTTP callback/410 probe was made.
