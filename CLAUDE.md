@@ -509,3 +509,14 @@ The production and PR #22 Zombies vs Heavy Metal wrapper loads https://demonanic
 **Documentation CI correction 2026-11-20 05:14 ET:** run 44719170874 passed npm test but failed only whitespace checks (MASTER_EXECUTION_CONTROL.md lines 8/65 and LAUNCH_READINESS_AUDIT.md EOF). The follow-up documentation-only commit removes those exact issues; verify its CI result before treating the shared-record update as green.
 
 **Documentation CI follow-up 2026-11-20 05:15 ET:** run 44719451991 passed npm test and failed only because all five updated shared records had an extra blank line at EOF. Follow-up commit 46be8d7 normalized the final newline; Actions run 44719817398 passed npm test and whitespace checks.
+
+
+## Latest Sync Watch — 2026-11-20 06:28 ET
+
+- Integration head at check start: `6fc8e48`; Actions run `44719973348` passed. Production main remains `bcc19d6`; containment run `44672601131` passed.
+- New RUNBOOK-01: the historical production snapshots for Offerwall.GG postback v3 and wall-url v1 are pre-containment active code, not safe rollback targets. `docs/RELEASE_RUNBOOK.md` now prohibits restoring v1/v3 and requires the inert postback v4/wall-url v2 handlers. Current deployed source hashes are recorded in `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`; the current inert sources are not yet archived in the historical snapshot directory.
+- Production runtime remains inert 410 with checked callback EXECUTE privileges revoked; the private production callback routine still contains the old journal/ledger path, so do not restore its grants. Staging wall-url v5 remains active/JWT with production-origin CORS; staging postback v8 remains record-only/no-JWT with unsigned reconciliation metadata and duplicate metadata updates. No callback/conversion rows exist in either environment.
+- Both provider registries retain disabled Offerwall.GG rows with stale LC/LootCoins reward metadata. Taplayad App 10066 remains unintegrated pending written permission and a complete transaction/reversal contract.
+- PR #25 remains draft and corrects only the integration wall-URL source. It does not align postback or deployed staging functions. Direct GitHub REST reports it clean/mergeable, but that is not merge approval. PR #20/#22 retain known wallet/game blockers; PR #23 preview Account/auth still targets production.
+- M2-T1/T3/T3b/T4/T6 and MIG-02 branches are stale relative to integration; the old M2-T3 branch has an obsolete duplicate migration version `20261119120000`. Relevant M2-T4/T6/MIG-02 documents/source are already on integration. No new Claude handoff or new Claude-authored commit was verified.
+- No merge/deploy, Supabase mutation, callback, provider agreement, payment, reward issuance or money movement occurred. This update is documentation-only.
