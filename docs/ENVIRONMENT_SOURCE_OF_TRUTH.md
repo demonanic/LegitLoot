@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 18:31 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:31 ET.
+**Last verified:** 2026-11-20 18:36 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:36 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1175,3 +1175,16 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 - **Migration provenance:** `tests/wallet-summary.test.mjs` now correctly labels its fixtures static and lists staging applied version `20261109050922` / production `20261108081619`; equivalence to the differently-prefixed repository SQL remains unproven. Do not treat the test as live DB verification.
 - **Docs/candidate alignment:** PR #27 is at `aae268f`, Actions `44837195049` passed. PR #30 contains docs through `e199df3` only, so it is one docs commit behind. Current PR #30 body still cites `9f2c9a0` and old Actions even though Claude's comment `7053199149` says it was refreshed. New candidate preview status is unverified.
 - All Supabase calls were SELECT-only. No Auth settings, secrets, grants, functions, migrations, schema, data, callbacks, provider settings or financial activity changed.
+
+
+## 2026-11-20 18:36 ET — Sync Watch #17 follow-up 2: latest candidate source review
+
+- PR #30 latest head `7f1e1c6113873d62058ae0454249a1658d21913f`, draft, 56 files / 77 commits. Node/whitespace `44837793174` and Deno `44837793169` pass. The last Claude-reported local 79/79 run was on preceding `ab505225`; browser test remains unrun; no preview status for this SHA has been returned.
+- Candidate source fixes now include: UI-only signup closure with backend `disable_signup` explicitly unverified; accurate account copy; wallet parser migration comments that distinguish applied versions from repository filenames; LC-only Edge Function account/entry filters and posted-transaction join; and a proposed staging RPC file outside migrations marked DO NOT APPLY.
+- **Live ledger confirmation:** aggregate SELECTs show `lootcoins_available` rows with `wallet_kind=game_credits,currency_code=LC` in both projects. Production also has legacy `game_credits_*` accounts with `currency_code=LLC`. The candidate's use of `lootcoins_*` for LC is consistent with live account metadata.
+- **Remaining proposed-RPC integrity gap:** SQL joins `journal_entries` to LC accounts by account_id and posted transaction only; it does not verify `e.wallet_kind=a.wallet_kind` and `e.currency_code=a.currency_code`. Add these predicates or reject mismatches, with a static regression test.
+- **Remaining ACL precondition gap:** SQL comment expects authenticated=true, service_role=true, anon=false, PUBLIC=false; the precondition query does not check PUBLIC. Fresh `proacl` for both environments is `{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}`. Add explicit PUBLIC-grantee verification via `aclexplode(proacl)` before any future application.
+- Current live RPCs remain cash/USD-bearing; production wallet-summary v4 remains deployed with its cash response. No SQL or Edge Function source is deployed. The proposed SQL is not applied.
+- Account sign-up UI is now closed, but the Supabase Auth `disable_signup` setting was not read/changed in this run; last recorded production probe was false. Backend registration remains owner-gated/unverified.
+- PR #27 is at `e1146ff`, Actions `44837816280` passed. PR #30 contains docs through `e199df3`, one docs commit behind. Its live PR body still cites `9f2c9a0` and old Actions even though Claude comment `7053199149` says it was refreshed. No preview result for the latest candidate SHA is verified.
+- No Auth setting, Supabase secret/grant/schema/data, callback, provider setting, agreement, payment, reward issuance or money movement occurred; all database queries were SELECT-only.

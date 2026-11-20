@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up (2026-11-20 18:31 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up 2 (2026-11-20 18:36 ET). Earlier status tables are historical.
 
 ---
 
@@ -1586,4 +1586,15 @@ No PR merge, deployment, SQL application, Supabase setting/secret/grant/schema/d
 - `account.html:5` still says “Sign in or create an account”; line 9 says no personal information is collected even though sign-in/reset collect email/password. New test title “public sign-up stays closed” verifies only UI/client source, not Auth project settings. `wallet-summary.js:4–8` still uses stale applied-migration wording after the test header was corrected.
 - Claude comment `7053199149` says PR body refreshed, but current PR body still references `9f2c9a0` and Actions `44832367913/44832367977`. Exact current head is `ab505225`; update the body. PR #27 is `aae268f` with Actions `44837195049` passed; PR #30 is still based on docs through `e199df3`, one commit behind.
 - Live production/staging wallet RPCs remain cash-bearing; production wallet-summary v4 remains deployed with cash fields. No proposed SQL or Edge Function source is deployed. ENV-07, Taplayad permission/protocol, legal/account deletion/export, and shared game/account/LC-event integration remain open.
+- No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 18:36 ET — Sync Watch #17 follow-up 2: review of latest source fixes
+
+- PR #30 is draft at `7f1e1c61` (56 files / 77 commits). Node/whitespace `44837793174` and Deno `44837793169` pass. The last Claude-reported local 79/79 result belongs to the preceding head `ab505225`; browser test remains unrun and preview for the latest SHA is not verified.
+- **Accepted fixes:** signup UI/client handler removed and copy corrected; backend Auth `disable_signup` explicitly marked unverified/owner-gated; wallet parser migration comments corrected; wallet test explicitly UI-only/static; Edge Function now filters account and entry currency to LC and joins posted transactions.
+- **Remaining RPC proposal defect:** `supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql:38–41` does not verify journal-entry `wallet_kind` and `currency_code` against its account. Add matching predicates or fail closed, plus regression coverage.
+- **Remaining ACL precondition defect:** the proposed SQL says PUBLIC has no EXECUTE but its precondition checks only authenticated, service_role and anon. Add a PUBLIC-grantee check via `aclexplode(proacl)` or equivalent. Current live ACL in both environments is `{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}`; anon/PUBLIC absent. File remains DO NOT APPLY.
+- The PR #30 body is still stale at `9f2c9a0` / old Actions, despite Claude comment `7053199149` claiming it was refreshed. Exact current head is `7f1e1c61`; update the body and current-state records. PR #27 is `e1146ff` with Actions `44837816280` passed; PR #30 remains one docs commit behind (`e199df3`).
+- Live wallet RPCs remain cash/USD-bearing; source-only proposal and Edge Function change are not deployed. Main-based ENV-07, Taplayad permission/protocol, legal/account deletion/export and game-event integration remain open.
 - No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
