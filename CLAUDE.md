@@ -8,7 +8,8 @@ Then read:
 
 1. `README.md`
 2. `AGENTS.md`
-3. `docs/PROJECT_PROGRESS.md`
+3. `docs/AGENT_OPERATING_CHARTER.md` — standing role and handoff agreement.
+4. `docs/PROJECT_PROGRESS.md`
 4. `docs/CODEX_EXECUTION_CONSTITUTION.md`
 5. `docs/PLATFORM_BUILD_SPEC.md`
 6. `docs/LEGITLOOT_CREATIVE_BIBLE.md`
