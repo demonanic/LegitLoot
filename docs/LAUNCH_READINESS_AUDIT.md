@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #16 (2026-11-20 17:58 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 (2026-11-20 18:20 ET). Earlier status tables are historical.
 
 ---
 
@@ -1552,3 +1552,25 @@ The owner-provided Offerwall.GG recording shows all five visible placements with
 
 ### Safety boundary
 No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callback, provider setting, agreement, payment, reward issuance or money movement occurred. All Supabase queries were SELECT-only; all code changes in this run were documentation-only on the existing PR #27 branch.
+
+
+## 2026-11-20 18:20 ET — Sync Watch #17 independent launch-readiness update
+
+### Candidate and tests
+- PR #30 remains a draft at exact head `0e9b9329846d5c4e4cbc65903f7e6bfd28fea4f3`, base `1466eb6`, 52 changed files / 71 commits. Node/whitespace Actions `44834506860` and Deno Actions `44834506806` pass; Claude reports local `npm ci && npm test` 77/77. The browser suite `tests/earn-hub.browser.py` remains unrun. Both Pages projects reported successful candidate branch-preview builds; source inspection confirms the candidate frontend is pinned to the exact staging project and fails closed if that config does not match.
+- PR #30 description is stale and still cites `9f2c9a0` / 76 tests. Refresh it to the exact current head and results before owner review.
+- **New test-provenance issue:** `tests/wallet-summary.test.mjs:4–6,31–35,81–85` describes repository migration files as the migrations applied in each environment. Live migration history instead lists staging `20261109050922 align_wallet_summary_response_with_staging_frontend` and production `20261108081619 standard_lootcoins_wallet`. The tested source files have different version prefixes. Correct the mapping or clearly label this as a static fixture/source test; the self-equality assertion on the fixture's `LLC` label does not verify the deployed response.
+
+### Wallet, onboarding, and games
+- **WALLET-01 remains FAIL:** production and staging `public.get_wallet_summary()` still include cash/USD buckets and grant authenticated EXECUTE. Production returns `lootCoins.available`; staging returns `gameCredits.available` with label `LLC` while the ledger filter uses LC. Production `wallet-summary` Edge Function v4 remains active and returns cash/USD fields. Candidate UI parsing ignores cash, but the backend response contract is not LC-only.
+- Candidate `account.html:7–9` still presents Create Account and `account-auth.js:100–110` calls `auth.signUp()`; `terms.html:4` and `privacy.html:4` state that final legal documents are not ready and instruct visitors not to submit personal information. Account deletion/export is incomplete. Public onboarding remains a launch blocker; no Auth setting was read or changed.
+- Both games remain early access with device-local saves. Staging registry still has only the unlisted `zid` placeholder; game events, saves and handoff tickets are empty. Shared account/session, cloud-save and server-verified LC-event integration remain incomplete.
+
+### Provider, isolation, and controls
+- Taplayad remains `pending_approval` with `launch: null` and the exact owner template `https://offerwall.tplayad.com/10066/{user_id}`. There is no Taplayad database row or integration. App-specific traffic permission and exact callback signature/transaction/reversal/retry semantics remain unverified; no publisher points or callback reward may become LC.
+- Staging Offerwall.GG postback v8 and wall-url v5 remain ACTIVE; the postback is record-only and the wall-url remains callable by an authenticated direct caller. Disabled Offerwall.GG rows retain stale LC metadata; staging CPAGrip is disabled. Production callback routine retains historical LC journal code but only postgres can execute it.
+- The main-based preview remains production-auth-connected (ENV-07); PR #28 is still draft against main. Candidate PR #30 preview source is staging-bound. GitHub reports 31 branches, all unprotected, and no repository rulesets.
+- Terms/Privacy, account deletion/export, support monitoring, backup/recovery and rollback evidence remain incomplete or unverified.
+
+### Safety
+No PR merge, deployment, SQL application, Supabase setting/secret/grant/schema/data change, callback, provider setting, provider agreement, payment, reward issuance or money movement occurred. Supabase checks were SELECT-only. PR #30 remains draft/review-only.

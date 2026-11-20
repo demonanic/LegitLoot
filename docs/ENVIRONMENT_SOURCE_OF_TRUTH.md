@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 17:58 ET by DaVinci (read-only GitHub, Cloudflare and Supabase review). Record edited 2026-11-20 17:58 ET.
+**Last verified:** 2026-11-20 18:20 ET by DaVinci (read-only GitHub and Supabase review; Cloudflare preview evidence from PR deployment comments). Record edited 2026-11-20 18:20 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1135,3 +1135,30 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 ### Access boundary and safety
 - `/admin.html` and `/payout-simulator.html` are publicly fetchable static shells; data/actions are gated by exact staging configuration, authentication and owner/admin RPCs. This is not URL-level denial and does not literally satisfy §630's “inaccessible to anonymous/public users” wording. A URL-level gate or `noindex` is a separate owner decision; no Cloudflare/security setting changed.
 - All queries in this recheck were read-only. No function deployment, setting/secret/grant/schema/data change, callback, provider setting, agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 18:20 ET — Sync Watch #17 fresh read-only environment check
+
+### GitHub and Cloudflare source targeting
+- Production remains `main@801f3e7`; integration remains `build/legitloot-neon-synthwave@1466eb6`.
+- PR #30 is a draft at `0e9b9329846d5c4e4cbc65903f7e6bfd28fea4f3`. GitHub Actions Node/whitespace `44834506860` and Deno `44834506806` pass. Both Pages projects reported successful pages.dev branch-preview builds. Candidate `supabase-config.js` selects the exact staging project; `account-auth.js` refuses to initialize unless the staging environment and exact staging URL match.
+- The separate main-based preview `fdf6b609` remains a preview deployment of `main@801f3e7` with production-targeting `account-auth.js`; keep Account/auth routes off it. PR #28 remains draft and production-targeting/owner-gated.
+- GitHub API reports 31 branches, all `protected:false`, and an empty repository-ruleset list. No branch-protection change was made.
+
+### Supabase — production
+- Project `gkbqderyjcuxnjbsiffb` is `ACTIVE_HEALTHY`; migration history has 7 entries, including `20261108081619 standard_lootcoins_wallet`.
+- Edge Functions: Offerwall.GG postback v4 and wall-url v2 remain ACTIVE tombstones; wallet-summary v4 remains ACTIVE (`verify_jwt=false`; handler source must continue its own bearer validation).
+- `public.get_wallet_summary()` is SECURITY DEFINER, returns cash USD buckets plus `lootCoins.available`, and grants EXECUTE to `authenticated` and `service_role`. `private.process_offerwall_gg_postback` still contains the historical LC journal path; EXECUTE is false for anon/authenticated/service_role and true for postgres only.
+- The production Offerwall.GG provider row remains disabled but its `approved_reward_model` still says LC/LootCoins.
+
+### Supabase — staging
+- Project `scmnxcsggquwtuyyjnnj` is `ACTIVE_HEALTHY`; migration history has 21 entries through `20261119145340 offerwall_gg_record_only`, including `20261109050922 align_wallet_summary_response_with_staging_frontend`.
+- Edge Functions include Offerwall.GG postback v8 ACTIVE/no-JWT, wall-url v5 ACTIVE/JWT, CPAGrip attribution v5, payout-simulator v6, admin-dashboard v7 and owner provisioning v7.
+- `public.get_wallet_summary()` is SECURITY DEFINER, returns cash USD buckets plus `gameCredits` (label `LLC`, ledger currency filter `LC`), and grants EXECUTE to `authenticated` and `service_role`.
+- `private.process_offerwall_gg_postback` remains `service_role`-executable, but its current body has no LC journal/ledger path. The staging wall-url remains callable by an authenticated direct caller. No callback was invoked.
+- `private.providers`: Offerwall.GG disabled with stale LC/LootCoins reward metadata; CPAGrip disabled with no approval/terms; no Taplayad row.
+- `public.game_registry` contains only the unlisted `zid` development placeholder. `private.game_events`, `private.game_saves`, and `private.game_handoff_tickets` each contain zero rows.
+
+### Migration-provenance discrepancy
+- Candidate `tests/wallet-summary.test.mjs:4–6,31–35,81–85` names repository files `20261109010000_align_wallet_summary_response.sql` and `20261108120000_standard_lootcoins_wallet.sql` as the applied staging/production migrations. Live Supabase migration history lists `20261109050922 align_wallet_summary_response_with_staging_frontend` and `20261108081619 standard_lootcoins_wallet`. The source-to-applied mapping is not established; correct the provenance or label the test as static source/fixture coverage.
+- No Supabase auth setting, secret, function, grant, schema, data, migration or provider configuration was changed. All SQL calls were SELECT-only.
