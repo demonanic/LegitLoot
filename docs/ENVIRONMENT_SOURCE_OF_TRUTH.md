@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 03:31 ET
+**Last verified:** 2026-11-20 04:39 ET
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -859,3 +859,40 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 
 ### No mutations
 - This check used GitHub reads, Supabase read-only project/function inspection and SELECT queries, and public documentation fetches. Only shared documentation and a PR #20 clarification comment were updated. No Edge Function deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 04:39 ET — Runtime and preview recheck
+
+### GitHub
+- Production main: bcc19d68694bcef968994c2a0466cecb57218955.
+- Integration: a345aa35470786f44760b6ac6998db50dd0ee9d3.
+- Branch count: 26. GitHub reports protected=false for main and integration.
+- Open PRs: #20 head 6e2e51b/base 387d035 (58/58); #22 head 332ca07 stacked on #20 (64/64); #23 head 33a5240 draft/no CI; #25 head 135607e draft with passing Node and Deno workflows; #9 stale draft.
+- PR #25's 20 commits of base-to-integration divergence affect only the six shared docs; PR #20's 59 commits of base-to-integration divergence also affect only those six docs. No application-code sync is required solely for this documentation churn.
+
+### Cloudflare Pages
+- Production project legitloot: deployment 75207a07-6306-4461-b115-c6c4a508bd97, environment=production, main commit bcc19d, alias https://legitloot.site. No production deployment was initiated in this run.
+- PR #25 exact head 135607e: project legitloot preview 3b687da5-66aa-4b69-a0bc-ece246e7df04 and project legitloot-preview preview 8d58bcb9-d489-485f-8be5-92f93c16710c; both environment=preview and pages.dev-only aliases.
+- Integration head a345aa3 has environment=preview deployments in both Pages projects; branch alias is build-legitloot-neon-synthwa.legitloot.pages.dev (Cloudflare's truncated branch alias).
+- PR #23 head 33a5240: deployment 5c3dd1bf-04d7-4901-8a17-3c30f0302278 in legitloot and eda80ba7-048a-42de-a6a8-94cc58c98dd7 in legitloot-preview; both environment=preview and pages.dev-only aliases. However, the deployed bundle includes account-auth.js hardcoded to production Supabase, with no preview environment variables. Pages environment=preview does not isolate its backend target.
+
+### Supabase — production gkbqderyjcuxnjbsiffb
+- offerwall-gg-wall-url v2: ACTIVE/JWT, inert HTTP 410.
+- offerwall-gg-postback v4: ACTIVE/no-JWT, inert HTTP 410.
+- Checked private/public callback routine EXECUTE grants are false for service_role, anon and authenticated.
+- Offerwall callback-event and conversion counts: zero.
+- Production provider registry contains only disabled Offerwall.GG; approval_reference, terms_url and terms_verified_at are null; approved_reward_model still says standard_virtual_currency / LC / LootCoins.
+
+### Supabase — staging scmnxcsggquwtuyyjnnj
+- offerwall-gg-wall-url v5: ACTIVE/JWT; deployed CORS includes https://legitloot.site and the full build preview origin.
+- offerwall-gg-postback v8: ACTIVE/no-JWT; record-only. Signature binds only userId:transactionId:currencyAmount; reconciliation metadata fields are unsigned and can be updated on duplicate callback results.
+- Current private/public callback routines are SECURITY DEFINER; service_role EXECUTE is true, anon/authenticated false. Their definitions have no journal, ledger or LootCoin references. Callback-event and conversion counts: zero.
+- Staging provider registry: CPAGrip disabled; Offerwall.GG disabled with null approval/terms and stale LC/LootCoins metadata; no Taplayad row.
+- The staging schema snapshot routines.sql still contains a pre-record-only Offerwall.GG journal-posting routine. Its README warns that this snapshot is stale and must not be replayed.
+- public.get_wallet_summary() returns cash USD buckets and gameCredits currency LLC. Production public.get_wallet_summary() returns cash USD buckets plus lootCoins; production wallet-summary Edge Function v4 also returns cash USD buckets and gameCredits LLC. The integration wallet parser ignores cash fields, but the backend contracts remain outside owner policy.
+
+### Source-of-truth warnings
+- Production main's wall-URL source remains active despite the deployed inert v2; a future source-based redeploy could reactivate it.
+- Integration canonical wall-URL and postback sources remain active until reviewed source changes are accepted. PR #25 head 135607e makes only the wall-URL source inert; it does not alter the postback source or deployed staging functions.
+- Staging deployed wall-URL source includes the production origin in CORS, while the canonical integration source uses the truncated build preview alias and omits production. Treat the deployed staging snapshot as the runtime truth until separately reviewed.
+- No Taplayad publisher configuration or callback integration is present. Preserve the owner-supplied template exactly and keep it inactive pending written App-10066 permission and a complete transaction/reversal contract.

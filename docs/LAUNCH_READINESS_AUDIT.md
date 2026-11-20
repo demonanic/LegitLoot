@@ -1300,3 +1300,42 @@ PR #23 discussion comment `7028436334` keeps the RXT2 game PR limited to game fi
 - Taplayad public docs currently lack transaction identity and a retry schedule; both legacy postback URLs return 404. Exact App-10066 URL, signature coverage, reversal/retry contract and incentivized-traffic permission remain unverified. Keep provider disabled and do not map provider points/reward/payout to LC.
 - Production launch remains NOT READY: prohibited cash/withdrawal UI and API fields, provider-to-LC copy, incomplete Terms/Privacy, unverified signup pause, Rocket 2 Nowhere absent from production listing, and missing shared account/save/LC-event integration.
 - No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement was performed.
+
+
+## 2026-11-20 04:39 ET — Independent Sync Watch #7
+
+### Offerwall.GG
+
+**Production runtime is contained, but source and staging are not.**
+- Production wall-url v2 and postback v4 are deployed inert HTTP 410 handlers. Checked EXECUTE privileges on private/public process_offerwall_gg_postback are false for service_role, anon and authenticated. Production callback/conversion tables are both zero.
+- Production main's wall-url source remains the old active URL generator; main's postback source is inert. A future wall-url redeploy from main could restore the old launcher.
+- The integration branch still has an active wall-url source and an active record-only postback source. PR #25 head 135607e makes only the wall-url source inert and adds recursive local-import regression scanning. It remains draft; Node and Deno Actions runs 44713338718 and 44713338856 passed. Do not describe PR #25 alone as full Offerwall closure.
+- Deployed staging wall-url v5 remains ACTIVE/JWT; its CORS allow-list includes the production site and full build preview origin. Staging postback v8 remains ACTIVE/no-JWT and record-only. The HMAC covers only userId:transactionId:currencyAmount; offerId, offerName, goalId, payoutUsd and timestamp are unsigned and sent to metadata storage even after a duplicate result. Live staging routines are SECURITY DEFINER and service_role-executable but contain no journal, ledger or LootCoin references. Staging callback/conversion counts are zero. This is a reconciliation-integrity risk, not current LC issuance.
+- Production/staging Offerwall.GG provider rows remain disabled with null approval/terms but stale standard_virtual_currency / LC / LootCoins metadata. Staging CPAGrip is disabled; no Taplayad row exists. The staging schema snapshot routines.sql is stale for Offerwall.GG and must not be replayed.
+
+### Launch policy and website
+
+- Production wallet-summary v4 and public.get_wallet_summary() still expose USD cash buckets; staging public.get_wallet_summary() also exposes cash USD buckets and labels gameCredits as LLC. The LC-only integration UI ignores those fields, but the server contract still violates the owner-locked no-cash/no-withdrawal model.
+- Production account.html/rewards.html still expose cash/withdrawal UI. Production earn.html still describes provider-confirmed LC. Production account-auth.js still hardcodes production Supabase and exposes signup. The production signup pause is not verifiable through the available read-only auth tools.
+- Production Terms and Privacy pages remain placeholders. Account deletion/export is not implemented; the draft account-deletion design is not an implementation.
+- Production games.html lists Zombies vs Heavy Metal only. ZVHM is live early access with device-local saves; Rocket 2 Nowhere is playable in preview only. Both still lack shared account/session handoff, cloud saves and verified LC-event ingestion.
+
+### PRs, previews and CI
+
+- PR #20 head 6e2e51b/base 387d035: 58/58 Actions passed. Its body cites stale head/base/test evidence; comment 7036351593 records the correction. PR #20's integration UI is LC-only, but backend cash fields remain.
+- PR #22 head 332ca07: 64/64 Actions passed; stacked on #20.
+- PR #23 head 33a5240: draft, no CI. Cloudflare classifies both Pages deployments as previews with pages.dev-only aliases, but the bundle includes account-auth.js hardcoded to production Supabase and active signup, with no preview environment variables. This violates preview isolation. Comment 7036403044 records the blocker.
+- PR #25 head 135607e: draft/mergeable; Node test/whitespace workflow and Deno type-check/handler workflow passed. Both Pages previews for this exact head are environment=preview and pages.dev-only. PR #25 is 20 commits behind current integration by ancestry; the 20 base-to-integration commits touch only six shared documentation files.
+
+### Taplayad App 10066
+
+- Current official docs at https://tplayad.com/docs (checked 2026-11-20) specify md5(app_id . user_id . api_secret), status 1/2, any-2xx acknowledgement, no transaction-ID macro and no retry schedule. The sample URL uses offer={offer_id}, while the PHP example reads offer_id.
+- The cached www legacy postback page appears in search but direct fetch of https://www.tplayad.com/doc/postback returns 404. Do not use its historical subId/transId protocol.
+- Current Terms at https://tplayad.com/terms were last updated 2026-10-29, require publishers to be 18+, and defer payment methods to the dashboard. General rewarded-offerwall product language exists, but App-10066-specific permission for LegitLoot's placement/traffic was not verified.
+- Preserve the owner URL exactly: https://offerwall.tplayad.com/10066/{user_id}. Do not map the $1=1 points multiplier or callback reward/payout to LC.
+
+### Coordination and actions
+
+- The only standalone Claude handoff in docs remains CLAUDE_START_HANDOFF_M1.md. Verified Claude commits remain PR #20 head 6e2e51b, PR #22 head 332ca07 and PR #23 head 33a5240; no newer Claude-authored commit was found after the 03:31 ET check. PR #25 test commit 135607e is authored by demonanic.
+- Comments added: PR #20 comment 7036351593; PR #23 comment 7036403044; PR #25 comment 7036350760.
+- No PR merge, deployment, Supabase settings/secrets/grants/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred. Cloudflare preview builds were automatic branch previews only.

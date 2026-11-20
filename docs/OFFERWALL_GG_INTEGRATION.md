@@ -111,3 +111,14 @@ Fresh read-only verification:
 - Staging offerwall-gg-postback v8 is ACTIVE (verify_jwt=false) and record-only. Staging provider row remains disabled but has stale LC/LootCoins reward-model metadata and null terms/approval evidence.
 - This guide says callback currencyName must be exactly “Loot coins”; staging handler supabase/functions/offerwall-gg-postback/index.ts line 82 accepts only “Loot Coins”. Confirm actual provider value and align staging source, documentation and tests before any permitted test-mode validation. No callback has been invoked.
 - Do not activate this provider, alter publisher settings, send a callback, or change production without required owner approval.
+
+
+## 2026-11-20 04:39 ET — Runtime/source correction (supersedes the 2026-11-19 runtime note)
+
+- Production deployed offerwall-gg-wall-url v2 and offerwall-gg-postback v4 are inert HTTP 410 handlers. Checked EXECUTE on the private/public callback routines is revoked for service_role, anon and authenticated. Production callback/conversion counts are zero.
+- Production main's postback source is inert, but main's wall-url source still contains the old active URL generator. Do not redeploy that source.
+- The integration branch still has an active wall-url source and an active record-only postback source. PR #25 head 135607e makes only the wall-url source inert and adds recursive local-import regression scanning; it does not modify postback source or deployed staging functions. Node and Deno Actions runs 44713338718 and 44713338856 passed. PR #25 remains draft.
+- Staging deployed wall-url v5 is ACTIVE/JWT and its CORS allow-list includes https://legitloot.site and the full build preview origin. Staging postback v8 is ACTIVE/no-JWT and record-only. Its HMAC covers only userId:transactionId:currencyAmount; offerId, offerName, goalId, payoutUsd and timestamp are unsigned and sent to metadata storage even when the transaction result is duplicate. Current live staging routines are SECURITY DEFINER and service_role-executable but contain no journal, ledger or LootCoin references. Staging callback/conversion counts are zero. This is a metadata-integrity/replay defect, not a verified LC-issuance path.
+- Production and staging Offerwall.GG provider rows remain disabled with null approval/terms but stale LC/LootCoins reward metadata. Staging CPAGrip is disabled; no Taplayad row exists. Do not infer provider approval from an Active badge or stale metadata.
+- supabase/environments/staging/schema-snapshot/routines.sql still contains the pre-record-only journal-posting routine; its README warning says the snapshot is stale for Offerwall.GG and must not be replayed.
+- No callback, provider setting, secret, schema, database row, deployment or financial action was performed in this check.

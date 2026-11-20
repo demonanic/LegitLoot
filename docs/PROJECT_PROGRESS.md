@@ -1,11 +1,11 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 03:31 ET
+**Updated:** 2026-11-20 04:39 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T3 — Offerwall.GG containment/source alignment; keep all provider paths disabled and no provider-to-LC issuance
-**Integration branch:** `build/legitloot-neon-synthwave` (audit start @ `0bcd3cb`; this check added documentation-only updates; no application code changed)
-**Production branch:** `main` @ `bcc19d` (PR #24 merged; Cloudflare production deployment succeeded)
-**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, 58/58 CI; application diff unchanged); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI; application diff unchanged); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #25 Offerwall.GG wall-URL source alignment (draft/mergeable, head `61f9ca8`, 54/54 Node plus Deno checks); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
+**Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere (per MASTER_EXECUTION_CONTROL.md). This Sync Watch focused Offerwall.GG containment/source alignment as a P0 launch/security blocker at the owner's request; the active task assignment is unchanged.
+**Integration branch:** build/legitloot-neon-synthwave @ a345aa3
+**Production branch:** main @ bcc19d; Cloudflare production deployment 75207a07 succeeded on 2026-11-20.
+**Current open PRs:** #20 Hustle/public-copy (head 6e2e51b, 58/58 exact-head CI; PR description evidence stale); #22 game integration (head 332ca07, 64/64 CI, stacked on #20); #23 Rocket 2 Nowhere main-based draft (head 33a5240, no CI, preview auth targets production Supabase); #25 Offerwall.GG wall-URL source alignment (draft, head 135607e, Node and Deno workflows pass); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
 
 ## Current owner-locked operating rules
 
@@ -743,3 +743,17 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Corrected `supabase/environments/staging/schema-snapshot/README.md`: its routines export contains the pre-record-only journal-posting implementation and is stale for Offerwall.GG despite the applied record-only migration. Live staging remains the current truth.
 - Current Taplayad docs have no transaction-ID macro or retry schedule; signature is `md5(app_id . user_id . api_secret)`; both legacy postback URLs now return 404. PR #20 comment [7034570945](https://github.com/demonanic/LegitLoot/pull/20) corrects the earlier legacy-protocol note. App 10066 remains unintegrated pending written provider clarification and permission.
 - PR #20/#22 CI remains green (58/64); PR #23 remains draft/no CI; PR #25 remains draft with 54/54 Node tests and passing Deno checks. No merge/deploy or financial/provider/database mutation occurred.
+
+
+## 2026-11-20 04:39 ET — Independent Sync Watch #7
+
+- Current integration is a345aa3; production main is bcc19d. There are 26 branches; main and integration both report protected=false.
+- PR #20/#22 remain open and green at 58/64 tests. PR #20's description is stale relative to its actual head/base; comment 7036351593 records the exact correction. PR #22 remains stacked on #20.
+- PR #23 is draft/no CI. Its Pages deployment is a preview, but its Account/auth bundle hardcodes production Supabase and signup; do not use Account/auth on that preview. Comment 7036403044 records the blocker.
+- PR #25 is draft at 135607e. Recursive local-import scanning was added to its staging/production-origin regression test. Node and Deno Actions passed; both Cloudflare previews are environment=preview and pages.dev-only. PR #25 changes only wall-url source, not postback source. Comment 7036350760 records the remaining scope.
+- Production Offerwall.GG runtime remains inert 410 with callback EXECUTE revoked and zero callback/conversion rows. Production main wall-url source remains active. Staging wall-url v5 remains active/JWT with production-origin CORS; postback v8 remains active/no-JWT and record-only with unsigned reconciliation metadata. Live staging routines currently have no journal/ledger/LC references; zero callback/conversion rows.
+- Production/staging provider registries are disabled; Offerwall.GG retains stale LC metadata and null approval/terms; staging CPAGrip is disabled; Taplayad is not registered. Taplayad App 10066 remains selected but unintegrated pending written permission and a complete transaction/reversal contract.
+- Wallet backend remains non-compliant: production/staging wallet RPCs and production wallet-summary v4 still return cash USD buckets; staging labels gameCredits LLC. Production UI still exposes cash/withdrawal and provider-to-LC wording; PR #20 integration UI is LC-only but does not change backend response contracts. Terms/Privacy, signup pause, account deletion/export and shared game/account/save/LC-event integration remain launch blockers.
+- ZVHM is production early access with device-local saves; RXT2 is playable in preview only. Both remain disconnected from the central account and authoritative LC wallet.
+- No merge, deployment, settings/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred. The PR #25 test-only commit is on its review branch and was not merged.
+- Next: keep Offerwall.GG disabled; review PR #25; prepare source-alignment candidates for both Offerwall.GG functions and a separate staging containment candidate; do not deploy. Keep PR #23 blocked until preview auth fails closed against production.
