@@ -1,8 +1,19 @@
 (() => {
   const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
-  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  // ENV-07: this file targets the PRODUCTION Supabase project. Only the canonical
+  // production hostnames may initialize a client; every other host (including
+  // *.pages.dev previews and localhost) fails closed before createClient runs.
+  const PRODUCTION_HOSTS = ["legitloot.site", "www.legitloot.site"];
+  const isProductionHost = PRODUCTION_HOSTS.includes(window.location.hostname);
+  const client = isProductionHost ? window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY) : null;
   const $ = (id) => document.getElementById(id);
+  if (!isProductionHost) {
+    const blocked = $("auth-status");
+    if (blocked) blocked.innerHTML = "<b>ACCOUNT DISABLED ON THIS HOST</b><p>Accounts are only available on the official LegitLoot site. This preview does not connect to any account system.</p>";
+    document.querySelectorAll("form").forEach((form) => { form.hidden = true; });
+    return;
+  }
   if (!client) {
     const status = $("auth-status");
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
