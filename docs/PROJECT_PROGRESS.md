@@ -29,7 +29,7 @@
 
 ## Current verification status
 
-- PR #20 Actions run `44661202504`: 58/58 pass, 0 failures, 0 skips. Claude synced it once to `387d035`; integration is now `7b240b2`, eight documentation-only commits ahead. No further sync until an owner-approved integration disposition.
+- PR #20 Actions run `44661202504`: 58/58 pass, 0 failures, 0 skips. Claude synced it once to `387d035`; at the start of the 22:39 ET check, integration was `7b240b2` and eight documentation-only commits ahead. This check added further documentation-only coordination records; read Master Control for the current head. No further sync until an owner-approved integration disposition.
 - PR #22 Actions run `44661225287`: 64/64 pass, 0 failures, 0 skips. Claude updated the stacked branch to head `332ca07`, 2 ahead / 0 behind PR #20 head `6e2e51b`; independent COMMENT review found no blocker in the scoped game changes.
 - PR #23: Cloudflare preview deployed successfully in both Pages projects; read-only browser QA confirmed the Games page and embedded RXT2 start screen. No GitHub Actions run exists for this PR.
 - PR #24: no Actions run; Deno tests are authored but not executed. Import-side-effect defect and preview-isolation finding were posted to the PR.
