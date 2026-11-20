@@ -23,5 +23,7 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.9.8
+      - name: Type-check Edge Function entrypoint
+        run: deno check supabase/functions/offerwall-gg-wall-url/index.ts
       - name: Test inert Offerwall.GG wall URL handler
         run: deno test supabase/functions/offerwall-gg-wall-url/index_test.ts
