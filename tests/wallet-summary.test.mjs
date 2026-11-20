@@ -129,3 +129,11 @@ test("WALLET-01 edge function source mirrors the proposed RPC filters (static)",
   assert.match(sql, /Precondition/);
   assert.doesNotMatch(sql, /no table, grant or data change/);
 });
+
+test("proposed RPC joins entries on account wallet_kind/currency and asserts exact ACL precondition (static)", () => {
+  const sql = read("supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql");
+  assert.match(sql, /e\.wallet_kind = a\.wallet_kind and e\.currency_code = a\.currency_code/);
+  assert.match(sql, /aclexplode\(p\.proacl\)/);
+  assert.match(sql, /x\.grantee = 0/);
+  assert.match(sql, /postgres=X\/postgres,authenticated=X\/postgres,service_role=X\/postgres/);
+});

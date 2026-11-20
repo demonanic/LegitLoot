@@ -36,6 +36,7 @@ begin
       end), 0)::numeric(30,0) as balance
     from user_accounts a
     left join private.journal_entries e on e.account_id = a.id
+      and e.wallet_kind = a.wallet_kind and e.currency_code = a.currency_code
     left join private.journal_transactions t on t.id = e.transaction_id
       and t.status::text = 'posted'
     where e.id is null or t.id is not null
@@ -55,9 +56,12 @@ begin
 end;
 $function$;
 
--- Precondition (run read-only before applying; expect authenticated=true, service_role=true, anon=false, public=false):
---   select has_function_privilege('authenticated','public.get_wallet_summary()','execute'),
---          has_function_privilege('service_role','public.get_wallet_summary()','execute'),
---          has_function_privilege('anon','public.get_wallet_summary()','execute');
+-- Precondition (run read-only before applying). Expected exact ACL today (proacl):
+--   {postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}  -- no anon, no PUBLIC grantee
+--   select p.proacl,
+--          exists (select 1 from aclexplode(p.proacl) x where x.grantee = 0) as public_granted,
+--          has_function_privilege('anon','public.get_wallet_summary()','execute') as anon_exec
+--   from pg_proc p where p.oid = 'public.get_wallet_summary()'::regprocedure;
+--   -- expect public_granted=false, anon_exec=false, and proacl equal to the set above.
 revoke all on function public.get_wallet_summary() from public, anon;
 grant execute on function public.get_wallet_summary() to authenticated, service_role;
