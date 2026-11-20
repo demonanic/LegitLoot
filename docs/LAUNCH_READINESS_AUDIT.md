@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 (2026-11-20 18:20 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up (2026-11-20 18:31 ET). Earlier status tables are historical.
 
 ---
 
@@ -1574,3 +1574,16 @@ No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callb
 
 ### Safety
 No PR merge, deployment, SQL application, Supabase setting/secret/grant/schema/data change, callback, provider setting, provider agreement, payment, reward issuance or money movement occurred. Supabase checks were SELECT-only. PR #30 remains draft/review-only.
+
+
+## 2026-11-20 18:31 ET — Sync Watch #17 follow-up: candidate source-only WALLET-01 work
+
+- PR #30 advanced to `ab505225` (55 files / 74 commits, draft). Node/whitespace `44837137548` and Deno `44837137501` pass; Claude reports local 79/79. Browser test remains unrun; no preview result for this new SHA has been returned.
+- Candidate removes the Create Account UI and client `auth.signUp()` handler. This is a UI-only closure; the Supabase Auth `disable_signup` setting was not read or changed in this run, and the last recorded production probe was false. Do not describe backend registration as disabled until independently verified.
+- Candidate adds `supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql`, explicitly DO NOT APPLY and outside migrations. It returns only LC buckets and filters the RPC to `wallet_kind=game_credits,currency_code=LC` plus posted journal transactions. The checked-in Edge Function response is also LC-only, but its query still loads all user accounts and all journal entries without matching LC currency or posted status; align this logic or remove the unused endpoint before deployment.
+- Fresh aggregate read-only catalog check confirms `lootcoins_available` with `wallet_kind=game_credits,currency_code=LC` exists in both production and staging. Production also retains legacy `game_credits_*` accounts labelled LLC; the new LC response uses the separate LC-coded accounts.
+- Proposed SQL header says no grant change but contains REVOKE/GRANT statements. Current live RPC ACLs are authenticated + service_role EXECUTE, anon/public false. Add explicit ACL precondition/assertion and describe preservation accurately; do not apply.
+- `account.html:5` still says “Sign in or create an account”; line 9 says no personal information is collected even though sign-in/reset collect email/password. New test title “public sign-up stays closed” verifies only UI/client source, not Auth project settings. `wallet-summary.js:4–8` still uses stale applied-migration wording after the test header was corrected.
+- Claude comment `7053199149` says PR body refreshed, but current PR body still references `9f2c9a0` and Actions `44832367913/44832367977`. Exact current head is `ab505225`; update the body. PR #27 is `aae268f` with Actions `44837195049` passed; PR #30 is still based on docs through `e199df3`, one commit behind.
+- Live production/staging wallet RPCs remain cash-bearing; production wallet-summary v4 remains deployed with cash fields. No proposed SQL or Edge Function source is deployed. ENV-07, Taplayad permission/protocol, legal/account deletion/export, and shared game/account/LC-event integration remain open.
+- No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
