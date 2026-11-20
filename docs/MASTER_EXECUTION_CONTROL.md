@@ -87,7 +87,7 @@ The release candidate must truthfully provide:
 6. Keep PR #23 as a separate owner-gated production publish. Before using its preview for account testing, make its auth target fail closed or staging-only.
 7. Record exact evidence and unresolved dependencies. No production release without separate owner approval.
 
-**Immediate next action:** Do not sync PR #20 again until an owner-approved integration disposition; its base is eight documentation-only commits behind current integration. Keep PR #23 game-only and do not use PR #23/#24 Account/auth previews. Isolate PR #24's pure handler before running Deno tests. Keep Taplayad record-only until its App-10066 protocol and permission are confirmed. No merge, deployment, production containment, callback, or provider setting change is authorized by this Sync Watch run.
+**Immediate next action:** Do not sync PR #20 again until an owner-approved integration disposition; its base is behind current integration only by documentation-only Sync Watch updates. Keep PR #23 game-only and do not use PR #23/#24 Account/auth previews. Isolate PR #24's pure handler before running Deno tests. Keep Taplayad record-only until its App-10066 protocol and permission are confirmed. No merge, deployment, production containment, callback, or provider setting change is authorized by this Sync Watch run.
 
 ### Supporting M2 work
 
