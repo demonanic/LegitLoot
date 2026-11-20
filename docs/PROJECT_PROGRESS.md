@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 05:16 ET
+**Updated:** 2026-11-20 06:28 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
@@ -789,3 +789,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 ## 2026-11-20 05:15 ET — Documentation CI follow-up
 
 - Run 44719451991 passed npm test and failed only the whitespace check because all five updated records had an extra blank line at EOF. Follow-up commit 46be8d7 removed those EOF blanks; Actions run 44719817398 passed npm test and whitespace checks.
+
+
+## 2026-11-20 06:28 ET — Independent Sync Watch #9
+
+- **New RUNBOOK-01:** the release runbook's Edge Function rollback row referenced historical production snapshots `offerwall-gg-postback` v3 and `offerwall-gg-wall-url` v1. Those are pre-containment active implementations, not safe rollback targets. Corrected `docs/RELEASE_RUNBOOK.md`: only the current inert v4/v2 HTTP 410 handlers may be preserved/restored; never restore v1/v3 or callback EXECUTE grants. Current deployed source fingerprints are recorded in `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md`.
+- Production runtime remains contained: postback v4 and wall-url v2 are inert; checked private/public callback EXECUTE is false for service_role/anon/authenticated; callback and conversion tables are both zero rows. The private production SECURITY DEFINER callback routine still contains old journal/ledger posting code, so grants must remain revoked.
+- Staging remains not fully contained: wall-url v5 is an active authenticated launcher whose CORS includes the production origin; postback v8 is no-JWT and record-only. Its HMAC binds only user ID, transaction ID and amount; unsigned reconciliation metadata can still be updated after duplicate results. Live staging routines have no journal/ledger/post_journal_transaction reference; both callback tables are zero rows.
+- Both provider registries retain disabled Offerwall.GG rows with null approval/terms but stale LC/LootCoins reward metadata. No Taplayad row exists in staging.
+- Integration at check start `6fc8e48` passed Actions run 44719973348. Main `bcc19d6` passed production-containment Actions run 44672601131. PR #20/#22 remain green at 58/64 tests but blocked by known wallet/game defects; PR #23 remains draft/no CI and its preview auth targets production; PR #25 remains draft, 54/54 Node plus Deno checks passed, and changes only integration wall-url source. Direct GitHub REST reports PR #25 clean/mergeable; one normalized connector summary disagreed.
+- 26 branches remain unprotected. M2 work branches are stale relative to integration; the old M2-T3 branch carries the record-only SQL under obsolete migration version `20261119120000`, while staging applied `20261119145340`. Do not merge or replay the stale branch. No new Claude handoff or new Claude-authored commit was verified.
+- No gated actions occurred. Only read-only repository/Supabase inspection, the release-runbook documentation correction, and shared-record updates were performed.
