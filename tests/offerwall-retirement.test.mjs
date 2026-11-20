@@ -50,12 +50,14 @@ test("staging snapshots of the retired functions are marked retired / do-not-dep
     assert.ok(existsSync(new URL(marker, root)), `${marker} missing`);
     assert.match(read(marker), /DO NOT DEPLOY/);
   }
-  const manifest = JSON.parse(read("supabase/environments/staging/DEPLOYED_FUNCTIONS_MANIFEST.json"));
-  for (const fn of FUNCTIONS) {
-    const entry = manifest.functions.find((f) => f.slug === fn);
-    if (!entry) continue; // absent from a manifest is fine
-    assert.equal(entry.retired, true, `${fn} manifest entry must be flagged retired`);
-    assert.equal(entry.do_not_deploy_snapshot, true, `${fn} manifest entry must be flagged do_not_deploy_snapshot`);
+  for (const env of ["staging", "production"]) {
+    const manifest = JSON.parse(read(`supabase/environments/${env}/DEPLOYED_FUNCTIONS_MANIFEST.json`));
+    for (const fn of FUNCTIONS) {
+      const entry = manifest.functions.find((f) => f.slug === fn);
+      assert.ok(entry, `${env} manifest must keep the historical ${fn} entry`);
+      assert.equal(entry.retired, true, `${env}/${fn} must be flagged retired`);
+      assert.equal(entry.do_not_deploy_snapshot, true, `${env}/${fn} must be flagged do_not_deploy_snapshot`);
+    }
   }
 });
 
@@ -86,16 +88,36 @@ test("the proposed retirement SQL is not in an auto-applied migrations directory
   assert.ok(!migrations.some((m) => /retire/i.test(m)));
 });
 
-test("no deployable manifest or workflow targets the old active snapshots", () => {
-  for (const dir of [".github/workflows"]) {
-    for (const f of readdirSync(new URL(dir + "/", root))) {
-      const src = read(`${dir}/${f}`);
-      assert.ok(!/environments\/(staging|production)\/functions\/offerwall-gg/.test(src), `${f} must not deploy a snapshot of a retired function`);
-    }
+function listFiles(dir, out = []) {
+  for (const entry of readdirSync(new URL(dir + "/", root), { withFileTypes: true })) {
+    const path = `${dir}/${entry.name}`;
+    if (entry.name === "node_modules" || entry.name === ".git") continue;
+    if (entry.isDirectory()) listFiles(path, out); else out.push(path);
+  }
+  return out;
+}
+
+test("no deployable path (workflows, scripts, configs) selects a retired snapshot or deploys a retired function", () => {
+  const candidates = [
+    ...listFiles(".github"),
+    ...readdirSync(root).filter((f) => /^(package\.json|Makefile|.*\.(sh|toml|ya?ml))$/.test(f)),
+    ...["supabase/config.toml"].filter((f) => existsSync(new URL(f, root))),
+    ...(existsSync(new URL("scripts/", root)) ? listFiles("scripts") : []),
+    ...listFiles("supabase").filter((f) => /\.(sh|toml|ya?ml|json)$/.test(f) && !/DEPLOYED_FUNCTIONS_MANIFEST\.json$/.test(f)),
+  ];
+  for (const file of new Set(candidates)) {
+    const src = read(file);
+    assert.ok(!/environments\/(staging|production)\/functions\/offerwall-gg/.test(src), `${file} selects a retired snapshot`);
+    assert.ok(!/functions\s+deploy[^\n]*offerwall-gg/i.test(src), `${file} deploys a retired function`);
   }
 });
 
-test("provider events in the website registry never launch Offerwall.GG", () => {
+test("the website registry has no Offerwall.GG record, name, launch or origin", () => {
   const registry = read("earn-providers.js");
-  assert.ok(!/launch:\s*Object\.freeze\(\{[^}]*offerwall-gg-wall-url/s.test(registry), "registry must not launch the retired wall-url function");
+  assert.ok(!/offerwall[-. _]?gg/i.test(registry), "no Offerwall.GG id/name/function in the registry");
+  assert.ok(!/offerwall\.gg/i.test(registry), "no offerwall.gg origin in the registry");
+  assert.ok(!/launch:\s*Object\.freeze/.test(registry), "no provider may carry a launch block in this release");
+  assert.match(registry, /id: "taplayad"/);
+  assert.match(registry, /state: "pending_approval"/);
+  assert.ok(!/id: "cpagrip"/.test(registry), "CPAGrip is not part of the initial registry");
 });
