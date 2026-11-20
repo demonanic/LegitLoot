@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 06:41 ET
+**Last verified:** 2026-11-20 12:51 ET
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -983,3 +983,20 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Preserve historical migration SQL, snapshots, records, and audit evidence. Do not drop historical tables or erase provider history. A retired/disabled provider row may remain as an explicit tombstone with no launch target, approval, terms, or reward metadata.
 - Owner authorized removal of the LegitLoot placement's postback URL and placement configuration in the Offerwall.GG dashboard, but not deletion of the entire publisher account or changes to payout details. This session could not access the dashboard (Browser Use insufficient credits; Opera browser disconnected); no change is claimed.
 - Supabase secret deletion is outside this authorization. Do not read or expose secret values; report obsolete secret names separately for owner decision.
+## 2026-11-20 12:51 ET — Read-only environment recheck
+
+### Cloudflare Pages
+- `legitloot` production deployment `fe4c0f22` is `environment=production`, branch `main`, commit `801f3e7`, status success, alias `https://legitloot.site`.
+- `legitloot-preview` still has a preview deployment `fdf6b609` from branch `main`, commit `801f3e7`, alias `https://main.legitloot-preview.pages.dev`, environment `preview`. Project environment variables are empty. Main `account-auth.js` nevertheless hardcodes production Supabase and exposes signup; the preview is not backend-isolated. Do not use Account/auth routes there.
+- Current integration preview from `build/legitloot-neon-synthwave` @ `a4d1b538` is a preview deployment. Its `account-auth.js` requires exact staging project URL, `environment=staging`, and a publishable key; it fails closed otherwise.
+
+### Supabase
+- Production `gkbqderyjcuxnjbsiffb`: `offerwall-gg-wall-url` v2/JWT and `offerwall-gg-postback` v4/no-JWT are runtime tombstones; `wallet-summary` v4 remains deployed. Production `private.providers` has an Offerwall.GG row `disabled`, but its `approved_reward_model` still names LC/LootCoins.
+- Staging `scmnxcsggquwtuyyjnnj`: `offerwall-gg-wall-url` v5/JWT and `offerwall-gg-postback` v8/no-JWT remain ACTIVE; `cpagrip-attribution` v5/JWT also remains ACTIVE. The Offerwall.GG provider row is `disabled` but retains LC/LootCoins reward metadata. No callbacks were invoked.
+- Staging `public.game_registry` has only `zid` / Zombie Invasion Defense, `status=development`, `is_listed=false`, `launch_url=null`. No ZVHM or R2N registry entries exist. `private.game_events`, `private.game_saves`, and `private.game_handoff_tickets` each contain 0 rows. No `game-event` Edge Function is deployed.
+- Production `public.get_wallet_summary()` still returns `cash` USD buckets and `lootCoins.available`; this remains incompatible with the owner-locked no-cash wallet model.
+
+### GitHub
+- 28 refs enumerated; every ref reports `protected=false`. Repository rulesets endpoint returns an empty list. No technical branch protection is in place.
+- Production main is `801f3e7`; integration branch is `a4d1b538`. PR #27 head `a6a01e9` is 10 commits ahead / 5 behind integration and GitHub reports it dirty/unmergeable. Its exact-head Actions run `44772928022` succeeded.
+- No Supabase settings, secrets, grants, schema or data were changed; this section records read-only evidence only.

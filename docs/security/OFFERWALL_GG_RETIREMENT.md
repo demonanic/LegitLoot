@@ -39,3 +39,9 @@ Remove active application code, provider registry/launch exposure, callback proc
 ## Prohibited shortcuts
 
 Do not merge a PR or deploy to production. Do not change production Supabase settings, secrets, grants, schema, or data. Do not invoke callbacks, test buttons, or conversions. Do not accept provider terms, alter payout settings, move money, or delete the whole publisher account. Do not map any provider amount, points, payout, or callback to LC. Taplayad App 10066 remains a separate owner-selected candidate, pending its own written permission and technical readiness.
+## Owner dashboard report — 2026-11-20
+
+- The owner reports removing the postback URL from every Offerwall.GG placement they attempted or successfully configured in the publisher dashboard. Treat this as owner attestation; no screenshot or independent dashboard readback was available in this run.
+- The owner has not confirmed that the LegitLoot placement itself was disabled or deleted. Record dashboard acceptance criterion 8 as **PARTIAL**: postback URL removal is owner-reported; placement disable/delete remains UNVERIFIED.
+- No other publisher-dashboard change was reported. Do not delete the publisher account, alter payout details, or move funds.
+- This dashboard step does not complete technical retirement. Staging functions and snapshots, provider metadata, source/deployment reactivation paths, and production owner-gated cleanup remain outstanding.

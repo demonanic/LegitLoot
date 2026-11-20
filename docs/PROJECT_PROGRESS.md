@@ -1,10 +1,10 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 06:41 ET
+**Updated:** 2026-11-20 12:51 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
+**Active task:** M2-T4 — both owner-selected games are present on `legitloot.site` in early access with device-local saves and no account/LC connection. Remaining: shared account/session handoff, cloud saves, trusted server-verified LC events. Offerwall.GG permanent retirement is a security subtask; the owner reports postback URL removal from all attempted/successful placements, but technical retirement and placement disable/delete are not verified.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
-**Production branch:** main @ bcc19d6; Cloudflare production deployment 75207a07 succeeded at 2026-11-20 04:11:50 UTC.
+**Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 succeeded at 2026-11-20 14:02 UTC and aliases https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
 
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs:** #20 Hustle/public copy (head 6e2e51b, 58/58 exact-head CI); #22 game integration (head 332ca07, 64/64 CI, stacked on #20 but blocked by wrong ZVHM source/test); #23 Rocket 2 Nowhere main-based draft (head 33a5240, no CI, preview auth targets production Supabase); #25 Offerwall.GG wall-URL source alignment (draft, head 135607e, 54/54 Node plus Deno checks, staging deployment-source test gap); #9 stale non-mergeable visual redesign draft. PR #21 and #24 were merged by owner account demonanic.
+**Current open PRs (2026-11-20 12:51 ET):** #9 stale draft; #20 Hustle/public copy (58/58); #22 game integration (64/64); #25 Offerwall.GG source alignment (draft, superseded); #26 Taplayad-only pending registry (59/59, stacked on #20); #27 docs reconciliation (exact-head Actions success, but branch diverged/dirty). PR #23 merged to production as `801f3e7`.
 
 ## Current owner-locked operating rules
 
@@ -29,15 +29,15 @@
 - **PROV-10 — DEPLOYMENT-SOURCE TEST GAP:** PR #25's recursive guard checks canonical supabase/functions imports, while tests/staging-function-origins.test.mjs deliberately excludes environment snapshots. The active staging wall-url/postback deployments exactly match those excluded snapshots. PR #25 comment 7037024928 requests a separate explicit deployment-source/manifest guard.
 - **WALLET-01 — HIGH:** Production and staging public.get_wallet_summary() return cash USD buckets. Production RPC returns lootCoins.available; staging RPC returns gameCredits with currency.gameCredits=LLC. Production wallet-summary Edge Function v4 returns cash plus gameCredits/LLC, differing from the production RPC's lootCoins/LC; no current page caller was found by repository code search. Production Account/Rewards/Earn UI and account-auth.js still expose cash/withdrawal or provider-to-LC behavior. PR #20's LC-only integration UI does not change the backend response contracts.
 - **AUTH-02:** Production main exposes Create Account and hardcodes production Supabase. The owner-approved signup pause remains unverified; no auth form was submitted. Account deletion/export is not implemented.
-- **GAME-02 — HIGH:** The production ZVHM wrapper embeds demonanic/Legitloot-2, which Platform Build Spec §0.4 explicitly excludes as Zombie Invasion Defense. PR #21 was merged by the owner account and deployed, but that does not change the locked game selection. PR #22's 64/64 tests assert the excluded URL; comments 7036549802 and 7036564753 block acceptance. Correct ZVHM source/build remains unlocated. RXT2 is preview-only, device-save, with no shared account/LC connection.
+- **GAME-02 — RESOLVED 2026-11-20:** `demonanic/Legitloot-2` is the owner-approved Zombies vs Heavy Metal build; Rocket 2 Nowhere is also published. Both are early access with device-local saves and no account/LC connection. Shared account/session, cloud saves and trusted LC events remain open.
 - **ENV-07 — CRITICAL:** PR #23's Cloudflare preview is correctly classified as preview and has a pages.dev-only alias, but its bundle uses main account-auth.js with production Supabase URL and active signup; deployment environment variables are empty. Do not use its Account/auth routes. Comment 7036403044 records the blocker.
 - **HUSTLE/TAPLAYAD — HIGH:** Owner App 10066 template remains https://offerwall.tplayad.com/10066/{user_id}. Current docs use md5(app_id . user_id . api_secret), status 1/2 and any-2xx acknowledgement; no transaction-ID macro or retry schedule is documented. The sample parameter mismatch remains; direct legacy postback page returns 404. Current Terms do not establish App-10066-specific incentivized-traffic permission. No publisher settings or terms were accepted; never map provider points/reward/payout to LC.
-- **GOV-01 — HIGH:** GitHub branch API reports all 26 refs, including main and integration, as protected:false. Do not treat owner gates as technically enforced.
+- **GOV-01 — HIGH:** GitHub reports all 28 refs `protected:false`; repository rulesets are empty. Owner release gates are not technically enforced.
 - **LEGAL/SUPPORT/OPS:** Terms/Privacy, monitored support, account deletion/export, signup-pause verification, monitoring, backup/PITR, and rollback evidence remain incomplete or owner-gated.
 
-## Current verification status## Current verification status
+## Current verification status
 
-- Integration application baseline is 56b98e4; Actions run [44715079355](https://github.com/demonanic/LegitLoot/actions/runs/44715079355) passed for that baseline. Docs-only run [44719170874](https://github.com/demonanic/LegitLoot/actions/runs/44719170874) passed npm test but failed whitespace checks; follow-up run [44719451991](https://github.com/demonanic/LegitLoot/actions/runs/44719451991) also passed npm test and failed only because the five updated files had extra blank lines at EOF. This follow-up trims them. Production main is bcc19d6; production Pages deployment 75207a07 succeeded and aliases https://legitloot.site.
+- Integration application baseline is 56b98e4; Actions run [44715079355](https://github.com/demonanic/LegitLoot/actions/runs/44715079355) passed for that baseline. Docs-only run [44719170874](https://github.com/demonanic/LegitLoot/actions/runs/44719170874) passed npm test but failed whitespace checks; follow-up run [44719451991](https://github.com/demonanic/LegitLoot/actions/runs/44719451991) also passed npm test and failed only because the five updated files had extra blank lines at EOF. This follow-up trims them. Production main is 801f3e7; production Pages deployment fe4c0f22 succeeded and aliases https://legitloot.site (previous production deployment 75207a07 was bcc19d6).
 - PR #20 head 6e2e51b: 58/58 pass (run 44661202504). PR #22 head 332ca07: 64/64 pass (run 44661225287), but its ZVHM identity assertion is invalid under §0.4. PR #22 is two commits ahead of PR #20.
 - PR #23 head 33a5240: draft, no Actions run. Cloudflare deployment 5c3dd1bf is preview-only, pages.dev alias, empty environment variables; inherited account/auth still targets production.
 - PR #25 head 135607e: 54/54 Node tests and Deno type-check/handler tests passed (runs 44713338718, 44713338856). Its test guard excludes environment snapshots; new PR comment 7037024928 records the active staging-source gap. Its behind-side integration changes are docs/README-only.
@@ -834,3 +834,10 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Preserve historical migrations, snapshots, records, and security findings. Staging retirement may proceed only after independent review and exact environment verification. Production changes remain owner-gated.
 - Dashboard access is currently blocked: Browser Use returned insufficient credits and Opera browser is not connected. No dashboard settings have been changed. Do not claim dashboard completion without evidence.
 - No code, DB, deployment, dashboard, secrets, callback, or financial state changed in this documentation update.
+## 2026-11-20 12:51 ET — Sync Watch #10
+
+- Production `main` @ `801f3e7` is deployed as `fe4c0f22` to `https://legitloot.site`. The Games page lists Zombies vs Heavy Metal and Rocket 2 Nowhere; both remain early access/device-local, with no central account or LC connection.
+- Owner reports Offerwall.GG postback URL removal from every attempted/successful placement. Placement disable/delete is unconfirmed. Staging wall-url v5 and postback v8 remain active; disabled Offerwall.GG provider rows in staging and production retain stale LC reward metadata. Full technical retirement is not complete.
+- Main-based preview `fdf6b609` (`main.legitloot-preview.pages.dev`) remains environment=preview but main `account-auth.js` hardcodes production Supabase and exposes signup. Keep Account/auth routes off that preview. Integration auth guard is staging-only.
+- Staging registry still has only unlisted `zid`; no ZVHM/R2N registry rows. `game_events`, `game_saves`, and `game_handoff_tickets` are empty. No generic client-submitted event endpoint can be called server-verified or used for LC.
+- All 28 GitHub refs are unprotected; rulesets empty. PR #27 exact head passed Actions but is 10 ahead/5 behind integration and dirty; rebase required. No retirement implementation artifact from Claude was found.

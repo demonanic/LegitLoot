@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 06:41 ET
+**Last updated:** 2026-11-20 12:51 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
-**Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub's branch API reports `protected:false` for all 26 branches as of 2026-11-20 05:13 ET. Do not describe `main` as technically protected.
+**Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API reports all 28 refs `protected:false` and repository rulesets are empty as of 2026-11-20 12:51 ET. Do not describe `main` as technically protected.
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -63,13 +63,13 @@ The release candidate must truthfully provide:
 
 ### Current active task — M2-T4: integrate the two owner-selected launch games
 
-**Status:** IN PROGRESS — the production ZVHM wrapper is not verified as the owner-selected game; Rocket 2 Nowhere is preview-only.
+**Status:** IN PROGRESS — both owner-selected games are present in the production build as early access with device-local saves; shared account/session, cloud saves, and server-verified LC-event integration remain unfinished. The older evidence block below is historical and superseded by Sync Watch #10.
 **Acting lead:** ChatGPT.  
 **Partner:** Claude when available; both agents retain standing integration/staging authority under Section 2, subject to the more restrictive instruction governing each individual run.
 
 **Owner-locked launch titles:** **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**.
 
-**Current evidence and gap:**
+**Historical evidence and gap (superseded by Sync Watch #10 below):**
 
 - **Zombies vs Heavy Metal — BLOCKED / IDENTITY UNVERIFIED:** Production zombies-vs-heavy-metal.html embeds https://demonanic.github.io/Legitloot-2/. Platform Build Spec §0.4 explicitly identifies that repository as Zombie Invasion Defense and excludes it as a substitute for the selected ZVHM title. PR #21 head 970dbbf is a verifiable Claude-authored commit; PR #21 was merged by owner account demonanic at 2026-11-20 00:24:04 UTC, and Cloudflare production deployment 6598c4c6 succeeded at 00:24:36 UTC. The merge created a route but did not establish the correct game identity. Keep the route/card unavailable or clearly unverified until the actual selected build is identified or the owner explicitly changes §0.4.
 - **Rocket 2 Nowhere:** The owner-supplied single-HTML prototype is packaged at games/rocket-2-nowhere/index.html in PR #22/#23. It is preview-only, device-save early access, with no shared account/session, cloud save, or LC-event integration. Do not publish PR #23 without separate owner approval.
@@ -1774,3 +1774,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 - DaVinci attempted dashboard access through the available cloud browser, but the browser service returned insufficient_credits; the connected Opera browser was unavailable. No dashboard change is claimed. Claude must not request credentials or claim completion without screenshot/equivalent verifiable evidence.
 - Next action: Claude acknowledges this owner decision in the coordination log and relevant PR threads, then creates one consolidated retirement PR with code, staging-only migration/function tombstones, snapshot/manifest guards, and tests. DaVinci independently reviews before any staging deployment. Keep PR #25 draft and do not merge it; its narrow wall-url alignment is superseded by full retirement.
 - No code, database, deployment, provider dashboard, secret, callback, payout, or financial state was changed by this decision-record update.
+## 2026-11-20 12:51 ET — Independent Sync Watch #10
+
+- **Production/game milestone:** Cloudflare production deployment `fe4c0f22` succeeded on `main` @ `801f3e7` and aliases `https://legitloot.site`. The production Games page links to `/zombies-vs-heavy-metal.html` and `/rocket-2-nowhere.html`; both are disclosed as early access with device-local saves and no LegitLoot account/LC connection. This run verified the deployment metadata and repository routes; a live interactive browser test was not available.
+- **Offerwall.GG dashboard:** The owner reports removing the postback URL from every placement they attempted or successfully configured. Record this as owner-confirmed, not independently dashboard-verified. Placement disable/delete is not confirmed; the retirement acceptance criterion remains PARTIAL, not complete.
+- **Offerwall.GG technical retirement remains open:** staging has wall-url v5 ACTIVE/JWT and postback v8 ACTIVE/no-JWT; production runtime wall-url v2/postback v4 remains inert HTTP 410, but source/snapshot reactivation drift remains. Read-only SQL shows the Offerwall.GG provider row disabled in both environments while `approved_reward_model` still names LC/LootCoins. No callbacks were invoked.
+- **Game-event readiness:** staging `public.game_registry` contains only the unlisted `zid` development placeholder (no ZVHM/R2N rows); `private.game_events`, `private.game_saves`, and `private.game_handoff_tickets` each contain zero rows, and no `game-event` Edge Function is deployed. Do not build or describe a generic client-submitted event endpoint as server-verified. Wait for trusted per-game event hooks and a defined authenticated handoff; client-reported events must not qualify for LC.
+- **Preview isolation — CRITICAL:** Cloudflare still has preview deployment `fdf6b609` from `main` @ `801f3e7`, alias `https://main.legitloot-preview.pages.dev`, environment `preview`, with no environment variables. Main `account-auth.js` hardcodes production Supabase and exposes signup. Do not use Account/auth routes on this preview. The integration branch auth guard requires the exact staging project configuration and fails closed.
+- **Taplayad App 10066:** current official docs specify `md5(app_id . user_id . api_secret)`, status 1 credited / 2 reversed, and suggest `offer_id + user_id` deduplication. The signature does not bind offer, reward, payout, or status; no immutable transaction-ID macro or retry schedule is documented. Current Terms (last updated 2026-10-29) do not expressly grant incentivized-traffic permission. Keep Taplayad pending; never map provider points/reward/payout to LC.
+- **GitHub coordination:** 28 refs enumerated; all report `protected:false`; repository rulesets are empty. Open PRs: #9, #20, #22, #25, #26, #27; #23 is merged. Exact-head Actions: #20 58/58, #22 64/64, #26 59/59, PR #27 head `a6a01e9` passed run `44772928022`. PR #27 is 10 commits ahead / 5 behind current integration `a4d1b538` and reports `mergeable=false` / dirty; rebase before acceptance. No Claude-authored Offerwall.GG retirement code/PR was found; PR #25 remains draft and is superseded by the full-retirement contract.
+- **Wallet/launch blockers remain:** production `public.get_wallet_summary()` still returns cash USD buckets alongside LC; production Account/Rewards/Earn copy still exposes cash/withdrawal or provider-to-LC language. Terms/Privacy, account deletion/export, monitored support, signup pause, monitoring, backup/PITR and rollback evidence remain incomplete.
+- No PR was merged, no deployment initiated, no Supabase settings/secrets/grants/schema/data changed, and no callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred. This update is documentation-only.
