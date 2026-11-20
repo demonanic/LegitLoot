@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-20 16:25 ET
+**Last updated:** 2026-11-20 16:26 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API reports all 30 refs `protected:false` and repository rulesets are empty as of Sync Watch #12 (2026-11-20 14:23 ET). Authorized integration application baseline is `a529b35` plus documentation-only commits (head `1466eb6` at the 14:45 ET sync). Do not describe `main` as technically protected.
@@ -1898,3 +1898,9 @@ Owner explicitly authorized preparation and testing of production containment, p
 
 - Restored the missing `Status: ACTIVE — owner-authorized` header and removed the duplicate `Last updated` line introduced during the prior metadata refresh. The current next-action field now reflects the remaining PR #29 SQL wording blocker and the pending PR #27 documentation sync.
 - This is a documentation-only correction on the existing PR #27 branch. Its new CI and Pages preview are pending verification; no application code, environment configuration, database, or production resource was changed.
+
+## 2026-11-20 16:26 ET — DaVinci preview backend target verification
+
+- **Branch-preview backend target:** read `supabase-config.js` and `account-auth.js` on the integration, PR #27 and PR #29 branches. Each config explicitly selects the staging Supabase project; each account script fails closed unless the config declares `staging` and matches the exact staging URL before creating a client. These branch previews are staging-bound, not production-bound. The main branch has no `supabase-config.js`; its `account-auth.js` hardcodes the production Supabase project and retains `auth.signUp()`, so the main-based preview `fdf6b609` remains production-connected until PR #28 is owner-approved and deployed.
+- **Latest preview/CI status:** PR #29 `24950f3` previews succeeded in both Pages projects as `environment=preview`; PR #27’s latest documentation-only head `5d5946b` has active preview deployments in both projects and Actions run `44820158390` in progress. No deployment env vars were present. The prior PR #27 head `9c14d72` passed CI and both preview builds.
+- **Boundary:** no production or staging backend configuration, settings, secrets, grants, functions, schema, or data were changed. No merge, deployment, callback, provider action, or financial activity occurred.
