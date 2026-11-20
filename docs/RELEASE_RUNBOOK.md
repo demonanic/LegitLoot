@@ -105,7 +105,7 @@ Owner approval: <quote + date>   <- required before any step in §3
 
 | Item | Ref | Owner |
 |---|---|---|
-| Production function source snapshots (postback v3, wall-url v1, wallet-summary v4) under `supabase/environments/production/functions/` | REPO-03 | **COMPLETE 2026-11-19** |
+| Historical production function snapshots (postback v3/wall-url v1) retained for forensics only; current inert v4/v2 fingerprints recorded in Environment Source of Truth; versioned current inert source archive | REPO-03 | Historical capture COMPLETE; current v4/v2 archive OPEN |
 | Production applied migration version/name metadata under `supabase/environments/production/MIGRATION_HISTORY.md` | MIG-01 | **COMPLETE 2026-11-19** |
 | Confirm production Supabase backup/PITR tier | OPS-03 | Owner or ChatGPT (read-only) |
 | Production config + test for the release candidate (§6) | ENV-04 | Claude, after PR #11 |
