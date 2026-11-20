@@ -14,11 +14,19 @@
 -- It does NOT touch: private.offerwall_gg_callback_events, private.offerwall_gg_conversions,
 -- journal/ledger tables, platform_settings, migrations history, or any other provider row.
 --
--- Rollback: re-apply 20261119145340_offerwall_gg_record_only.sql (restores the record-only
--- private routine), re-run the CREATE OR REPLACE of the public wrappers from
--- supabase/environments/staging/schema-snapshot/routines.sql, re-grant EXECUTE to
--- service_role only, and restore the provider row from the staging snapshot. Do not
--- restore any version that can post to the LC journal.
+-- Recovery plan (FORWARD-ONLY, FAIL-CLOSED — there is deliberately no rollback to the old path):
+--   Offerwall.GG is permanently retired (docs/security/OFFERWALL_GG_RETIREMENT.md). If this
+--   file or the tombstone deploy fails or partly applies, REPAIR AND RE-APPLY THE RETIREMENT
+--   STATE; never restore the previous behavior. Specifically:
+--     * keep the Edge Functions as inert HTTP 410 tombstones;
+--     * keep EXECUTE revoked from public, anon, authenticated and service_role on all four routines;
+--     * keep the provider row 'retired' with reward-model, approval and terms metadata cleared.
+--   Do NOT re-apply the record-only callback migration, recreate the old wrappers, re-grant
+--   EXECUTE, or restore provider metadata from any snapshot, even as a "rollback". Any such
+--   change needs a new explicit owner decision. Every statement below is idempotent, so it is
+--   safe to re-run after a partial failure; the transaction below makes it all-or-nothing.
+--   Pre-apply, read-only: record the current provider row and routine grants as audit
+--   evidence (not as a restore source) and confirm the project ref is scmnxcsggquwtuyyjnnj.
 
 begin;
 

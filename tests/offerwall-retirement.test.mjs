@@ -83,6 +83,14 @@ test("proposed staging SQL retires the routines without deleting data or touchin
   assert.equal([...code.matchAll(/update private\./g)].length, 1, "only the provider row may be updated");
 });
 
+test("proposed SQL recovery plan is forward-only and never restores the callback path", () => {
+  const header = read("supabase/proposed/staging/20261120160000_offerwall_gg_retirement.sql").split("begin;")[0];
+  assert.match(header, /FORWARD-ONLY, FAIL-CLOSED/);
+  assert.match(header, /Do NOT re-apply the record-only callback migration/);
+  assert.ok(!/\bRollback:/i.test(header), "no rollback-to-old-path instructions");
+  assert.ok(!/re-grant EXECUTE to\s+service_role only|restore the provider row from the staging snapshot/i.test(header));
+});
+
 test("the proposed retirement SQL is not in an auto-applied migrations directory", () => {
   const migrations = readdirSync(new URL("supabase/migrations/", root));
   assert.ok(!migrations.some((m) => /retire/i.test(m)));
