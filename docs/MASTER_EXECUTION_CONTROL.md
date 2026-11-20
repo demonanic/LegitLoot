@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 06:41 ET
+**Last updated:** 2026-11-20 11:14 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
-**Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub's branch API reports `protected:false` for all 26 branches as of 2026-11-20 05:13 ET. Do not describe `main` as technically protected.
+**Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub branch search returned 28 refs as of 2026-11-20 11:14 ET. The last protection check covered 26 refs at 05:13 ET and reported `protected:false`; protection status for the two additional refs has not been rechecked. Do not describe `main` as technically protected.
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -1781,3 +1781,15 @@ Owner explicitly authorized preparation and testing of production containment, p
 - M2-T4 stays IN PROGRESS: shared account/session handoff, cloud saves and server-verified idempotent LC events remain open.
 - PR #20 note (comment on #20): #20 alone still registers Offerwall.GG/CPAGrip; hold combined Hustle release until #26 is retargeted and its combined head is verified.
 - No merge, deploy, setting, schema or data change. Exact new head and test result are in the PR #27 handoff comment.
+
+
+## 2026-11-20 11:14 ET — DaVinci Sync Watch #2; PR #27 independent re-review
+
+- Re-read the shared control documents and Claude entrypoint. The three-role charter is present and Claude's acknowledgement is verifiable in PR #27; the latest standalone handoff is still the historical M1 file, with current handoffs in PR #27 and the related PR threads.
+- PR #27 exact head `18357dd78476ef373d824f7f6297d8f1043e01f9` is documentation-only. GitHub Actions run [44762625551](https://github.com/demonanic/LegitLoot/actions/runs/44762625551) passed `npm ci`, `npm test` (**50/50**) and the submitted-patch whitespace check. Cloudflare produced successful `environment=preview` builds on both Pages projects; no production deployment resulted from this PR.
+- **PR #27 disposition: CHANGES REQUIRED.** `docs/PROJECT_PROGRESS.md` still has a stale “current open PRs” list at line 15 (it includes merged PR #23 and omits #26/#27), a duplicated verification heading at line 38, an obsolete `main=bcc19d6` claim at line 40, and a superseded “PR #22 ZVHM identity assertion is invalid” claim at line 41. The owner-approved ZVHM identity decision and blocker withdrawal are recorded in PR #22 comment [7041463948](https://github.com/demonanic/LegitLoot/pull/22#issuecomment-7041463948). Preserve history but correct these current summaries.
+- Reverified Cloudflare production: `legitloot` production deployment `fe4c0f22` serves `main@801f3e7` at https://legitloot.site. ENV-07 remains active: `legitloot-preview` deployment `fdf6b609` is an `environment=preview` build from `main@801f3e7`, alias https://main.legitloot-preview.pages.dev, with no environment variables. Main `account-auth.js` hardcodes the production Supabase URL at lines 2–4 and calls `auth.signUp()` in the signup handler. Do not use Account/auth routes on this preview. No Cloudflare or Supabase settings were changed.
+- Fresh official Tplayad docs check: current App integration documents `md5(app_id . user_id . api_secret)`, statuses 1/2, deduplication by `offer_id + user_id`, and any-2xx acknowledgement; no immutable transaction-ID macro is documented and reward/payout/offer/status are not bound by that signature. The old `www.tplayad.com/doc/postback` page describes a different legacy `transId`/reward signature and retry protocol and must not be combined with the current App 10066 docs. Current Terms last updated 2026-10-29 do not expressly establish incentivized-traffic permission. Keep Taplayad pending, preserve the owner URL as descriptive data only, and never map provider points/reward/payout to LC. No publisher settings, terms, or callbacks were touched.
+- PR #26 head `30f5dbf` remains independently reviewed with 59/59 tests passing; it is still stacked on PR #20. PR #20 alone still includes Offerwall.GG/CPAGrip in the initial registry; hold the combined Hustle release until #26 is retargeted and the combined head is verified. PR #25 remains draft and changes only the canonical wall-URL source; its staging-snapshot/deployment-source gap remains open. PR #22 remains open; its 64/64 tests do not establish shared account/session, cloud-save, or server-verified LC-event integration.
+- M2-T4 remains IN PROGRESS. No PR was merged, no production or staging deployment was initiated, and no Supabase settings/secrets/schema/data, provider settings/terms, callbacks, rewards, payments, or money movement were changed.
+- Next: Claude corrects the remaining current-state documentation inconsistencies in PR #27 and supplies a bounded task handoff for the remaining game account/save/event integration. DaVinci re-reviews the exact new SHA. The main-preview auth correction remains a separate owner-gated main-source PR.
