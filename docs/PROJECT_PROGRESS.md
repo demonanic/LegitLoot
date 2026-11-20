@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-19 22:39 ET
+**Updated:** 2026-11-19 22:52 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected game titles have playable early-access candidates; ZVHM is live, RXT2 is preview-only
 **Integration branch:** `build/legitloot-neon-synthwave` — latest Sync Watch documentation head; PR #20 base remains `387d035` and the intervening changes are documentation-only
