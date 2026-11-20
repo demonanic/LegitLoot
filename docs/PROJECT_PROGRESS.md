@@ -691,3 +691,12 @@ Owner explicitly authorized preparation and testing of production containment, p
 - ZVHM is live; RXT2 remains preview-only. PR #20/#22 CI is green (58/58, 64/64) but both are 34 docs-only commits behind integration. PR #23 remains draft/no CI and its preview Account routes target production.
 - Current Taplayad docs still do not provide a signed transaction/reversal contract or App-10066-specific incentivized-traffic permission. Keep unintegrated and outside LC.
 - This run made no production/staging mutation, merge, deployment, callback, provider setting, agreement, payment, reward issuance, or money movement.
+
+
+## 2026-11-20 01:36 ET — Independent Sync Watch #4
+
+- Current integration remains `e868121`. PR #20/#22 application diffs remain unchanged and their latest recorded Actions runs pass 58/58 and 64/64; their 39-commit lag is documentation-only. PR #23 remains a draft main-based candidate with a production-targeting Account/auth preview blocker and no CI; PR #9 remains stale.
+- Added draft PR #25, targeting integration only, to replace the old Offerwall.GG wall-URL launcher with a pure HTTP 410 handler and add regression tests. Actions run [44689653386](https://github.com/demonanic/LegitLoot/actions/runs/44689653386) passed 54/54 (0 failures/skips); isolated handler tests passed 3/3 locally. No function was deployed. Production `main` still has the old launcher source and needs separate owner-gated alignment.
+- Cloudflare's automatic PR/branch builds are `environment=preview`, pages.dev-only, with no production domain aliases. The PR branch pins Supabase to staging and its auth code fails closed unless the exact staging config is present.
+- Current Taplayad docs have a parameter-name mismatch (`offer={offer_id}` sample vs PHP `$_GET['offer_id']`), no transaction-ID macro, a signature that omits transaction/payload fields, and no documented retry schedule. Status 2 is a reversal but no stable original transaction reference is specified. Current Terms do not establish App-10066 incentivized-traffic permission. Keep App 10066 record-only and never map provider points/reward/payout into LC.
+- Production cash/withdrawal fields, provider-to-LC copy, incomplete Terms/Privacy, unverified sign-up pause, and missing shared account/save/LC-event integration remain launch blockers. No production/staging data, settings, secrets, callbacks, provider agreements or financial activity changed.
