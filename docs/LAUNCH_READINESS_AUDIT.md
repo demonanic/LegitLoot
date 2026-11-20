@@ -1387,3 +1387,21 @@ The earlier statement that ZVHM is live on production as early access is correct
 ## 2026-11-20 05:15 ET — Documentation CI follow-up
 
 - Run 44719451991 passed npm test and failed only the whitespace check because the five updated records had an extra blank line at EOF. Follow-up commit 46be8d7 trimmed each updated record to a single final newline; Actions run 44719817398 passed npm test and whitespace checks.
+
+
+## 2026-11-20 06:28 ET — Sync Watch #9: rollback safety and current state
+
+### New release-runbook defect
+The Edge Function rollback row previously said to redeploy the previous version's source and referenced production snapshots for Offerwall.GG postback v3 and wall-url v1. The manifest confirms those snapshots were captured before containment and contain active provider code. Current production is postback v4 and wall-url v2, both inert HTTP 410. Restoring v1/v3 could reactivate the provider launcher/callback code; the private production callback routine still contains journal/ledger posting code even though checked EXECUTE grants are revoked. Corrected `docs/RELEASE_RUNBOOK.md` to prohibit v1/v3 rollback and require preservation of the inert v2/v4 handlers. Current deployed source hashes are recorded in the Environment Source of Truth. The current inert sources are not yet archived in the historical snapshot directory.
+
+### Live environment verification
+- Production `gkbqderyjcuxnjbsiffb`: postback v4/410, wall-url v2/410; callback EXECUTE false for service_role/anon/authenticated; callback/conversion counts 0/0. `public.get_wallet_summary()` still returns cash USD buckets, and wallet-summary v4 still returns cash plus gameCredits/LLC.
+- Staging `scmnxcsggquwtuyyjnnj`: wall-url v5 active/JWT with `https://legitloot.site` in CORS; postback v8 active/no-JWT and record-only. The deployed files exactly match the staging source snapshots. Private/public callback routines are SECURITY DEFINER and service-role executable, but their live definitions contain no journal/ledger references. The postback HMAC omits offer/goal/payout/timestamp fields and the metadata RPC runs after duplicate results. Callback/conversion counts 0/0.
+- Both provider registries retain a disabled Offerwall.GG row with null approval/terms and stale LC/LootCoins reward metadata. Taplayad remains unregistered and unintegrated.
+
+### GitHub and release state
+- Integration `6fc8e48` passed Actions run 44719973348; production main `bcc19d6` passed containment run 44672601131. PR #20 58/58 and PR #22 64/64 remain green on exact heads but have existing blockers; PR #23 is draft/no CI and production-connected for Account/auth; PR #25 is draft with 54/54 Node and passing Deno checks. PR #25's direct GitHub REST state is `mergeable=true/clean`; a normalized connector summary reported false, so no mergeability claim is used as approval.
+- 26 branches report `protected=false`. M2 task branches are stale relative to integration; the M2-T3 branch has a duplicate record-only migration under obsolete version `20261119120000`, while staging applied `20261119145340`. The MIG-02 source/test, account-deletion design, and release runbook are already present on integration. Only the historical M1 Claude handoff note exists.
+- Known launch blockers remain: incorrect ZVHM source identity, RXT2 preview-only, production-connected PR #23 auth, cash/withdrawal wallet contract and copy, incomplete Terms/Privacy, unverified signup pause/support mailbox, and missing shared account/save/verified LC-event integration.
+
+No PR was merged and no deployment, Supabase setting/secret/grant/schema/data change, callback, provider setting/terms acceptance, payment, reward issuance, or money movement occurred. This check made read-only inspections and documentation-only corrections.
