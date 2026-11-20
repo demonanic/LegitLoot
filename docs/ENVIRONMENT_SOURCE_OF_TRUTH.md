@@ -934,3 +934,24 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 ## 2026-11-20 05:15 ET — Documentation CI follow-up
 
 - The previous two docs-only Actions runs passed npm test but failed whitespace checks. Follow-up commit 46be8d7 normalized the final newline in each updated shared record; Actions run 44719817398 passed npm test and whitespace checks.
+
+
+## 2026-11-20 06:28 ET — Independent Sync Watch #9: runtime and rollback verification
+
+### Production Supabase (`gkbqderyjcuxnjbsiffb`)
+- Project status `ACTIVE_HEALTHY`. `offerwall-gg-postback` v4 (`verify_jwt=false`) is an inert HTTP 410 handler; deployed source SHA-256 `42b1dfd345c359e3bcca45f77c19cf35d38f7bc4e1554885141ffec92da443bd`. `offerwall-gg-wall-url` v2 (`verify_jwt=true`) is an inert HTTP 410 handler; SHA-256 `7f5344ed8f8413a38827ba3484f1e2394e40150c63efee34cfbf462868e02b44`. `wallet-summary` v4 remains deployed with cash USD and `gameCredits/LLC` response fields; SHA-256 `d4384fd6e91b7683389cedc2c122daaf460cd27f2acb6b95676110e035e274da`.
+- Read-only privilege query: private/public `process_offerwall_gg_postback` EXECUTE is false for `service_role`, `anon`, and `authenticated`. The private SECURITY DEFINER routine still contains the old journal/ledger posting implementation, so do not restore its grants. Callback-event and conversion tables both contain 0 rows.
+- **RUNBOOK-01 — rollback hazard found and corrected:** the historical production manifest/snapshots capture pre-containment postback v3 and wall-url v1 active code. `docs/RELEASE_RUNBOOK.md` previously said to redeploy the previous function source and described those snapshots as rollback references. Restoring v1/v3 could reactivate the provider launcher/callback code. The runbook now explicitly prohibits v1/v3 rollback and requires the inert v2/v4 source only; exact current hashes above are recorded here. The current inert v2/v4 sources are not yet archived in the historical snapshot directory.
+
+### Staging Supabase (`scmnxcsggquwtuyyjnnj`)
+- Project status `ACTIVE_HEALTHY`. Wall URL v5 (`verify_jwt=true`) remains an active launcher; source SHA-256 `99f4ca9c56cef8d565efc48812d66892542ca5af4204f881f7dc90d6721c91aa`; its CORS allow-list includes `https://legitloot.site`. Postback v8 (`verify_jwt=false`) remains active and record-only; source SHA-256 `d17c18d7ca2643b9fac2fd8c336e741f27edea63e7bb819764b8927e796c321e`. Both deployed files exactly match `supabase/environments/staging/functions/` snapshots.
+- Read-only SQL confirms staging private/public callback routines are SECURITY DEFINER and service-role executable, but their live definitions contain no journal, ledger, or `post_journal_transaction` reference. `record_offerwall_gg_metadata` is also service-role executable. Callback-event and conversion tables both contain 0 rows.
+- The deployed postback signs only `userId:transactionId:currencyAmount`; offer/goal/payout/timestamp metadata remains unsigned and the metadata RPC runs after duplicate results. This remains PROV-09 and is not safe for future provider activation.
+- Production and staging `private.providers` each still have Offerwall.GG disabled with null approval/terms fields but stale `approved_reward_model` metadata naming LC/LootCoins. No Taplayad provider row exists in staging.
+
+### Repository and coordination
+- Integration head at check start: `6fc8e488828a25a40a58a81087cd893e5c85d47a`; Actions run [44719973348](https://github.com/demonanic/LegitLoot/actions/runs/44719973348) passed. Production main remains `bcc19d68694bcef968994c2a0466cecb57218955`; production containment Actions run [44672601131](https://github.com/demonanic/LegitLoot/actions/runs/44672601131) passed.
+- PR #25 is still draft, head `135607e`, base `e868121`; current integration is 26 commits ahead of that base, and the base-to-integration diff is documentation-only. GitHub REST reports `mergeable=true`, `mergeable_state=clean`; the normalized PR-info connector returned `mergeable=false`, so the direct REST result is recorded with that read inconsistency. PR #25 still changes only the integration wall-URL source, not postback or deployed staging functions.
+- 26 branches report `protected=false`. The M2-T1, M2-T3, M2-T3b, M2-T4, M2-T6 and MIG-02 work branches are stale relative to integration; their relevant code/docs are already present on integration except the old M2-T3 branch carries the same record-only migration SQL under obsolete version `20261119120000` instead of the applied staging version `20261119145340`. Do not merge/replay that stale migration branch.
+- No newer standalone Claude handoff exists; only `docs/CLAUDE_START_HANDOFF_M1.md` is present. No new Claude-authored commit after the previously recorded PR #20/#22/#23 work was found.
+- This update is documentation-only. No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callback, provider setting/terms, payment, reward issuance, or money movement occurred.
