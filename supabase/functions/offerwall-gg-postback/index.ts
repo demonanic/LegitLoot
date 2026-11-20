@@ -1,16 +1,6 @@
 // Production containment candidate for Offerwall.GG.
-// This endpoint is intentionally inert. It does not read secrets, parse callback
-// payloads, create a Supabase client, or invoke any database RPC.
-// Deploy only after the separate owner-approved production release gate.
-
-export function handleRequest(_request: Request): Response {
-  return new Response("OFFERWALL_GG_DISABLED", {
-    status: 410,
-    headers: {
-      "content-type": "text/plain; charset=utf-8",
-      "cache-control": "no-store",
-    },
-  });
-}
+// The HTTP entrypoint is the only module that starts the server. The pure
+// handler lives in handler.ts so tests can import it without side effects.
+import { handleRequest } from "./handler.ts";
 
 Deno.serve(handleRequest);
