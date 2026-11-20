@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 11:14 ET
+**Last updated:** 2026-11-20 11:21 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub branch search returned 28 refs as of 2026-11-20 11:14 ET. The last protection check covered 26 refs at 05:13 ET and reported `protected:false`; protection status for the two additional refs has not been rechecked. Do not describe `main` as technically protected.
@@ -1800,3 +1800,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Directly opening the legacy URL `https://www.tplayad.com/doc/postback` returned HTTP 404 in this check. Search indexing still exposes a cached excerpt with a different `subId/transId/reward` signature and retry protocol, but that source is not currently retrievable; do not treat it as a verified App 10066 contract or combine it with the current guide.
 - The directly retrievable current guide is `https://tplayad.com/docs`: `md5(app_id . user_id . api_secret)`, status 1/2, deduplication suggested by `offer_id + user_id`, and any-2xx acknowledgement. It does not document a transaction-ID macro, retry schedule, or reversal linkage; its signature does not bind offer, reward, payout, or status. Its generic iframe URL also differs from the owner-supplied App 10066 template.
 - Current Terms `https://tplayad.com/terms` (last updated 2026-10-29) do not expressly establish permission for LegitLoot's incentivized-traffic model. Keep Taplayad pending and unintegrated until written App-10066-specific permission and a complete current protocol are supplied. No settings, terms, callbacks, or provider data were changed.
+
+
+## 2026-11-20 11:21 ET — DaVinci re-review of Claude's PR #27 follow-up
+
+- Claude-authored commit `a37c6863fd01ab3c9ef2baf7aa559aaa6dcfd323` corrected the Project Progress PR list, duplicate verification heading, production deployment reference, and ZVHM status; it also qualified the branch-protection count. Handoff is recorded in PR #27 comment [7044611903](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7044611903).
+- Claude-authored commit `22ccd1cae08d5f5a3c87ac4c9b847738de83cf75` added 11:14 ET recheck sections to the Environment Source of Truth and Launch Readiness Audit, preserving the 10:30 ET entries. Handoff is recorded in PR #27 comment [7044646734](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7044646734). The record explicitly attributes the Cloudflare observations to DaVinci's read-only check rather than claiming Claude independently re-queried them.
+- Exact PR #27 head `22ccd1cae08d5f5a3c87ac4c9b847738de83cf75` is documentation-only. GitHub Actions run [44772590115](https://github.com/demonanic/LegitLoot/actions/runs/44772590115) passed `npm ci`, `npm test` (**50/50**) and the submitted-patch whitespace check. PR #27 is open, mergeable, and not merged.
+- **PR #27 remains CHANGES REQUIRED for minor record/description accuracy:** `PROJECT_PROGRESS.md` still says `Updated: 10:30 ET`, labels the open-PR list as of 11:30 ET although this head was committed at 11:21 ET, and GOV-01 still states all 26 refs are unprotected without noting that 28 were enumerated and two were not protection-checked. The Master Control header is refreshed to 11:21 ET here. The PR description also still says only one file was touched, although the PR changes five documentation files. Update these items before acceptance.
+- `ENVIRONMENT_SOURCE_OF_TRUTH.md` and `LAUNCH_READINESS_AUDIT.md` now carry the 11:14 ET recheck: production `801f3e7` / deployment `fe4c0f22`, preview `fdf6b609`, and ENV-07. The main-based preview still targets production Supabase; no Account/auth routes should be used there.
+- M2-T4 remains IN PROGRESS: both games are early-access/live with device-local saves; shared account/session handoff, cloud saves, and server-verified idempotent LC events remain unfinished. No PR was merged, no deployment initiated, and no settings, secrets, schema, data, provider terms, callbacks, rewards, or financial state were changed.
+- Next: Claude corrects the remaining timestamps/GOV-01 wording and refreshes PR #27's description. DaVinci re-reviews the exact new SHA. No owner approval is requested for this documentation cleanup.
