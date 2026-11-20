@@ -1439,3 +1439,20 @@ No PR was merged and no deployment, Supabase setting/secret/grant/schema/data ch
 - GAME-02 stays resolved. PR #22's ZVHM URL assertion is consistent with the owner decision (comment 7041463948).
 - M2-T4 remains IN PROGRESS: shared account/session handoff, cloud saves and server-verified idempotent LC-event ingestion are not implemented.
 - Branch protection: 26 of 28 refs checked (05:13 ET, all unprotected); two newer refs unchecked.
+
+## 2026-11-20 11:28 ET — Owner decision: Offerwall.GG permanently retired from launch scope
+
+Offerwall.GG is removed from the future LegitLoot provider plan. The owner explicitly chose full retirement rather than further containment/repair. The retirement acceptance contract is docs/security/OFFERWALL_GG_RETIREMENT.md.
+
+Required verification before marking the provider retired: no active UI/registry/launcher or callback path; canonical and staging snapshot functions inert; no staging RPC/privilege path can mint or mutate LC; deployment manifest guard prevents reactivation; LegitLoot placement postback URL removed and placement disabled/deleted in the Offerwall.GG dashboard. Preserve historical evidence and tables. Do not delete the publisher account.
+
+Current state is NOT COMPLETE: production runtime containment (inert v2/v4, callback grants revoked) was previously recorded, but main source drift and active staging wall-url source/deployment require retirement work. Production changes remain owner-gated. Dashboard removal is pending because browser access was unavailable in this session. Taplayad App 10066 remains separate and pending its own permission/protocol checks.
+## 2026-11-20 12:51 ET — Independent launch-readiness recheck
+
+- **Games:** production `main` @ `801f3e7` is deployed as `fe4c0f22`. `games.html` links to `zombies-vs-heavy-metal.html` and `rocket-2-nowhere.html`; both pages disclose early access, device-local saves and no LegitLoot account/LC connection. Account/session handoff, cloud saves and server-verified LC events remain launch blockers.
+- **Offerwall.GG:** owner reports the postback URL has been removed from all attempted/successful publisher placements. This is owner attestation; placement disable/delete and independent dashboard evidence are not verified. Staging still has active wall-url v5/JWT and postback v8/no-JWT; disabled provider rows retain stale LC reward metadata. Full retirement is not complete.
+- **ENV-07 — CRITICAL:** active preview `fdf6b609` from `main` @ `801f3e7` remains at `main.legitloot-preview.pages.dev`. It has no environment variables, but main `account-auth.js` hardcodes production Supabase and exposes signup. Do not use Account/auth routes on main-based previews. Integration auth is explicitly staging-only.
+- **WALLET-01 — HIGH:** production `public.get_wallet_summary()` still returns cash USD buckets alongside LC; production account/rewards/earn source still exposes cash/withdrawal or provider-to-LC copy. No cash, withdrawal, transfer, USD peg, or provider-to-LC behavior is permitted by owner policy.
+- **GAME-EVENT readiness:** staging `public.game_registry` contains only the unlisted `zid` placeholder; `private.game_events`, `game_saves`, and `game_handoff_tickets` each have zero rows. A generic client-submitted JSON event is not proof of game completion. Wait for trusted game-side event contracts before any LC eligibility work.
+- **TAPLAYAD:** official docs still lack an immutable transaction ID, retry schedule, and signature coverage for offer/reward/payout/status; Terms last updated 2026-10-29 do not expressly establish incentivized-traffic permission. App 10066 remains pending and must never map points/reward/payout to LC.
+- **GOV-01 — HIGH:** all 28 GitHub refs report `protected:false`; repository rulesets are empty. PR #27 documentation branch passed Actions on exact head but is diverged/dirty and requires rebase. No PR merge or deployment was performed.
