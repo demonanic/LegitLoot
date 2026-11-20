@@ -476,3 +476,8 @@ Production Offerwall.GG containment is verified, but the canonical repository wa
 - Taplayad current and www-legacy guides remain incompatible; the non-www legacy path returns 404, while the www path documents transaction-ID signature and retry semantics. Obtain written App-10066 confirmation and incentivized-traffic permission; preserve the owner's exact URL template and never map publisher points/reward/payout into LC.
 - A COMMENT review [5988741931](https://github.com/demonanic/LegitLoot/pull/25) records the non-blocking static-guard import-graph gap. GitHub attributes all 16 PR #25 commits to demonanic; no new Claude-authored commit was verified in this window.
 - Production cash/withdrawal wallet fields, provider-to-LC copy, incomplete Terms/Privacy, unverified signup pause, Rocket 2 Nowhere production listing, and shared game/account/LC-event integration remain launch blockers. No gated action was performed.
+
+
+## 2026-11-20 01:56 ET — Documentation CI correction
+
+- The push workflow for documentation commit `5236e7e` ran the full Node suite successfully (50/50) but failed `git diff --check` because the updated `Last updated` and `Last verified` metadata lines retained Markdown trailing spaces. Those two added trailing spaces were removed in this follow-up. No application files or tests changed; the correction is documentation-only. Verify the next push run before treating the coordination update as CI-clean.

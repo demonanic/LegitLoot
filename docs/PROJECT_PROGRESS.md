@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 01:55 ET
+**Updated:** 2026-11-20 01:56 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate the two owner-selected launch games; both have early-access candidates, ZVHM is live, RXT2 is preview-only
 **Integration branch:** `build/legitloot-neon-synthwave` @ `42cf97c`; PR #20's base `387d035` is 45 commits behind by ancestry, but compare shows only the five shared control documents differ
@@ -722,3 +722,8 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Production/staging Offerwall.GG registry rows remain disabled but retain stale LC reward metadata; no Taplayad row exists in staging. Current and www-legacy Taplayad docs expose incompatible protocols; the non-www legacy path returns 404 while the www path resolves. No App-10066 permission or complete applicable contract is verified.
 - Production still violates the locked no-cash/no-withdrawal and no-provider-to-LC model in wallet/UI/copy; Terms/Privacy are placeholders, signup pause is unverified, Rocket 2 Nowhere is not in production, and shared game/account/LC-event integration is incomplete.
 - No PR merge, deployment, Supabase settings/secrets/grants/schema/data changes, callback, publisher settings, provider agreement, payment, reward issuance or money movement occurred. No new Claude-authored commit was verified; all 16 PR #25 commits are attributed by GitHub to demonanic.
+
+
+## 2026-11-20 01:56 ET — Documentation CI correction
+
+- The push workflow for documentation commit `5236e7e` ran the full Node suite successfully (50/50) but failed `git diff --check` because the updated `Last updated` and `Last verified` metadata lines retained Markdown trailing spaces. Those two added trailing spaces were removed in this follow-up. No application files or tests changed; the correction is documentation-only. Verify the next push run before treating the coordination update as CI-clean.

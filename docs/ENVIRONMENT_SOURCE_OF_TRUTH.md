@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 01:55 ET  
+**Last verified:** 2026-11-20 01:56 ET
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -826,3 +826,8 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 
 ### No mutations
 - No function deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance, or money movement was performed. Automatic Cloudflare builds were branch previews only.
+
+
+## 2026-11-20 01:56 ET — Documentation CI correction
+
+- The push workflow for documentation commit `5236e7e` ran the full Node suite successfully (50/50) but failed `git diff --check` because the updated `Last updated` and `Last verified` metadata lines retained Markdown trailing spaces. Those two added trailing spaces were removed in this follow-up. No application files or tests changed; the correction is documentation-only. Verify the next push run before treating the coordination update as CI-clean.

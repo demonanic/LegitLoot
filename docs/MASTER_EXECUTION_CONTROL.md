@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 01:55 ET  
+**Last updated:** 2026-11-20 01:56 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API reports `protected:false`; branch-protection details returned 403 and no repository rulesets were returned (2026-11-19). Do not describe `main` as technically protected until verified.  
@@ -1640,3 +1640,8 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Launch policy remains FAIL/NOT VERIFIED on production:** `account.html` and `rewards.html` still expose cash/withdrawal UI; `account-auth.js` requires cash wallet fields; production `get_wallet_summary()` returns cash USD buckets plus LC; `earn.html` still says provider-confirmed completions credit LC. Terms/Privacy remain placeholders, production signup pause is not verifiable through available read-only tools, and production `games.html` lists only Zombies vs Heavy Metal (Rocket 2 Nowhere remains preview/integration-only). Shared account/session, cloud-save and verified LC-event ingestion are incomplete.
 - **Actions:** read-only GitHub/Supabase/public-doc checks, PR #25 COMMENT review, and documentation updates only. No PR merge, production/staging deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance, or money movement. Cloudflare branch builds were automatic previews, not production deployments.
 - **Next:** owner disposition of PR #25 and separate owner-gated main-source alignment; keep staging wall-url/postback disabled from player-facing use. Do not invoke or deploy during a run whose instruction prohibits it.
+
+
+## 2026-11-20 01:56 ET — Documentation CI correction
+
+- The push workflow for documentation commit `5236e7e` ran the full Node suite successfully (50/50) but failed `git diff --check` because the updated `Last updated` and `Last verified` metadata lines retained Markdown trailing spaces. Those two added trailing spaces were removed in this follow-up. No application files or tests changed; the correction is documentation-only. Verify the next push run before treating the coordination update as CI-clean.
