@@ -658,3 +658,23 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Test execution is pending an environment with Deno/Supabase CLI. Source review confirms the handler contains no database/client/secret/RPC path; tests are authored but not yet executed.
 - Next: restore Supabase connector access; independently inspect live production function/RPC definitions and effective grants; run Deno tests; review PR #24. Only after those pass should a separate production maintenance plan be presented for explicit owner approval. Consider removing the publisher dashboard URL only after verifying other configured products do not depend on it.
 - Owner gate: production database privilege revocation and Edge Function deployment each require separate explicit approval. Dashboard changes and any provider-side contract changes remain separately gated.
+
+
+## 2026-11-19 21:29 ET — Live environment and preview-isolation recheck
+
+### Cloudflare Pages
+- `legitloot` production remains bound to branch `main` at `4e0f533`, alias `https://legitloot.site`.
+- PR #23 (`claude/rxt2-main`, `33a5240`) and PR #24 (`security/offerwall-gg-production-containment`, `7a31165`) each deployed successfully as **preview** in both `legitloot` and `legitloot-preview`; aliases are branch `*.pages.dev` URLs. The project preview environment variable maps are empty.
+- Preview classification and empty Pages environment variables do **not** isolate hard-coded browser targets. Main-based PR #23/#24 previews inherit `account-auth.js` with a production Supabase URL and active sign-up handler. Do not test Account/auth flows on those previews until a fail-closed or staging-only guard exists. PR #22's `claude/rxt2-launch` branch uses `supabase-config.js` for the exact staging project and `account-auth.js` refuses non-staging/missing config.
+
+### Supabase projects — read-only connector recheck
+- Both projects are `ACTIVE_HEALTHY`: production `gkbqderyjcuxnjbsiffb`; staging `scmnxcsggquwtuyyjnnj`.
+- Production Edge Functions: `offerwall-gg-postback` v3 ACTIVE (`verify_jwt=false`), `offerwall-gg-wall-url` v1 ACTIVE (`verify_jwt=true`), `wallet-summary` v4 ACTIVE.
+- Production `private.process_offerwall_gg_postback(uuid,text,text,bigint,text,text,text,text)` and its public wrapper are SECURITY DEFINER, owned by postgres, and currently grant EXECUTE to `service_role`. The private function still calls `private.post_journal_transaction`; production provider callbacks can still mint LC. `public.get_wallet_summary()` remains SECURITY DEFINER and returns cash plus LC.
+- Production `private.providers` has only Offerwall.GG: disabled, but stale `standard_virtual_currency / LC / LootCoins` metadata and null approval/terms evidence.
+- Staging Edge Functions: `offerwall-gg-postback` v8 ACTIVE (`verify_jwt=false`), `offerwall-gg-wall-url` v5 ACTIVE (`verify_jwt=true`), `cpagrip-attribution` v5 ACTIVE (`verify_jwt=true`), plus internal functions. Staging Offerwall.GG callback SQL is record-only and does not call the journal. Staging provider rows are CPAGrip disabled and Offerwall.GG disabled with stale LC metadata; Taplayad is absent.
+- Staging game registry contains only the unlisted ZID development row; saves, game events and handoff tickets are all zero; no challenge/milestone/season tables exist.
+- No callbacks were invoked and no settings, secrets, grants, schema, data, migrations or functions were changed.
+
+### Provider protocol note
+- Taplayad owner template remains `https://offerwall.tplayad.com/10066/{user_id}`. Current public docs use signature `md5(app_id . user_id . api_secret)` with no transaction-ID macro; legacy docs use `transId` and `md5(subId . transId . reward . secret)`. These are incompatible and do not provide a verified full payload/transaction/reversal contract for App ID 10066. Current public Terms do not establish incentivized-traffic permission. No Taplayad code or provider row was added.
