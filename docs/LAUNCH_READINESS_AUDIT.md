@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the original audited branch and earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent recheck is Sync Watch #15 (2026-11-20 17:30 ET). The original audited branch and earlier status tables are historical.
 
 ---
 
@@ -1485,3 +1485,26 @@ Current state is NOT COMPLETE: production runtime containment (inert v2/v4, call
 - **PR #29 exact heads:** `0014d3a` source-only acceptance (qualified) -> `230b7bf` incomplete test wording -> `24950f3` historical-only test correction **accepted by DaVinci** (Node 44819720446, Deno 44819720582) -> `dad8fd7` fixes the last finding, the proposed SQL label "reversible" -> "non-destructive, no data deleted; forward-only", with a regression assertion (Node 44820230399, Deno 44820229990 pass). Re-review of `dad8fd7` requested. SQL unapplied; functions undeployed.
 - **Branch previews are staging-bound (DaVinci source inspection, 16:17 ET):** the PR #27 and PR #29 branches' `supabase-config.js` selects the staging project and `account-auth.js` fails closed unless the environment is `staging` and the URL matches that exact staging project before `createClient`. These previews are therefore not production-bound. This does **not** apply to the main-based preview `fdf6b609` (`main@801f3e7`, `main.legitloot-preview.pages.dev`): main `account-auth.js` still hardcodes the production Supabase project and exposes `auth.signUp()`. **ENV-07 remains critical**; keep Account/auth off that preview; PR #28 is draft and owner-gated.
 - **Next:** after #29 and #27 re-review, review #20 + #22 + #26 as one release unit (do not release #20 alone). No merge, deploy, SQL application, provider activation or financial action occurred.
+
+## M2 recheck — 2026-11-20 17:30 ET — Sync Watch #15
+
+**Overall disposition: NOT READY for basic-operable launch.** This was a read-only source, GitHub, Cloudflare and Supabase review; no deployment, database change, provider action or financial activity occurred.
+
+### Verified progress
+- Production `main@801f3e7` is live at `https://legitloot.site`; both owner-selected games are present as early access with device-local saves.
+- PR #29 exact head `dad8fd7` is **ACCEPTED by DaVinci for source-only owner review**. Its Offerwall.GG handlers are pure HTTP 410 tombstones, launcher removal is present, and Taplayad is the sole pending provider with `launch: null` and the exact owner template. Node/whitespace and Deno Actions pass.
+- PR #27 documentation branch `b33745a` passes Actions. Both PR #27 and #29 previews succeeded as `environment=preview` in both Cloudflare Pages projects; their branch configs explicitly target staging.
+
+### Launch blockers
+- **ENV-07 — CRITICAL:** the active main-based preview `main.legitloot-preview.pages.dev` is deployment `fdf6b609`, `environment=preview`, built from `main@801f3e7`. Main `account-auth.js` still hardcodes the production Supabase URL, initializes the production client and exposes signup. Do not use Account/auth routes on that preview. PR #28's guard is a draft against `main` and remains owner-gated.
+- **WALLET-01 — CRITICAL:** production and staging `public.get_wallet_summary()` still return cash USD buckets. Production grants `authenticated` EXECUTE. Production `account.html`, `account-auth.js` and `rewards.html` still expose pending cash/withdrawal or USD-denominated rewards. The LC-only PR #20 UI is not live and does not fix either backend contract.
+- **PROV-07 — HIGH:** production Offerwall.GG Edge Functions are ACTIVE v2/v4 but return HTTP 410; the production private callback SQL routine still contains an LC journal path, although only postgres has EXECUTE. Staging wall-url v5/postback v8 remain ACTIVE; staging callbacks are record-only but service_role-executable. Callback/conversion tables are zero rows in both environments. PR #29's retirement SQL is not applied and its tombstones are not deployed.
+- **TAPLAYAD — HIGH / OWNER-PROVIDER BLOCKER:** current and old Tplayad documentation describe different protocol generations. The exact owner template does not identify which generation applies to App 10066. Current Terms (updated 2026-10-29) do not expressly confirm incentivized-traffic permission. Written App-10066-specific confirmation is required before implementation/activation. Never map publisher points, callback reward or payout into LC.
+- **M2-T4 — HIGH:** both selected games remain early access with device-local saves. Staging game registry contains only the unlisted `zid` placeholder; `game_events`, `game_saves` and `game_handoff_tickets` each contain zero rows. Shared account/session, cloud saves and trusted server-verified LC-event ingestion remain unfinished.
+- **GOV-01 — HIGH:** all 30 GitHub refs report `protected:false`; repository rulesets are empty.
+- **LEGAL/OPS:** Terms/Privacy approval, account deletion/export, monitored support, signup-pause verification, monitoring, backup/recovery and rollback evidence remain incomplete or unverified.
+
+### Coordination and release sequencing
+- PR #20 is 15 ahead/119 behind current integration; #22 and #26 are 17 ahead/119 behind. PR #26's three core registry/test files are byte-identical to PR #29; do not integrate both copies. PR #29 is 6 ahead/1 behind integration and PR #27 is based on current integration.
+- Latest Claude handoffs are PR #27 comment `7051054842` and PR #29 comment `7051020358`. The repository tree contains no new standalone M2 handoff file; `docs/CLAUDE_START_HANDOFF_M1.md` remains historical.
+- Next: Claude reconciles the stacked release branches and produces one exact combined candidate; DaVinci independently reviews that SHA. Production merge/deploy, provider agreement/activation and live financial actions remain owner-gated.

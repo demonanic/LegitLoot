@@ -4,9 +4,11 @@
 **Date:** 2026-11-19 (v1.1 2026-11-10)  
 **v1.3 change:** Adds the later 2026-11-19 owner launch decisions in §0.4, which supersede conflicting earlier launch-game and challenge-catalogue assumptions. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
-**Production:** `https://legitloot.site/` — untouched; no production deployment authorized.  
+**Production:** `https://legitloot.site/` — owner-approved early-access publish is live on `main@801f3e7`; all further production merge/deploy/configuration changes remain owner-gated.
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
-**Authorization:** Owner has now explicitly authorized development. This supersedes v1.3's earlier "no development authorized" status for work on the isolated build branch only. It does not authorize paid services, account creation, provider agreements, live money movement, or production deployment.
+**Authorization:** Owner has explicitly authorized development on the isolated build branch. This does not authorize paid services, provider agreements, live money movement, or further production deployment.
+
+**Operational status update — 2026-11-20:** PR #23 was owner-approved and published Rocket 2 Nowhere to production as early access at `main@801f3e7`. This historical publish does not authorize any subsequent production merge/deploy or live financial/provider action.
 
 ## 0. Owner-locked decisions of 2026-11-19 — read first
 
