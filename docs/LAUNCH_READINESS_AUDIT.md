@@ -1492,7 +1492,7 @@ Current state is NOT COMPLETE: production runtime containment (inert v2/v4, call
 
 ### Verified progress
 - Production `main@801f3e7` is live at `https://legitloot.site`; both owner-selected games are present as early access with device-local saves.
-- PR #29 exact head `dad8fd7` is **ACCEPTED by DaVinci for source-only owner review**. Its Offerwall.GG handlers are pure HTTP 410 tombstones, launcher removal is present, and Taplayad is the sole pending provider with `launch: null` and the exact owner template. Node/whitespace and Deno Actions pass.
+- PR #29 exact current head `cfe9f0a` is **ACCEPTED by DaVinci for source-only owner review**. The follow-up changes only SQL/documentation wording and a static test; exact-head Node/whitespace `44831268131` and Deno `44831268125` pass. Browser test `tests/earn-hub.browser.py` remains unrun. Its Offerwall.GG handlers are pure HTTP 410 tombstones, launcher removal is present, and Taplayad is the sole pending provider with `launch: null` and the exact owner template. Node/whitespace and Deno Actions pass.
 - PR #27 documentation branch `b33745a` passes Actions. Both PR #27 and #29 previews succeeded as `environment=preview` in both Cloudflare Pages projects; their branch configs explicitly target staging.
 
 ### Launch blockers
@@ -1508,3 +1508,9 @@ Current state is NOT COMPLETE: production runtime containment (inert v2/v4, call
 - PR #20 is 15 ahead/119 behind current integration; #22 and #26 are 17 ahead/119 behind. PR #26's three core registry/test files are byte-identical to PR #29; do not integrate both copies. PR #29 is 6 ahead/1 behind integration and PR #27 is based on current integration.
 - Latest Claude handoffs are PR #27 comment `7051054842` and PR #29 comment `7051020358`. The repository tree contains no new standalone M2 handoff file; `docs/CLAUDE_START_HANDOFF_M1.md` remains historical.
 - Next: Claude reconciles the stacked release branches and produces one exact combined candidate; DaVinci independently reviews that SHA. Production merge/deploy, provider agreement/activation and live financial actions remain owner-gated.
+
+## PR #29 follow-up — 2026-11-20 17:44 ET
+
+Exact current head `cfe9f0a` was independently re-reviewed. The commit changes only the proposed SQL header, retirement contract wording and a static test; no executable SQL or runtime code changed. It now accurately states the four application roles whose EXECUTE grants are revoked and the inherent postgres-owner exception. Node/whitespace `44831268131` and Deno `44831268125` pass. **ACCEPTED for source-only owner review.** The browser test remains unrun; SQL is unapplied and functions are undeployed.
+
+The owner-provided Offerwall.GG recording shows all five visible placements with postback fields cleared, including a successful save on the remaining Pending placement. It is not an independent dashboard readback; placement disable/delete remains PARTIAL/UNVERIFIED.

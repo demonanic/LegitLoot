@@ -1048,10 +1048,10 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 
 ### GitHub
 - Production `main@801f3e7`; integration `build/legitloot-neon-synthwave@1466eb6`. GitHub lists 30 refs and every ref has `protected:false`; repository rulesets are empty.
-- Open PR heads: #20 `6e2e51b`; #22 `332ca07`; #26 `30f5dbf`; #27 `b33745a`; #28 `93f62ac`; #29 `dad8fd7` (plus stale draft #9 and superseded draft #25).
+- Open PR heads: #20 `6e2e51b`; #22 `332ca07`; #26 `30f5dbf`; #27 `ba8160d` at the previous documentation check; #28 `93f62ac`; #29 `cfe9f0a` (plus stale draft #9 and superseded draft #25).
 - PR #20 is 15 ahead/119 behind integration; #22 and #26 are 17 ahead/119 behind. PR #29 is 6 ahead/1 behind. PR #27 is based on current integration.
 - PR #29's `earn-providers.js`, `tests/earn-registry.test.mjs` and `tests/earn-hub.browser.py` blob SHAs are identical to PR #26. Avoid duplicate integration.
-- Actions: #20 `44661202504` success; #22 `44661225287` success; #26 `44729695582` success; #27 `44820503105` success; #28 `44791797759` success; #29 Node `44820230399` and Deno `44820229990` success.
+- Actions: #20 `44661202504` success; #22 `44661225287` success; #26 `44729695582` success; #27 prior head `b33745a` `44820503105` success and docs head `ba8160d` `44831088272` success; #28 `44791797759` success; #29 exact current head `cfe9f0a` Node `44831268131` and Deno `44831268125` success. Browser test `tests/earn-hub.browser.py` remains unrun.
 
 ### Supabase
 - Production project `gkbqderyjcuxnjbsiffb`: ACTIVE_HEALTHY. Functions: Offerwall.GG wall-url v2 and postback v4 (ACTIVE, deployed handlers return HTTP 410), wallet-summary v4 (ACTIVE).
@@ -1077,3 +1077,10 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - The owner template `https://offerwall.tplayad.com/10066/{user_id}` remains descriptive only. Written App-10066-specific platform-generation, wall URL, signature, transaction/reversal/retry and incentivized-traffic confirmation is outstanding.
 
 No settings, secrets, functions, grants, schema, data, callbacks, provider settings or financial records were changed.
+
+## 2026-11-20 17:44 ET — PR #29 source-only follow-up
+
+- Exact head `cfe9f0a` changes only the proposed SQL header, retirement-contract wording and static regression test. It now explicitly states the postgres function-owner exception. Node/whitespace `44831268131` and Deno `44831268125` pass.
+- DaVinci accepted this exact head for source-only owner review. The browser test remains unrun; SQL remains unapplied and functions undeployed.
+- Owner-provided Offerwall.GG recording shows all five visible placements with postback fields cleared and a successful save on the Pending placement; it is not independent dashboard readback. Placement disable/delete remains PARTIAL/UNVERIFIED.
+- No live environment state changed during this follow-up.
