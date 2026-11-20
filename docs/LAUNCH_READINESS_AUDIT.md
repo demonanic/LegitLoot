@@ -1289,3 +1289,14 @@ PR #23 discussion comment `7028436334` keeps the RXT2 game PR limited to game fi
 
 - Follow-up commit `c25df5c` is the current integration head. Actions run [44692358619](https://github.com/demonanic/LegitLoot/actions/runs/44692358619) completed successfully: Node suite 50/50 and `git diff --check` passed. The prior run [44692216892](https://github.com/demonanic/LegitLoot/actions/runs/44692216892) had the same 50/50 tests but failed only on the two metadata trailing-space lines now corrected.
 - PR #25 remains draft and integration-only; its base `e868121` is now eight documentation-only commits behind integration. Application files did not change in the follow-up; no resync is needed solely for documentation.
+
+
+## 2026-11-20 03:31 ET — Independent launch-readiness recheck
+
+- Production Offerwall.GG issuance remains contained: deployed wall-url v2 and postback v4 return inert 410; checked callback routine EXECUTE is false for service_role, anon and authenticated; callback/conversion counts are zero.
+- Staging is not fully contained: wall-url v5 remains active/JWT with production-origin CORS; postback v8 remains active/no-JWT and record-only. The HMAC covers only user ID, transaction ID and amount; unsigned payout/timestamp metadata is still updated on duplicate callbacks. This is a reconciliation-integrity risk, not current LC issuance.
+- Integration source drift: `supabase/functions/offerwall-gg-postback/index.ts` remains active record-only while production `main` uses an inert handler; production `main` wall-url source still contains the old launcher. PR #25 aligns only the integration wall-url source. Both source entrypoints must be aligned before future promotion.
+- The staging schema snapshot README was corrected because `routines.sql` still contains the pre-record-only journal-posting routine even though the applied migration history and live staging DB show record-only behavior.
+- Taplayad public docs currently lack transaction identity and a retry schedule; both legacy postback URLs return 404. Exact App-10066 URL, signature coverage, reversal/retry contract and incentivized-traffic permission remain unverified. Keep provider disabled and do not map provider points/reward/payout to LC.
+- Production launch remains NOT READY: prohibited cash/withdrawal UI and API fields, provider-to-LC copy, incomplete Terms/Privacy, unverified signup pause, Rocket 2 Nowhere absent from production listing, and missing shared account/save/LC-event integration.
+- No PR merge, deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement was performed.
