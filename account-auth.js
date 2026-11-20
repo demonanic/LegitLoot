@@ -30,7 +30,7 @@
   };
   const switchTab = (tab) => {
     document.querySelectorAll("[data-auth-tab]").forEach((button) => button.classList.toggle("active", button.dataset.authTab === tab));
-    ["signin", "signup", "reset", "recovery"].forEach((name) => {
+    ["signin", "reset", "recovery"].forEach((name) => {
       const form = $(name + "-form");
       form.hidden = name !== tab;
     });
@@ -97,28 +97,8 @@
       button.disabled = false;
     }
   });
-  $("signup-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const button = event.currentTarget.querySelector("button[type=submit]");
-    button.disabled = true;
-    try {
-      const { data, error } = await client.auth.signUp({
-        email: $("signup-email").value.trim(),
-        password: $("signup-password").value,
-        options: {
-          data: { display_name: $("signup-name").value.trim() },
-          emailRedirectTo: window.location.origin + "/account.html"
-        }
-      });
-      if (error) throw error;
-      if (data.session && data.user) await showSignedIn(data.user);
-      else showMessage("CHECK YOUR EMAIL", "Your registration was received. Open the confirmation email to activate your account, then return here to sign in.");
-    } catch (error) {
-      showMessage("ACCOUNT NOT CREATED", error.message || "Please try again.", true);
-    } finally {
-      button.disabled = false;
-    }
-  });
+  // Sign-up is intentionally not wired: public onboarding stays closed until Terms, Privacy
+  // and account deletion/export are approved (DaVinci review 6000758245).
   $("reset-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     const button = event.currentTarget.querySelector("button[type=submit]");

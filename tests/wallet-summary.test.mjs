@@ -1,9 +1,12 @@
 // Run: node --test tests/*.test.mjs
-// Regression test for the get_wallet_summary() response contract (PR #11 review).
-// The two response shapes below mirror the SQL that each environment applied:
-// - staging:    supabase/migrations/20261109010000_align_wallet_summary_response.sql
-// - production: supabase/migrations/20261108120000_standard_lootcoins_wallet.sql
-// The first test checks the SQL files still build these keys, so the fixtures cannot drift silently.
+// STATIC fixture + parser coverage only. This is NOT proof of the deployed RPC contract.
+// The fixtures are modelled on repository SQL whose applied versions differ in prefix:
+// - staging:    repo 20261109010000_align_wallet_summary_response.sql; applied as
+//               20261109050922 align_wallet_summary_response_with_staging_frontend
+// - production: repo 20261108120000_standard_lootcoins_wallet.sql; applied as
+//               20261108081619 standard_lootcoins_wallet
+// SQL equivalence between the repo files and the applied statements was not demonstrated here;
+// the live contract was last read by DaVinci (cash/USD buckets still returned: WALLET-01).
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -28,7 +31,7 @@ const productionResponse = {
   lootCoins: { available: "125000" },
 };
 
-test("fixtures match the keys the migration SQL actually builds", () => {
+test("fixtures match the keys the repository migration SQL builds (static; not the applied statement)", () => {
   const staging = read("supabase/migrations/20261109010000_align_wallet_summary_response.sql");
   assert.match(staging, /'gameCredits', jsonb_build_object\(\s*'available', coalesce\(sum\(balance\) filter \(where account_code = 'lootcoins_available'/);
   const production = read("supabase/migrations/20261108120000_standard_lootcoins_wallet.sql");
@@ -90,4 +93,27 @@ test("contract: the staging 'LLC' label is a display alias; the balance is the L
   // Changing the label must not change the rendered balance.
   const relabelled = { ...stagingResponse, currency: { cash: "USD", gameCredits: "LC" } };
   assert.equal(parseLegitCoins(relabelled), parseLegitCoins(stagingResponse));
+});
+
+test("WALLET-01 source (not deployed): LC-only Edge Function and proposed SQL carry no cash/USD fields", () => {
+  const fn = read("supabase/functions/wallet-summary/index.ts");
+  const sql = read("supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql");
+  for (const [name, src] of [["edge function", fn], ["proposed SQL", sql]]) {
+    assert.doesNotMatch(src.replace(/^\s*(--|\/\/).*$/gm, ""), /cash|USD|LLC/i, name + " must not emit cash/USD/LLC");
+    assert.match(src, /lootCoins/, name);
+  }
+  assert.match(sql, /DO NOT APPLY/);
+  // The proposed SQL stays outside supabase/migrations so it cannot be applied by accident.
+  assert.ok(!read("supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql").includes("create table"));
+  // The client parser already reads the lootCoins key the new contract uses.
+  assert.equal(parseLegitCoins({ lootCoins: { available: "125000", provisional: "0", deferred: "0", withdrawable: false } }), 12.5);
+});
+
+test("public sign-up stays closed: no create-account form or signUp call (Terms/Privacy unpublished)", () => {
+  const html = read("account.html");
+  const js = read("account-auth.js");
+  assert.doesNotMatch(html, /id="signup-form"|data-auth-tab="signup"|CREATE ACCOUNT/i);
+  assert.doesNotMatch(js, /auth\.signUp|signup-form/);
+  assert.match(html, /SIGN-UP IS NOT OPEN YET/);
+  assert.match(html, /data-auth-tab="signin"/);
 });

@@ -72,20 +72,13 @@ Deno.serve(async (req: Request) => {
     return account ? (balances.get(account.id) ?? 0n).toString() : "0";
   };
 
+  // LC-only contract (WALLET-01, source only, NOT deployed): no cash/USD
+  // buckets and no currency label. Cash is deferred; LC is not cash-convertible.
   return json({
-    currency: { cash: "USD", gameCredits: "LLC" },
-    cash: {
-      pendingCents: balance("cash_pending"),
-      availableCents: balance("cash_available"),
-      withdrawalReservedCents: balance("cash_withdrawal_reserved"),
-      paidCents: balance("cash_paid"),
-      heldCents: balance("cash_held"),
-    },
-    gameCredits: {
-      available: balance("game_credits_available"),
-      provisional: balance("game_credits_provisional"),
-      deferred: balance("game_credits_deferred"),
-      cashValue: null,
+    lootCoins: {
+      available: balance("lootcoins_available"),
+      provisional: balance("lootcoins_provisional"),
+      deferred: balance("lootcoins_deferred"),
       withdrawable: false,
     },
     generatedAt: new Date().toISOString(),
