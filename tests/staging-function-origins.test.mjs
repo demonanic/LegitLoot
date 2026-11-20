@@ -23,14 +23,26 @@ test("canonical function sources exist for the staging provider functions", () =
 
 test("no canonical function source allows the production origin", () => {
   for (const name of functions) {
-    const source = readFileSync(new URL(`${name}/index.ts`, functionsDir), "utf8").replace(/(^|[\s;{}])\/\/.*$/gm, "$1"); // strip comments, not the // inside URLs
+    const source = readFileSync(new URL(`${name}/index.ts`, functionsDir), "utf8").replace(/(^|[\\s;{}])\\/\\/.*$/gm, "$1"); // strip comments, not the // inside URLs
     assert.ok(!PRODUCTION_ORIGIN.test(source), `supabase/functions/${name} allows https://legitloot.site`);
   }
 });
 
 test("canonical cpagrip-attribution differs from the deployed snapshot only by the production origin", () => {
-  const strip = (s) => s.split("\n").filter((l) => !l.trim().startsWith("//")).join("\n");
+  const strip = (s) => s.split("\\n").filter((l) => !l.trim().startsWith("//")).join("\\n");
   const canonical = strip(readFileSync(new URL("supabase/functions/cpagrip-attribution/index.ts", root), "utf8"));
   const snapshot = strip(readFileSync(new URL("supabase/environments/staging/functions/cpagrip-attribution/index.ts", root), "utf8"));
-  assert.equal(canonical, snapshot.replace('  "https://legitloot.site",\n', ""));
+  assert.equal(canonical, snapshot.replace('  "https://legitloot.site",\\n', ""));
+});
+
+test("Offerwall.GG wall URL source is inert and cannot create a provider wall", () => {
+  const entrypoint = readFileSync(new URL("supabase/functions/offerwall-gg-wall-url/index.ts", root), "utf8");
+  const handler = readFileSync(new URL("supabase/functions/offerwall-gg-wall-url/handler.ts", root), "utf8");
+  assert.match(entrypoint, /Deno\\.serve\\(handler\\)/);
+  assert.doesNotMatch(
+    entrypoint + handler,
+    /createClient|OFFERWALL_GG_(?:PUBLIC_KEY|SECRET)|offerwall\\.gg\\/wall|signWallParams|auth\\.getUser|crypto\\.subtle/i,
+  );
+  assert.match(handler, /status:\\s*410/);
+  assert.match(handler, /OFFERWALL_GG_DISABLED/);
 });
