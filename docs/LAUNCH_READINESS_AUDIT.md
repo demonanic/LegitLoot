@@ -1002,3 +1002,34 @@ Production Offerwall containment, main branch protection, Taplayad terms/account
 - Taplayad App ID 10066 remains selected as the initial Hustle publisher, but account-generation/protocol, canonical URL, payload-bound authentication, transaction identity, reversal matching, retries/idempotency, authoritative verification and incentivized-traffic permission remain unconfirmed. Keep any permitted staging work record-only. Publisher `$1 = 1 point`, `{reward}` and `{payout}` must never map to LC or user cash/withdrawal.
 - Production Offerwall.GG provider-to-LC issuance is the critical owner-gated blocker. Branch protection is disabled on all 21 branches. Support-mailbox verification, sign-up-pause verification, provider agreements/paid commitments and final production release remain owner-controlled.
 - No PR was merged, no deployment performed, no callback invoked, no provider terms accepted, no money moved, and no Supabase/Cloudflare settings, secrets, schema or data changed.
+
+
+---
+
+## 2026-11-19 19:41 ET — Launch-readiness correction: ZVHM live; production policy mismatch blocks full launch
+
+### Verified milestone
+PR #21 was specifically owner-authorized and merged to production as `4e0f533`. Cloudflare confirms successful production deployment on `main` to `https://legitloot.site`. Read-only browser checks verified HTTP 200 for the homepage, Games page, ZVHM play page and direct game URL. The iframe displays the actual game canvas/tutorial/HUD, with no page errors or horizontal overflow at desktop/390px mobile. The game is early access, device-save only, and not connected to LegitLoot accounts or LC.
+
+### Still not launch-complete
+- Rocket 2 Nowhere has no located source and is not listed as playable; production Games shows a placeholder for future games.
+- Integration branch `907f1a6` is 404 ahead / 2 behind main `4e0f533` and lacks the PR #21 play page. Port the four public files into integration before future release.
+- PR #21 had no GitHub Actions status/workflow run or review submission returned. Cloudflare preview and production deployments succeeded; independent browser smoke check passed, but no automated test suite is evidenced for this PR/game commit.
+- PR #20's public-copy changes are not on production. PR #20 head `7912edd` is 13 ahead / 1 behind integration; Actions `44637573706` passed 58/58 Node tests, 0 failures, whitespace check. Sync once to `907f1a6` and rerun. PR #20 uses staging-only Supabase configuration and is not a production release artifact.
+- Production `index.html`, `rewards.html`, `account.html` still advertise offerwall-to-LC, cash wallet and withdrawal concepts contrary to locked rules. Production `account-auth.js` supports sign-up against production Supabase; `get_wallet_summary()` returns cash and LC fields. Terms/Privacy are expressly incomplete while account forms remain present. This is a critical privacy/legal/policy release blocker; owner must decide sign-up pause and authorize any production changes.
+- Production Offerwall.GG v3 callback can still issue LC via SECURITY DEFINER journal routine. Disabled provider metadata does not stop the active function because the function does not check provider status. Critical owner-gated financial-policy blocker.
+- Staging postback v8 is record-only; staging wall-url CORS allows `https://legitloot.site`, a cross-environment exception to review.
+- Taplayad remains unintegrated; account protocol, signed transaction identity, reversals/retries and incentivized-traffic permission unresolved.
+- Branch inventory returned 22 names; branch protection was not re-queried in this run (previous record found all then-existing branches unprotected).
+
+### Acceptance criteria before production launch
+1. Complete the second approved game route or obtain an owner-approved scope change; do not substitute.
+2. Port the live ZVHM public-page change into integration and maintain no-account/no-LC disclosure until handoff is built.
+3. Remove production-facing provider-to-LC and cash/withdrawal claims; make wallet LC-only.
+4. Resolve production callback-to-LC path under owner authorization.
+5. Resolve account sign-up versus incomplete Terms/Privacy before collecting user data.
+6. Verify staging/production origin separation and branch protection.
+7. Verify Taplayad contract/permission before live provider integration.
+8. Publish approved legal documents and obtain final owner release approval.
+
+No merge, deploy, Supabase/Cloudflare mutation, callback, payment or provider agreement was performed during this audit.

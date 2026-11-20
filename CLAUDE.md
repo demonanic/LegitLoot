@@ -304,3 +304,28 @@ The official public docs now expose two separate systems:
 - Taplayad App ID 10066 protocol/account generation, URL alias, signed transaction fields, unique transaction ID, reversal/retry semantics, verification method and incentivized-traffic permission remain unconfirmed. Keep staging record-only; never map publisher points/reward/payout to LC.
 - No new Claude implementation or handoff after PR #20 comment `7024420349` was found. No PR merge, deploy, Supabase/Cloudflare settings or secret change, callback, provider agreement, payment, schema/data mutation or production action occurred.
 - Next: owner reviews PR #20; Claude should only resync if integration advances again. Continue M2-T4 without inventing routes. Production containment, branch protection, provider terms/activation and final launch remain owner-gated.
+
+
+---
+
+## Sync Watch handoff — 2026-11-19 19:41 ET
+
+### New verified state
+- Owner specifically authorized PR #21 on 2026-11-19 to publish **Zombies vs Heavy Metal** after checks. PR #21 merged as `4e0f533` to `main`; Cloudflare `legitloot` production deployment succeeded on `https://legitloot.site`. This is a narrow past authorization, not blanket production permission.
+- Independent browser check: homepage, Games page, ZVHM play page and direct game URL all HTTP 200; actual game canvas/tutorial/HUD rendered; no page errors or horizontal overflow at desktop/390px mobile. The game is device-save only; no LegitLoot account or LC connection yet. No buttons were pressed or progress saved.
+- Source: `demonanic/Legitloot-2`; latest observed game commit `fcf4000`. No GitHub Actions runs/statuses returned for PR #21 or game commit. Do not claim automated CI passed.
+- Rocket 2 Nowhere remains unlocated and not playable. Do not substitute.
+- Main is `4e0f533`; integration is `907f1a6`, 404 ahead / 2 behind. Integration still has the old ZID card and lacks `zombies-vs-heavy-metal.html`. Port PR #21's four public files to integration in a separate integration-only change; preserve the early-access/device-save/no-account/no-LC disclosure. Do not merge/deploy to main.
+- PR #20 head `7912edd` is 13 ahead / 1 behind current integration. Actions `44637573706` passed 58/58 Node tests, 0 failures, whitespace check. Sync once to `907f1a6`, rerun CI, then stop. Its account/Supabase config is staging-only; it is not production-ready.
+- Production main still has prohibited legacy copy: homepage says offers planned; rewards page says Offerwall.GG completions award LC and describes cash/withdrawals; account page shows cash wallet and withdrawal fields. Production `account-auth.js` hardcodes production Supabase and implements signup; `get_wallet_summary()` returns cash and LC. Terms and Privacy explicitly say they are incomplete and warn users not to submit personal data. Do not change production auth, wallet, legal pages or sign-up status without owner approval; raise the decision whether sign-ups should be paused pending approved legal docs and LC-only wallet.
+- Production Offerwall.GG v3 remains active and can call a SECURITY DEFINER journal-posting routine. Provider registry row is disabled, but the function does not check provider status. This is a critical owner-gated financial blocker.
+- Staging postback v8 is record-only. Staging wall-url v5 CORS includes `https://legitloot.site`; review this cross-environment allow-list before production integration.
+- Taplayad App ID 10066 remains record-only until account protocol, canonical URL, signed transaction identity, reversal/retry semantics and incentivized-traffic permission are confirmed. Never map publisher points/reward/payout to LC.
+- No Supabase/Cloudflare changes, secret changes, schema/data mutations, callbacks, payments, provider agreements or new production action occurred in this audit.
+
+### Next authorized engineering work
+1. Sync PR #20 once and rerun CI; do not merge to main.
+2. Port PR #21 public-page change into integration only.
+3. Continue locating Rocket 2 Nowhere source.
+4. Prepare an owner decision brief for production sign-up/legal mismatch and Offerwall.GG containment; do not execute.
+5. Review staging CORS allow-list; do not alter settings.

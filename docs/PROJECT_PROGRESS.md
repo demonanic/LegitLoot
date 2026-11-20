@@ -554,3 +554,20 @@ Next: Claude should synchronize PR #16 and PR #17 once to current integration `1
 - Taplayad App ID 10066 remains selected as the initial Hustle publisher, but account-generation/protocol, canonical URL, payload-bound authentication, transaction identity, reversal matching, retries/idempotency, authoritative verification and incentivized-traffic permission remain unconfirmed. Keep any permitted staging work record-only. Publisher `$1 = 1 point`, `{reward}` and `{payout}` must never map to LC or user cash/withdrawal.
 - Production Offerwall.GG provider-to-LC issuance is the critical owner-gated blocker. Branch protection is disabled on all 21 branches. Support-mailbox verification, sign-up-pause verification, provider agreements/paid commitments and final production release remain owner-controlled.
 - No PR was merged, no deployment performed, no callback invoked, no provider terms accepted, no money moved, and no Supabase/Cloudflare settings, secrets, schema or data changed.
+
+
+---
+
+## 2026-11-19 19:41 ET — First launch game is live; production blockers newly surfaced
+
+- **Resolved M2-T4 for game 1:** owner-approved PR #21 was merged as `4e0f533` to `main`; Cloudflare `legitloot` production deployment `6598c4c6-ecd5-49a1-9122-a55caa892cd8` succeeded on `main`, alias `https://legitloot.site`. The play route is `/zombies-vs-heavy-metal.html`, embedding `https://demonanic.github.io/Legitloot-2/`.
+- Independent read-only browser check: homepage, Games page, play page and direct game URL returned HTTP 200; actual ZVHM canvas/tutorial/HUD rendered; no browser-captured page errors or horizontal overflow at desktop/390px mobile. No game controls were pressed and no save was created.
+- Game repository: `demonanic/Legitloot-2`; latest observed commit `fcf4000`. README confirms official title and device-local progress; LegitLoot sign-in, shared saves and LC rewards are not connected. No GitHub Actions run/status evidence was returned for PR #21 or game commit `fcf4000`.
+- **Rocket 2 Nowhere is still missing** from production and has no located source in the connected repository inventory. Production Games shows ZVHM plus “More worlds later”; full two-game launch is not complete.
+- Integration `907f1a6` is 404 commits ahead / 2 behind main `4e0f533`; it lacks the new ZVHM play page and still displays the ZID placeholder. Port PR #21's four public files to integration before a future release.
+- PR #20 remains open, head `7912edd`, 13 ahead / 1 behind current integration. Actions run `44637573706` passed 58/58 Node tests and whitespace check. It needs one sync to `907f1a6`; do not merge to main. PR #9 remains a stale draft.
+- New critical production finding: `main` still advertises provider-to-LC credits in `rewards.html`, cash rewards/withdrawal in `rewards.html` and `account.html`, and “Complete offers — Planned” in `index.html`. Production `account-auth.js` is hardwired to production Supabase and implements sign-up; `public.get_wallet_summary()` returns cash and LC. Terms and Privacy pages explicitly say they are incomplete and warn users not to submit personal data. Owner decision required on pausing public sign-ups until legal and LC-only wallet cleanup is approved. No auth settings or production code changed.
+- Production Offerwall.GG v3 remains ACTIVE and its DB routine posts LC journal transactions. The provider row is disabled, but the deployed function does not check that disabled status before calling the RPC. Staging v8 remains record-only.
+- Staging `offerwall-gg-wall-url` CORS allow-list includes production origin `https://legitloot.site`; review this cross-environment exception before production integration.
+- Taplayad App ID 10066 remains unintegrated and record-only pending protocol, signed transaction identity, reversal semantics and incentivized-traffic permission.
+- No production change, merge, deployment, setting/secret change, database mutation, callback, payment or provider agreement occurred during this audit.
