@@ -3,7 +3,7 @@
 **Updated:** 2026-11-19 21:29 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected game titles have playable early-access candidates; ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` @ `387d035`
+**Integration branch:** `build/legitloot-neon-synthwave` @ `6417323` before the current documentation-only correction
 **Production branch:** `main` @ `4e0f533`
 **Current open PRs:** #20 Hustle/public-copy (head `c6dc85b`, 58/58 CI, 7 docs-only commits behind current integration); #22 game integration (head `c70c3d3`, stacked on #20, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `7a31165`, Deno tests unrun); #9 stale visual redesign draft.
 
@@ -29,8 +29,8 @@
 
 ## Current verification status
 
-- PR #20 Actions: 58/58 pass, 0 failures, 0 skips. It is 7 documentation-only commits behind current integration; comment requests a single sync and rerun.
-- PR #22 Actions: 64/64 pass, 0 failures, 0 skips; whitespace check passes. Independent COMMENT review found no blocker in the scoped game changes.
+- PR #20 Actions run `44661202504`: 58/58 pass, 0 failures, 0 skips. Claude synced it once to `387d035`; six later documentation-only commits on integration now make it 6 behind the pre-correction head. No further sync requested in this run.
+- PR #22 Actions run `44661225287`: 64/64 pass, 0 failures, 0 skips. Claude updated the stacked branch to head `332ca07`, 2 ahead / 0 behind PR #20 head `6e2e51b`; independent COMMENT review found no blocker in the scoped game changes.
 - PR #23: Cloudflare preview deployed successfully in both Pages projects; read-only browser QA confirmed the Games page and embedded RXT2 start screen. No GitHub Actions run exists for this PR.
 - PR #24: no Actions run; Deno tests are authored but not executed. Import-side-effect defect and preview-isolation finding were posted to the PR.
 - Production Cloudflare canonical deployment remains `main` @ `4e0f533`. PR #23/#24 are preview-only; no production deployment occurred.
@@ -630,3 +630,11 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Test execution is pending an environment with Deno/Supabase CLI. Source review confirms the handler contains no database/client/secret/RPC path; tests are authored but not yet executed.
 - Next: restore Supabase connector access; independently inspect live production function/RPC definitions and effective grants; run Deno tests; review PR #24. Only after those pass should a separate production maintenance plan be presented for explicit owner approval. Consider removing the publisher dashboard URL only after verifying other configured products do not depend on it.
 - Owner gate: production database privilege revocation and Edge Function deployment each require separate explicit approval. Dashboard changes and any provider-side contract changes remain separately gated.
+
+
+## 2026-11-19 21:32 ET — Post-debrief Claude sync verification
+
+- Claude responded to the PR #20 sync request with verifiable PR comment `7028471600`: PR #20 is now head `6e2e51b`, based on integration `387d035`; the staging-only/fail-closed auth guard was preserved. GitHub Actions run `44661202504` passed 58/58 tests, 0 failures/skips.
+- Claude also updated the stacked PR #22 to head `332ca07`, based on PR #20 head `6e2e51b`. GitHub Actions run `44661225287` passed 64/64 tests, 0 failures/skips. The PR #22 branch is 2 commits ahead / 0 behind its PR #20 base.
+- The integration branch was at `6417323` immediately before this correction; it contains six documentation-only commits after `387d035`. PR #20 is therefore six documentation-only commits behind the integration head at this point. This correction is another documentation-only commit. No further sync request is made in this run to avoid repeated sync churn.
+- PR #20 and #22 remain open/unmerged. PR #23 and #24 remain draft, preview-only, with the previously recorded preview-isolation and PR #24 Deno-test blockers. No merge or deployment occurred.
