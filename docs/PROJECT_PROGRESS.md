@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 06:36 ET
+**Updated:** 2026-11-20 06:41 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
