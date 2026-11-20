@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 17:30 ET by DaVinci (read-only GitHub, Cloudflare and Supabase check). Record edited 2026-11-20 17:30 ET.
+**Last verified:** 2026-11-20 17:50 ET by DaVinci (read-only GitHub, Cloudflare and Supabase review). Record edited 2026-11-20 17:50 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1084,3 +1084,23 @@ No settings, secrets, functions, grants, schema, data, callbacks, provider setti
 - DaVinci accepted this exact head for source-only owner review. The browser test remains unrun; SQL remains unapplied and functions undeployed.
 - Owner-provided Offerwall.GG recording shows all five visible placements with postback fields cleared and a successful save on the Pending placement; it is not independent dashboard readback. Placement disable/delete remains PARTIAL/UNVERIFIED.
 - No live environment state changed during this follow-up.
+
+## 2026-11-20 17:50 ET — PR #30 and staging-tool recheck
+
+### GitHub and Cloudflare
+- GitHub lists 31 refs; every ref reports `protected:false`; repository rulesets are empty.
+- PR #30 `272a1c1` is based on current integration `1466eb6`, 30 commits ahead/0 behind, 43 changed files. Node/whitespace `44831521863` and Deno `44831521848` pass.
+- Cloudflare candidate previews `a2c66c56` (`legitloot`) and `4e14c250` (`legitloot-preview`) both succeeded as `environment=preview` on exact SHA `272a1c1`.
+- Candidate `supabase-config.js` and `account-auth.js` select the exact staging project. `admin.js` and `payout-simulator.js` also fail closed unless the exact staging URL/environment is present.
+
+### Staging simulator
+- Staging payout-simulator Edge Function exists only in staging; production has no matching function.
+- Its RPCs are SECURITY DEFINER but ACL-restricted to postgres/service_role and enforce owner/admin role checks. The Edge Function makes no PayPal/Venmo API call.
+- Staging simulator tables currently contain 2 wallet rows, 2 withdrawal rows and 6 event rows. These are simulator records, not real payments; no rows were changed.
+
+### Candidate and provider
+- The owner-confirmed ZVHM source is `demonanic/Legitloot-2`; candidate wrapper/test match. Candidate README/Platform Build Spec/PR description remain stale.
+- Candidate `index.html` retains an unexplained `offerwall-verification` meta token; confirm origin and remove if Offerwall.GG, or document another owner-approved purpose.
+- Taplayad remains pending with `launch: null`; no provider-to-LC issuance path is enabled.
+
+No environment setting, secret, function, grant, schema, data, callback, provider setting or financial record was changed.
