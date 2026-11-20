@@ -757,3 +757,10 @@ Owner explicitly authorized preparation and testing of production containment, p
 - ZVHM is production early access with device-local saves; RXT2 is playable in preview only. Both remain disconnected from the central account and authoritative LC wallet.
 - No merge, deployment, settings/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred. The PR #25 test-only commit is on its review branch and was not merged.
 - Next: keep Offerwall.GG disabled; review PR #25; prepare source-alignment candidates for both Offerwall.GG functions and a separate staging containment candidate; do not deploy. Keep PR #23 blocked until preview auth fails closed against production.
+
+
+## 2026-11-20 04:55 ET — ZVHM identity blocker
+
+- Correction to the 04:39 ET status: do not describe Zombies vs Heavy Metal as verified/live. Production main and PR #22's play page load https://demonanic.github.io/Legitloot-2/ from zombies-vs-heavy-metal.html. Platform Build Spec §0.4 explicitly excludes that repo as Zombie Invasion Defense, not the selected ZVHM game.
+- PR #22's tests/launch-games.test.mjs asserts the excluded URL, so its 64/64 pass does not verify the correct game. Blocking comments 7036549802 and 7036564753 were added. Keep ZVHM unavailable/unverified until the owner-approved source/build is identified.
+- Rocket 2 Nowhere remains a separate playable preview artifact, with device-local saves only and no shared account/LC connection.

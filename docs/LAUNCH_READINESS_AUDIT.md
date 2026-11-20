@@ -1339,3 +1339,14 @@ PR #23 discussion comment `7028436334` keeps the RXT2 game PR limited to game fi
 - The only standalone Claude handoff in docs remains CLAUDE_START_HANDOFF_M1.md. Verified Claude commits remain PR #20 head 6e2e51b, PR #22 head 332ca07 and PR #23 head 33a5240; no newer Claude-authored commit was found after the 03:31 ET check. PR #25 test commit 135607e is authored by demonanic.
 - Comments added: PR #20 comment 7036351593; PR #23 comment 7036403044; PR #25 comment 7036350760.
 - No PR merge, deployment, Supabase settings/secrets/grants/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred. Cloudflare preview builds were automatic branch previews only.
+
+
+## 2026-11-20 04:55 ET — Critical ZVHM identity finding
+
+The earlier statement that ZVHM is live on production as early access is corrected. The production route exists, but its iframe target is the owner-excluded repository:
+- Production main and PR #22 use zombies-vs-heavy-metal.html with iframe src https://demonanic.github.io/Legitloot-2/.
+- Platform Build Spec §0.4 explicitly states demonanic/Legitloot-2 is Zombie Invasion Defense and is not a substitute for Zombies vs Heavy Metal.
+- PR #22 games.html calls both games playable; tests/launch-games.test.mjs explicitly asserts the excluded URL and hides the excluded game's name from the catalog. The 64/64 test pass therefore codifies the wrong identity.
+- PR #22 is not ready for owner acceptance until the actual selected ZVHM source/build is identified and the card/route/test are corrected. Do not use the excluded repo or label it as ZVHM.
+- Rocket 2 Nowhere is a separate self-contained in-repo preview build at games/rocket-2-nowhere/index.html; device-local saves only, no shared account or LC.
+- Blocking review comments: PR #22 comments 7036549802 and 7036564753. No code or deployment was changed.

@@ -1682,3 +1682,13 @@ Owner explicitly authorized preparation and testing of production containment, p
 - GitHub attributes the latest relevant Claude commits to Claude: PR #20 head 6e2e51b and PR #22 head 332ca07 (2026-11-20 02:29 UTC), plus PR #23 head 33a5240 (2026-11-20 01:28 UTC). No newer Claude-authored commit or handoff was verified since the 03:31 ET check. PR #25 test commit 135607e is authored by demonanic, not Claude.
 - Actions performed: read-only GitHub/Supabase/Cloudflare inspection; test-only import-graph hardening on PR #25; review comments 7036350760, 7036351593 and 7036403044; documentation updates. No PR merge, production or staging function deployment, Supabase settings/secrets/grants/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
 - Next: keep PR #25 draft for owner review; prepare separately reviewed source alignment for both Offerwall.GG functions and a staging-only containment candidate, but do not deploy in this run. Keep PR #23 blocked until its preview cannot initialize production Supabase. Continue M2-T4 per the Master Control; the Offerwall.GG work remains the owner's requested critical launch/security focus.
+
+
+## 2026-11-20 04:55 ET — Critical launch-game identity correction
+
+- Re-inspected PR #22's actual play route and test. Production main and PR #22 both use zombies-vs-heavy-metal.html, whose iframe src is https://demonanic.github.io/Legitloot-2/. Platform Build Spec §0.4 explicitly says demonanic/Legitloot-2 is Zombie Invasion Defense and is not a substitute for the owner-selected Zombies vs Heavy Metal.
+- PR #22's games.html labels the card PLAYABLE and links to that wrapper. tests/launch-games.test.mjs explicitly asserts the excluded iframe URL and then suppresses the excluded game's name from the catalog. This test codifies the owner-decision violation, not a valid identity check.
+- Added blocking comments to PR #22: 7036549802 and 7036564753. Keep the ZVHM card/route unavailable or clearly unverified until the actual owner-approved ZVHM source/build is identified. Do not use or relabel Zombie Invasion Defense as ZVHM.
+- RXT2 is a separate in-repo build at games/rocket-2-nowhere/index.html in PR #22/#23; it is preview-only, device-save early access, and has no shared account or LC connection.
+- Correction to the 04:39 ET Sync Watch note: the production ZVHM wrapper exists, but it does not establish that the owner-selected ZVHM game is live. The selected game's actual source/identity remains unverified. PR #22's 64/64 tests pass but do not validate game identity.
+- No game code, test, deployment, production setting or external source was changed in this correction. Only PR review comments and shared documentation were updated.

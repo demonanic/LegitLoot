@@ -40,6 +40,14 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 - The earlier reference title Zombie Invasion Defense (repository `demonanic/Legitloot-2`) is not a substitute for either selected launch title. Do not list it as a launch game unless the owner changes the selection.
 - Exact source repositories and playable hosting URLs remain UNLOCATED in the connected GitHub account and handoffs. Do not invent URLs or wire unrelated projects.
 
+### Implementation status recheck — 2026-11-20 04:55 ET (status only; owner decision unchanged)
+
+- The production and PR #22 Zombies vs Heavy Metal wrapper uses an iframe to https://demonanic.github.io/Legitloot-2/. This is the repository §0.4 explicitly identifies as Zombie Invasion Defense and not a substitute for the selected ZVHM game. The wrapper's title/branding does not establish game identity. The actual owner-approved ZVHM source/build remains unverified; do not publish this route as the selected game.
+- PR #22 tests/launch-games.test.mjs currently asserts that excluded URL. The test must be changed to reject the excluded repository, and the ZVHM card must remain unavailable/unverified until the correct build is identified.
+- Rocket 2 Nowhere has a self-contained in-repository build at games/rocket-2-nowhere/index.html in PR #22/#23. It is preview-only with device-local saves and no shared account/LC connection.
+- This note does not change the owner-selected game titles or authorize any substitute source.
+
+
 ### Launch challenges and LC awards
 - The owner authorizes creation of **at least five** launch challenges/milestones and integration with the central reward system.
 - Agents may author objective definitions, event sources, anti-replay conditions, completion states, and tests.

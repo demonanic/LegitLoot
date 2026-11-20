@@ -896,3 +896,10 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Integration canonical wall-URL and postback sources remain active until reviewed source changes are accepted. PR #25 head 135607e makes only the wall-URL source inert; it does not alter the postback source or deployed staging functions.
 - Staging deployed wall-URL source includes the production origin in CORS, while the canonical integration source uses the truncated build preview alias and omits production. Treat the deployed staging snapshot as the runtime truth until separately reviewed.
 - No Taplayad publisher configuration or callback integration is present. Preserve the owner-supplied template exactly and keep it inactive pending written App-10066 permission and a complete transaction/reversal contract.
+
+
+## 2026-11-20 04:55 ET — Game route identity correction
+
+- Production main's zombies-vs-heavy-metal.html iframe points to https://demonanic.github.io/Legitloot-2/. The owner-locked Platform Build Spec §0.4 excludes demonanic/Legitloot-2 as Zombie Invasion Defense, not the selected ZVHM launch title. The production route must not be treated as a verified ZVHM build.
+- PR #22's games.html links its ZVHM card to the same wrapper and tests/launch-games.test.mjs explicitly asserts the excluded URL. PR #22 remains blocked pending the actual approved ZVHM source/build and a corrected regression test.
+- Rocket 2 Nowhere is packaged at games/rocket-2-nowhere/index.html in PR #22/#23 and remains preview-only, device-local.
