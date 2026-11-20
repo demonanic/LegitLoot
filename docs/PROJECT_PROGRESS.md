@@ -826,3 +826,11 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Open PRs are #9, #20, #22, #23, #25 and #26. Branch count is 27; every branch still reports `protected=false`. PR #23 remains draft/no CI with production-targeted Account/auth on its preview. PR #22 retains the ZVHM identity/test blocker. No new standalone Claude handoff was found; PR #26 is the new verified Claude-authored artifact.
 - The documentation-only update sequence passed GitHub Actions through run [44729867195](https://github.com/demonanic/LegitLoot/actions/runs/44729867195), including npm tests and whitespace checks; no application code changed. PR #26's branch previews are not production deployments.
 - No PR was merged, no production/staging deploy was initiated, and no Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
+## 2026-11-20 11:28 ET — Owner decision: Offerwall.GG permanent retirement
+
+- Owner approved full retirement (option B). Offerwall.GG is no longer a provider to preserve or repair. Remove active code/UI/registry/callback/database execution/deployment paths and the LegitLoot placement postback/configuration from the provider dashboard; do not delete the entire publisher account.
+- Implementation contract: docs/security/OFFERWALL_GG_RETIREMENT.md. Claude owns implementation; DaVinci independently reviews. Keep PR #25 draft/superseded; do not merge its narrow source-alignment change.
+- Preserve historical migrations, snapshots, records, and security findings. Staging retirement may proceed only after independent review and exact environment verification. Production changes remain owner-gated.
+- Dashboard access is currently blocked: Browser Use returned insufficient credits and Opera browser is not connected. No dashboard settings have been changed. Do not claim dashboard completion without evidence.
+- No code, DB, deployment, dashboard, secrets, callback, or financial state changed in this documentation update.
