@@ -448,3 +448,12 @@ Keep PR #23 game-only. Its Account page inherits production-targeting auth from 
 
 ## Latest Sync Watch — 2026-11-20 00:28 ET
 Production Offerwall.GG containment is verified, but the canonical repository wall-URL source remains active and must be aligned before any future redeploy. Main still has cash/withdrawal wallet UI and provider-to-LC wording; Terms/Privacy are incomplete. Read the latest dated entry in docs/MASTER_EXECUTION_CONTROL.md before further work. No production or staging mutation was performed by this check.
+
+
+## 2026-11-20 01:36 ET — Sync Watch handoff
+
+- Draft PR #25 (`claude/offerwall-gg-wall-url-source-align` → `build/legitloot-neon-synthwave`) aligns the integration-branch Offerwall.GG wall-URL source with inert HTTP 410 behavior. It uses a side-effect-free `handler.mjs`; GET/POST/OPTIONS runtime tests and a static reactivation guard are included. GitHub Actions run [44689653386](https://github.com/demonanic/LegitLoot/actions/runs/44689653386) passed 54/54, 0 failed/skipped; isolated handler test passed 3/3 locally. Keep the PR draft; do not merge or deploy.
+- Important limitation: `main/supabase/functions/offerwall-gg-wall-url/index.ts` still contains the old active launcher. PR #25 does not touch main. A separate owner-gated main-source alignment is required before any future production function redeploy.
+- Cloudflare automatically built both PR #25 previews as `environment=preview`, pages.dev-only, with no production alias. The branch pins Supabase to staging and fails closed if the staging config is absent. No Supabase function was deployed.
+- Fresh Taplayad docs check found `offer={offer_id}` in the sample URL but `$_GET['offer_id']` in the PHP sample; current signature omits transaction identity and reward/status/payout/offer; no transaction-ID macro or retry schedule is documented; reversal matching is underspecified; App-10066 incentivized-traffic permission remains unverified. Keep Taplayad record-only and preserve the owner's exact URL template.
+- Current integration is still `e868121`; PR #20/#22 are unchanged at 58/64 passing tests and 39 docs-only commits behind the base; PR #23 is draft/no CI with production-targeting Account/auth in its main-based preview; PR #9 is stale. Production cash/withdrawal and provider-to-LC copy, incomplete legal pages, unverified sign-up pause, and missing shared game/account/LC-event integration remain blockers.
