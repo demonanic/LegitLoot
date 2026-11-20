@@ -5,6 +5,13 @@
 **Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
 **Production branch:** main @ bcc19d6; Cloudflare production deployment 75207a07 succeeded at 2026-11-20 04:11:50 UTC.
+
+## Agent coordination — 2026-11-20
+
+- Standing roles are now explicit in `docs/AGENT_OPERATING_CHARTER.md`: **Claude implements; ChatGPT/DaVinci directs, coordinates, and independently verifies; Sam owns business priorities and final decisions.**
+- `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
+- Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
+- This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
 **Current open PRs:** #20 Hustle/public copy (head 6e2e51b, 58/58 exact-head CI); #22 game integration (head 332ca07, 64/64 CI, stacked on #20 but blocked by wrong ZVHM source/test); #23 Rocket 2 Nowhere main-based draft (head 33a5240, no CI, preview auth targets production Supabase); #25 Offerwall.GG wall-URL source alignment (draft, head 135607e, 54/54 Node plus Deno checks, staging deployment-source test gap); #9 stale non-mergeable visual redesign draft. PR #21 and #24 were merged by owner account demonanic.
 
 ## Current owner-locked operating rules
