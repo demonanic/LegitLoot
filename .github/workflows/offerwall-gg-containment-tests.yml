@@ -1,0 +1,35 @@
+name: Offerwall.GG containment tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "supabase/functions/offerwall-gg-postback/**"
+      - "tests/earn-registry.test.mjs"
+      - "earn-providers.js"
+      - ".github/workflows/offerwall-gg-containment-tests.yml"
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "supabase/functions/offerwall-gg-postback/**"
+      - "tests/earn-registry.test.mjs"
+      - "earn-providers.js"
+      - ".github/workflows/offerwall-gg-containment-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  containment-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Deno
+        uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - name: Run side-effect-free handler tests
+        run: deno test supabase/functions/offerwall-gg-postback/index_test.ts
+      - name: Run earning registry regression tests
+        run: node --test tests/earn-registry.test.mjs
