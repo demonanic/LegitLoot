@@ -77,3 +77,17 @@ test("account page loads the wallet parser before account-auth.js", () => {
   const parserAt = html.indexOf('src="wallet-summary.js');
   assert.ok(parserAt > 0 && parserAt < html.indexOf('src="account-auth.js'));
 });
+
+test("contract: the staging 'LLC' label is a display alias; the balance is the LC ledger account", () => {
+  const sql = read("supabase/migrations/20261109010000_align_wallet_summary_response.sql");
+  // The label is cosmetic: the client never reads currency.gameCredits.
+  assert.match(sql, /'gameCredits', 'LLC'/);
+  assert.equal(stagingResponse.currency.gameCredits, "LLC");
+  // The balance itself is filtered to the LC game-credits ledger account, in atoms.
+  assert.match(sql, /account_code = 'lootcoins_available' and wallet_kind = 'game_credits' and currency_code = 'LC'/);
+  const src = read("wallet-summary.js");
+  assert.doesNotMatch(src, /\.currency\b/, "parser must not depend on the currency label");
+  // Changing the label must not change the rendered balance.
+  const relabelled = { ...stagingResponse, currency: { cash: "USD", gameCredits: "LC" } };
+  assert.equal(parseLegitCoins(relabelled), parseLegitCoins(stagingResponse));
+});
