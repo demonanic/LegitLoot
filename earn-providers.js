@@ -11,7 +11,8 @@
 //     "unavailable" and can never be opened.
 //   - Only a provider whose state is "active" AND that has a `launch` block
 //     can be opened. Changing a state to "active" is an owner-approved release
-//     step: it requires provider approval, verified callbacks and ledger tests.
+//     step: it requires provider approval plus provider signature, transaction identity, reversal,
+//     duplicate/retry and reconciliation tests. Provider events never post LC.
 //   - `launch.functionName` must be a server function that returns an
 //     account-bound URL; the browser only opens it after checking its origin.
 //   - Never put provider secrets, offer lists, payout amounts or reward rates here.

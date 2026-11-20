@@ -75,6 +75,6 @@ test("provider registry and hub never reference LC or open a Taplayad wall", () 
   const reg = readFileSync(new URL("../earn-providers.js", import.meta.url), "utf8");
   const hub = readFileSync(new URL("../earn-hub.js", import.meta.url), "utf8");
   assert.doesNotMatch(reg, /launch:\s*Object\.freeze/);
-  assert.doesNotMatch(reg + hub, /post_journal|journal|ledger_entry|\.rpc\(/i);
+  assert.doesNotMatch(reg + hub, /journal|ledger|\.rpc\(/i);
   assert.doesNotMatch(hub, /recordedTemplate/);
 });
