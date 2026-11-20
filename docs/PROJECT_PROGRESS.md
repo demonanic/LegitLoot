@@ -3,9 +3,9 @@
 **Updated:** 2026-11-19 22:39 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected game titles have playable early-access candidates; ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` @ `7b240b2`; PR #20 base `387d035` is eight documentation-only commits behind current integration
+**Integration branch:** `build/legitloot-neon-synthwave` — latest Sync Watch documentation head; PR #20 base remains `387d035` and the intervening changes are documentation-only
 **Production branch:** `main` @ `4e0f533`
-**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI, eight docs-only commits behind integration); #22 game integration (head `332ca07`, base PR #20 head `6e2e51b`, 2 ahead / 0 behind, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `7a31165`, Deno tests unrun); #9 stale visual redesign draft.
+**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI, application diff unchanged; base behind integration only by documentation-only Sync Watch commits); #22 game integration (head `332ca07`, base PR #20 head `6e2e51b`, 2 ahead / 0 behind, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #24 Offerwall containment draft (head `7a31165`, Deno tests unrun); #9 stale visual redesign draft.
 
 ## Current owner-locked operating rules
 
