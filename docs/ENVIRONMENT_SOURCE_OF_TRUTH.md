@@ -1084,3 +1084,11 @@ No settings, secrets, functions, grants, schema, data, callbacks, provider setti
 - DaVinci accepted this exact head for source-only owner review. The browser test remains unrun; SQL remains unapplied and functions undeployed.
 - Owner-provided Offerwall.GG recording shows all five visible placements with postback fields cleared and a successful save on the Pending placement; it is not independent dashboard readback. Placement disable/delete remains PARTIAL/UNVERIFIED.
 - No live environment state changed during this follow-up.
+
+## 2026-11-20 — Internal staging tools: access boundary is data/action-level, not URL-level (PR #30 review)
+
+Master Control M2-T1 rule 4 ("keep branch-only admin, payout simulator … verify they remain inaccessible to anonymous/public users and are not wired into production") is satisfied at the **data and action level only**; it is **not** URL-level inaccessibility.
+
+- `/admin.html` and `/payout-simulator.html` are static Cloudflare Pages routes, so their HTML shells are publicly fetchable on any deployment that contains them. They are not linked from any other page or `sitemap.xml`, and carry no `noindex` meta.
+- `admin.js` and `payout-simulator.js` fail closed unless the environment label is `staging`, the URL is the exact staging project and a publishable key is present (ENV-06, `tests/internal-pages-staging-guard.test.mjs`). The Edge Functions require an authenticated caller and the staging RPCs enforce owner/admin roles. No production payout-simulator function exists and nothing calls PayPal/Venmo or moves real funds.
+- A URL-level gate (for example Cloudflare Access or a `_headers`/Functions guard) or a `noindex` tag would be a separate, owner-approved security-configuration change. None is made or proposed as done here.
