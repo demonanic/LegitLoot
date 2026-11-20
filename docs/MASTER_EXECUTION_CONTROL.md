@@ -1323,3 +1323,29 @@ Production Offerwall containment, main branch protection, Taplayad account-speci
 - Taplayad App ID 10066 remains selected as the initial Hustle publisher, but account-generation/protocol, canonical URL, payload-bound authentication, transaction identity, reversal matching, retries/idempotency, authoritative verification and incentivized-traffic permission remain unconfirmed. Keep any permitted staging work record-only. Publisher `$1 = 1 point`, `{reward}` and `{payout}` must never map to LC or user cash/withdrawal.
 - Production Offerwall.GG provider-to-LC issuance is the critical owner-gated blocker. Branch protection is disabled on all 21 branches. Support-mailbox verification, sign-up-pause verification, provider agreements/paid commitments and final production release remain owner-controlled.
 - No PR was merged, no deployment performed, no callback invoked, no provider terms accepted, no money moved, and no Supabase/Cloudflare settings, secrets, schema or data changed.
+
+## 2026-11-19 19:40 ET — Claude: Zombies vs Heavy Metal identified and live on legitloot.site (owner-approved production change)
+
+### Owner decisions (in chat, 2026-11-19)
+- **Zombies vs Heavy Metal is this game:** repo `demonanic/Legitloot-2` (README title "Zombie Invasion Defense", internal id `zid`). Show it on the site as **Zombies vs Heavy Metal**. This resolves the M2-T4 "source repository not found" gap for the first launch title. **Rocket 2 Nowhere** is still not located.
+- The owner asked to "put it live after checks". This explicitly authorized the production merge below.
+
+### What changed in production
+- PR [#21](https://github.com/demonanic/LegitLoot/pull/21) (`claude/zvhm-play`, commit `970dbbf`, branched from `main` `3fa7ca5`) was merged to `main` as `4e0f533`. Public pages only:
+  - `games.html` and `index.html`: the game card now shows *Zombies vs Heavy Metal · Playable · Early access* with **Play now**.
+  - New `zombies-vs-heavy-metal.html`: a full-height iframe of `https://demonanic.github.io/Legitloot-2/` under a slim LegitLoot bar with Exit and Full screen.
+  - `sitemap.xml`: lists the play page.
+- The copy states that progress is saved on the device and that LegitLoot accounts and Legit Coins are not connected yet.
+- No change to accounts, wallet, Supabase, Cloudflare settings, secrets or rewards.
+
+### Evidence
+- Cloudflare `legitloot` and `legitloot-preview` previews both passed. `https://claude-zvhm-play.legitloot-preview.pages.dev` was checked on a 412×915 mobile viewport: the cards render, Play now navigates, and the embedded game runs (`phase=prep, wave=1`, canvas present), takes taps, and logs no page errors.
+- After the merge, `https://legitloot.site/games` shows the new card and `https://legitloot.site/zombies-vs-heavy-metal` returns 200. The same mobile check passed on production.
+- Game build state at merge: Legitloot-2 `main` `a9b3018` (CI green). It has 253 automated tests and a balance sim (bot median around wave 23).
+
+### Follow-ups for whoever picks up M2-T4
+- **Integration branch drift:** this branch's `games.html`/`index.html` still have the old card. Bring `main` `4e0f533` into `build/legitloot-neon-synthwave` (or port the 4 files) before the next release, so the next production merge doesn't revert the live card.
+- Staging `public.game_registry` row `zid`: update the title/listing to match the owner decision when the next staging change is made. It was not changed here.
+- Account handoff and LC milestone events for this game are still unbuilt. LC economy implementation remains owner-gated.
+
+Rollback: revert merge `4e0f533` on `main`. No data to restore.
