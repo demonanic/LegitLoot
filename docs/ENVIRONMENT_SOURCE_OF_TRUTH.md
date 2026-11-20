@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-19 20:10 ET  
+**Last verified:** 2026-11-19 22:39 ET  
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -37,7 +37,7 @@ Read-only connector inventory on 2026-11-19:
 
 - Project status: ACTIVE_HEALTHY
 - Database engine: PostgreSQL 17
-- Applied migration history: 20 entries, latest version `20261118080655` (`game_platform_foundation`)
+- Applied migration history: 21 entries, latest version `20261118080655` (`game_platform_foundation`)
 - Deployed Edge Functions:
   - `offerwall-gg-wall-url` v5, verify_jwt=true
   - `cpagrip-attribution` v4, verify_jwt=true
@@ -691,3 +691,31 @@ Owner explicitly authorized preparation and testing of production containment, p
 ## 2026-11-19 21:33 ET — Preview-auth owner decision recorded
 
 Main-based Cloudflare previews inherit production-targeting `account-auth.js`. PR #23 discussion comment `7028436334` confirms the game-only PR will not change that inherited production account code; a separate owner-approved PR is required to add a preview-host fail-closed guard while preserving the production custom domain. Until then, do not use Account/auth routes on PR #23/#24 previews.
+
+## 2026-11-19 22:39 ET — Fresh environment verification and Taplayad protocol record
+
+### GitHub and Cloudflare
+- Current integration head: `7b240b2`; production `main`: `4e0f533`. Branch search returned 25 refs. Open PRs: #20, #22, #23, #24, #9. PR #20 remains `6e2e51b` / base `387d035`, eight docs-only commits behind integration; PR #22 remains `332ca07`, stacked on #20. CI: 58/58 and 64/64 respectively. PR #23/#24 are main-based drafts and preview-only.
+- Cloudflare `legitloot` canonical production remains branch `main` / commit `4e0f533`, custom domain `https://legitloot.site`. Integration `7b240b2` and PR previews completed successfully in preview environments. Preview classification does not override a hard-coded backend URL: PR #23/#24 inherit main's production-targeting `account-auth.js`; do not use their Account/auth routes.
+- The separate `legitloot-preview` Pages project has a legacy `design/industrial-cyberpunk-rebuild` production-branch deployment on its own `*.pages.dev` hostname; it is not the canonical `legitloot.site` production deployment and contains an old concept page with cash-wallet mockup copy. Treat it as a stale prototype, not a launch artifact.
+
+### Production Supabase — `gkbqderyjcuxnjbsiffb`
+- Project is ACTIVE_HEALTHY; 7 migrations. `offerwall-gg-postback` v3 ACTIVE (`verify_jwt=false`), `wallet-summary` v4 ACTIVE, `offerwall-gg-wall-url` v1 ACTIVE (`verify_jwt=true`).
+- `private.providers` contains Offerwall.GG disabled, with stale `standard_virtual_currency / LC / LootCoins` reward metadata and null terms/approval evidence.
+- `private.process_offerwall_gg_postback` and `public.process_offerwall_gg_postback` are SECURITY DEFINER and grant EXECUTE to `service_role`; the private routine calls `private.post_journal_transaction`. The deployed v3 Edge Function does not check the provider row's disabled status before invoking the posting path. Production provider-to-LC issuance remains possible if callback configuration is present. No callback or privilege change occurred.
+- `public.get_wallet_summary()` is SECURITY DEFINER and returns cash and LC. Security Advisor still reports leaked-password protection disabled and an authenticated SECURITY DEFINER warning. The actual Auth sign-up pause setting was not retrievable with the current read tools.
+
+### Staging Supabase — `scmnxcsggquwtuyyjnnj`
+- Project is ACTIVE_HEALTHY; 21 migrations. `offerwall-gg-postback` v8 ACTIVE (`verify_jwt=false`) and its live SQL routine is record-only: it stores provider conversion/reversal state and does not post journal entries. `offerwall-gg-wall-url` v5 and `cpagrip-attribution` v5 are ACTIVE/JWT-protected.
+- Staging providers: Offerwall.GG disabled with stale LC metadata, CPAGrip disabled, Taplayad absent. Staging wall-URL CORS still allow-lists production origin `https://legitloot.site`; this is a cross-environment exception to review, not proof the production site currently uses staging.
+- `public.game_registry` contains only `zid` / `zombie-invasion-defense`, status `development`, `is_listed=false`, `launch_url=null`. Counts: `game_saves=0`, `game_events=0`, `game_handoff_tickets=0`; no challenge/milestone/season tables.
+- Staging `public.get_wallet_summary()` is SECURITY DEFINER and returns `cash` fields plus `gameCredits`; `currency.cash=USD`, `gameCredits.cashValue=null`, `withdrawable=false`. The PR #20 browser parser ignores cash and reads only `gameCredits.available`, but the cash buckets are still sent to the browser. `currency.gameCredits` is `LLC`, not `LC`; parser currently ignores that metadata. Do not describe the backend wallet contract as fully LC-only until resolved.
+
+### Taplayad App 10066 — protocol and permission evidence
+- Preserve owner-supplied URL template: `https://offerwall.tplayad.com/10066/{user_id}`. No Taplayad provider row, code, saved publisher setting, or callback exists; screenshot Active badge is not proof of integration or traffic permission.
+- Current public docs: `https://tplayad.com/docs`. They list `user_id`, `payout`, `reward`, `offer_id`, `status`, `sig`; status 1=credited, 2=reversed; signature `md5(app_id . user_id . api_secret)`, which does not bind transaction ID, reward, payout, offer or status. Their iframe example uses `https://app.tplayad.com/app/iframe/{APP_ID}/{USER_ID}`, not the owner-supplied host/template.
+- Legacy public docs: `https://tplayad.com/doc/postback`. They list `subId`, `transId`, `reward`, `payout`, `status`, `campaign_id`, `uuid`; signature `md5(subId . transId . reward . secret)`; status 1/2; `OK`/ `DUP` responses; up to five retries after 60 seconds. The legacy signature still does not bind status or payout. The two systems conflict; neither is verified for App 10066.
+- Public Terms `https://tplayad.com/terms` were last updated 2026-10-29, require publisher accounts to be 18+, and leave payment terms to the dashboard. No app-specific written permission for LegitLoot's exact incentivized model was verified. Keep record-only pending written confirmation of active system, canonical URL, incentivized traffic, complete signed fields, unique transaction ID, reversal/retry/idempotency and response contract. Never map the publisher's $1=1 points multiplier or callback `{reward}`/`{payout}` to LC/cash.
+
+### Safety
+- No production/staging setting, secret, SQL grant, schema/data, migration, Edge Function, callback, provider dashboard, agreement, payment, reward issuance, or deployment was changed. No PR was merged.
