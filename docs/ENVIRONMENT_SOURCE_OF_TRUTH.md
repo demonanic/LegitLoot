@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 17:50 ET by DaVinci (read-only GitHub, Cloudflare and Supabase review). Record edited 2026-11-20 17:50 ET.
+**Last verified:** 2026-11-20 17:58 ET by DaVinci (read-only GitHub, Cloudflare and Supabase review). Record edited 2026-11-20 17:58 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1104,3 +1104,26 @@ No settings, secrets, functions, grants, schema, data, callbacks, provider setti
 - Taplayad remains pending with `launch: null`; no provider-to-LC issuance path is enabled.
 
 No environment setting, secret, function, grant, schema, data, callback, provider setting or financial record was changed.
+
+
+## 2026-11-20 17:58 ET — Sync Watch #16 environment recheck
+
+### Cloudflare Pages
+- Production project `legitloot`: deployment `fe4c0f22`, branch `main`, commit `801f3e7`, successful; alias `https://legitloot.site` remains production.
+- PR #30 candidate `b85aa8b`: deployments in both `legitloot` and `legitloot-preview` succeeded as `environment=preview`, with pages.dev-only preview aliases. Candidate `supabase-config.js` and `account-auth.js` select the exact staging project; no production target was observed in those candidate files.
+- Main-based preview `fdf6b609` in `legitloot-preview` remains a preview deployment of branch `main` / commit `801f3e7`. The main bundle's `account-auth.js` hardcodes production Supabase and calls `auth.signUp()`; do not use Account/auth routes on that preview. PR #28 remains draft/owner-gated.
+
+### Supabase — production `gkbqderyjcuxnjbsiffb`
+- Project remains ACTIVE_HEALTHY. `offerwall-gg-postback` v4 and `offerwall-gg-wall-url` v2 are deployed but their canonical handlers are HTTP 410 tombstones. `wallet-summary` v4 still returns cash/USD buckets plus `gameCredits/LLC`.
+- Read-only catalog inspection confirms `private.process_offerwall_gg_postback` still contains the historical LC journal-posting body. Current EXECUTE checks: `anon=false`, `authenticated=false`, `service_role=false`, `postgres=true`. This is not currently callable by application roles, but it remains dormant production LC-issuance code and requires owner-gated cleanup/containment planning.
+- Production `public.get_wallet_summary()` still returns cash USD fields; authenticated users have EXECUTE. No auth setting or secret was read or changed in this pass; the owner-approved signup-pause state remains unverified.
+
+### Supabase — staging `scmnxcsggquwtuyyjnnj`
+- Project remains ACTIVE_HEALTHY. `offerwall-gg-wall-url` v5 remains ACTIVE/JWT and its CORS configuration includes `https://legitloot.site`; `offerwall-gg-postback` v8 remains ACTIVE/no-JWT but its handler routes to a record-only database routine. The staging postback routine remains service_role-executable; its current body has no journal/ledger path. The wall-url can still construct an Offerwall.GG URL for an authenticated direct caller even though the public registry no longer exposes that provider.
+- `private.providers`: CPAGrip disabled with no approval/terms; Offerwall.GG disabled but retains `approved_reward_model.currency_code=LC` / `currency_name=LootCoins` metadata; no Taplayad row. No provider settings were changed.
+- Row counts: `public.game_registry=1`; `private.game_events=0`; `private.game_saves=0`; `private.game_handoff_tickets=0`. The game registry is still a placeholder rather than the two approved launch games.
+- Staging `public.get_wallet_summary()` returns cash USD buckets and labels the `gameCredits` field `LLC`, while its ledger filter uses currency code `LC`. Candidate `wallet-summary.js` ignores cash and reads `gameCredits`/ `lootCoins` without validating that currency label. Clarify/normalize this response contract and test it before release.
+
+### Access boundary and safety
+- `/admin.html` and `/payout-simulator.html` are publicly fetchable static shells; data/actions are gated by exact staging configuration, authentication and owner/admin RPCs. This is not URL-level denial and does not literally satisfy §630's “inaccessible to anonymous/public users” wording. A URL-level gate or `noindex` is a separate owner decision; no Cloudflare/security setting changed.
+- All queries in this recheck were read-only. No function deployment, setting/secret/grant/schema/data change, callback, provider setting, agreement, payment, reward issuance or money movement occurred.
