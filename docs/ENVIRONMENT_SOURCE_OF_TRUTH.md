@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 18:38 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:38 ET.
+**Last verified:** 2026-11-20 18:39 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:39 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1191,3 +1191,14 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 - Candidate UI registration is closed and copy corrected; Supabase Auth `disable_signup` remains unverified/owner-gated. No Auth setting changed.
 - PR #27 current head `26768972`, Actions `44838133420` passed. PR #30 still includes docs only through `e1146ff`, one docs commit behind. Its current-state header still cites `7f1e1c6` and old Actions; exact head is `38a9406`, 56 files / 80 commits, current Actions `44838085850/44838085857`. No preview result for the latest SHA is verified.
 - No secrets, grants, schema, data, callbacks, provider settings, agreements or financial activity were changed.
+
+
+## 2026-11-20 18:39 ET — Sync Watch #17 follow-up 4: latest merge and CI
+
+- PR #30 latest head `226caadcfd11d9b69d3b98b310b5b9325306959c`, draft, 56 files / 82 commits. Node/whitespace `44838319726` and Deno `44838319730` pass. The last Claude-reported local 81/81 result was on prior head `38a9406`; no fresh local count is attached to the merge commit. Browser test remains unrun; no preview status for `226caadc` has been returned.
+- PR #30 merge commit `226caadc` includes PR #27 through `26768972`. Current PR #27 head is `8c6aa8c`, with exact-head Actions `44838341613` passed; PR #30 is one docs commit behind.
+- The proposed RPC SQL join now matches entry wallet_kind/currency to the account and requires posted transactions; ACL precondition checks PUBLIC. Static tests assert both. SQL remains DO NOT APPLY.
+- The Edge Function source filters LC accounts/entries and posted transactions but remains undeployed; its nested PostgREST transaction embed is unexecuted. Do not deploy before staging validation.
+- Live production/staging RPCs remain cash/USD-bearing; production wallet-summary v4 remains active with cash/USD response. No SQL or Edge Function deployment occurred.
+- PR #30 body remains one commit stale at `38a9406` / 80 commits / previous Actions and says PR #27 merged through `e1146ff`. Update to current head `226caadc`, 82 commits, Actions `44838319726/44838319730`, and merged docs through `26768972`. Local 81/81 is from the prior SHA.
+- No Auth setting, secret, grant, schema, data, callback, provider setting/agreement or financial activity changed.

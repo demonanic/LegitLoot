@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up 3 (2026-11-20 18:38 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up 4 (2026-11-20 18:39 ET). Earlier status tables are historical.
 
 ---
 
@@ -1610,3 +1610,13 @@ No PR merge, deployment, SQL application, Supabase setting/secret/grant/schema/d
 - PR #30 current-state header is one commit stale at `7f1e1c6` / 77 commits / old Actions; current head is `38a9406`, 56 files / 80 commits, Actions `44838085850/44838085857`. The last local test count belongs to the previous SHA. PR #27 is at `26768972`, Actions `44838133420` passed; PR #30 includes docs through `e1146ff`, one docs commit behind. Latest-head preview remains unverified.
 - ENV-07, Taplayad permission/protocol, Terms/Privacy, account deletion/export, and shared game/save/verified-event integration remain open.
 - No Auth setting, Supabase secret/grant/schema/data, SQL application, function deployment, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 18:39 ET — Sync Watch #17 follow-up 4: documentation merge status
+
+- PR #30 now points to merge commit `226caadc` (56 files / 82 commits, draft). Node/whitespace `44838319726` and Deno `44838319730` pass. Last Claude-reported local 81/81 was on preceding `38a9406`; no fresh local count is attached to `226caadc`. Browser test remains unrun; latest preview not verified.
+- The merge commit synchronizes PR #27 through `26768972`. PR #27 is now at `8c6aa8c`; exact-head docs Actions `44838341613` pass. PR #30 is one docs commit behind.
+- The proposed RPC SQL join and PUBLIC ACL precondition findings were fixed in `38a9406`; static tests pass. The SQL remains DO NOT APPLY. Edge Function source remains undeployed and its PostgREST transaction embed is unexecuted.
+- PR #30 body still reports `38a9406` / 80 commits / old Actions and merged docs through `e1146ff`; update to `226caadc` / 82 commits / Actions `44838319726/44838319730` and docs through `26768972`. Local 81/81 is only verified on prior SHA.
+- Live wallet RPCs and production wallet-summary v4 remain cash/USD-bearing. Auth signup setting, ENV-07, Taplayad permission/protocol, legal/account deletion/export, and shared game/save/verified-event integration remain open.
+- No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
