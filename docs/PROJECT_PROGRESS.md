@@ -3,7 +3,7 @@
 **Updated:** 2026-11-19 20:10 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate the owner-selected launch games; Zombies vs Heavy Metal is live on production, while Rocket 2 Nowhere remains unresolved
-**Integration branch:** `build/legitloot-neon-synthwave` @ `fd758a7`
+**Integration branch:** `build/legitloot-neon-synthwave` @ `4e2a1f6` (latest debrief commit)
 **Production branch:** `main` @ `4e0f533`; PR #21 was specifically owner-approved for the first public game release
 **Current open PRs:** #20 Hustle/public-copy (head `c6dc85b`, 14 ahead / 0 behind, 58/58 CI); #9 stale visual redesign draft (non-mergeable)
 
