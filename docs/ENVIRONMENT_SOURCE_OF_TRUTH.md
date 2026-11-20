@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-19 23:02 ET  
+**Last verified:** 2026-11-20 00:28 ET  
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -743,3 +743,41 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - The owner-supplied Taplayad App-10066 template remains `https://offerwall.tplayad.com/10066/{user_id}`. Current docs use `md5(app_id . user_id . api_secret)` without a transaction-ID macro; legacy docs use `transId` and `md5(subId . transId . reward . secret)`. Current docs describe status 1/2 and `offer_id + user_id` deduplication; legacy docs describe `OK`/`DUP` and up to five retries after 60 seconds. These remain incompatible and neither authenticates the full callback payload. Current Terms do not establish app-specific incentivized-traffic permission.
 - No database settings, secrets, grants, schema, data, functions, callbacks, or publisher settings were changed.
 
+
+## 2026-11-20 00:28 ET — Current environment verification after PR #24 merge
+
+### GitHub and Cloudflare
+- Production branch main: bcc19d68694bcef968994c2a0466cecb57218955 (PR #24 merged). Authorized integration branch: 61e6e2f4fd61102a74f296fbd3025a54990c1e2f.
+- Open PRs: #20 (6e2e51b, CI 58/58), #22 (332ca07, CI 64/64, stacked on #20), #23 (33a5240, draft/no CI), #9 (stale draft). PR #21 and #24 are merged.
+- Integration branch is 34 commits ahead of PR #20's base 387d035; comparison shows changes only in the five shared control documents. PR #20/#22 application diffs were not resynchronized.
+- Canonical Pages production deployment: 75207a07-6306-4461-b115-c6c4a508bd97, branch main, commit bcc19d, environment production, successful, alias https://legitloot.site.
+- Authorized integration deployment: 94108c1a-d95f-4733-a0d5-24658f53b3ad, branch build/legitloot-neon-synthwave, commit 61e6e2f, environment preview, successful, alias build-legitloot-neon-synthwa.legitloot.pages.dev. This branch's supabase-config.js is pinned to staging and its Account auth code fails closed unless that exact staging config is present.
+- PR #23 is a separate main-based preview; its inherited account-auth.js still hardcodes production Supabase and exposes auth.signUp. Do not use its Account/auth routes.
+
+### Production Supabase — gkbqderyjcuxnjbsiffb
+- Project ACTIVE_HEALTHY; 7 migrations.
+- offerwall-gg-postback v4 ACTIVE/verify_jwt=false: deployed source is inert and returns HTTP 410 OFFERWALL_GG_DISABLED; it does not read body/secrets or call Supabase.
+- offerwall-gg-wall-url v2 ACTIVE/verify_jwt=true: deployed source is inert and returns HTTP 410; it no longer creates Offerwall.GG URLs.
+- wallet-summary v4 remains ACTIVE. public.get_wallet_summary() is SECURITY DEFINER and returns cash USD buckets plus LC.
+- Read-only SQL: service_role EXECUTE false on both private/public process_offerwall_gg_postback; checked anon and authenticated privileges are also false. Both routines remain SECURITY DEFINER.
+- private.providers retains one disabled Offerwall.GG row with stale standard_virtual_currency / LC / LootCoins reward metadata and null approval_reference, terms_url, and terms_verified_at. No publisher dashboard setting was changed.
+- Repository/live-source drift: main/supabase/functions/offerwall-gg-wall-url/index.ts remains the old active Offerwall.GG launcher even though the deployed production v2 is inert. Correct the canonical source and add regression coverage before any future function redeploy.
+- Security Advisor: leaked-password protection disabled (WARN); authenticated SECURITY DEFINER get_wallet_summary() (WARN); 12 private RLS/no-policy notices (INFO). Do not add public policies blindly.
+
+### Staging Supabase — scmnxcsggquwtuyyjnnj
+- Project ACTIVE_HEALTHY; 21 migrations.
+- offerwall-gg-postback v8 ACTIVE/verify_jwt=false; its live private/public routines are record-only and do not post journal entries.
+- offerwall-gg-wall-url v5 ACTIVE/verify_jwt=true; its CORS allow-list includes https://legitloot.site, a cross-environment exception to review. No setting changed.
+- Providers: disabled CPAGrip and disabled Offerwall.GG; Taplayad absent. Offerwall.GG retains stale LC metadata.
+- public.game_registry contains only unlisted development zid / zombie-invasion-defense, with null launch URL. private.game_saves, private.game_events, and private.game_handoff_tickets each have 0 rows.
+- public.get_wallet_summary() remains SECURITY DEFINER and returns cash USD buckets plus gameCredits; currency.gameCredits is LLC, not LC.
+
+### Taplayad App 10066
+- Preserve the owner-supplied template exactly: https://offerwall.tplayad.com/10066/{user_id}. No provider row, code, or saved publisher setting exists.
+- Current docs https://tplayad.com/docs list user_id,payout,reward,offer_id,country,user_ip,status,sig; status 1=credited/2=reversed; signature md5(app_id . user_id . api_secret); server IP 176.97.212.58; any 2xx marks delivery. No transaction-ID macro; signature does not bind reward, payout, offer, or status. Current iframe host differs from the owner template.
+- Legacy https://tplayad.com/doc/postback now returns 404. Current Terms https://tplayad.com/terms were last updated 2026-10-29, require publisher age 18+, and leave payment terms to the dashboard; no App-10066-specific incentivized-traffic permission is established.
+- Keep Taplayad unintegrated/record-only. Never map publisher $1=1 points or callback {reward}/{payout} into LC or cash.
+
+### Owner gates and actions
+- PR #24 production merge/deployment and Supabase containment were already complete before this check; this run only verified them read-only.
+- No Supabase/Cloudflare settings or secrets, grants, schema/data, callbacks, publisher settings, provider agreements, payments, reward issuance, or money movement were changed in this check.
