@@ -781,3 +781,12 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 ### Owner gates and actions
 - PR #24 production merge/deployment and Supabase containment were already complete before this check; this run only verified them read-only.
 - No Supabase/Cloudflare settings or secrets, grants, schema/data, callbacks, publisher settings, provider agreements, payments, reward issuance, or money movement were changed in this check.
+
+
+## 2026-11-20 01:36 ET — Independent Sync Watch #4
+
+- GitHub integration branch remains `build/legitloot-neon-synthwave` @ `e868121`; production `main` remains `bcc19d`. PR #25 is a new draft against integration at head `c4cf11f`; it changes only the canonical wall-URL source and tests. No merge or function deployment occurred.
+- Cloudflare automatically deployed PR #25 branch previews in both `legitloot` and `legitloot-preview`: each reports `environment=preview`, pages.dev URL and branch alias only, with no `legitloot.site` alias. The branch's `supabase-config.js` points to staging project `scmnxcsggquwtuyyjnnj`; `account-auth.js` requires that exact staging URL and `environment=staging`, otherwise it fails closed. No Cloudflare settings were changed.
+- Production deployed Offerwall.GG postback v4 and wall-url v2 remain inert HTTP 410; the checked callback routine EXECUTE grants remain revoked. However, production repository source `main/supabase/functions/offerwall-gg-wall-url/index.ts` is still active. PR #25 only aligns integration source; production source remains owner-gated.
+- Current official Taplayad docs show a sample parameter mismatch and an incomplete signature/transaction/reversal/retry contract. No provider settings were saved, no terms accepted, no callback invoked, and no provider row/code added.
+- No Supabase project setting, secret, grant, schema, data, function deployment, financial activity or publisher configuration was changed.
