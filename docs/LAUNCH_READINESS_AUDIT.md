@@ -1178,3 +1178,61 @@ PR #23 discussion comment `7028436334` keeps the RXT2 game PR limited to game fi
 - Taplayad current and legacy public docs remain incompatible on signed fields, transaction identity, reversals, retries, and response semantics. No App-10066-specific permission for incentivized traffic is verified. Keep unintegrated/record-only and never map publisher points, `{reward}`, or `{payout}` to LC/cash.
 - PR #24's test pass makes the inert 410 candidate reviewable for an owner decision, but its SQL is not applied and its handler is not deployed. Production SQL revocation and Edge Function deployment remain separate owner approvals. No production/staging setting, secret, grant, schema/data, callback, provider setting, payment, or deployment was changed.
 
+
+## 2026-11-20 00:28 ET — Independent recheck after PR #24 production containment
+
+### PROV-07 — Offerwall.GG production issuance path
+- **Status:** RESOLVED for the currently deployed production callback/launcher path.
+- **Evidence:** PR #24 merged to main as bcc19d; Cloudflare production deployment 75207a07-6306-4461-b115-c6c4a508bd97 succeeded. Production Supabase reports offerwall-gg-postback v4 ACTIVE/verify_jwt=false with an inert HTTP 410 source, and offerwall-gg-wall-url v2 ACTIVE/verify_jwt=true with an inert HTTP 410 source. Read-only SQL reports service_role EXECUTE false on both private/public callback routines and false for the checked anon/authenticated roles.
+- **Impact:** The known Offerwall.GG callback path can no longer reach the LC journal-posting routine through the deployed function/checked grants.
+- **Remaining caveat:** The provider row remains disabled but retains stale LC metadata and null terms/approval fields; the publisher dashboard callback URL was not changed. No callback or live HTTP probe was made.
+
+### PROV-08 — Repository wall-URL source drift
+- **Severity:** CRITICAL
+- **Status:** FAIL
+- **Evidence:** main/supabase/functions/offerwall-gg-wall-url/index.ts still reads OFFERWALL_GG_PUBLIC_KEY/OFFERWALL_GG_SECRET, signs parameters, authenticates the user, and constructs an https://offerwall.gg/wall/... URL. PR #24's changed-file list does not include this path. The deployed Supabase wall-url v2 source is inert, so repository source and live production source differ.
+- **Impact:** A future function redeploy from the checked-in main source can re-enable the obsolete Offerwall.GG launcher.
+- **Smallest safe corrective action:** Replace the checked-in source with the same inert 410 behavior and add a source-level regression test plus workflow path coverage. Keep any production deployment owner-gated.
+- **Owner approval:** Required for production deployment; documentation and staging-only tests are reversible.
+
+### WALLET-01 / LC-01 — Public rewards and wallet policy
+- **Severity:** HIGH
+- **Status:** FAIL
+- **Evidence:** rewards.html lines 20, 25, 27 still show cash rewards and withdrawal states; account.html lines 4, 15–17 still shows cash wallet/pending/reserved/paid fields; account-auth.js lines 53–70 requires and formats data.cash. Production public.get_wallet_summary() is SECURITY DEFINER and returns cash USD buckets plus LC. earn.html line 9 and earn-providers.js lines 5/23 still say provider completions can credit LootCoins.
+- **Impact:** Production pages and API contradict the owner-locked rules: no cash, withdrawals, transfers, USD peg, or provider-offerwall-to-LC issuance; LC must come only from verified in-game milestones, weekly challenges, and seasonal events.
+- **Smallest safe corrective action:** Prepare a production-specific, reviewable UI/API contract change that removes cash/withdrawal/USD fields and rewrites provider-to-LC copy. Do not change production schema/data or deploy without owner approval. Add regression tests covering Rewards, Account, Earn, wallet response, and the wall-URL function source.
+
+### AUTH-02 — Account onboarding and legal readiness
+- **Severity:** HIGH
+- **Status:** NOT VERIFIED / FAIL
+- **Evidence:** account.html still exposes Create Account; account-auth.js still calls client.auth.signUp at line 114. terms.html says formal Terms are not yet published; privacy.html says the full Privacy Notice is in preparation. The connected read-only tools did not expose the production Auth sign-up pause setting.
+- **Impact:** Public account creation and legal disclosures are not demonstrated ready for launch.
+- **Smallest safe corrective action:** Keep public sign-up paused until the actual Auth setting and approved Terms/Privacy are verified. Do not infer the pause from UI copy.
+- **Owner approval:** Required for production Auth settings and legal publication.
+
+### GAME-02 — Two-game release
+- **Severity:** HIGH
+- **Status:** INCOMPLETE
+- **Evidence:** Production games.html lists Zombies vs Heavy Metal but still says more worlds later; Rocket 2 Nowhere remains in PR #22 (integration) and PR #23 (draft main-based preview). PR #22 CI passed 64/64; PR #23 has no CI. Staging public.game_registry contains only unlisted zid / zombie-invasion-defense; game_saves, game_events, and game_handoff_tickets each contain zero rows.
+- **Impact:** The owner-selected two-game launch is not complete, and shared account/save/reward integration is not available.
+- **Smallest safe corrective action:** Complete the integration-branch review and prepare the smallest owner-reviewable RXT2 production candidate; keep production merge/deploy owner-gated. Do not claim shared account, cloud save, or LC event support.
+
+### ENV-07 — Preview isolation
+- **Severity:** CRITICAL
+- **Status:** FAIL for PR #23; PASS for the authorized integration preview
+- **Evidence:** Integration 61e6e2f uses supabase-config.js pinned to staging and account-auth.js fails closed unless the exact staging project config is present. Cloudflare deployment 94108c1a-d95f-4733-a0d5-24658f53b3ad is environment=preview with only the build-branch alias. PR #23's main-based preview inherits production account-auth.js and an active auth.signUp path.
+- **Impact:** Account/auth flows on PR #23 can target production from a preview URL.
+- **Smallest safe corrective action:** Keep PR #23 Account/auth routes unused; prepare a separate preview-host fail-closed guard only after owner approval.
+
+### HUSTLE/TAPLAYAD-01 — App 10066 provider readiness
+- **Severity:** HIGH
+- **Status:** NOT VERIFIED / DEFERRED
+- **Evidence:** Staging private.providers contains disabled CPAGrip and Offerwall.GG only; Taplayad is absent. Current official docs at https://tplayad.com/docs list no transaction-ID macro and sign only md5(app_id . user_id . api_secret). The legacy /doc/postback URL now returns 404. Current Terms (last updated 2026-10-29) require publishers to be 18+ and refer payment details to the dashboard, but do not establish App-10066-specific permission for incentivized traffic.
+- **Impact:** There is no safe basis to authenticate unique conversions, reconcile reversals, or enable App 10066 for LegitLoot's incentivized model.
+- **Smallest safe corrective action:** Obtain written App-10066-specific permission and a complete current signed transaction/reversal/retry/idempotency/response contract. Keep record-only; never map the publisher's $1=1 points or {reward}/{payout} to LC.
+- **Owner approval:** Required for provider terms, publisher settings, and live integration.
+
+### Security and operational observations
+- Production Security Advisor reports leaked-password protection disabled and warns that authenticated users can execute SECURITY DEFINER public.get_wallet_summary(); 12 private-schema RLS/no-policy notices are informational. Review deliberately; do not weaken security or add public policies blindly.
+- Staging offerwall-gg-postback v8 remains record-only; staging wall-url v5 is still active and its CORS allow-list includes https://legitloot.site. Staging wallet summary still returns cash USD buckets and labels game credits LLC.
+- No production/staging settings, secrets, grants, schema/data, callbacks, provider settings, agreements, payments, or deployments were changed by this recheck.
