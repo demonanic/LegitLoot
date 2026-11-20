@@ -397,3 +397,5 @@ Requires explicit owner approval of the exact commit, production deployment, dom
 - Rejected/cancelled requests release reserved funds through a compensating journal transaction; they must never edit or delete prior journal entries.
 - Mark a request paid only after a reconciled, trusted payout confirmation. Admin approval alone is not payment.
 - No payout function may be deployed to the production Supabase project until an isolated staging project exists and all required tests pass.
+
+> Record note 2026-11-20 15:20 ET: Taplayad App 10066 protocol/permission status is recorded in `docs/MASTER_EXECUTION_CONTROL.md` (Sync Watch #13); the spec text above is unchanged and Taplayad remains `pending_approval`, record-only, never mapped to LC.
