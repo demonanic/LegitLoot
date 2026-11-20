@@ -1349,3 +1349,43 @@ Production Offerwall containment, main branch protection, Taplayad account-speci
 - Account handoff and LC milestone events for this game are still unbuilt. LC economy implementation remains owner-gated.
 
 Rollback: revert merge `4e0f533` on `main`. No data to restore.
+
+
+---
+
+## 2026-11-19 19:41 ET — Independent Sync Watch: ZVHM is live; production policy conflicts and branch drift identified
+
+### Verified owner authorization and production deployment
+- PR [#21](https://github.com/demonanic/LegitLoot/pull/21) records the owner's specific 2026-11-19 approval to publish **Zombies vs Heavy Metal** on the live site after checks. This was a narrow authorization for public game-page changes only; it is not blanket permission for future production merges, deployments, account/wallet changes, provider activation, financial activity, or legal decisions.
+- Claude's PR head: `970dbbfeabce8eebdd02e61ef652ba0b7d96f03d`; merge commit on `main`: `4e0f533a1962767d7595f32c9a9bdcb979d31513`.
+- Cloudflare API independently confirms `legitloot` production deployment `6598c4c6-ecd5-49a1-9122-a55caa892cd8`, environment `production`, branch `main`, commit `4e0f533`, alias `https://legitloot.site`, all deploy stages successful at 2026-11-20 00:24:36Z (2026-11-19 19:24 ET).
+- Read-only browser verification returned HTTP 200 for the homepage, `/games.html`, and `/zombies-vs-heavy-metal.html`; the play page loads the actual GitHub Pages game at `https://demonanic.github.io/Legitloot-2/`. The game canvas/tutorial/HUD rendered. No page errors or horizontal overflow at desktop and 390px mobile width. No controls were pressed and no progress was saved.
+- Game source is `demonanic/Legitloot-2`; README identifies the official title **Zombies vs Heavy Metal** and says progress is saved on-device. LegitLoot account sign-in, cross-game save handoff and LC are not connected. The game repo's latest observed commit is `fcf4000` (official-title rename). No GitHub Actions workflow runs or commit status checks were returned for PR #21 head `970dbbf` or game commit `fcf4000`; Cloudflare previews and production deploy succeeded, but that is not a GitHub test-suite pass.
+- **Rocket 2 Nowhere remains unresolved**: exact-title searches of connected repositories and public repository search did not locate its source. Production Games currently shows only Zombies vs Heavy Metal plus a “More worlds later” placeholder.
+
+### Integration and PR drift
+- Current `main`: `4e0f533`. Current integration: `907f1a6`. Compare reports integration 404 commits ahead and 2 behind main (merge base `3fa7ca5`); the two main-only commits are PR #21 head/merge.
+- Integration `games.html` and `index.html` still show the old ZID placeholder; `zombies-vs-heavy-metal.html` is absent from integration. Port PR #21's public-page changes into integration before any later production release, or the next integration-based release risks losing the live game page. Do not merge/deploy as part of this audit.
+- PR #20 remains open, non-draft. Head `7912edd`, base recorded at `1e950355`; comparison against current integration `907f1a6` is 13 ahead / 1 behind. Latest Actions run `44637573706` completed successfully: `npm ci`, `npm test` (58 passed, 0 failed), and patch whitespace check. Its previously reviewed 15-file application diff remains scoped to public copy/navigation/account preview. It must sync once to current integration and rerun CI. PR #9 remains a stale draft. GitHub currently returns 22 branch names; branch-protection state was not independently re-queried in this run (last recorded audit found the then-existing branches unprotected).
+
+### New production policy and privacy/legal blocker — no changes made
+- Production `main` is still on the pre-PR20 copy. `index.html` says “Complete offers — Planned” and “Earn LootCoins”; `rewards.html` says Offerwall.GG completions credit LootCoins and describes cash rewards/withdrawal; `account.html` renders cash wallet, pending cash, withdrawal-reserved and paid fields.
+- Production `account-auth.js` hardcodes the production Supabase project `gkbqderyjcuxnjbsiffb`, initializes the Supabase client and implements `client.auth.signUp`. It calls `public.get_wallet_summary()`; the live SECURITY DEFINER RPC returns both cash fields and LootCoins. The page contains sign-in/create-account forms. No account was created and no personal data was queried.
+- Production `terms.html` says formal Terms are not yet published; `privacy.html` says the full Privacy Notice is not approved and instructs visitors not to submit personal information. The production account form is nevertheless present and wired to production auth. This is a critical launch/privacy/legal readiness mismatch. Owner decision required on whether to pause public sign-ups until approved Terms/Privacy and the LC-only wallet experience are in place. No auth settings or production code changed.
+- PR #20's branch corrects the public copy, removes cash/withdrawal UI and uses a staging-only Supabase configuration guard. It is not a production-ready release artifact and must not be merged to `main` without a separate owner-approved production configuration/release plan.
+
+### Provider and environment controls rechecked
+- Production Supabase: 7 migrations; Offerwall.GG postback v3 ACTIVE, `verify_jwt=false`; live `private.process_offerwall_gg_postback` is SECURITY DEFINER and calls `private.post_journal_transaction`. The production provider registry row is disabled but retains stale LC reward metadata and no terms/approval evidence. Crucially, the deployed v3 Edge Function does not check the provider registry's disabled status before invoking the posting RPC. Provider-to-LC issuance remains possible and violates policy.
+- Staging Supabase: 21 migrations; Offerwall.GG postback v8 ACTIVE, `verify_jwt=false`; live routine is record-only and contains no LC journal posting. Staging providers: Offerwall.GG disabled with stale LC metadata; CPAGrip disabled; Taplayad absent.
+- Staging `offerwall-gg-wall-url` v5 is JWT-protected but its CORS allow-list includes `https://legitloot.site` as well as the staging preview origin. This allows a production-origin browser to call a staging endpoint; it is not proof production currently uses staging, but it is a cross-environment exception to review before any production integration.
+- Taplayad App ID 10066 remains selected but its account protocol, canonical wall URL, payload-bound transaction authentication, unique transaction ID, reversal/retry semantics and incentivized-traffic permission remain unconfirmed. Keep record-only; never map publisher points, `{reward}` or `{payout}` to LC.
+
+### Next actions
+1. Claude: synchronize PR #20 once to integration `907f1a6`, rerun Actions, and do not merge to main.
+2. Prepare a separate integration-only port of PR #21's four public files so integration cannot regress the live ZVHM route; preserve the early-access/device-save/no-account-or-LC disclosure.
+3. Continue locating Rocket 2 Nowhere source; do not substitute a different game.
+4. Owner gate: decide sign-up pause/legal readiness and separately authorize production containment of Offerwall.GG provider-to-LC issuance. No automated production action.
+5. Review staging wall-url CORS production-origin allowance; no setting change without authorization.
+6. Continue Taplayad record-only design pending written provider confirmation.
+
+No production change, PR merge, deployment, Supabase/Cloudflare setting or secret change, database mutation, callback, provider agreement, payment, or personal-data access was performed by this audit.
