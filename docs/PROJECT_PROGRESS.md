@@ -3,7 +3,7 @@
 **Updated:** 2026-11-20 03:31 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T3 — Offerwall.GG containment/source alignment; keep all provider paths disabled and no provider-to-LC issuance
-**Integration branch:** `build/legitloot-neon-synthwave` @ `0bcd3cb`; PR #25 base `e868121` is 9 commits behind by ancestry (five shared control documents only); PR #20 base `387d035` is 48 commits behind by ancestry (same five documents only)
+**Integration branch:** `build/legitloot-neon-synthwave` (audit start @ `0bcd3cb`; this check's documentation-only updates advanced it through `f117f0e`; no application code changed)
 **Production branch:** `main` @ `bcc19d` (PR #24 merged; Cloudflare production deployment succeeded)
 **Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, 58/58 CI; application diff unchanged); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI; application diff unchanged); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #25 Offerwall.GG wall-URL source alignment (draft/mergeable, head `61f9ca8`, 54/54 Node plus Deno checks); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
 
