@@ -34,20 +34,17 @@ Current active task: **M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 N
 **Taplayad:** preserve the owner-supplied App 10066 template exactly: https://offerwall.tplayad.com/10066/{user_id}. Current official docs specify md5(app_id . user_id . api_secret), status 1/2 and any-2xx acknowledgement, but no transaction-ID macro or retry schedule; sample URL/PHP parameter names disagree. The cached www legacy page returns 404 when opened directly. Current Terms (last updated 2026-10-29) require publishers to be 18+ and defer payment details to the dashboard; no App-10066-specific permission for LegitLoot's placement/traffic was verified. Keep Taplayad unintegrated; never map its points multiplier, callback reward or payout to LC.
 
 Production and business-critical gates remain unchanged.
-## Collaboration with ChatGPT
+## Collaboration with ChatGPT / DaVinci
 
-ChatGPT is the architecture/risk reviewer, independent second set of eyes, and staging deployment operator where its connected access permits. Claude is the primary implementation lead for the active M2 milestone.
+Read `docs/AGENT_OPERATING_CHARTER.md` as the standing role and handoff agreement.
 
-Both agents are authorized to:
-- Review each other's findings and code.
-- Assign bounded review or implementation tasks within the active milestone.
-- Provide direct technical instructions and recommendations to one another.
-- Update shared planning/progress documents.
-- Resolve routine engineering questions autonomously using repository evidence and approved specifications.
+- **Sam:** owner and final business authority.
+- **Claude:** primary implementation lead; turns approved requirements into tested code and implementation commits.
+- **ChatGPT / DaVinci:** technical director and independent auditor; coordinates priorities and acceptance criteria, reviews the exact implementation SHA, checks architecture/security/environment boundaries, and records acceptance or precise required changes.
 
-Use `docs/MASTER_EXECUTION_CONTROL.md` as the shared communication channel. Read the latest log entries at session start. Append a dated entry at session end with findings, files changed, tests/evidence, blockers, and the exact next action. Never erase previous decisions or another agent's work.
+Claude remains the implementation lead even when a particular task assigns DaVinci as task coordinator. DaVinci is not a competing implementation lead. Sam must not be used as a routine message relay.
 
-Do not edit the same file concurrently. Inspect the latest branch/file state before writing. Use separate branches and reviewed PRs if simultaneous work risks conflicts.
+The shared repository is the agent-to-agent communication channel. Put actionable implementation handoffs in the Agent Coordination Log and, when tied to an open PR, in that PR's comments. Do not assume the other agent has seen a handoff until it is acknowledged in a later session. Each implementation task must end with a commit SHA, changed files, exact test results, limitations, and the next action. DaVinci reviews the exact SHA and records ACCEPTED, CHANGES REQUIRED, BLOCKED, or NOT VERIFIED.
 
 ## Standing integration and staging authority — owner direction 2026-11-19
 
