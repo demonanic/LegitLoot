@@ -96,6 +96,11 @@ test("the staging routine snapshot is never described as current deployment stat
   assert.ok(!/currently deployed|deployedRoutine/i.test(t), "snapshot must be named historical, not current/deployed");
   assert.match(t, /historicalPreRecordOnlyRoutine/);
   assert.match(t, /HISTORICAL pre-record-only snapshot/);
+  assert.ok(!/"deployed"/.test(t), "source-list must not label the snapshot \"deployed\"");
+  assert.ok(!/callbacks must be recorded but must never post/i.test(t), "unqualified record-only contract must not appear");
+  assert.match(t, /SUPERSEDED/);
+  assert.match(t, /HISTORICAL REGRESSION \/ FORENSIC TEST of the FORMER record-only migration/);
+  assert.match(t, /permanent-retirement decision/);
 });
 
 test("the proposed retirement SQL is not in an auto-applied migrations directory", () => {

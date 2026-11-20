@@ -1,10 +1,15 @@
+// HISTORICAL REGRESSION / FORENSIC TEST of the FORMER record-only migration (audit PROV-07 / M2-T3).
+// SUPERSEDED: the owner's permanent-retirement decision (docs/security/OFFERWALL_GG_RETIREMENT.md)
+// replaces the record-only policy. Offerwall.GG now has NO active callback processing and NO
+// callback recording; nothing here describes current behavior or current deployment state.
+// The tests are preserved as the historical record of how the former record-only migration behaved.
 // Run: npm install && node --test tests/*.test.mjs
-// Database test (PGlite = real Postgres 16 in Node) for audit PROV-07 / M2-T3:
-// Offerwall.GG callbacks must be recorded but must never post a Legit Coins journal entry.
+// Database test (PGlite = real Postgres 16 in Node) of the former behavior: callbacks were to be
+// recorded but never post a Legit Coins journal entry.
 // Uses the real table DDL from the staging-lineage migration and the real routines:
-// - "deployed": private.process_offerwall_gg_postback as exported from staging
-//   (supabase/environments/staging/schema-snapshot/routines.sql)
-// - "record-only": supabase/migrations/20261119145340_offerwall_gg_record_only.sql
+// - historical pre-record-only snapshot: private.process_offerwall_gg_postback as exported from staging
+//   (supabase/environments/staging/schema-snapshot/routines.sql) — NOT the live runtime
+// - former record-only: supabase/migrations/20261119145340_offerwall_gg_record_only.sql
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
