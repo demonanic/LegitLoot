@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections (especially §19) together with the current Master Control and Environment Source of Truth for present status; the original audited branch and earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the original audited branch and earlier status tables are historical.
 
 ---
 
@@ -1131,3 +1131,24 @@ Owner explicitly authorized preparation and testing of production containment, p
 ## 2026-11-19 21:33 ET — Preview-auth owner decision recorded
 
 PR #23 discussion comment `7028436334` keeps the RXT2 game PR limited to game files and treats a preview-host guard for main's production `account-auth.js` as a separate owner decision. No fix has been pushed. The owner must authorize a separate non-deploying PR before Account/auth testing is permitted on main-based Cloudflare previews. PR #22 remains staging-only and fail-closed.
+
+## 2026-11-19 22:39 ET — Independent Sync Watch: launch-scope and control recheck
+
+### Verified repository and release candidates
+- Integration `build/legitloot-neon-synthwave` is `7b240b2`; production `main` remains `4e0f533`. GitHub returned 25 branch refs. Open PRs are #20, #22, #23, #24 and stale draft #9. PR #20's 15-file application diff is unchanged at head `6e2e51b`; it is eight documentation-only commits behind integration `7b240b2`. Actions run `44661202504` passed 58/58. PR #22 head `332ca07` is stacked on #20 and Actions run `44661225287` passed 64/64. Both remain unmerged.
+- PR #22's RXT2 package is static and device-save only; no account, Supabase, wallet, LC, or provider callback code was found. The page discloses early access and no account/LC connection. ZVHM is live on production; RXT2 is preview-only. No shared session/save/event/challenge integration is verified.
+- PR #23 remains a draft main-based publish with no Actions run. PR #24 remains a draft containment candidate with no verified Deno test run; its tests import the entrypoint that starts `Deno.serve` at module load. No code fix has been pushed for either blocker.
+
+### Launch failures against owner-locked decisions
+- **FAIL — provider-to-LC prohibition:** production Offerwall.GG v3 is still ACTIVE with `verify_jwt=false`; the provider registry row is disabled but the handler does not check it. Production SECURITY DEFINER callback routines grant `service_role` execution and the private routine calls `private.post_journal_transaction`. Provider-to-LC issuance remains possible. No callback was invoked and no containment was deployed.
+- **FAIL — no cash/withdrawal model:** production Rewards/Account source and production wallet RPC still contain cash, USD and withdrawal concepts. Staging `get_wallet_summary()` also returns cash buckets and `currency.cash=USD` even though the client ignores those fields; its `currency.gameCredits` label is `LLC` while the visible unit is LC. Public UI is LC-only in PR #20, but the backend contract is not yet clean.
+- **FAIL — preview isolation:** PR #23/#24 Cloudflare previews are marked `preview` but inherit main's production Supabase URL and active sign-up handler. Do not use their Account/auth routes. A separate owner-approved preview-host guard PR is required; no fix exists.
+- **INCOMPLETE — game platform:** staging game registry has one unlisted ZID development row; saves/events/handoff tickets are zero and no challenge/milestone/season tables exist. The two game candidates are device-save early access only.
+- **INCOMPLETE — Hustle/Taplayad:** current provider registry and staging provider rows do not contain Taplayad. Public current and legacy Tplayad docs conflict on URL, macros, signature formula, transaction identity, status binding, and response/retry semantics. No App-10066-specific permission or complete callback contract is verified. Keep it unintegrated/record-only.
+- **INCOMPLETE — legal and account onboarding:** production Terms and Privacy remain placeholders, production Account exposes Create Account, and the actual Supabase sign-up pause setting was not retrievable with the current read tools. Do not claim the pause is active.
+
+### Security, environment, and owner gates
+- Staging Offerwall.GG callback v8 is record-only; staging wall-URL v5 is JWT-protected but CORS still allows `https://legitloot.site`. Review this cross-environment exception before production integration.
+- Security Advisor reports leaked-password protection disabled and an authenticated SECURITY DEFINER warning. Private-schema RLS/no-policy notices are informational; do not add public policies blindly.
+- Branch protection was not re-queried; previous audit found all then-listed branches unprotected and no rulesets. GOV-01 remains open.
+- No merge, deployment, settings/secret/grant/schema/data change, callback, publisher dashboard change, provider agreement, payment, reward issuance, or money movement occurred.
