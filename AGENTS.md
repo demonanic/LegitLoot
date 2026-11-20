@@ -5,8 +5,9 @@ You are an autonomous implementation/review agent for LegitLoot.
 ## Mandatory reading before every work session
 
 1. `README.md`
-2. `docs/MASTER_EXECUTION_CONTROL.md` — current owner-authorized direction, active milestone, task assignment, agent coordination protocol, escalation rules, and shared log.
-3. `docs/PROJECT_PROGRESS.md`
+2. `docs/MASTER_EXECUTION_CONTROL.md` — current owner-authorized direction, active milestone, task assignment, escalation rules, and shared log.
+3. `docs/AGENT_OPERATING_CHARTER.md` — standing roles: Claude implements; ChatGPT/DaVinci directs and independently verifies; Sam owns final business decisions.
+4. `docs/PROJECT_PROGRESS.md`
 4. `docs/CODEX_EXECUTION_CONSTITUTION.md`
 5. `docs/PLATFORM_BUILD_SPEC.md`
 6. `docs/BRAND_ART_DIRECTION.md`
