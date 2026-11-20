@@ -25,7 +25,7 @@ Current active task: **M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 N
 
 PR #20 remains open at head `6e2e51b`, based on integration `387d035`, with Actions run `44661202504` passing 58/58. Claude synced it once and preserved the staging-only/fail-closed auth guard. Integration was `6417323` before this run's six documentation-only commits were consolidated; PR #20 is six docs-only commits behind that pre-correction head. No further sync is requested in this run. PR #22 is stacked on PR #20.
 
-**Preview isolation blocker:** PR #23 and #24 are Cloudflare `preview` deployments, but both inherit main's `account-auth.js`, which hardcodes the production Supabase project and exposes sign-up. The preview environment and empty Pages env vars do not change that browser target. Do not use Account/auth flows on those previews until the script fails closed or is staging-only. PR #22 is different: its `account-auth.js` uses exact staging configuration and fails closed.
+**Preview isolation blocker:** PR #23 and #24 are Cloudflare `preview` deployments, but both inherit main's `account-auth.js`, which hardcodes the production Supabase project and exposes sign-up. The preview environment and empty Pages env vars do not change that browser target. Do not use Account/auth flows on those previews until a separate owner-approved PR adds a preview-host fail-closed guard or staging-only configuration. PR #23 discussion comment `7028436334` keeps the games-only PR unchanged and treats the guard as a separate owner decision. PR #22 is different: its `account-auth.js` uses exact staging configuration and fails closed.
 
 **Offerwall containment:** production Offerwall.GG v3 remains ACTIVE with `verify_jwt=false`; the deployed callback still calls a SECURITY DEFINER routine that posts LC through `private.post_journal_transaction`. The provider row is disabled but retains LC metadata and has no approval/terms evidence. PR #24 is draft and undeployed; its tests import the entrypoint that calls top-level `Deno.serve`, so isolate the pure handler before testing and run Deno tests in CI. Separate owner approval is required before production grant revocation or function deployment.
 
@@ -415,3 +415,8 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Claude also updated the stacked PR #22 to head `332ca07`, based on PR #20 head `6e2e51b`. GitHub Actions run `44661225287` passed 64/64 tests, 0 failures/skips. The PR #22 branch is 2 commits ahead / 0 behind its PR #20 base.
 - The integration branch was at `6417323` immediately before this correction; it contains six documentation-only commits after `387d035`. PR #20 is therefore six documentation-only commits behind the integration head at this point. This correction is another documentation-only commit. No further sync request is made in this run to avoid repeated sync churn.
 - PR #20 and #22 remain open/unmerged. PR #23 and #24 remain draft, preview-only, with the previously recorded preview-isolation and PR #24 Deno-test blockers. No merge or deployment occurred.
+
+
+## 2026-11-19 21:33 ET — Preview-auth owner decision
+
+Keep PR #23 game-only. Its Account page inherits production-targeting auth from `main`; the preview environment does not override that hard-coded URL. A separate owner-approved PR is required to add a preview-host fail-closed guard while preserving production behavior. Until that is authorized and verified, do not use Account/auth routes on PR #23/#24 previews. PR #22 remains staging-only.

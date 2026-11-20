@@ -1126,3 +1126,8 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Claude also updated the stacked PR #22 to head `332ca07`, based on PR #20 head `6e2e51b`. GitHub Actions run `44661225287` passed 64/64 tests, 0 failures/skips. The PR #22 branch is 2 commits ahead / 0 behind its PR #20 base.
 - The integration branch was at `6417323` immediately before this correction; it contains six documentation-only commits after `387d035`. PR #20 is therefore six documentation-only commits behind the integration head at this point. This correction is another documentation-only commit. No further sync request is made in this run to avoid repeated sync churn.
 - PR #20 and #22 remain open/unmerged. PR #23 and #24 remain draft, preview-only, with the previously recorded preview-isolation and PR #24 Deno-test blockers. No merge or deployment occurred.
+
+
+## 2026-11-19 21:33 ET — Preview-auth owner decision recorded
+
+PR #23 discussion comment `7028436334` keeps the RXT2 game PR limited to game files and treats a preview-host guard for main's production `account-auth.js` as a separate owner decision. No fix has been pushed. The owner must authorize a separate non-deploying PR before Account/auth testing is permitted on main-based Cloudflare previews. PR #22 remains staging-only and fail-closed.
