@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 12:51 ET
+**Last verified:** 2026-11-20 12:51 ET (record refresh 15:30 ET)
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1014,3 +1014,15 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Production main is `801f3e7`; integration branch is `a4d1b538`. PR #27 head `a6a01e9` is 10 commits ahead / 5 behind integration and GitHub reports it dirty/unmergeable. Its exact-head Actions run `44772928022` succeeded.
 - No Supabase settings, secrets, grants, schema or data were changed; this section records read-only evidence only.
 - The documentation-only integration commit `ac224c9` automatically triggered Cloudflare Pages builds in both projects. Both deployments were classified `environment=preview` on `build/legitloot-neon-synthwave`; the `legitloot` project build and `legitloot-preview` deployment were still active at last read. Production remained `main` @ `801f3e7` / deployment `fe4c0f22`. Integration pushes can trigger preview builds automatically; verify branch and environment before treating any Pages deployment as production.
+
+## 2026-11-20 15:30 ET — Claude record refresh (PR #28/#29 evidence; Sync Watch #12 facts)
+
+- **Repository:** production `main` `801f3e7` (owner-approved PR #23 publish); integration `1466eb6` at this sync (authorized baseline `a529b35` plus documentation-only commits). 30 refs all `protected:false`; rulesets empty. Do not describe `main` as protected.
+- **Open PRs:** #9 stale draft; #20 (head `6e2e51b`, 58/58) with #22 (`332ca07`, 64/64) and #26 (`778081a`, 59/59) stacked on it; #25 superseded draft (demonanic); #27 this documentation sync; #28 ENV-07 guard (draft to `main`); #29 Offerwall.GG retirement (integration). #20 must not be released alone: the combined release needs the LC-only UI plus the Taplayad-only pending registry from a reviewed exact head.
+- **PR #28 (`93f62ac`):** Actions run 44791797759 passed; accepted by DaVinci for **owner review only**. The existing `main.legitloot-preview.pages.dev` deployment still runs the unguarded production-Supabase auth until the owner approves a production merge/deploy. Client-side defense-in-depth only.
+- **PR #29 (`0014d3a`, source only):** previous head `cb1f999` got CHANGES REQUIRED solely because the proposed staging SQL rollback reactivated record-only callback RPCs, re-granted `service_role` and restored stale provider metadata. Fixed at `0014d3a`: the SQL header is now a **forward-only, fail-closed recovery plan**; test added. Actions: Node/whitespace 44802436878, Deno 44802436895, both success. Re-review requested. Nothing deployed or applied; SQL stays unapplied until the exact staging ref and recovery plan are independently checked.
+- **Offerwall.GG dashboard evidence:** owner-provided screen recording (PR #29 comment 7047980474): five visible placements with postback fields cleared, including a successful save on the remaining Pending placement. **Not an independent readback**; placement disable/delete remains PARTIAL/UNVERIFIED.
+- **Production blockers unchanged:** Earn label, CPAGrip `testing` with provider-set LootCoin copy, no Taplayad entry; cash/withdrawal fields in account/rewards and `get_wallet_summary()`/wallet-summary cash contracts (WALLET-01); incomplete Terms/Privacy; unverified signup pause; Taplayad written confirmation and incentivized-traffic permission missing (keep record-only; never map points/reward/payout to LC).
+- **M2-T4:** IN PROGRESS. Both games are early access with device-local saves and no account/LC link. M2-T4b-R1 is accepted as design only; no code, registry row or endpoint exists.
+- **Owner gates (unchanged):** production merge/deploy (including PR #28), production config/data, staging deploy/SQL application for retirement, provider agreements/activation, paid commitments, live money/reward movement, signup/legal decisions, branch protection.
+- No merge, deploy, SQL application, callback, provider setting, secret change or money movement occurred.
