@@ -1,10 +1,15 @@
+// HISTORICAL REGRESSION / FORENSIC TEST of the FORMER record-only migration (audit PROV-07 / M2-T3).
+// SUPERSEDED: the owner's permanent-retirement decision (docs/security/OFFERWALL_GG_RETIREMENT.md)
+// replaces the record-only policy. Offerwall.GG now has NO active callback processing and NO
+// callback recording; nothing here describes current behavior or current deployment state.
+// The tests are preserved as the historical record of how the former record-only migration behaved.
 // Run: npm install && node --test tests/*.test.mjs
-// Database test (PGlite = real Postgres 16 in Node) for audit PROV-07 / M2-T3:
-// Offerwall.GG callbacks must be recorded but must never post a Legit Coins journal entry.
+// Database test (PGlite = real Postgres 16 in Node) of the former behavior: callbacks were to be
+// recorded but never post a Legit Coins journal entry.
 // Uses the real table DDL from the staging-lineage migration and the real routines:
-// - "deployed": private.process_offerwall_gg_postback as exported from staging
-//   (supabase/environments/staging/schema-snapshot/routines.sql)
-// - "record-only": supabase/migrations/20261119145340_offerwall_gg_record_only.sql
+// - historical pre-record-only snapshot: private.process_offerwall_gg_postback as exported from staging
+//   (supabase/environments/staging/schema-snapshot/routines.sql) — NOT the live runtime
+// - former record-only: supabase/migrations/20261119145340_offerwall_gg_record_only.sql
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -53,7 +58,9 @@ async function newDb() {
   return db;
 }
 
-const deployedRoutine = () => {
+// HISTORICAL pre-record-only snapshot (forensic evidence). It is NOT the live staging runtime:
+// live staging postback v8 and its routine are record-only, and Offerwall.GG is retired.
+const historicalPreRecordOnlyRoutine = () => {
   const snapshot = read("supabase/environments/staging/schema-snapshot/routines.sql");
   return between(snapshot, "CREATE OR REPLACE FUNCTION private.process_offerwall_gg_postback", "-- private.provision_initial_owner_admin");
 };
@@ -65,16 +72,16 @@ const call = async (db, { user = USER, tx = "txn-00000001", status = "credited",
     [user, tx, status, atoms, digest])).rows[0].r;
 const count = async (db, table) => Number((await db.query(`select count(*)::int as n from ${table}`)).rows[0].n);
 
-test("control: the currently deployed staging routine posts an LC journal entry", needsDb, async () => {
+test("control: the HISTORICAL pre-record-only snapshot routine posted an LC journal entry (not current staging state)", needsDb, async () => {
   const db = await newDb();
-  await db.exec(deployedRoutine());
+  await db.exec(historicalPreRecordOnlyRoutine());
   assert.equal((await call(db)).result, "posted");
   assert.equal(await count(db, "private.journal_canary"), 1);
 });
 
 test("record-only: a verified credit is recorded and posts no LC", needsDb, async () => {
   const db = await newDb();
-  await db.exec(deployedRoutine());
+  await db.exec(historicalPreRecordOnlyRoutine());
   await db.exec(recordOnlyMigration());
   assert.equal((await call(db)).result, "recorded");
   assert.equal(await count(db, "private.journal_canary"), 0);
@@ -129,18 +136,5 @@ test("record-only migration never references the ledger", () => {
   assert.ok(!/post_journal_transaction|ledger_accounts|journal_entries/i.test(sql));
 });
 
-test("Edge Function accepts only record-only results and never 'posted'", () => {
-  const source = read("supabase/functions/offerwall-gg-postback/index.ts");
-  const list = source.match(/RECORD_ONLY_RESULTS = \[([^\]]*)\]/);
-  assert.ok(list, "RECORD_ONLY_RESULTS list missing");
-  assert.deepEqual(JSON.parse(`[${list[1]}]`).sort(), ["duplicate", "recorded", "reversal_recorded"]);
-  assert.ok(!/"posted"/.test(source.replace(/(^|[\s;{}])\/\/.*$/gm, "$1"))); // strip comments, not URLs
-});
-
-test("Edge Function stores the original payout as positive metadata for reversals", () => {
-  const source = read("supabase/functions/offerwall-gg-postback/index.ts");
-  assert.match(
-    source,
-    /payoutUsdValue = status === "reversed" && payoutUsd\.startsWith\("-"\)\s*\?\s*payoutUsd\.slice\(1\)\s*:\s*payoutUsd;/,
-  );
-});
+// The two Edge Function source assertions that used to follow were retired with the
+// functions themselves (owner decision 2026-11-20). See tests/offerwall-retirement.test.mjs.

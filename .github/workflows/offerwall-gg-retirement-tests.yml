@@ -1,0 +1,33 @@
+name: Offerwall.GG retirement Deno tests
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/offerwall-gg-*/**"
+      - ".github/workflows/offerwall-gg-retirement-tests.yml"
+  push:
+    branches:
+      - "build/legitloot-neon-synthwave"
+    paths:
+      - "supabase/functions/offerwall-gg-*/**"
+      - ".github/workflows/offerwall-gg-retirement-tests.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  deno-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.8
+      - name: Type-check tombstone entrypoints
+        run: |
+          deno check supabase/functions/offerwall-gg-postback/index.ts
+          deno check supabase/functions/offerwall-gg-wall-url/index.ts
+      - name: Test inert tombstone handlers
+        run: |
+          deno test supabase/functions/offerwall-gg-postback/index_test.ts
+          deno test supabase/functions/offerwall-gg-wall-url/index_test.ts
