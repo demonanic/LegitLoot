@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 05:13 ET
+**Last verified:** 2026-11-20 05:14 ET
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -923,6 +923,11 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 
 ### Repository and policy boundary
 
-- Integration is 56b98e4; production main is bcc19d6; 26 branch refs all report protected:false.
+- Current docs-only integration head is 4f3ed99 (application baseline 56b98e4); production main is bcc19d6; 26 branch refs all report protected:false.
 - Production main's Offerwall wall-url source remains active despite deployed v2 being inert; integration canonical wall-url and postback sources remain active; PR #25 changes only wall-url and remains draft. Staging deployment remains active as detailed above.
 - No production or staging deployment, Supabase setting/secret/grant/schema/data mutation, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred in this run.
+
+## 2026-11-20 05:14 ET — Documentation verification
+
+- Integration branch now includes docs-only debrief commit 4f3ed99; application baseline remains 56b98e4. Its Actions run 44719170874 passed npm test but failed whitespace checks only. The follow-up removes the two trailing-space lines and extra EOF blank line; new CI verification is pending.
+

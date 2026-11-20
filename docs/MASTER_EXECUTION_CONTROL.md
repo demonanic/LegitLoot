@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 05:13 ET
+**Last updated:** 2026-11-20 05:14 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
-**Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub's branch API reports `protected:false` for all 26 branches as of 2026-11-20 05:13 ET. Do not describe `main` as technically protected.  
+**Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub's branch API reports `protected:false` for all 26 branches as of 2026-11-20 05:13 ET. Do not describe `main` as technically protected.
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 
 **Explicit owner authorization:** The owner has expressly authorized both ChatGPT and Claude to collaborate autonomously on LegitLoot, inspect shared repository and connected development resources, update documentation, assign bounded tasks, provide implementation/review instructions, and carry out routine reversible work within the active milestone. Effective 2026-11-19, both agents may independently merge independently reviewed and verified work into `build/legitloot-neon-synthwave` and deploy to staging, including documented staging-only migrations and reversible staging database changes, without per-action approval. These are not owner gates. Require independent review, passing tests, exact environment checks, rollback planning, and a dated debrief. This authority does not permit production deployment or merge, production settings/secrets/schema/data changes, real financial activity/reward issuance/payouts, paid commitments, provider agreements, destructive real-data changes, security weakening, or irreversible legal/business decisions. Security clearance authorizes protective security work, not weakening safeguards. These critical categories remain governed by Section 6.
@@ -62,7 +62,7 @@ The release candidate must truthfully provide:
 
 ### Current active task — M2-T4: integrate the two owner-selected launch games
 
-**Status:** IN PROGRESS — the production ZVHM wrapper is not verified as the owner-selected game; Rocket 2 Nowhere is preview-only.  
+**Status:** IN PROGRESS — the production ZVHM wrapper is not verified as the owner-selected game; Rocket 2 Nowhere is preview-only.
 **Acting lead:** ChatGPT.  
 **Partner:** Claude when available; both agents retain standing integration/staging authority under Section 2, subject to the more restrictive instruction governing each individual run.
 
@@ -1701,7 +1701,7 @@ Owner explicitly authorized preparation and testing of production containment, p
 ## 2026-11-20 05:13 ET — Independent Sync Watch #8
 
 - Re-read the shared control, progress, launch audit, environment source of truth, CLAUDE.md, and the only standalone Claude handoff docs/CLAUDE_START_HANDOFF_M1.md. No newer handoff note was present.
-- Rechecked all 26 branches, open PRs, current heads, review comments, and Actions. Integration is 56b98e4 with Actions run 44715079355 passing; production main is bcc19d6. All 26 branch refs report protected:false.
+- Rechecked all 26 branches, open PRs, current heads, review comments, and Actions. Current docs-only integration head is 4f3ed99 (application baseline 56b98e4); Actions run 44715079355 passed for the application baseline. Docs-only run 44719170874 passed npm test but failed the whitespace check on two trailing-space lines in this file and an extra EOF blank line in the launch audit; this follow-up corrects those exact formatting defects. Production main is bcc19d6. All 26 branch refs report protected:false.
 - PR #21's Claude-authored ZVHM wrapper was merged by the owner account and deployed, but its iframe points to the repository §0.4 excludes as Zombie Invasion Defense. PR #22's 64/64 test explicitly asserts that excluded URL. Existing blocking comments remain; the selected ZVHM build is not verified.
 - PR #23's Cloudflare deployment is a preview with no environment variables, but its Account/auth bundle still targets production Supabase. Do not use its auth routes.
 - Re-read production and staging Edge Function sources and SQL privileges. Production Offerwall.GG runtime remains inert 410 with checked callback EXECUTE privileges revoked. Staging wall-url v5 and postback v8 are ACTIVE and exactly match their environment snapshot source; wall-url allows the production origin, while postback remains record-only with unsigned reconciliation metadata. Live staging routines contain no journal/ledger/LC references.
@@ -1709,3 +1709,9 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Rechecked wallet contracts: production/staging RPCs still return cash USD buckets; staging labels game credits LLC. Production wallet-summary v4 differs from the RPC response shape and has no current page caller found by repository code search.
 - Rechecked Taplayad's current docs and Terms. App 10066 remains unintegrated pending written permission and a complete transaction/reversal/retry contract. Owner URL preserved; no provider points or callback values map to LC.
 - Actions this run: read-only GitHub/Supabase/Cloudflare inspection, one actionable PR #25 comment, and documentation updates only. No production or staging mutation, PR merge, callback, publisher setting, provider agreement, payment, reward issuance, or money movement.
+
+## 2026-11-20 05:14 ET — Documentation CI correction
+
+- Docs-only commit 4f3ed99 triggered Actions run 44719170874. npm test passed; the whitespace check failed only on trailing spaces in this file's lines 8 and 65 and an extra blank line at EOF of docs/LAUNCH_READINESS_AUDIT.md.
+- Removed the two trailing-space instances and the extra EOF blank line in the follow-up docs-only commit. Verify the new Actions run before marking the updated documentation green.
+

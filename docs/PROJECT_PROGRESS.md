@@ -1,13 +1,13 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 05:13 ET
+**Updated:** 2026-11-20 05:14 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
-**Integration branch:** build/legitloot-neon-synthwave @ 56b98e4
+**Integration branch:** build/legitloot-neon-synthwave @ 4f3ed99 (docs-only; application baseline 56b98e4)
 **Production branch:** main @ bcc19d6; Cloudflare production deployment 75207a07 succeeded at 2026-11-20 04:11:50 UTC.
 **Current open PRs:** #20 Hustle/public copy (head 6e2e51b, 58/58 exact-head CI); #22 game integration (head 332ca07, 64/64 CI, stacked on #20 but blocked by wrong ZVHM source/test); #23 Rocket 2 Nowhere main-based draft (head 33a5240, no CI, preview auth targets production Supabase); #25 Offerwall.GG wall-URL source alignment (draft, head 135607e, 54/54 Node plus Deno checks, staging deployment-source test gap); #9 stale non-mergeable visual redesign draft. PR #21 and #24 were merged by owner account demonanic.
 
-## Current owner-locked operating rules## Current owner-locked operating rules
+## Current owner-locked operating rules
 
 - Legit Coins (LC) are earned only through verified in-game milestones, weekly challenges, and seasonal events.
 - The LegitLoot website wallet is authoritative. Games do not maintain spendable duplicate wallets.
@@ -30,7 +30,7 @@
 
 ## Current verification status## Current verification status
 
-- Integration branch build/legitloot-neon-synthwave is 56b98e4; Actions run [44715079355](https://github.com/demonanic/LegitLoot/actions/runs/44715079355) passed. Production main is bcc19d6; production Pages deployment 75207a07 succeeded and aliases https://legitloot.site.
+- Current docs-only integration head is 4f3ed99 (application baseline 56b98e4); Actions run [44715079355](https://github.com/demonanic/LegitLoot/actions/runs/44715079355) passed for the application baseline. Docs-only run [44719170874](https://github.com/demonanic/LegitLoot/actions/runs/44719170874) passed npm test but failed whitespace checks on two trailing-space lines and an extra EOF blank line; this follow-up corrects them. Production main is bcc19d6; production Pages deployment 75207a07 succeeded and aliases https://legitloot.site.
 - PR #20 head 6e2e51b: 58/58 pass (run 44661202504). PR #22 head 332ca07: 64/64 pass (run 44661225287), but its ZVHM identity assertion is invalid under §0.4. PR #22 is two commits ahead of PR #20.
 - PR #23 head 33a5240: draft, no Actions run. Cloudflare deployment 5c3dd1bf is preview-only, pages.dev alias, empty environment variables; inherited account/auth still targets production.
 - PR #25 head 135607e: 54/54 Node tests and Deno type-check/handler tests passed (runs 44713338718, 44713338856). Its test guard excludes environment snapshots; new PR comment 7037024928 records the active staging-source gap. Relative to integration it is 17 ahead / 22 behind by ancestry; behind-side changes are docs/README-only.
@@ -781,3 +781,8 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Wallet RPCs still expose cash USD buckets; staging labels game credits LLC. Production wallet-summary v4 differs from the RPC response shape and has no current page caller found by repository code search.
 - Taplayad App 10066 remains unintegrated pending written permission and a complete transaction/reversal/retry contract.
 - No gated actions occurred. Only read-only inspection, one PR comment, and documentation updates were performed.
+
+## 2026-11-20 05:14 ET — Documentation CI correction
+
+- Run 44719170874 passed npm test and failed only the whitespace check: trailing spaces in MASTER_EXECUTION_CONTROL.md lines 8/65 and an extra blank line at EOF of LAUNCH_READINESS_AUDIT.md. Those formatting issues were corrected in the follow-up documentation-only commit; verify its CI before marking the update green.
+
