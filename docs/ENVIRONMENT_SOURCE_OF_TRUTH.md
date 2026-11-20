@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 00:28 ET  
+**Last verified:** 2026-11-20 01:55 ET  
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -800,3 +800,29 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Current Tplayad docs at `https://tplayad.com/docs` and legacy docs at `https://www.tplayad.com/doc/postback` specify incompatible callback protocols. Current docs omit transaction ID and sign only app_id/user_id/secret; legacy docs include transId/reward and define OK/DUP plus retries. Do not combine; provider must confirm App 10066's actual protocol, reversal linkage, retries and traffic permission. Preserve the owner-supplied template.
 - Cloudflare production remains `legitloot` branch `main` @ `bcc19d`, alias `https://legitloot.site`. The authorized integration branch is `432060b`; both Pages projects built it as `environment=preview`, pages.dev branch aliases only. Its `supabase-config.js` pins staging and `account-auth.js` fails closed without the exact staging config. PR #25's branch previews are also preview-only.
 - No Supabase function deployment, setting/secret/grant/schema/data change, callback, publisher setting, provider agreement or financial activity occurred.
+
+
+## 2026-11-20 01:55 ET — Read-only environment recheck
+
+### GitHub and Cloudflare
+- Production `main` is `bcc19d`; integration `build/legitloot-neon-synthwave` is `42cf97c`. Integration Actions run [44690472788](https://github.com/demonanic/LegitLoot/actions/runs/44690472788) passed 50/50. PR #25 head `61f9ca8` has successful Node/Deno checks and successful previews in both Pages projects; the preview URLs are pages.dev-only. No production alias was added.
+- PR #25 remains draft and integration-only. Its independent COMMENT review [5988741931](https://github.com/demonanic/LegitLoot/pull/25) notes that the static guard does not inspect transitive local imports.
+
+### Production Supabase — `gkbqderyjcuxnjbsiffb`
+- Project status: ACTIVE_HEALTHY. `offerwall-gg-wall-url` v2 ACTIVE/JWT and `offerwall-gg-postback` v4 ACTIVE/no-JWT are both deployed inert HTTP 410 handlers.
+- Read-only SQL confirms `service_role`, `anon`, and `authenticated` cannot EXECUTE either private/public `process_offerwall_gg_postback` routine. Both remain SECURITY DEFINER. No callback was invoked.
+- Production `main/supabase/functions/offerwall-gg-wall-url/index.ts` remains active source and can recreate the launcher on a future redeploy. PR #25 has not changed main.
+- Production provider row remains disabled with null approval/terms references but stale `standard_virtual_currency / LC / LootCoins` reward metadata.
+- Production `public.get_wallet_summary()` still returns cash USD buckets plus LC; this conflicts with the owner-locked wallet model.
+
+### Staging Supabase — `scmnxcsggquwtuyyjnnj`
+- Project status: ACTIVE_HEALTHY. `offerwall-gg-wall-url` v5 ACTIVE/JWT still authenticates callers, reads service-role/provider keys, signs parameters and returns a provider wall URL. Its CORS allow-list includes `https://legitloot.site` and the integration preview origin. The registry is disabled, but a direct authenticated caller can still reach it.
+- `offerwall-gg-postback` v8 ACTIVE/no-JWT is record-only. Its HMAC message is only `userId:transactionId:currencyAmount`; offer ID/name, goal ID, payout USD and timestamp are not signed but are stored/updated through service-role RPCs. The private callback routine only records callback/conversion rows and has no journal/ledger/LC write. Treat this as a staging metadata-integrity defect, not an issuance path.
+- Both staging callback routines are SECURITY DEFINER and service_role can execute them; anon/authenticated cannot. Staging provider registry contains disabled Offerwall.GG and CPAGrip rows, no Taplayad row, and stale Offerwall.GG LC metadata. Staging `get_wallet_summary()` still returns cash USD buckets and labels `gameCredits` as `LLC`.
+
+### Taplayad App 10066
+- Current guide [tplayad.com/docs](https://tplayad.com/docs) documents `md5(app_id . user_id . api_secret)`, no transaction-ID macro, no retry schedule, and a sample parameter mismatch (`offer={offer_id}` vs PHP `offer_id`). Legacy [www guide](https://www.tplayad.com/doc/postback) remains accessible and documents a different `subId/transId/reward` signature and `OK/DUP` retry contract; the non-www path returns 404. Do not combine protocols.
+- Terms [updated 2026-10-29](https://tplayad.com/terms) require publishers to be 18+ and do not establish App-10066-specific incentivized-traffic permission. No provider row/code/settings exist for Taplayad. Preserve the owner-supplied URL template exactly.
+
+### No mutations
+- No function deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance, or money movement was performed. Automatic Cloudflare builds were branch previews only.

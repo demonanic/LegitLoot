@@ -1,11 +1,11 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 00:28 ET
+**Updated:** 2026-11-20 01:55 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — integrate the two owner-selected launch games; both have early-access candidates, ZVHM is live, RXT2 is preview-only
-**Integration branch:** `build/legitloot-neon-synthwave` @ `61e6e2f`; PR #20's base `387d035` is 34 commits behind, with the intervening changes limited to the five shared control documents
+**Integration branch:** `build/legitloot-neon-synthwave` @ `42cf97c`; PR #20's base `387d035` is 45 commits behind by ancestry, but compare shows only the five shared control documents differ
 **Production branch:** `main` @ `bcc19d` (PR #24 merged; Cloudflare production deployment succeeded)
-**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, base `387d035`, 58/58 CI; 34 docs-only commits behind integration); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
+**Current open PRs:** #20 Hustle/public-copy (head `6e2e51b`, 58/58 CI; application diff unchanged); #22 game integration (head `332ca07`, stacked on #20, 64/64 CI; application diff unchanged); #23 RXT2 production draft (head `33a5240`, no CI, preview only, owner-gated); #25 Offerwall.GG wall-URL source alignment (draft/mergeable, head `61f9ca8`, 54/54 Node plus Deno checks); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
 
 ## Current owner-locked operating rules
 
@@ -711,3 +711,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Current and legacy Tplayad docs conflict on signature fields, transaction identity, response codes and retries; App-10066 protocol and incentivized-traffic permission require written provider confirmation. Keep Taplayad record-only.
 - PR #20/#22 are ready for owner review for integration acceptance only (58/58 and 64/64); their 44-commit lag is docs-only. PR #23 is draft/no CI with production-targeting Account/auth in its main-based preview; PR #9 is stale.
 - Production cash/withdrawal wallet fields, provider-to-LC copy, incomplete Terms/Privacy, unverified sign-up pause and incomplete shared game/account/LC-event integration remain launch blockers. No gated action was performed.
+
+
+## 2026-11-20 01:55 ET — Independent Sync Watch #5
+
+- Integration is `42cf97c`; production main is `bcc19d`. Integration push run [44690472788](https://github.com/demonanic/LegitLoot/actions/runs/44690472788) passed 50/50. PR #20 is 45 commits behind by ancestry but only the five shared docs differ; PR #22 has divergent ancestry but its tree comparison likewise shows only those five docs differ. Do not resync for documentation-only churn.
+- PR #25 head advanced to `61f9ca8`; its 54/54 Node suite, Deno type-check and Deno handler tests pass. Both Pages previews succeeded with pages.dev-only aliases. Independent COMMENT review [5988741931](https://github.com/demonanic/LegitLoot/pull/25) records a non-blocking static-guard gap (transitive imports are not scanned). PR remains draft; no merge/deploy.
+- Production Offerwall.GG runtime is contained (wall-url v2 and postback v4 are inert 410; checked callback EXECUTE privileges false), but main's canonical wall-url source remains active. Staging wall-url v5 remains active/JWT with production-origin CORS; staging postback v8 is record-only.
+- **New PROV-09:** staging postback signature covers only user ID, transaction ID and amount; offer ID/name, goal ID, payout USD and timestamp are unsigned yet stored/updated in conversion metadata. Database callback routines are record-only and do not write ledger/journal/LC, so this is a staging reconciliation-integrity defect, not LC issuance. Keep disabled/record-only and require full payload binding plus tamper/replay/reversal tests before any future integration.
+- Production/staging Offerwall.GG registry rows remain disabled but retain stale LC reward metadata; no Taplayad row exists in staging. Current and www-legacy Taplayad docs expose incompatible protocols; the non-www legacy path returns 404 while the www path resolves. No App-10066 permission or complete applicable contract is verified.
+- Production still violates the locked no-cash/no-withdrawal and no-provider-to-LC model in wallet/UI/copy; Terms/Privacy are placeholders, signup pause is unverified, Rocket 2 Nowhere is not in production, and shared game/account/LC-event integration is incomplete.
+- No PR merge, deployment, Supabase settings/secrets/grants/schema/data changes, callback, publisher settings, provider agreement, payment, reward issuance or money movement occurred. No new Claude-authored commit was verified; all 16 PR #25 commits are attributed by GitHub to demonanic.
