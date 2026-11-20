@@ -1,13 +1,13 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 04:39 ET
+**Updated:** 2026-11-20 05:13 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere (per MASTER_EXECUTION_CONTROL.md). This Sync Watch focused Offerwall.GG containment/source alignment as a P0 launch/security blocker at the owner's request; the active task assignment is unchanged.
-**Integration branch:** build/legitloot-neon-synthwave @ a345aa3
-**Production branch:** main @ bcc19d; Cloudflare production deployment 75207a07 succeeded on 2026-11-20.
-**Current open PRs:** #20 Hustle/public-copy (head 6e2e51b, 58/58 exact-head CI; PR description evidence stale); #22 game integration (head 332ca07, 64/64 CI, stacked on #20); #23 Rocket 2 Nowhere main-based draft (head 33a5240, no CI, preview auth targets production Supabase); #25 Offerwall.GG wall-URL source alignment (draft, head 135607e, Node and Deno workflows pass); #9 stale non-mergeable visual redesign draft. PR #21 and #24 are merged to main.
+**Active task:** M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere. The ZVHM production wrapper is not verified as the selected game; RXT2 remains preview-only. Offerwall.GG containment/source alignment remains the owner's stated immediate security priority.
+**Integration branch:** build/legitloot-neon-synthwave @ 56b98e4
+**Production branch:** main @ bcc19d6; Cloudflare production deployment 75207a07 succeeded at 2026-11-20 04:11:50 UTC.
+**Current open PRs:** #20 Hustle/public copy (head 6e2e51b, 58/58 exact-head CI); #22 game integration (head 332ca07, 64/64 CI, stacked on #20 but blocked by wrong ZVHM source/test); #23 Rocket 2 Nowhere main-based draft (head 33a5240, no CI, preview auth targets production Supabase); #25 Offerwall.GG wall-URL source alignment (draft, head 135607e, 54/54 Node plus Deno checks, staging deployment-source test gap); #9 stale non-mergeable visual redesign draft. PR #21 and #24 were merged by owner account demonanic.
 
-## Current owner-locked operating rules
+## Current owner-locked operating rules## Current owner-locked operating rules
 
 - Legit Coins (LC) are earned only through verified in-game milestones, weekly challenges, and seasonal events.
 - The LegitLoot website wallet is authoritative. Games do not maintain spendable duplicate wallets.
@@ -17,27 +17,32 @@
 
 ## Current launch blockers and evidence
 
-- **PROV-07 — RESOLVED (production path contained 2026-11-20):** PR #24 merged as `bcc19d`; production postback v4 and wall-url v2 are deployed as inert HTTP 410 handlers. Read-only SQL confirms `service_role` EXECUTE is false on both private/public callback routines; checked `anon`/`authenticated` privileges are also false. No callback was invoked. Provider row remains disabled but retains stale LC/LootCoins metadata and null terms/approval fields; publisher dashboard callback URL was not changed.
-- **WALLET-01 — HIGH:** production `public.get_wallet_summary()` remains SECURITY DEFINER and returns cash USD buckets plus LC. `rewards.html` still renders cash/withdrawal states; `account.html` still renders cash wallet/pending/reserved/paid fields; `account-auth.js` requires and formats those cash fields. Staging `get_wallet_summary()` also returns cash buckets and `currency.cash=USD`; `currency.gameCredits` is mislabeled `LLC`. This contradicts the owner-locked no-cash/no-withdrawal/no-USD model.
-- **AUTH-02:** production sign-up pause was previously owner-approved but remains unverified as applied. The main-branch Account page exposes Create Account and hardcodes the production Supabase target; no auth form was submitted during this check.
-- **GAME-02 — HIGH:** PR #22 contains both selected game routes and passes 64/64 CI; PR #23 is the main-based RXT2 draft with no CI. Production `games.html` still lists only Zombies vs Heavy Metal. Staging `game_registry` remains one unlisted ZID placeholder; saves/events/handoff tickets are 0; shared account/session, cloud saves, and verified LC-event ingestion remain incomplete.
-- **ENV-07 — CRITICAL:** PR #23's main-based Cloudflare preview inherits `account-auth.js` with the production Supabase URL and active `auth.signUp`; do not use its Account/auth routes. The authorized integration preview is isolated: `supabase-config.js` pins staging and `account-auth.js` fails closed unless the exact staging config is present.
-- **PR24-TEST — RESOLVED:** PR #24 is merged to `main` as `bcc19d`; Actions run `44670475596` passed 3/3 Deno 2.9.8 tests on the candidate head. Production postback v4 and wall-url v2 are verified inert, and the callback RPC execute grants are revoked. A separate critical repository source-drift finding remains: `main/supabase/functions/offerwall-gg-wall-url/index.ts` still contains the old active launcher.
-- **HUSTLE/TAPLAYAD — HIGH:** owner-selected App 10066 template remains `https://offerwall.tplayad.com/10066/{user_id}`; Taplayad is absent from staging providers and no integration exists. Current docs use `md5(app_id . user_id . api_secret)` without a transaction-ID macro; legacy `/doc/postback` now returns 404. The current signature does not bind reward/payout/offer/status, and no App-10066-specific incentivized-traffic permission is verified. Keep record-only and never map publisher points or `{reward}`/`{payout}` to LC/cash.
-- **GOV-01 — HIGH:** the previous audit found all then-listed branches `protected:false` and no repository rulesets. The current branch search returned 25 refs, but branch protection was not re-queried this run. Owner approval is not proven to be technically enforced on `main`.
-- **LEGAL/SUPPORT/OPS:** Terms/Privacy, monitored support, account deletion/export, sign-up pause verification, monitoring, backup/PITR, and rollback evidence remain incomplete or owner-gated.
+- **PROV-07 — PRODUCTION RUNTIME CONTAINED; SOURCE/STAGING NOT CLOSED:** Production postback v4 and wall-url v2 are inert HTTP 410; checked private/public callback EXECUTE is false for service_role, anon and authenticated. Production main's wall-url source remains active, so a future source redeploy could restore it. Staging wall-url v5 remains ACTIVE/JWT and allows https://legitloot.site in CORS; staging postback v8 is ACTIVE/no-JWT and record-only. Both deployed staging sources exactly match supabase/environments/staging/functions snapshots.
+- **PROV-09 — STAGING RECONCILIATION INTEGRITY:** Staging postback HMAC binds only userId:transactionId:currencyAmount; offer/goal/payout/timestamp metadata is unsigned and can be updated on duplicate results. Live staging database routines contain no journal, ledger or LootCoin references; callback/conversion tables are zero rows. This is not a current LC-issuance path, but is not safe for future provider activation.
+- **PROV-10 — DEPLOYMENT-SOURCE TEST GAP:** PR #25's recursive guard checks canonical supabase/functions imports, while tests/staging-function-origins.test.mjs deliberately excludes environment snapshots. The active staging wall-url/postback deployments exactly match those excluded snapshots. PR #25 comment 7037024928 requests a separate explicit deployment-source/manifest guard.
+- **WALLET-01 — HIGH:** Production and staging public.get_wallet_summary() return cash USD buckets. Production RPC returns lootCoins.available; staging RPC returns gameCredits with currency.gameCredits=LLC. Production wallet-summary Edge Function v4 returns cash plus gameCredits/LLC, differing from the production RPC's lootCoins/LC; no current page caller was found by repository code search. Production Account/Rewards/Earn UI and account-auth.js still expose cash/withdrawal or provider-to-LC behavior. PR #20's LC-only integration UI does not change the backend response contracts.
+- **AUTH-02:** Production main exposes Create Account and hardcodes production Supabase. The owner-approved signup pause remains unverified; no auth form was submitted. Account deletion/export is not implemented.
+- **GAME-02 — HIGH:** The production ZVHM wrapper embeds demonanic/Legitloot-2, which Platform Build Spec §0.4 explicitly excludes as Zombie Invasion Defense. PR #21 was merged by the owner account and deployed, but that does not change the locked game selection. PR #22's 64/64 tests assert the excluded URL; comments 7036549802 and 7036564753 block acceptance. Correct ZVHM source/build remains unlocated. RXT2 is preview-only, device-save, with no shared account/LC connection.
+- **ENV-07 — CRITICAL:** PR #23's Cloudflare preview is correctly classified as preview and has a pages.dev-only alias, but its bundle uses main account-auth.js with production Supabase URL and active signup; deployment environment variables are empty. Do not use its Account/auth routes. Comment 7036403044 records the blocker.
+- **HUSTLE/TAPLAYAD — HIGH:** Owner App 10066 template remains https://offerwall.tplayad.com/10066/{user_id}. Current docs use md5(app_id . user_id . api_secret), status 1/2 and any-2xx acknowledgement; no transaction-ID macro or retry schedule is documented. The sample parameter mismatch remains; direct legacy postback page returns 404. Current Terms do not establish App-10066-specific incentivized-traffic permission. No publisher settings or terms were accepted; never map provider points/reward/payout to LC.
+- **GOV-01 — HIGH:** GitHub branch API reports all 26 refs, including main and integration, as protected:false. Do not treat owner gates as technically enforced.
+- **LEGAL/SUPPORT/OPS:** Terms/Privacy, monitored support, account deletion/export, signup-pause verification, monitoring, backup/PITR, and rollback evidence remain incomplete or owner-gated.
 
-## Current verification status
+## Current verification status## Current verification status
 
-- PR #20 Actions run `44661202504`: 58/58 pass, 0 failures, 0 skips. Current integration is `61e6e2f`; PR #20 is 34 commits behind, but the 34 intervening commits touch only the five shared control documents. Its application diff is unchanged; no resync was performed.
-- PR #22 Actions run `44661225287`: 64/64 pass, 0 failures, 0 skips. Head `332ca07` remains stacked on PR #20 head `6e2e51b`; it is also 34 documentation-only commits behind current integration. The game application diff is unchanged.
-- PR #23: Cloudflare preview deployed successfully in both Pages projects; it remains a draft with no Actions run and is one commit behind current `main`. Its Account/auth code still targets production; do not use those routes.
-- PR #24: merged to `main` as `bcc19d`. Deno run `44670475596` passed 3/3 tests on the PR candidate. Production Cloudflare deployment `75207a07-6306-4461-b115-c6c4a508bd97` succeeded on `bcc19d`; production Supabase function versions 4/2 and the revoked callback routine grants were re-queried read-only.
-- Production Cloudflare canonical deployment is now `main` / `bcc19d`; deployment `75207a07-6306-4461-b115-c6c4a508bd97` succeeded and aliases `https://legitloot.site`. The authorized integration preview is `61e6e2f` and remains `environment=preview` with only the build-branch alias.
-- Supabase production and staging projects were re-queried read-only at 2026-11-20 00:28 ET. Production Offerwall.GG callback and launcher are deployed as inert 410 handlers; both callback routine EXECUTE grants are false for `service_role`, and checked public roles are also false. Staging callback remains record-only; staging wallet response still includes cash/LLC metadata.
-- No gated action was performed by this check. PR #24 merge and the resulting production Cloudflare/Supabase containment occurred before this run; this check only verified the live state and updated documentation.
+- Integration branch build/legitloot-neon-synthwave is 56b98e4; Actions run [44715079355](https://github.com/demonanic/LegitLoot/actions/runs/44715079355) passed. Production main is bcc19d6; production Pages deployment 75207a07 succeeded and aliases https://legitloot.site.
+- PR #20 head 6e2e51b: 58/58 pass (run 44661202504). PR #22 head 332ca07: 64/64 pass (run 44661225287), but its ZVHM identity assertion is invalid under §0.4. PR #22 is two commits ahead of PR #20.
+- PR #23 head 33a5240: draft, no Actions run. Cloudflare deployment 5c3dd1bf is preview-only, pages.dev alias, empty environment variables; inherited account/auth still targets production.
+- PR #25 head 135607e: 54/54 Node tests and Deno type-check/handler tests passed (runs 44713338718, 44713338856). Its test guard excludes environment snapshots; new PR comment 7037024928 records the active staging-source gap. Relative to integration it is 17 ahead / 22 behind by ancestry; behind-side changes are docs/README-only.
+- PR #20 is 15 ahead / 61 behind current integration by ancestry; behind-side changes are docs/README-only. Its description remains stale; comment 7036351593 records the correction.
+- PR #21 (Claude-authored head 970dbbf) and PR #24 (head 6cb0a36) were merged by owner account demonanic. PR #21's production Pages deployment 6598c4c6 succeeded at 00:24:36 UTC; PR #24's production deployment 75207a07 succeeded at 04:11:50 UTC.
+- Supabase production: wall-url v2 and postback v4 are inert 410; callback EXECUTE is revoked for checked roles. Staging: wall-url v5 ACTIVE/JWT and postback v8 ACTIVE/no-JWT record-only; their deployed source exactly matches the environment snapshots. No callbacks were invoked.
+- Only standalone Claude handoff found is docs/CLAUDE_START_HANDOFF_M1.md. Verified Claude-authored commits include PR #21/#20/#22/#23; PR #25 test commit 135607e is authored by demonanic.
+- This check made no PR merge, deployment, Supabase settings/secrets/grants/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance, or money movement. It added one actionable PR #25 comment and updated shared documentation only.
 
 ---
+
+## Historical M1 visual-rebuild baseline---
 
 ## Historical M1 visual-rebuild baseline (retained for context)
 
@@ -764,3 +769,15 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Correction to the 04:39 ET status: do not describe Zombies vs Heavy Metal as verified/live. Production main and PR #22's play page load https://demonanic.github.io/Legitloot-2/ from zombies-vs-heavy-metal.html. Platform Build Spec §0.4 explicitly excludes that repo as Zombie Invasion Defense, not the selected ZVHM game.
 - PR #22's tests/launch-games.test.mjs asserts the excluded URL, so its 64/64 pass does not verify the correct game. Blocking comments 7036549802 and 7036564753 were added. Keep ZVHM unavailable/unverified until the owner-approved source/build is identified.
 - Rocket 2 Nowhere remains a separate playable preview artifact, with device-local saves only and no shared account/LC connection.
+
+
+## 2026-11-20 05:13 ET — Independent Sync Watch #8
+
+- Integration 56b98e4 passed Actions run 44715079355; production main is bcc19d6, with Cloudflare deployment 75207a07 successful. All 26 branches report protected:false.
+- Production Offerwall.GG runtime remains contained, but main's wall-url source is active. Staging wall-url v5 is active/JWT with production-origin CORS; staging postback v8 is active/no-JWT and record-only with unsigned reconciliation metadata. Both deployed staging sources exactly match the environment snapshot files.
+- PR #25's recursive guard deliberately excludes supabase/environments/*; those excluded files are the exact active staging deployment sources. Added comment 7037024928 requesting a separate deployment-source/manifest guard.
+- PR #21's Claude-authored wrapper was merged by owner account and deployed, but it embeds the repository §0.4 excludes as Zombie Invasion Defense. PR #22's test asserts that URL; ZVHM identity remains blocked. RXT2 remains preview-only.
+- PR #23 preview remains production-connected for Account/auth despite preview classification and empty environment variables. Do not use those routes.
+- Wallet RPCs still expose cash USD buckets; staging labels game credits LLC. Production wallet-summary v4 differs from the RPC response shape and has no current page caller found by repository code search.
+- Taplayad App 10066 remains unintegrated pending written permission and a complete transaction/reversal/retry contract.
+- No gated actions occurred. Only read-only inspection, one PR comment, and documentation updates were performed.

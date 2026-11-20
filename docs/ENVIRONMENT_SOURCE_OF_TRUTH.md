@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 04:39 ET
+**Last verified:** 2026-11-20 05:13 ET
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -19,7 +19,7 @@
 
 ## 2. Verified Supabase inventory
 
-Read-only connector inventory on 2026-11-19:
+Read-only connector inventory rechecked 2026-11-20 05:13 ET (function versions below are current; migration-history counts remain the 2026-11-19 observation):
 
 ### Production — `gkbqderyjcuxnjbsiffb`
 
@@ -27,9 +27,9 @@ Read-only connector inventory on 2026-11-19:
 - Database engine: PostgreSQL 17
 - Applied migration history: 7 entries, latest version `20261108081650` (`secure_offerwall_callback_tables`)
 - Deployed Edge Functions:
-  - `offerwall-gg-postback` v3, verify_jwt=false
-  - `wallet-summary` v4, verify_jwt=false
-  - `offerwall-gg-wall-url` v1, verify_jwt=true
+  - `offerwall-gg-postback` v4, verify_jwt=false (inert HTTP 410)
+  - `wallet-summary` v4, verify_jwt=false (cash + gameCredits/LLC response; no current page caller found)
+  - `offerwall-gg-wall-url` v2, verify_jwt=true (inert HTTP 410)
 - Tables observed: `public.profiles`; private ledger, provider, reward allocation, payout, audit, platform settings and Offerwall.GG conversion/callback tables. All listed tables reported RLS enabled.
 - Observed row counts: `public.profiles` 2; private journal transactions/entries 0; Offerwall.GG conversion/callback records 0. Counts are point-in-time metadata, not a full data audit.
 
@@ -903,3 +903,26 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Production main's zombies-vs-heavy-metal.html iframe points to https://demonanic.github.io/Legitloot-2/. The owner-locked Platform Build Spec §0.4 excludes demonanic/Legitloot-2 as Zombie Invasion Defense, not the selected ZVHM launch title. The production route must not be treated as a verified ZVHM build.
 - PR #22's games.html links its ZVHM card to the same wrapper and tests/launch-games.test.mjs explicitly asserts the excluded URL. PR #22 remains blocked pending the actual approved ZVHM source/build and a corrected regression test.
 - Rocket 2 Nowhere is packaged at games/rocket-2-nowhere/index.html in PR #22/#23 and remains preview-only, device-local.
+
+
+## 2026-11-20 05:13 ET — Current environment and source verification
+
+### Cloudflare Pages
+
+- Production project legitloot remains bound to main; deployment 75207a07 on commit bcc19d6 completed successfully at 2026-11-20 04:11:50 UTC and aliases https://legitloot.site.
+- The PR #23 deployment 5c3dd1bf is environment=preview, branch claude/rxt2-main, commit 33a5240, alias https://claude-rxt2-main.legitloot.pages.dev, and env_vars={}. Its inherited Account/auth bundle still hardcodes production Supabase. Preview classification does not isolate the backend.
+- Integration commit 56b98e4 has an automatic branch preview only; it is not the production deployment.
+
+### Current Supabase function inventory
+
+- Production gkbqderyjcuxnjbsiffb: offerwall-gg-postback v4/no-JWT (inert 410); offerwall-gg-wall-url v2/JWT (inert 410); wallet-summary v4/no-JWT (still returns cash USD plus gameCredits/LLC).
+- Staging scmnxcsggquwtuyyjnnj: offerwall-gg-postback v8/no-JWT (record-only); offerwall-gg-wall-url v5/JWT (active launcher, CORS allows production origin); cpagrip-attribution v5/JWT; admin-dashboard v7/JWT; payout-simulator v6/JWT; provision-initial-owner v7/JWT.
+- The deployed staging wall-url and postback source files match their respective supabase/environments/staging/functions snapshots exactly. Those snapshots are intentionally excluded by tests/staging-function-origins.test.mjs; this leaves a deployment-source test gap recorded in PR #25 comment 7037024928.
+- Production callback routines remain SECURITY DEFINER, but checked EXECUTE privileges for service_role/anon/authenticated are false. Staging callback routines remain SECURITY DEFINER and service_role-executable, but their live definitions contain no journal, ledger, or LootCoin references. No callbacks were invoked.
+- Production and staging public.get_wallet_summary() both return cash USD buckets. Production returns lootCoins.available; staging returns gameCredits with currency LLC. The separate production wallet-summary v4 Edge Function returns gameCredits/LLC and cash, differing from the production RPC contract; repository code search found no current page caller.
+
+### Repository and policy boundary
+
+- Integration is 56b98e4; production main is bcc19d6; 26 branch refs all report protected:false.
+- Production main's Offerwall wall-url source remains active despite deployed v2 being inert; integration canonical wall-url and postback sources remain active; PR #25 changes only wall-url and remains draft. Staging deployment remains active as detailed above.
+- No production or staging deployment, Supabase setting/secret/grant/schema/data mutation, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred in this run.

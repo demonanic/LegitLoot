@@ -1350,3 +1350,33 @@ The earlier statement that ZVHM is live on production as early access is correct
 - PR #22 is not ready for owner acceptance until the actual selected ZVHM source/build is identified and the card/route/test are corrected. Do not use the excluded repo or label it as ZVHM.
 - Rocket 2 Nowhere is a separate self-contained in-repo preview build at games/rocket-2-nowhere/index.html; device-local saves only, no shared account or LC.
 - Blocking review comments: PR #22 comments 7036549802 and 7036564753. No code or deployment was changed.
+
+
+## 2026-11-20 05:13 ET — Independent Sync Watch #8
+
+### Repository, branches, PRs, and Claude handoffs
+
+- Production main is bcc19d6; authorized integration is 56b98e4. The repository has 26 branches and GitHub reports protected:false for all. Integration Actions run [44715079355](https://github.com/demonanic/LegitLoot/actions/runs/44715079355) passed.
+- Open PRs: #20 (58/58), #22 (64/64 but blocked by wrong ZVHM identity assertion), #23 (draft/no CI, production-connected Account/auth preview), #25 (draft, 54/54 Node plus Deno checks; staging deployment-source coverage gap), and stale #9. PR #21 and #24 were merged by owner account demonanic.
+- PR #21 head 970dbbf is a verifiable Claude-authored commit; it was merged by the owner account at 00:24:04 UTC and deployed to production at 00:24:36 UTC. Its wrapper embeds demonanic/Legitloot-2, which Platform Build Spec §0.4 explicitly excludes as Zombie Invasion Defense. Do not call this the selected ZVHM game. PR #22's tests/launch-games.test.mjs asserts that excluded URL; comments 7036549802 and 7036564753 remain blocking.
+- PR #23 Cloudflare deployment 5c3dd1bf is environment=preview, branch claude/rxt2-main, alias claude-rxt2-main.legitloot.pages.dev, and has empty environment variables. Its Account/auth bundle inherits production Supabase from main. Comment 7036403044 remains current.
+- The only standalone Claude handoff found is docs/CLAUDE_START_HANDOFF_M1.md. No newer handoff note or Claude-authored commit after PR #23 was verified. PR #25 commit 135607e is authored by demonanic, not Claude.
+
+### Offerwall.GG — production, staging, and source integrity
+
+- Production Supabase: wall-url v2 and postback v4 are deployed inert HTTP 410 handlers. Checked private/public callback routine EXECUTE is false for service_role, anon and authenticated. Production Cloudflare deployment 75207a07 on bcc19d6 succeeded at 04:11:50 UTC.
+- Production main's wall-url source still contains the old active launcher; main's postback source is inert. Integration canonical wall-url and postback sources remain active. PR #25 aligns only wall-url and remains draft.
+- Staging Supabase: wall-url v5 ACTIVE/JWT; postback v8 ACTIVE/no-JWT record-only. I re-read deployed source and compared it byte-for-byte with supabase/environments/staging/functions/offerwall-gg-wall-url/index.ts and offerwall-gg-postback/index.ts; both are exact matches. Wall-url CORS allows https://legitloot.site and creates signed provider URLs. Postback HMAC covers only userId:transactionId:currencyAmount; offer/goal/payout/timestamp metadata is unsigned. Live callback routines are service_role-executable but contain no journal/ledger/LootCoin references; callback/conversion counts remain zero.
+- **New PR #25 review finding:** tests/staging-function-origins.test.mjs deliberately excludes supabase/environments/* snapshots, but those snapshots exactly match the active staging deployments. Added actionable comment [7037024928](https://github.com/demonanic/LegitLoot/pull/25#issuecomment-7037024928) requesting a separate deployment-source/manifest guard. No function or setting was changed.
+
+### Wallet, launch scope, and provider readiness
+
+- Production and staging public.get_wallet_summary() still return cash USD buckets. Production RPC uses lootCoins.available; staging returns gameCredits labeled LLC. Deployed production wallet-summary v4 also returns cash and gameCredits/LLC, a different response shape from the production RPC; repository code search found no current page caller. Production Account/Rewards/Earn pages and main account-auth.js still expose cash/withdrawal or provider-to-LC behavior.
+- Rocket 2 Nowhere remains a preview-only in-repo build with device-local saves and no shared account/LC integration. The selected ZVHM source remains unverified; the production wrapper is the excluded ZID repository.
+- Taplayad App 10066 remains unintegrated. Current docs specify md5(app_id . user_id . api_secret), status 1/2 and any-2xx acknowledgement, but no transaction-ID macro or retry schedule. The sample parameter mismatch remains; direct legacy postback page returns 404. Current Terms do not establish App-10066-specific incentivized-traffic permission. Preserve https://offerwall.tplayad.com/10066/{user_id}; never map publisher points or callback reward/payout into LC.
+
+### Actions and restrictions
+
+- This run was read-only for GitHub, Supabase and Cloudflare. One actionable comment was added to PR #25. Shared documentation was updated on the authorized integration branch.
+- No PR merge, production/staging deployment, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
