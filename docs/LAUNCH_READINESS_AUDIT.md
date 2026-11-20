@@ -1431,3 +1431,11 @@ No PR was merged and no deployment, Supabase setting/secret/grant/schema/data ch
 - **Rocket 2 Nowhere is live:** production `main` `801f3e7` (PR #23, owner-approved); production deployment confirmed. Early access, device-local saves, no account/LC connection.
 - **ENV-07 open (owner decision):** main-based previews inherit `account-auth.js` that targets production Supabase and exposes signup; see `docs/ENVIRONMENT_SOURCE_OF_TRUTH.md` 2026-11-20 10:30 ET. Do not use Account/auth routes on them.
 - **M2-T4 remains IN PROGRESS:** shared account/session handoff, cloud saves and server-verified idempotent LC-event ingestion are not implemented.
+
+## 2026-11-20 11:14 ET — Recheck (10:30 ET entry above preserved)
+
+- Production is `main` @ `801f3e7`, Cloudflare deployment `fe4c0f22`. PR #23 is merged; open PRs are #9, #20, #22, #25, #26 and #27.
+- ENV-07 remains open: Cloudflare preview `fdf6b609` (`main@801f3e7`, `main.legitloot-preview.pages.dev`, no environment variables) inherits `account-auth.js` that hardcodes production Supabase and exposes signup. Keep Account/auth routes off it. Owner decision pending on a separate fail-closed PR against `main`.
+- GAME-02 stays resolved. PR #22's ZVHM URL assertion is consistent with the owner decision (comment 7041463948).
+- M2-T4 remains IN PROGRESS: shared account/session handoff, cloud saves and server-verified idempotent LC-event ingestion are not implemented.
+- Branch protection: 26 of 28 refs checked (05:13 ET, all unprotected); two newer refs unchecked.

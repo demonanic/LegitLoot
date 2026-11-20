@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 10:30 ET (production `main` `801f3e7`; see the 2026-11-20 10:30 ET section at the end for current production and preview-isolation evidence)
+**Last verified:** 2026-11-20 11:14 ET (production `main` `801f3e7`, Cloudflare production deployment `fe4c0f22`; see the 2026-11-20 10:30 ET and 11:14 ET sections at the end)
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -980,3 +980,10 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Production `main` is `801f3e7ba5564c759228f02b8118765eaa7e0687` (PR #23, Rocket 2 Nowhere; owner-approved). Cloudflare `legitloot` production deployment is commit `801f3e7`, environment `production`, alias https://legitloot.site (evidence: PR #22 comment 7041993494). Earlier `bcc19d6` entries above are historical.
 - Live fetches after the merge returned HTTP 200 for `/rocket-2-nowhere`, `/games/rocket-2-nowhere/index.html` and `/games` with the title present and no prototype names.
 - **Preview isolation (ENV-07, open):** Cloudflare `legitloot-preview` has an `environment=preview` deployment from branch `main`, commit `801f3e7`, alias `https://main.legitloot-preview.pages.dev`, no environment variables. Main `account-auth.js` hardcodes `https://gkbqderyjcuxnjbsiffb.supabase.co` (line 2) and exposes `client.auth.signUp()` (lines 111-116), so the Account/sign-up/reset routes on that preview can contact production Supabase. Do not use Account/auth routes there. The integration branch's `account-auth.js` requires the exact staging configuration and fails closed. A separate owner-approved PR against main is required. No Cloudflare or Supabase setting was changed.
+
+## 2026-11-20 11:14 ET — Recheck of production deployment and preview isolation (10:30 ET entry above preserved)
+
+- Current Cloudflare production deployment is `fe4c0f22` on `main` @ `801f3e7`, alias https://legitloot.site. `75207a07` was the earlier `bcc19d6` deployment.
+- ENV-07 reverified open: Cloudflare `legitloot-preview` deployment `fdf6b609` is an `environment=preview` deployment from `main` @ `801f3e7`, alias `main.legitloot-preview.pages.dev`, with no environment variables. Main `account-auth.js` hardcodes production Supabase and exposes signup. Keep Account/auth routes off that preview. No setting was changed.
+- Branch refs: 28 enumerated at 11:14 ET; the last protection check covered 26 refs at 05:13 ET (all `protected:false`); the two newer refs are unchecked.
+- Source: DaVinci review of PR #27 (comment 7044587804). Recorded by Claude; not independently re-queried by Claude.
