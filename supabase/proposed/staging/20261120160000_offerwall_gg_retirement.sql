@@ -8,7 +8,7 @@
 -- What it does (non-destructive, no data deleted; forward-only):
 --   1. Replaces both callback routines (private + public wrappers) with bodies that
 --      always raise, so no Offerwall.GG traffic can be processed or recorded.
---   2. Revokes EXECUTE on all four from every role, including service_role.
+--   2. Revokes EXECUTE on all four from PUBLIC, anon, authenticated and service_role (the postgres function owner retains inherent owner execution).
 --   3. Marks the disabled provider row 'retired' and clears reward-model, approval and
 --      terms metadata. The row is kept for audit.
 -- It does NOT touch: private.offerwall_gg_callback_events, private.offerwall_gg_conversions,

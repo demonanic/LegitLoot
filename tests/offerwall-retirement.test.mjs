@@ -143,3 +143,12 @@ test("the website registry has no Offerwall.GG record, name, launch or origin", 
   assert.match(registry, /state: "pending_approval"/);
   assert.ok(!/id: "cpagrip"/.test(registry), "CPAGrip is not part of the initial registry");
 });
+
+test('proposed SQL and contract do not claim EXECUTE is revoked from literally every role', () => {
+  const sql = readFileSync('supabase/proposed/staging/20261120160000_offerwall_gg_retirement.sql', 'utf8');
+  const doc = readFileSync('docs/security/OFFERWALL_GG_RETIREMENT.md', 'utf8');
+  for (const text of [sql, doc]) {
+    assert.doesNotMatch(text, /from (every|all) roles?/i);
+    assert.match(text, /postgres function owner retains inherent owner execution/);
+  }
+});
