@@ -109,11 +109,23 @@ test("WALLET-01 source (not deployed): LC-only Edge Function and proposed SQL ca
   assert.equal(parseLegitCoins({ lootCoins: { available: "125000", provisional: "0", deferred: "0", withdrawable: false } }), 12.5);
 });
 
-test("public sign-up stays closed: no create-account form or signUp call (Terms/Privacy unpublished)", () => {
+test("sign-up UI stays closed: no create-account form or client signUp call (backend registration status unverified/owner-gated)", () => {
   const html = read("account.html");
   const js = read("account-auth.js");
   assert.doesNotMatch(html, /id="signup-form"|data-auth-tab="signup"|CREATE ACCOUNT/i);
   assert.doesNotMatch(js, /auth\.signUp|signup-form/);
   assert.match(html, /SIGN-UP IS NOT OPEN YET/);
+  assert.doesNotMatch(html, /create an account|not collecting personal information/i);
   assert.match(html, /data-auth-tab="signin"/);
+});
+
+test("WALLET-01 edge function source mirrors the proposed RPC filters (static)", () => {
+  const fn = read("supabase/functions/wallet-summary/index.ts");
+  assert.match(fn, /\.eq\("wallet_kind", "game_credits"\)/);
+  assert.equal((fn.match(/\.eq\("currency_code", "LC"\)/g) || []).length, 2);
+  assert.match(fn, /\.eq\("journal_transactions\.status", "posted"\)/);
+  const sql = read("supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql");
+  assert.match(sql, /grant execute on function public\.get_wallet_summary\(\) to authenticated, service_role/);
+  assert.match(sql, /Precondition/);
+  assert.doesNotMatch(sql, /no table, grant or data change/);
 });

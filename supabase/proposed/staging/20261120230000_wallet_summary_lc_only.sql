@@ -1,7 +1,8 @@
 -- PROPOSED, NOT APPLIED. DO NOT APPLY without independent staging-ref and rollback review.
 -- WALLET-01: LC-only get_wallet_summary() response. Removes cash/USD buckets and the
 -- "LLC" label from the authoritative wallet API. Replaces the function body only;
--- no table, grant or data change. Response key is `lootCoins`, which wallet-summary.js
+-- no table or data change. The trailing REVOKE/GRANT statements only restate the ACL that is live today
+-- (authenticated + service_role EXECUTE; anon/PUBLIC none) and must be preceded by the precondition check below. Response key is `lootCoins`, which wallet-summary.js
 -- already parses (gameCredits is still accepted for the unchanged environments).
 -- Production and staging still return the cash contract until this is separately approved.
 
@@ -54,5 +55,9 @@ begin
 end;
 $function$;
 
+-- Precondition (run read-only before applying; expect authenticated=true, service_role=true, anon=false, public=false):
+--   select has_function_privilege('authenticated','public.get_wallet_summary()','execute'),
+--          has_function_privilege('service_role','public.get_wallet_summary()','execute'),
+--          has_function_privilege('anon','public.get_wallet_summary()','execute');
 revoke all on function public.get_wallet_summary() from public, anon;
-grant execute on function public.get_wallet_summary() to authenticated;
+grant execute on function public.get_wallet_summary() to authenticated, service_role;

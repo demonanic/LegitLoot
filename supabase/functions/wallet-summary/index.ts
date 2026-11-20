@@ -42,7 +42,9 @@ Deno.serve(async (req: Request) => {
     .from("ledger_accounts")
     .select("id, account_code, wallet_kind, currency_code")
     .eq("owner_user_id", authData.user.id)
-    .eq("is_system", false);
+    .eq("is_system", false)
+    .eq("wallet_kind", "game_credits")
+    .eq("currency_code", "LC");
 
   if (accountError || !accounts) return json({ error: "Wallet summary unavailable" }, 503);
   const ids = accounts.map((account) => account.id);
@@ -50,8 +52,10 @@ Deno.serve(async (req: Request) => {
 
   const { data: entries, error: entryError } = await admin
     .from("journal_entries")
-    .select("account_id, direction, amount, wallet_kind, currency_code")
-    .in("account_id", ids);
+    .select("account_id, direction, amount, wallet_kind, currency_code, journal_transactions!inner(status)")
+    .in("account_id", ids)
+    .eq("currency_code", "LC")
+    .eq("journal_transactions.status", "posted");
 
   if (entryError || !entries) return json({ error: "Wallet summary unavailable" }, 503);
 
@@ -72,7 +76,8 @@ Deno.serve(async (req: Request) => {
     return account ? (balances.get(account.id) ?? 0n).toString() : "0";
   };
 
-  // LC-only contract (WALLET-01, source only, NOT deployed): no cash/USD
+  // LC-only contract (WALLET-01, source only, NOT deployed, NOT executed: the posted-status embed
+  // must be verified against staging before any deploy; accounts/entries mirror the proposed RPC filters): no cash/USD
   // buckets and no currency label. Cash is deferred; LC is not cash-convertible.
   return json({
     lootCoins: {

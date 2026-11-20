@@ -97,6 +97,8 @@
       button.disabled = false;
     }
   });
+  // UI-only closure: the sign-up form/handler is not wired. Supabase Auth project-level
+  // disable_signup is NOT read or changed here and remains unverified/owner-gated.
   // Sign-up is intentionally not wired: public onboarding stays closed until Terms, Privacy
   // and account deletion/export are approved (DaVinci review 6000758245).
   $("reset-form").addEventListener("submit", async (event) => {

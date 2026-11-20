@@ -2,10 +2,11 @@
 // value players see: their Legit Coins (LC) balance.
 //
 // The RPC contract currently differs by environment (audit MIG-01):
-// - staging applied supabase/migrations/20261109010000_align_wallet_summary_response.sql,
-//   which returns the LC balance at gameCredits.available;
-// - the production lineage ends at 20261108120000_standard_lootcoins_wallet.sql,
-//   which returns it at lootCoins.available.
+// - staging (applied 20261109050922 align_wallet_summary_response_with_staging_frontend; repo
+//   file 20261109010000_align_wallet_summary_response.sql) returns the LC balance at gameCredits.available;
+// - production (applied 20261108081619 standard_lootcoins_wallet; repo file
+//   20261108120000_standard_lootcoins_wallet.sql) returns it at lootCoins.available.
+// Repo-to-applied SQL equivalence is not demonstrated; see tests/wallet-summary.test.mjs.
 // Both read the `lootcoins_available` LC ledger account. Amounts are integer
 // atom strings; LC accounts use currency_scale 10000 (1 LC = 10,000 atoms),
 // set by the offerwall_gg_callback_pipeline migration in both lineages.
