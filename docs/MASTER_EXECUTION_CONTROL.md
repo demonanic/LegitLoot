@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 06:28 ET
+**Last updated:** 2026-11-20 06:36 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub's branch API reports `protected:false` for all 26 branches as of 2026-11-20 05:13 ET. Do not describe `main` as technically protected.
