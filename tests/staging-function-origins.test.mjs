@@ -38,7 +38,8 @@ test("canonical cpagrip-attribution differs from the deployed snapshot only by t
 
 test("Offerwall.GG wall URL source is inert and cannot create a provider wall", () => {
   const entrypoint = readFileSync(new URL("supabase/functions/offerwall-gg-wall-url/index.ts", root), "utf8");
-  const handler = readFileSync(new URL("supabase/functions/offerwall-gg-wall-url/handler.ts", root), "utf8");
+  const handler = readFileSync(new URL("supabase/functions/offerwall-gg-wall-url/handler.mjs", root), "utf8");
+  assert.match(entrypoint, /from "\.\/handler\.mjs"/);
   assert.match(entrypoint, /Deno\.serve\(handler\)/);
   assert.doesNotMatch(
     entrypoint + handler,
