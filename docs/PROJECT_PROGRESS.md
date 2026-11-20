@@ -700,3 +700,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Cloudflare's automatic PR/branch builds are `environment=preview`, pages.dev-only, with no production domain aliases. The PR branch pins Supabase to staging and its auth code fails closed unless the exact staging config is present.
 - Current Taplayad docs have a parameter-name mismatch (`offer={offer_id}` sample vs PHP `$_GET['offer_id']`), no transaction-ID macro, a signature that omits transaction/payload fields, and no documented retry schedule. Status 2 is a reversal but no stable original transaction reference is specified. Current Terms do not establish App-10066 incentivized-traffic permission. Keep App 10066 record-only and never map provider points/reward/payout into LC.
 - Production cash/withdrawal fields, provider-to-LC copy, incomplete Terms/Privacy, unverified sign-up pause, and missing shared account/save/LC-event integration remain launch blockers. No production/staging data, settings, secrets, callbacks, provider agreements or financial activity changed.
+
+
+## 2026-11-20 01:49 ET — Final read-only recheck
+
+- Integration branch head is `432060b` (Actions 50/50); production main is `bcc19d`. PR #25 is draft, head `c4cf11f`, base `e868121` (five documentation-only commits behind current integration), mergeable. Its full suite passed 54/54; no function deployment was performed.
+- Production Offerwall.GG runtime remains contained: wall-url v2 and postback v4 return inert 410; callback routine EXECUTE is revoked for service_role/anon/authenticated. Production main source still contains the old active wall-url implementation.
+- Staging wall-url v5 remains ACTIVE/JWT, reads secrets and can create wall URLs for authenticated callers; its CORS allow-list includes the production site. The player registry is disabled. Staging postback v8 and both callback routines are record-only with no ledger/journal/LC references. No staging deploy was performed.
+- Both provider registries still have Offerwall.GG disabled with null approval/terms but stale LC reward-model metadata; staging has CPAGrip disabled and no Taplayad row. No data was changed.
+- Current and legacy Tplayad docs conflict on signature fields, transaction identity, response codes and retries; App-10066 protocol and incentivized-traffic permission require written provider confirmation. Keep Taplayad record-only.
+- PR #20/#22 are ready for owner review for integration acceptance only (58/58 and 64/64); their 44-commit lag is docs-only. PR #23 is draft/no CI with production-targeting Account/auth in its main-based preview; PR #9 is stale.
+- Production cash/withdrawal wallet fields, provider-to-LC copy, incomplete Terms/Privacy, unverified sign-up pause and incomplete shared game/account/LC-event integration remain launch blockers. No gated action was performed.
