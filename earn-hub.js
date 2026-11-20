@@ -70,7 +70,7 @@
   const openCount = providers.filter(canOpen).length;
   if (summary) {
     summary.textContent = openCount === 0
-      ? "No earning provider is open to players right now, so nothing here is available yet. Each provider's status is shown on its card."
+      ? "No Hustle provider is open to players right now, so nothing here is available yet. Each provider's status is shown on its card."
       : `${openCount} provider${openCount === 1 ? " is" : "s are"} open to signed-in players. Partner offers do not award Legit Coins.`;
   }
 
