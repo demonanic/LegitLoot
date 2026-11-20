@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized  
-**Last updated:** 2026-11-20 12:51 ET
+**Last updated:** 2026-11-20 13:30 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API reports all 28 refs `protected:false` and repository rulesets are empty as of 2026-11-20 12:51 ET. Do not describe `main` as technically protected.
@@ -92,7 +92,7 @@ The release candidate must truthfully provide:
 6. PR #23 published with owner approval (main `801f3e7`). Before any account testing on main-based previews, a separate owner-approved PR must make main's auth target fail closed or staging-only (ENV-07).
 7. Record exact evidence and unresolved dependencies. No production release without separate owner approval.
 
-**Immediate next action:** Keep Offerwall.GG disabled; no merge/deploy without the owner gate. Claude: (1) finish documentation reconciliation in PR #27; (2) bring DaVinci a bounded task definition for the server-verified, idempotent, record-only game-event path (staging, no LC awards until owner-approved challenge values); (3) prepare, only if the owner approves, the main-based preview-auth guard PR. DaVinci: review the exact head of PR #27. PR #25 remains draft; comment 7037024928 records the test/deployment-source boundary.
+**Immediate next action:** Keep Offerwall.GG disabled; no merge/deploy without the owner gate. Claude: (1) sync PR #27 and keep its records current; (2) PR #28 (draft, main-based ENV-07 guard) review fixes; (3) one consolidated Offerwall.GG retirement PR on the integration branch per `docs/security/OFFERWALL_GG_RETIREMENT.md`; (4) M2-T4b-R1 is accepted design-only: next bounded task is staging registry rows (`development`/unlisted/no launch URL) after DaVinci accepts it. DaVinci reviews exact SHAs.
 
 ### Supporting M2 work
 
@@ -1834,3 +1834,12 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **GitHub coordination:** 28 refs enumerated; all report `protected:false`; repository rulesets are empty. Open PRs: #9, #20, #22, #25, #26, #27; #23 is merged. Exact-head Actions: #20 58/58, #22 64/64, #26 59/59, PR #27 head `a6a01e9` passed run `44772928022`. PR #27 is 10 commits ahead / 5 behind current integration `a4d1b538` and reports `mergeable=false` / dirty; rebase before acceptance. No Claude-authored Offerwall.GG retirement code/PR was found; PR #25 remains draft and is superseded by the full-retirement contract.
 - **Wallet/launch blockers remain:** production `public.get_wallet_summary()` still returns cash USD buckets alongside LC; production Account/Rewards/Earn copy still exposes cash/withdrawal or provider-to-LC language. Terms/Privacy, account deletion/export, monitored support, signup pause, monitoring, backup/PITR and rollback evidence remain incomplete.
 - No PR was merged and no manual or production deployment was initiated. The documentation-only integration push automatically triggered Cloudflare branch-preview builds in both Pages projects for `ac224c9`; both were `environment=preview` on the integration branch, with no production deployment. No Supabase settings/secrets/grants/schema/data changed, and no callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 13:30 ET — Claude handoff: PR #28 corrections, PR #27 record sync, M2-T4b-R1 amendments recorded
+
+- **PR #28 (DRAFT → `main`, prepare-only):** addressed DaVinci's 13:08 ET review. Removed unverified `www.legitloot.site` from the allowlist (negative test added); the production-path test no longer swallows exceptions and now asserts `legitloot.site` initializes without error, creates one client and wires the sign-in/sign-up/reset/recovery/sign-out handlers plus auth-state and session calls, while blocked hosts wire nothing; added a non-deploying Node 22 workflow (`node --check`, `node --test`, patch whitespace check). Not merged, not deployed. The existing `main.legitloot-preview.pages.dev` deployment remains unguarded until the owner approves a production release.
+- **M2-T4b-R1:** accepted with DaVinci's amendments (design only); recorded in `CLAUDE.md` and the immediate-next-action line above. No code, registry row or endpoint was created.
+- **Records:** `CLAUDE.md` current summary refreshed (history preserved), `PROJECT_PROGRESS.md` now lists PR #28 and 29 refs, Master Control next-action updated.
+- **Next:** one consolidated Offerwall.GG retirement PR on the integration branch per `docs/security/OFFERWALL_GG_RETIREMENT.md`. Owner gates unchanged.
+

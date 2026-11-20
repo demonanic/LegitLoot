@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 12:51 ET
+**Updated:** 2026-11-20 13:30 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on `legitloot.site` in early access with device-local saves and no account/LC connection. Remaining: shared account/session handoff, cloud saves, trusted server-verified LC events. Offerwall.GG permanent retirement is a security subtask; the owner reports postback URL removal from all attempted/successful placements, but technical retirement and placement disable/delete are not verified.
 **Integration branch:** build/legitloot-neon-synthwave; application baseline 56b98e4, followed by documentation-only Sync Watch updates
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-20 12:51 ET):** #9 stale draft; #20 Hustle/public copy (58/58); #22 game integration (64/64); #25 Offerwall.GG source alignment (draft, superseded); #26 Taplayad-only pending registry (59/59, stacked on #20); #27 docs reconciliation (exact-head Actions success, but branch diverged/dirty). PR #23 merged to production as `801f3e7`.
+**Current open PRs (2026-11-20 13:30 ET):** #9 stale draft; #20 Hustle/public copy (58/58); #22 game integration (64/64); #25 Offerwall.GG source alignment (draft, superseded); #26 Taplayad-only pending registry (59/59, stacked on #20); #27 docs reconciliation (5 documentation files, clean/mergeable after sync to integration `a529b35`); #28 DRAFT against main (ENV-07 account-auth host guard, prepare-only, owner approval required to merge)
 
 ## Current owner-locked operating rules
 
@@ -32,7 +32,7 @@
 - **GAME-02 — RESOLVED 2026-11-20:** `demonanic/Legitloot-2` is the owner-approved Zombies vs Heavy Metal build; Rocket 2 Nowhere is also published. Both are early access with device-local saves and no account/LC connection. Shared account/session, cloud saves and trusted LC events remain open.
 - **ENV-07 — CRITICAL:** PR #23's Cloudflare preview is correctly classified as preview and has a pages.dev-only alias, but its bundle uses main account-auth.js with production Supabase URL and active signup; deployment environment variables are empty. Do not use its Account/auth routes. Comment 7036403044 records the blocker.
 - **HUSTLE/TAPLAYAD — HIGH:** Owner App 10066 template remains https://offerwall.tplayad.com/10066/{user_id}. Current docs use md5(app_id . user_id . api_secret), status 1/2 and any-2xx acknowledgement; no transaction-ID macro or retry schedule is documented. The sample parameter mismatch remains; direct legacy postback page returns 404. Current Terms do not establish App-10066-specific incentivized-traffic permission. No publisher settings or terms were accepted; never map provider points/reward/payout to LC.
-- **GOV-01 — HIGH:** GitHub reports all 28 refs `protected:false`; repository rulesets are empty. Owner release gates are not technically enforced.
+- **GOV-01 — HIGH:** GitHub reports all 29 refs `protected:false` (13:08 ET); repository rulesets are empty. Owner release gates are not technically enforced.
 - **LEGAL/SUPPORT/OPS:** Terms/Privacy, monitored support, account deletion/export, signup-pause verification, monitoring, backup/PITR, and rollback evidence remain incomplete or owner-gated.
 
 ## Current verification status
