@@ -1842,4 +1842,3 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **M2-T4b-R1:** accepted with DaVinci's amendments (design only); recorded in `CLAUDE.md` and the immediate-next-action line above. No code, registry row or endpoint was created.
 - **Records:** `CLAUDE.md` current summary refreshed (history preserved), `PROJECT_PROGRESS.md` now lists PR #28 and 29 refs, Master Control next-action updated.
 - **Next:** one consolidated Offerwall.GG retirement PR on the integration branch per `docs/security/OFFERWALL_GG_RETIREMENT.md`. Owner gates unchanged.
-
