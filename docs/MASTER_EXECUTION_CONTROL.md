@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 17:03 ET (22:03 UTC) (PR #31; cash rule conflict open)
+**Last updated:** 2026-11-21 18:15 ET (PR #31; cash rule reconciled by the owner at 18:08 ET)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
 **Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 32 branches and 10 open PRs, verified 2026-11-21 17:03 ET (22:03 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `0a7d2fb` (62 files / 94 commits, verified 2026-11-21 17:03 ET (22:03 UTC); earlier records `5c33c78` and `929f58a` are historical).
@@ -56,7 +56,7 @@ The release candidate must truthfully provide:
 - Central account sign-in, recovery, and a working deletion/export path before public account onboarding.
 - The website as the authoritative LC wallet; no game-side spendable wallet.
 - LC earned only from verified in-game milestones, weekly challenges, and seasonal events.
-- No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance.
+- No cash withdrawals or payouts (owner-gated), no LC transfer or USD peg, and no provider-offerwall-to-LC issuance. A separate USD cash balance credited only by verified Hustle completions is approved and never mixes with LC (owner, 2026-11-21 18:08 ET, replacing the earlier objective "No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance"; spec §0.5).
 - A verified playable game, or an honestly labelled early-access portal.
 - Approved Terms, Privacy, support route, monitoring, backup/recovery expectations, and rollback plan.
 - No live financial activity or provider activation without the applicable owner gate.
@@ -2342,3 +2342,4 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Sync Watch #39 follow-up (about 17:00 ET; the earlier "17:05" was wrong):** header facts refreshed (PR #30 `929f58a`, 10 open PRs, 32 branches); EST record-edit time separated from its verification time; LRA points to the current review. **Open conflict, not resolved by this PR:** §2's launch objective ("No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance") contradicts issue #2's two-balance decision. Per the charter, agents keep cash API/UI/credits/payouts unchanged until the owner explicitly reconciles them; the owner has been asked.
 - **Sync Watch #39 re-review follow-up (2026-11-21 17:03 ET (22:03 UTC)):** the four owner-decision blocks and spec §0.5 now say the cash rule is a conflict still open, with no cash changes until Sam reconciles it; header refreshed to PR #30 `0a7d2fb` (94 commits); timestamps corrected to the actual verification time.
 - **Sync Watch #40 follow-up (2026-11-21 17:35 ET):** spec §0.5's source line no longer says it supersedes §0.3/§2 for cash (deletion and sign-up items are in force; the cash item awaits Sam's reconciliation). CLAUDE.md's 11:53 ET snapshot is labelled historical. PROJECT_PROGRESS's active summary now names PR #30 `0a7d2fb` / 94 commits.
+- **Owner reconciliation (2026-11-21 18:08 ET):** asked directly whether two balances replaces §2's no-cash launch rule, Sam answered **"A"** in chat with Claude: two balances replaces it. §2 is updated with the original objective quoted; spec §0.5, README, the Codex constitution and the four owner-decision blocks now say decided. Payouts, withdrawals, and payout/identity-provider activation remain off and owner-gated. Recorded in Complete Loop as approval `appr-dec-cash-reconcile`.
