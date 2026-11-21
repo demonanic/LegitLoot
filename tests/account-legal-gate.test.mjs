@@ -2,6 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import vm from "node:vm";
 
 const read = (n) => readFileSync(new URL("../" + n, import.meta.url), "utf8");
 
@@ -28,4 +29,18 @@ test("while privacy.html warns against submitting personal info, the gate must s
   if (/Do not submit personal information/i.test(privacy)) {
     assert.match(read("account-auth.js"), /const LEGAL_NOTICES_FINAL = false;/);
   }
+});
+
+test("closed gate at runtime: zero clients, zero handlers, zero config reads, panel hidden", () => {
+  const counts = { clients: 0, handlers: 0, configReads: 0 };
+  const status = { innerHTML: "" };
+  const panel = { hidden: false };
+  const el = (id) => (id === "auth-status" ? status : id === "auth-panel" ? panel : { addEventListener() { counts.handlers++; }, hidden: false });
+  const window = { supabase: { createClient() { counts.clients++; throw new Error("client created"); } } };
+  Object.defineProperty(window, "LEGITLOOT_SUPABASE_CONFIG", { get() { counts.configReads++; return undefined; } });
+  const document = { getElementById: el, querySelectorAll: () => ({ forEach() { counts.handlers++; } }) };
+  vm.runInNewContext(read("account-auth.js"), { window, document, console });
+  assert.deepEqual(counts, { clients: 0, handlers: 0, configReads: 0 });
+  assert.equal(panel.hidden, true);
+  assert.match(status.innerHTML, /ACCOUNT ACCESS PAUSED/);
 });
