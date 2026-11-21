@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-20 19:22 ET
+**Last updated:** 2026-11-20 20:05 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API at Sync Watch #18 (2026-11-20 19:14 ET) reports all 31 refs `protected:false` and repository rulesets empty. Authorized integration application baseline is `a529b35` plus documentation-only commits; current head `1466eb6`. Do not describe `main` as technically protected.
@@ -2073,3 +2073,11 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Taplayad:** current official docs still specify `md5(app_id . user_id . api_secret)`, status 1/2, any-2xx acknowledgement and suggested `offer_id + user_id` deduplication, without a documented immutable transaction ID or retry schedule. The legacy docs describe a different signature and transaction/retry protocol; do not combine them. Current Terms last updated 2026-10-29 do not establish App-10066-specific incentivized-traffic permission. Keep App 10066 pending and preserve the owner's exact URL template; no publisher setting or callback was touched.
 - **New coordination finding:** PR #28's description still says `www.legitloot.site` is allowed, but exact code/test at `93f62ac` permit only `legitloot.site`. Actionable correction was posted on PR #28 as comment `7054770946`; no code change was requested.
 - **Safety:** no merge, deployment, SQL application, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred. All Supabase queries were SELECT-only. The latest shared state showed no other material change, so no duplicate status comments were added.
+
+
+## 2026-11-20 20:05 ET — Sync Watch #19 documentation verification
+
+- The #19 shared-control debrief was committed to the canonical PR #27 branch as `e4a95450685824095c9fd9a9c191ceaf892544ae` (documentation only).
+- Exact-head Node test and whitespace check `44848038288` passed, including `npm ci` and `npm test`.
+- Cloudflare Pages deployments for both `legitloot` (`e8c67b67`) and `legitloot-preview` (`6d6c9723`) completed successfully as `environment=preview` builds on `claude/log-ack-charter`. Neither deployment targets production.
+- PR #27 remains open; no merge or production action occurred.
