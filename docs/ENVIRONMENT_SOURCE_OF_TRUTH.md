@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 00:59 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and source review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 00:59 ET.
+**Last verified:** 2026-11-21 01:15 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and source review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 01:15 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1255,3 +1255,22 @@ All database operations in this check were SELECT-only. No settings, secrets, sc
 - Exact-head Node/whitespace run 44873202212 and Deno run 44873202199 passed. Claude reports 85/85 local tests; browser suite remains unrun.
 - Cloudflare deployment `30b91602-8334-4014-b363-aff022516248` in `legitloot` and `4e852597-85e7-469b-b9d3-e9234af58aa6` in `legitloot-preview` both completed successfully as `environment=preview`, branch `claude/m2-release-candidate`, commit `3bfa615`. No production deployment.
 - Account sign-in/reset are unavailable in candidate until owner-approved legal notices; wallet view is also unavailable. Production main remains `801f3e7` with signup; main-based preview remains production-auth-connected. No Auth settings, secrets, schema, data or legal text changed.
+
+
+## 2026-11-21 01:15 ET — Sync Watch #24 environment recheck
+
+### Cloudflare Pages
+
+- `legitloot` production branch is `main`; production deployment `fe4c0f22` is `main@801f3e7`, environment `production`, alias `https://legitloot.site`.
+- PR #30 exact candidate `37763d8` has successful preview deployments: `7dc5f1f0` in `legitloot` and `30f96ba2` in `legitloot-preview`; both are environment `preview`, branch `claude/m2-release-candidate`. Candidate `supabase-config.js` pins staging.
+- Separate `main.legitloot-preview.pages.dev` deployment `fdf6b609` is environment `preview`, branch `main`, commit `801f3e7`. Its source `account-auth.js` hardcodes production Supabase. Do not use Account/auth routes on this preview until owner-approved ENV-07 remediation is deployed and rechecked.
+
+### Supabase read-only verification
+
+- Production `gkbqderyjcuxnjbsiffb`: ACTIVE_HEALTHY, 7 migrations. Staging `scmnxcsggquwtuyyjnnj`: ACTIVE_HEALTHY, 21 migrations.
+- Both `public.get_wallet_summary()` definitions still return cash/USD fields. Production response includes `cash` + `lootCoins`; staging includes `currency.cash=USD`, `currency.gameCredits=LLC`, `cash` + `gameCredits`. Both ACLs are `{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}`; anon EXECUTE false, authenticated EXECUTE true. Both have zero journal entries and zero journal transactions.
+- Production `wallet-summary` Edge Function v4 is ACTIVE, `verify_jwt=false` with manual Bearer validation, and still returns cash/LLC. Staging has no `wallet-summary` function. Candidate LC-only function/SQL are not deployed; SQL remains DO NOT APPLY. The staging FK `private.journal_entries.transaction_id → private.journal_transactions.id` exists, but private-schema exposure and the PostgREST embed remain NOT VERIFIED.
+- Staging `public.game_registry` contains only legacy `zombie-invasion-defense` / “Zombie Invasion Defense” (`launch_url=NULL`, development, unlisted). No row for Zombies vs Heavy Metal or Rocket 2 Nowhere. `private.game_events`, `game_saves`, `game_handoff_tickets` are all zero.
+- Staging `private.providers`: CPAGrip disabled; Offerwall.GG disabled but retains stale LC approved-reward metadata; no Taplayad row. Staging Offerwall.GG wall-url v5 remains ACTIVE/JWT and postback v8 ACTIVE/no-JWT/record-only. Production wall-url v2 and postback v4 remain ACTIVE HTTP 410 tombstones. No callback was invoked.
+
+All database operations in this check were SELECT-only. No settings, secrets, schema, data, functions, provider settings, callbacks, or financial activity were changed.
