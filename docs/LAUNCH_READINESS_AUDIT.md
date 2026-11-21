@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #25 (2026-11-21 02:35 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #26 (2026-11-21 03:52 ET). Earlier status tables are historical.
 
 ---
 
@@ -1713,3 +1713,20 @@ No PR merge, deployment, legal change, Supabase setting/secret/schema/data chang
 - **Release-control side branch:** owner-authored docs/m2-t6-release-runbook@5fe4cea removes the canonical Offerwall.GG rollback exception and recommends generic previous-version redeploy. Do not use or merge it; the integration runbook at blob 4acf171 correctly forbids restoring pre-containment postback v3/wall-url v1.
 
 Two non-blocking candidate review notes were added to PR #30: 7059451348 (Hustle test name overstates its assertions) and 7059451679 (support-contact mismatch). No merge, deployment, setting, schema/data, provider, callback or financial action occurred.
+
+
+## 2026-11-21 03:52 ET — Sync Watch #26: independent current-state audit
+
+**Disposition: NOT LAUNCH-READY.** The latest PR #30 delta is a test-only improvement at `49f209d`; it is accepted for that limited purpose, not as release approval. Exact-head Node/whitespace and Deno Actions pass; Claude reports 87/87 local tests, not independently rerun. Browser coverage remains unrun. No formal PR #30 approval exists.
+
+### Current evidence
+
+- **Candidate and preview isolation:** PR #30 remains draft (58 files / 86 commits). Both candidate Pages previews for exact `49f209d` succeeded as `environment=preview`; candidate `supabase-config.js` pins staging. Production remains `main@801f3e7`. The separate `main.legitloot-preview.pages.dev` preview remains `main@801f3e7` and its Account script hardcodes production Supabase; keep Account/auth routes off that preview until owner-approved ENV-07 remediation is deployed and rechecked.
+- **Wallet:** production and staging `public.get_wallet_summary()` still return cash/USD buckets (production `lootCoins`; staging `gameCredits/LLC`). Both journal tables are empty in both environments. Production wallet-summary Edge Function v4 remains cash/legacy-LLC-bearing and manually validates Bearer tokens despite `verify_jwt=false`; staging has no wallet-summary function. Candidate LC-only SQL/function remain source-only, SQL DO NOT APPLY, and PostgREST private-schema exposure/embed is NOT VERIFIED.
+- **Game integration:** staging registry has only the legacy `zid / zombie-invasion-defense` placeholder (development, unlisted, no URL). Neither Zombies vs Heavy Metal nor Rocket 2 Nowhere is registered. Events, cloud saves and handoff tickets are zero. Static public pages prove early-access routes only, not trusted account/session, save or LC-event integration.
+- **Hustle/providers:** CPAGrip and Offerwall.GG staging rows are disabled; Offerwall.GG retains stale LC reward metadata; no Taplayad row exists. Staging wall-url v5 remains ACTIVE/JWT and postback v8 ACTIVE/no-JWT/record-only. The live staging processing RPC records callback/conversion events and validates reversals but does not post to the ledger.
+- **Taplayad:** current public docs specify `md5(app_id . user_id . api_secret)`, status 1/2, any-2xx acknowledgement and `offer_id + user_id` deduplication, without an immutable transaction ID or retry schedule. A search-indexed legacy snapshot describes a different signed payload and retry/acknowledgement contract; direct retrieval of that legacy page returns 404. Do not combine protocols. App-10066-specific incentivized-traffic permission and the full current protocol remain unverified. Preserve the owner URL and never convert provider points/callback rewards/payouts into LC.
+- **Legal/account:** candidate account access remains safely paused while Terms/Privacy are drafts. Deletion/export is missing; `payouts@legitloot.site` is unverified and draft Privacy still lists `hello@legitloot.site`. Production signup setting remains unverified.
+- **Governance:** all 31 refs report `protected:false`; rulesets are empty. The owner-authored `docs/m2-t6-release-runbook@5fe4cea` side branch remains unsafe for rollback because it omits the canonical Offerwall.GG v3/v1 prohibition. Use only the integration runbook at blob `4acf171`.
+
+No production merge/deploy, Supabase mutation, provider setting/agreement, callback, financial activity, or legal decision occurred. All database checks were SELECT-only.

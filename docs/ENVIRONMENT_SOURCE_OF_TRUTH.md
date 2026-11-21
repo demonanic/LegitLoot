@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 02:35 ET by DaVinci (read-only GitHub, Cloudflare and Supabase inventory plus source review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 02:35 ET.
+**Last verified:** 2026-11-21 03:52 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and public Tplayad documentation review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 03:52 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1307,3 +1307,34 @@ All database operations in this check were SELECT-only. No settings, secrets, sc
 - AUTH-03 design is present on integration. payouts@legitloot.site remains unverified; draft privacy.html still lists hello@legitloot.site. No deletion/export implementation or mailbox verification.
 
 All database operations in this check were SELECT-only. No settings, secrets, schema, data, functions, callbacks, provider settings, agreements, payments or financial activity were changed.
+
+
+## 2026-11-21 03:52 ET — Sync Watch #26 environment verification
+
+### GitHub and controls
+
+- Production `main@801f3e7`; integration `build/legitloot-neon-synthwave@1466eb6`; PR #30 candidate `49f209d`; docs PR #27 `b715436`; PR #28 ENV-07 `93f62ac`.
+- Nine PRs remain open. Branch inventory: 31 refs, every `protected:false`; repository rulesets empty. Main branch-protection details endpoint returned 403; branch metadata confirms main is not protected.
+- PR #30 exact-head Node/whitespace Actions `44881682972` and Deno Actions `44881683000` passed. PR #27 exact-head Actions `44881864337` passed. Browser test remains unrun; no formal approval for PR #30.
+
+### Cloudflare Pages
+
+- Production `legitloot`: deployment `fe4c0f22`, `main@801f3e7`, `environment=production`, alias `https://legitloot.site`.
+- PR #30 exact-head preview deployments: `4aa90b38` (`legitloot`) and `e2cb7f38` (`legitloot-preview`), both successful with `environment=preview`; candidate `supabase-config.js` pins staging ref `scmnxcsggquwtuyyjnnj`.
+- Main-based preview: deployment `fdf6b609-72ca-4550-be8d-7ede1ba80bd4`, `environment=preview`, branch `main`, commit `801f3e7`, alias `https://main.legitloot-preview.pages.dev`. Main `account-auth.js` hardcodes production Supabase ref `gkbqderyjcuxnjbsiffb`; do not use Account/auth routes there.
+
+### Supabase — SELECT-only
+
+- Production `gkbqderyjcuxnjbsiffb` and staging `scmnxcsggquwtuyyjnnj` are both ACTIVE_HEALTHY. Migration counts: production 7, staging 21.
+- Both live `public.get_wallet_summary()` RPCs return cash/USD fields. Production also returns `lootCoins`; staging returns `gameCredits` labelled `LLC`. Both journal_transactions and journal_entries counts are zero in both projects.
+- Production `wallet-summary` Edge Function v4 is ACTIVE with `verify_jwt=false`, manually validates Bearer tokens, and still returns cash/legacy-LLC fields. Staging has no wallet-summary function. Candidate LC-only Edge Function and proposed SQL are not deployed; SQL remains DO NOT APPLY.
+- Staging `public.game_registry`: exactly one row, legacy `zid / zombie-invasion-defense / Zombie Invasion Defense`, development, unlisted, no launch URL. `private.game_events`, `private.game_saves`, and `private.game_handoff_tickets` each have zero rows.
+- Staging providers: CPAGrip disabled; Offerwall.GG disabled with stale LC reward metadata; no Taplayad row. Offerwall.GG wall-url v5 remains ACTIVE/JWT; postback v8 remains ACTIVE/no-JWT/record-only. The live staging `process_offerwall_gg_postback` RPC records provider callback/conversion rows and validates reversal identity/amount but contains no ledger posting. No callback invoked.
+- `current_setting('pgrst.db_schemas', true)` returned NULL; private-schema exposure and candidate PostgREST relationship embed remain NOT VERIFIED.
+
+### Provider and rollback notes
+
+- Current Tplayad docs and search-indexed legacy postback snapshot describe incompatible signatures, acknowledgement and retry contracts; the legacy page is currently not directly retrievable (404). App-10066-specific incentivized-traffic permission and complete transaction/reversal semantics remain unverified. Keep Taplayad pending and preserve the exact owner URL.
+- Owner-authored `docs/m2-t6-release-runbook@5fe4cea` still has a generic Edge Function rollback instruction and lists pre-containment Offerwall.GG v3/v1. Canonical integration runbook blob `4acf171` explicitly prohibits restoring those versions. Do not use or merge the side branch.
+
+All database operations in this check were SELECT-only. No settings, secrets, schema, data, functions, provider settings, callbacks, agreements, payments or financial activity were changed.

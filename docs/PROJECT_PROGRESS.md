@@ -1,9 +1,9 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 02:35 ET
+**Updated:** 2026-11-21 03:52 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
-**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the separate canonical documentation branch at `6db6b04` (exact-head Actions 44875190144 passed).
+**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the separate canonical documentation branch at `b715436` (exact-head Actions 44881864337 passed).
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-21 02:35 ET):** #9 stale draft; #20 head `6e2e51b`; #22 head `332ca07` (stacked on #20); #25 head `135607e` (superseded draft); #26 head `30f5dbf` (Taplayad pending; provider-contract gate); #27 docs branch head `6db6b04` (Actions `44875190144` passed); #28 head `93f62ac` (draft against main; Actions `44791797759` passed; scoped owner review only); #29 head `dad8fd7` (DO NOT MERGE STANDALONE; superseded by #30); #30 head `37763d8` consolidated draft (58 files / 85 commits; Node `44873409564` and Deno `44873409629` pass; Claude reports 86/86 local tests; browser test unrun; no formal approval).
+**Current open PRs (2026-11-21 03:52 ET):** #9 head `046019f` stale design draft; #20 head `6e2e51b`; #22 head `332ca07` (stacked on #20); #25 head `135607e` (superseded draft); #26 head `30f5dbf` (Taplayad pending; provider-contract gate); #27 docs branch head `b715436` (Actions `44881864337` passed); #28 head `93f62ac` (draft against main; Actions `44791797759` passed; scoped owner review only); #29 head `cfe9f0a` (DO NOT MERGE STANDALONE; superseded by #30); #30 head `49f209d` consolidated draft (58 files / 86 commits; Node `44881682972` and Deno `44881683000` pass; Claude reports 87/87 local tests; browser test unrun; no formal approval).
 
 ## Current owner-locked operating rules
 
@@ -972,3 +972,15 @@ Claude's response to the account/privacy finding is now verified at PR #30 head 
 - AUTH-03 design is on integration; payouts@legitloot.site remains unverified, and draft privacy.html still lists hello@legitloot.site. No deletion/export implementation or mailbox test.
 - A separate owner-authored docs/m2-t6-release-runbook branch at 5fe4cea has unsafe generic rollback language that omits the Offerwall.GG v1/v3 exception. Do not use or merge it; integration docs/RELEASE_RUNBOOK.md remains authoritative.
 - Two non-blocking PR #30 findings were recorded in comments 7059451348 (Hustle test title overstates assertion scope) and 7059451679 (Privacy contact mismatch). No production or financial action occurred.
+
+
+## 2026-11-21 03:52 ET — Sync Watch #26 current-state update
+
+- PR #30 advanced to `49f209d` with a test-only change in `tests/hustle-public-copy.test.mjs`. Independent review accepted the narrower test title and explicit provider-to-LC copy guard; exact-head Node/whitespace and Deno Actions passed. Claude reports 87/87 local tests; not independently rerun. Browser test remains unrun; no formal approval exists and PR #30 stays draft. Review disposition: [7060202497](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7060202497).
+- PR #27 documentation branch is `b715436`; exact-head Actions `44881864337` passed. Candidate previews for `49f209d` succeeded in both Pages projects as `environment=preview`, with the candidate Supabase config pinned to staging.
+- All 31 repository branches report `protected:false`; rulesets are empty. Production main remains `801f3e7`; no technical branch-protection gate exists.
+- Production and staging wallet RPCs still expose cash/USD fields; both journal tables remain empty. Candidate LC-only SQL/Edge Function are not deployed; SQL remains DO NOT APPLY and PostgREST private-schema exposure remains unverified.
+- Staging has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered and events/saves/handoff tickets are zero. Both public game pages remain early access with local saves only.
+- Staging Offerwall.GG is disabled in the provider table but its wall-url v5 remains active/JWT; postback v8 and its database routine are record-only. No callback was invoked.
+- Taplayad's current and indexed legacy public docs describe conflicting signature/acknowledgement/retry contracts; direct legacy-page retrieval returns 404; App-10066 permission and protocol remain unverified. Keep it pending and never map provider points or callbacks into LC. See PR #26 comment `7060202798`.
+- Production-auth-connected main preview, account/legal/deletion gaps, production cash/withdrawal UI, stale Offerwall.GG metadata, unsafe side-branch rollback runbook and unprotected branch refs remain open launch risks.

@@ -714,3 +714,17 @@ Claude's commit `3bfa615` on PR #30 pauses sign-in/reset while Terms/Privacy rem
 - Critical release-control warning: do not use or merge owner-authored docs/m2-t6-release-runbook@5fe4cea. It removes the Offerwall.GG rollback exception and could restore pre-containment active postback v3/wall-url v1. Integration docs/RELEASE_RUNBOOK.md at blob 4acf171 remains authoritative.
 - Production main remains 801f3e7 with cash/withdrawal and provider-to-LC copy. Main-based preview remains production-auth-connected. All 31 refs are unprotected; production gates remain owner-controlled.
 - No production, Supabase, provider, callback, financial or legal action was performed in this check.
+
+
+## 2026-11-21 03:52 ET — DaVinci Sync Watch #26 handoff
+
+- Start by rereading Master Execution Control and the four working records. Latest task-specific Claude response is PR #30 comment 7059459276; latest independent review of its test-only follow-up is PR #30 comment 7060202497.
+- Keep PR #30 draft at exact head `49f209d` (58 files / 86 commits). Its latest change is test-only and accepted for that scope. Exact-head Node/whitespace and Deno Actions passed; 87/87 local tests are Claude-reported, not independently rerun; browser test remains unrun. No formal approval exists. Do not merge or deploy.
+- M2-T4 remains active. Staging registry contains only the legacy Zombie Invasion Defense placeholder; neither Zombies vs Heavy Metal nor Rocket 2 Nowhere is registered, and game events, cloud saves and handoff tickets are zero. Prepare a bounded, reviewable source/test plan for correct game registry, shared account/session handoff, cloud saves and server-verified idempotent events for milestones, weekly challenges and seasonal events. Do not claim integration complete from static game pages.
+- Both live wallet RPCs still return cash/USD fields; production wallet-summary v4 remains cash/legacy-LLC-bearing. Candidate LC-only SQL/function are source-only; SQL DO NOT APPLY; private-schema/PostgREST relationship execution remains unverified. Do not apply SQL or change database settings/data in this run.
+- Candidate Account gate remains closed while Terms/Privacy and the support/deletion route are unresolved. Do not flip `LEGAL_NOTICES_FINAL`, reopen sign-in/reset, or publish an unverified email address.
+- Taplayad App 10066 remains pending. Current docs and the indexed legacy snapshot conflict on signature, transaction identity, acknowledgement and retries; direct legacy-page retrieval returns 404. Obtain App-specific written permission and protocol confirmation. Preserve `https://offerwall.tplayad.com/10066/{user_id}`; no provider points, callback rewards or payout amounts become LC.
+- Keep Account/auth routes off `main.legitloot-preview.pages.dev`; it is `main@801f3e7` and main `account-auth.js` targets production Supabase. PR #28 remains draft/owner-gated.
+- Do not use or merge `docs/m2-t6-release-runbook@5fe4cea`; its rollback wording could restore pre-containment Offerwall.GG v3/v1. Canonical integration runbook blob `4acf171` is authoritative.
+- All 31 refs remain unprotected and repository rulesets are empty. Production merge/deploy, production settings/secrets/schema/data, financial activity, provider agreements/settings, legal publication, destructive changes and security weakening remain owner-gated.
+- Sync Watch #26 made no merge, manual deployment, Supabase mutation, callback, provider setting/agreement, payment, reward issuance or money movement. All database queries were SELECT-only.
