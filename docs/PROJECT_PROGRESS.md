@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 00:59 ET
+**Updated:** 2026-11-21 01:15 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on `legitloot.site` in early access with device-local saves and no account/LC connection. Remaining: shared account/session handoff, cloud saves, trusted server-verified LC events. Offerwall.GG permanent retirement is a security subtask; the owner reports postback URL removal from all attempted/successful placements, but technical retirement and placement disable/delete are not verified.
 **Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6` (last commit 14:28 ET). PR #27 is a separate documentation branch based on this integration head.
@@ -950,3 +950,13 @@ Owner explicitly authorized preparation and testing of production containment, p
 ## 2026-11-21 00:59 ET — Sync Watch #23 follow-up
 
 Claude's response to the account/privacy finding is now verified at PR #30 head `3bfa615`. The candidate sets `LEGAL_NOTICES_FINAL = false`, returns before any Supabase client or auth handler is created, and ships the auth panel hidden. This closes the candidate-preview credential-submission contradiction. The signed-in wallet view is intentionally unavailable until owner-approved final Terms/Privacy are in place and the gate is reopened. Exact-head Node/whitespace Actions 44873202212 and Deno Actions 44873202199 passed; Claude reports 85/85 local tests; browser suite remains unrun. Both PR #30 previews for this SHA succeeded as staging-bound previews. PR #30 remains draft. Production main still has signup, PR #28 remains owner-gated, and account deletion/export remains missing. Do not change legal wording or reopen the gate without owner approval.
+
+
+## 2026-11-21 01:15 ET — Sync Watch #24
+
+- PR #30 advanced to `37763d8` (58 files / 85 commits, still draft). The latest commit is test-only and adds a VM execution test for the closed Account legal gate. Exact-head Node/whitespace and Deno Actions #44873409564 and #44873409629 passed; Claude reports 86/86 local tests, not independently rerun. Browser suite remains unrun. Eight prior inline review threads are resolved; no formal approval exists for this head.
+- Cloudflare confirms both candidate previews for exact `37763d8` succeeded as preview deployments and use staging configuration. Production remains `main@801f3e7`. The separate main-based preview remains a preview deployment built from main and its Account script hardcodes production Supabase; keep Account/auth routes off-limits pending owner-approved ENV-07 remediation.
+- **M2-T4 evidence refined:** the staging game registry's only row is legacy Zombie Invasion Defense (`slug=zombie-invasion-defense`, development, unlisted, no launch URL). Neither owner-selected launch game has a registry row; game events, saves and handoff tickets remain zero. `tests/launch-games.test.mjs` verifies public pages and local-save disclosures only. The candidate accurately labels both games early access and unconnected, but trusted integration remains incomplete. Finding posted to PR #30 comment 7058531808.
+- Fresh read-only Supabase check confirms both live wallet RPCs still return cash/USD; production uses `lootCoins`, staging uses `gameCredits/LLC`; both deny anon EXECUTE and have zero journal entries/transactions. Production wallet-summary v4 remains cash-bearing; no staging wallet-summary function is deployed. Candidate LC-only SQL/Edge Function remain source-only and unverified; do not apply/deploy.
+- Staging provider table still has CPAGrip disabled and Offerwall.GG disabled with stale LC reward metadata; no Taplayad row. Offerwall.GG staging wall-url v5 and record-only postback v8 remain deployed. Taplayad App 10066 remains pending written incentivized-traffic permission and a complete signed transaction/reversal/retry contract; preserve the owner template and never issue LC from provider activity.
+- M2 remains not launch-ready. Keep M2-T4 active; next evidence needed is the two selected games' registry/session/save/verified-event path, plus a working LC-only wallet contract and owner-approved legal/account journey. No owner-gated action occurred.
