@@ -78,8 +78,8 @@ Deno.serve(async (req: Request) => {
 
   // LC-only contract (WALLET-01, source only, NOT deployed, NOT executed: the posted-status embed
   // must be verified against staging before any deploy; accounts/entries mirror the proposed RPC filters): no cash/USD
-  // buckets and no currency label. Cash is a separate USD ledger (owner decision 2026-11-21) and, if exposed,
-  // belongs to a separate cash-summary contract; LC and cash never mix and LC is not cash-convertible.
+  // buckets and no currency label. Cash is PENDING owner reconciliation (issue #2 proposed a separate ledger;
+  // Master Control §2 says no cash balance); no cash change until resolved. LC is never cash-convertible.
   return json({
     legitCoins: {
       available: balance("lootcoins_available"),
