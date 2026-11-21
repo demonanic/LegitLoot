@@ -1795,3 +1795,12 @@ PR #30 advanced to Claude head `7b4b4a6` (63 files / 90 commits). The Deno retir
 Claude also added a source-only staging retirement proposal and runbook. It remains NOT APPLIED / DO NOT APPLY. Independent review identified three required safety refinements: abort if the live RPC ACL differs from the expected ACL; explicitly verify no PUBLIC grant with `aclexplode(proacl)` or equivalent; and use an authenticated staging request for the 410 check because the deployed function has `verify_jwt=true`. See PR #30 comment [7065972694](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065972694).
 
 The deployed staging CPAGrip v5 and service-role RPC remain active; token table is empty. No function deployment, SQL application, ACL change, schema/data mutation or endpoint invocation occurred. PR #30 remains draft, 8/8 inline threads resolved, 4 COMMENTED reviews and no APPROVED review. All other launch blockers remain open.
+
+
+### Sync Watch #34 closing follow-up — 2026-11-21 11:53 ET
+
+PR #30 advanced to Claude head `d588e3c` (63 files / 91 commits). The CPAGrip staging retirement proposal now includes an abort condition for unexpected project/provider/ACL state, a PUBLIC-grant post-check using `aclexplode`, and an authenticated staging JWT requirement for the 410 verification. The exact runbook, SQL and regression test were independently re-reviewed and accepted for source-only use in PR #30 comment [7066005647](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7066005647). The SQL remains outside migrations and DO NOT APPLY.
+
+Exact-head Node [44926815172](https://github.com/demonanic/LegitLoot/actions/runs/44926815172) and Deno [44926815107](https://github.com/demonanic/LegitLoot/actions/runs/44926815107) passed; the Deno job includes CPAGrip type-check. Claude reports 90/90 local tests; not independently rerun. Browser test remains unrun.
+
+The deployed staging CPAGrip v5 and service-role RPC remain active; token table is empty. No function deployment, SQL application, ACL change, schema/data mutation or endpoint invocation occurred. PR #30 remains draft, 8/8 inline threads resolved, 4 COMMENTED reviews and no APPROVED review. All other launch blockers remain open.

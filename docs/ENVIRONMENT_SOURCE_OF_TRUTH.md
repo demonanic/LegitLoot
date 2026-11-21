@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 11:50 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:50 ET.
+**Last verified:** 2026-11-21 11:53 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:53 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 **MIG-02 correction (2026-11-21 07:20 ET):** Any older section below stating that the `game_platform_foundation` source is missing describes the pre-recovery state. The canonical migration and its regression test are now present on integration; the migration is already applied to staging and must not be replayed. The integration migration directory still has no CPAGrip migration source.
@@ -1427,3 +1427,11 @@ No setting, secret, schema, data, function, callback, provider configuration, ag
 - **Deployed staging remains unchanged:** `cpagrip-attribution` v5 ACTIVE/JWT; `public.store_cpagrip_attribution_token(text,uuid,text,timestamptz)` SECURITY DEFINER, ACL `{postgres=X/postgres,service_role=X/postgres}`; public/anon/authenticated EXECUTE false, service_role true; token table 0 rows. No deployment or ACL change.
 - **Proposal review gap:** require an abort if the live ACL differs from expected; verify no PUBLIC grant via `aclexplode(proacl)` or equivalent; specify authenticated staging request for 410 because `verify_jwt=true`. See PR #30 comment 7065972694. No SQL applied.
 - **Cloudflare:** candidate `7b4b4a6` previews [e45e18f4](https://e45e18f4.legitloot.pages.dev) and [177d2bcf](https://177d2bcf.legitloot-preview.pages.dev) succeeded as `environment=preview`. Production remains `main@801f3e7` / `fe4c0f22`.
+
+
+### Sync Watch #34 closing follow-up — 2026-11-21 11:53 ET
+
+- **PR #30:** latest head `d588e3c`, 63 files / 91 commits. Exact-head Node [44926815172](https://github.com/demonanic/LegitLoot/actions/runs/44926815172) and Deno [44926815107](https://github.com/demonanic/LegitLoot/actions/runs/44926815107) passed; Deno checks the CPAGrip tombstone.
+- **CPAGrip proposal:** source-only runbook and SQL remain outside migrations and DO NOT APPLY. Runbook now aborts if project ref, provider state or live RPC ACL differs from expected; SQL footer checks PUBLIC grantee 0 via `aclexplode`; runbook requires authenticated staging JWT for 410 verification. Accepted for source-only use; see PR #30 comment 7066005647.
+- **Deployed staging remains unchanged:** `cpagrip-attribution` v5 ACTIVE/JWT; `public.store_cpagrip_attribution_token(text,uuid,text,timestamptz)` SECURITY DEFINER, ACL `{postgres=X/postgres,service_role=X/postgres}`; public/anon/authenticated EXECUTE false, service_role true; token table 0 rows. No deployment or ACL change.
+- **Cloudflare:** candidate `d588e3c` previews [9022da0f](https://9022da0f.legitloot.pages.dev) and [b86f1e07](https://b86f1e07.legitloot-preview.pages.dev) succeeded as `environment=preview`. Docs head `73bacc` previews [436876ed](https://436876ed.legitloot.pages.dev) and [e5112f79](https://e5112f79.legitloot-preview.pages.dev) succeeded; docs Actions [44926908404](https://github.com/demonanic/LegitLoot/actions/runs/44926908404) passed. Production remains `main@801f3e7` / `fe4c0f22`.

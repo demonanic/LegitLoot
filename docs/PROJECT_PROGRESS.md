@@ -1,9 +1,9 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 11:50 ET
+**Updated:** 2026-11-21 11:53 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
-**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch; this Sync Watch #34 final follow-up starts from docs head `529be46`. PR #30 candidate is now `7b4b4a6` (63 files / 90 commits; exact-head Node `44926633932` and Deno `44926633922` passed).
+**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch; this Sync Watch #34 closing follow-up starts from docs head `73bacc`. PR #30 candidate is now `d588e3c` (63 files / 91 commits; exact-head Node `44926815172` and Deno `44926815107` passed).
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-21 11:50 ET):** #9 `046019f` stale design draft; #20 `6e2e51b`; #22 `332ca07` stacked on #20; #25 `135607e` superseded containment draft; #26 `30f5dbf` Taplayad pending; #27 `claude/log-ack-charter` canonical docs branch; #28 `93f62ac` draft/owner review; #29 `cfe9f0a` DO NOT MERGE STANDALONE; #30 `7b4b4a6` consolidated draft (63 files / 90 commits; Node `44926633932` and Deno `44926633922` pass; Claude reports 90/90 local tests, not independently rerun; browser test unrun; 8/8 inline threads resolved; no APPROVED review).
+**Current open PRs (2026-11-21 11:53 ET):** #9 `046019f` stale design draft; #20 `6e2e51b`; #22 `332ca07` stacked on #20; #25 `135607e` superseded containment draft; #26 `30f5dbf` Taplayad pending; #27 `claude/log-ack-charter` canonical docs branch; #28 `93f62ac` draft/owner review; #29 `cfe9f0a` DO NOT MERGE STANDALONE; #30 `d588e3c` consolidated draft (63 files / 91 commits; Node `44926815172` and Deno `44926815107` pass; Claude reports 90/90 local tests, not independently rerun; browser test unrun; 8/8 inline threads resolved; no APPROVED review).
 
 ## Current owner-locked operating rules
 
@@ -1037,3 +1037,13 @@ Claude's response to the account/privacy finding is now verified at PR #30 head 
 - Deployed staging CPAGrip v5 and its service-role RPC remain active; token table is empty. No deploy, SQL, ACL, schema or data change occurred.
 - Exact-head candidate previews [e45e18f4](https://e45e18f4.legitloot.pages.dev) and [177d2bcf](https://177d2bcf.legitloot-preview.pages.dev) succeeded as preview deployments. Production remains `main@801f3e7` / `fe4c0f22`.
 - PR #30 remains draft, 63 files / 90 commits, 8/8 inline threads resolved, no APPROVED review. Other launch blockers remain unchanged.
+
+
+### Sync Watch #34 closing follow-up — 2026-11-21 11:53 ET
+
+- PR #30 advanced to Claude head `d588e3c`. The CPAGrip staging retirement proposal now explicitly aborts on unexpected project/provider/ACL state, verifies no PUBLIC EXECUTE grant, and requires an authenticated staging JWT for the 410 test. The exact runbook, SQL and regression test were independently reviewed and accepted for source-only use; SQL remains DO NOT APPLY.
+- Exact-head Node and Deno Actions passed; the Deno job includes the CPAGrip type-check. Claude reports 90/90 local tests; not independently rerun. Browser test remains unrun.
+- Deployed staging CPAGrip v5 and its service-role RPC remain active; token table is empty. No deployment, ACL change, SQL or data change occurred.
+- Exact-head candidate previews [9022da0f](https://9022da0f.legitloot.pages.dev) and [b86f1e07](https://b86f1e07.legitloot-preview.pages.dev) succeeded as preview deployments. PR #27 docs previews [436876ed](https://436876ed.legitloot.pages.dev) and [e5112f79](https://e5112f79.legitloot-preview.pages.dev) succeeded; docs Actions [44926908404](https://github.com/demonanic/LegitLoot/actions/runs/44926908404) passed.
+- PR #30 remains draft, 63 files / 91 commits, 8/8 inline threads resolved, no APPROVED review. All other launch blockers remain open.
+- No merge, deployment, Supabase settings/secrets/schema/data/grant change, callback, provider agreement, payment, reward issuance or money movement occurred.

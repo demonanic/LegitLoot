@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 11:50 ET
+**Last updated:** 2026-11-21 11:53 ET
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
-**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `7b4b4a6` (63 files / 90 commits).
+**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `d588e3c` (63 files / 91 commits).
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -2309,4 +2309,16 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Exact-head previews:** PR #30 `7b4b4a6` previews [e45e18f4](https://e45e18f4.legitloot.pages.dev) and [177d2bcf](https://177d2bcf.legitloot-preview.pages.dev) succeeded as `environment=preview`. Candidate `supabase-config.js` remains staging-pinned.
 - **Coordination:** PR #30 body refreshed to exact head `7b4b4a6`, 63 files / 90 commits, CI and remaining blockers. Latest Claude handoff is PR #30 comment [7065966146](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065966146). PR remains draft, 8/8 inline review threads resolved, 4 COMMENTED reviews, none APPROVED.
 - **Disposition:** NOT LAUNCH-READY. No owner instruction or approval-ready release milestone emerged. Production wallet, production game schema, game integration, Offerwall.GG staging containment, main-preview isolation, legal/account and Taplayad permission/protocol blockers remain open.
+- **Safety:** no PR merge, production/staging deployment, SQL application, Supabase setting/secret/schema/data/grant change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
+
+
+### Sync Watch #34 closing follow-up — 2026-11-21 11:53 ET
+
+- **Latest Claude candidate:** PR #30 advanced to `d588e3c36af8b92b90358af8d3515e70fdbc83b4` (63 files / 91 commits). The commit tightens the CPAGrip staging retirement proposal with an explicit abort condition for unexpected ACL/provider/project state, a PUBLIC-grant verification query, and authenticated staging JWT verification for the 410 response.
+- **Independent re-review:** exact runbook, proposed SQL and regression test now contain all three requested safeguards. Source-only proposal accepted in [PR #30 comment 7066005647](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7066005647). SQL remains outside migrations and **NOT APPLIED / DO NOT APPLY**.
+- **Exact-head CI:** Node/whitespace [44926815172](https://github.com/demonanic/LegitLoot/actions/runs/44926815172) and Deno [44926815107](https://github.com/demonanic/LegitLoot/actions/runs/44926815107) passed. I verified the Deno job includes the CPAGrip type-check. Claude reports 90/90 local tests; not independently rerun. Browser test remains unrun.
+- **Live staging boundary:** deployed CPAGrip attribution v5 remains ACTIVE/JWT; `public.store_cpagrip_attribution_token(text,uuid,text,timestamptz)` remains SECURITY DEFINER with service_role EXECUTE and postgres-owner execution. Public/anon/authenticated EXECUTE are false; token table has 0 rows. No function deployment, ACL change, SQL application or endpoint invocation occurred.
+- **Exact-head previews:** PR #30 `d588e3c` previews [9022da0f](https://9022da0f.legitloot.pages.dev) and [b86f1e07](https://b86f1e07.legitloot-preview.pages.dev) succeeded as `environment=preview`. PR #27 docs head `73bacc` previews [436876ed](https://436876ed.legitloot.pages.dev) and [e5112f79](https://e5112f79.legitloot-preview.pages.dev) also succeeded; Actions [44926908404](https://github.com/demonanic/LegitLoot/actions/runs/44926908404) passed.
+- **Coordination:** PR #30 body was refreshed to exact head `d588e3c`, 63 files / 91 commits, current CI and blockers. Latest Claude handoff is PR #30 comment [7065997669](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065997669). PR remains draft, 8/8 inline threads resolved, 4 COMMENTED reviews, none APPROVED.
+- **Disposition:** NOT LAUNCH-READY. Production wallet, production game schema, trusted game integration, Offerwall.GG staging containment, main-preview isolation, legal/account and Taplayad permission/protocol blockers remain open.
 - **Safety:** no PR merge, production/staging deployment, SQL application, Supabase setting/secret/schema/data/grant change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
