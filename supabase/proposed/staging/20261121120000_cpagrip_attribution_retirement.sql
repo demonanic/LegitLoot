@@ -28,6 +28,10 @@ revoke all on function public.store_cpagrip_attribution_token(text, uuid, text, 
 
 commit;
 
--- Post-apply verification (read-only; expect all false):
+-- Post-apply verification (read-only; expect all false / zero rows):
 --   select r, has_function_privilege(r, 'public.store_cpagrip_attribution_token(text,uuid,text,timestamptz)', 'EXECUTE')
 --   from unnest(array['anon','authenticated','service_role']) r;
+--   -- direct PUBLIC grant check (grantee 0); expect zero rows:
+--   select 1 from pg_proc p, aclexplode(coalesce(p.proacl, acldefault('f', p.proowner))) a
+--   where p.oid = 'public.store_cpagrip_attribution_token(text,uuid,text,timestamptz)'::regprocedure
+--     and a.grantee = 0 and a.privilege_type = 'EXECUTE';

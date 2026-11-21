@@ -24,6 +24,11 @@ test("CPAGrip staging retirement proposal is source-only, non-destructive and fa
   assert.match(exec, /revoke all on function public\.store_cpagrip_attribution_token\(text, uuid, text, timestamptz\)\s+from public, anon, authenticated, service_role;/);
   assert.doesNotMatch(exec, /\bgrant\b|\bdrop\b|\bdelete\b|\btruncate\b|\bupdate\b|\binsert\b|create (or replace )?function|alter table/i);
   assert.match(sql, /FORWARD-ONLY, FAIL-CLOSED/);
+  assert.match(sql, /aclexplode\(coalesce\(p\.proacl, acldefault\('f', p\.proowner\)\)\)[\s\S]*a\.grantee = 0/, "direct PUBLIC grant check");
+  const doc = readFileSync(new URL("../docs/security/CPAGRIP_STAGING_RETIREMENT.md", import.meta.url), "utf8");
+  assert.match(doc, /ABORT and escalate[\s\S]*differs from the expected/);
+  assert.match(doc, /authenticated staging request with a valid staging\s+JWT/);
+  assert.match(doc, /aclexplode/);
   const wf = readFileSync(new URL("../.github/workflows/offerwall-gg-retirement-tests.yml", import.meta.url), "utf8");
   assert.match(wf, /supabase\/functions\/cpagrip-attribution\/\*\*/);
   assert.match(wf, /deno check supabase\/functions\/cpagrip-attribution\/index\.ts/);
