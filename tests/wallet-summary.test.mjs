@@ -150,7 +150,10 @@ test("account.html cache-busts account-auth.js after the sign-up handler removal
   assert.doesNotMatch(html, /wallet-summary\.js\?v=m2t1-1/);
 });
 
-test("two-balance decision (2026-11-21): LC contract is separate from the cash ledger; no mixing path", async () => {
+// Scope: static checks only. This proves the LC parser ignores cash fields and that the LC sources document cash as a
+// separate ledger. It does NOT prove a cash-summary contract; none exists, and cash credits/payouts remain off.
+// Master Control §2 vs the Nov 21 owner decision (PR #31) still needs owner reconciliation.
+test("LC parser ignores cash fields; LC sources document cash as separate (static check, no cash contract exists)", async () => {
   const { readFileSync } = await import("node:fs");
   const strip = (s) => s.replace(/^\s*(--|\/\/).*$/gm, "");
   const parser = strip(readFileSync(new URL("../wallet-summary.js", import.meta.url), "utf8"));
