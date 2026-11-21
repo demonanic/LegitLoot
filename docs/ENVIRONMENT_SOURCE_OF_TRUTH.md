@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 11:47 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:47 ET.
+**Last verified:** 2026-11-21 11:50 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:50 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 **MIG-02 correction (2026-11-21 07:20 ET):** Any older section below stating that the `game_platform_foundation` source is missing describes the pre-recovery state. The canonical migration and its regression test are now present on integration; the migration is already applied to staging and must not be replayed. The integration migration directory still has no CPAGrip migration source.
@@ -1418,3 +1418,12 @@ No setting, secret, schema, data, function, callback, provider configuration, ag
 - **Cloudflare candidate previews:** `cb359c1` preview [02dabd9a](https://02dabd9a.legitloot.pages.dev) and [fa5f55b8](https://fa5f55b8.legitloot-preview.pages.dev) succeeded as `environment=preview`. The previous docs head `5e02fed` preview [644f1b70](https://644f1b70.legitloot.pages.dev) and [b86fe144](https://b86fe144.legitloot-preview.pages.dev) also succeeded; Actions [44926428447](https://github.com/demonanic/LegitLoot/actions/runs/44926428447) passed.
 - **Production remains:** `main@801f3e7`, deployment `fe4c0f22`; no production deployment. Main-based preview `fdf6b609` remains production-auth-connected and must stay off-limits for Account/auth.
 - **Next:** source-only staging retirement plan only; no SQL application, function deployment, table deletion or provider activation until separately authorized.
+
+
+### Sync Watch #34 final follow-up — 2026-11-21 11:50 ET
+
+- **PR #30:** latest head `7b4b4a6`, 63 files / 90 commits. Exact-head Node [44926633932](https://github.com/demonanic/LegitLoot/actions/runs/44926633932) and Deno [44926633922](https://github.com/demonanic/LegitLoot/actions/runs/44926633922) passed; Deno now type-checks `cpagrip-attribution/index.ts`.
+- **Canonical CPAGrip source:** inert HTTP 410 tombstone. New staging proposal `supabase/proposed/staging/20261121120000_cpagrip_attribution_retirement.sql` remains outside migrations and DO NOT APPLY. Runbook `docs/security/CPAGRIP_STAGING_RETIREMENT.md` describes tombstone-first order and manifest timing.
+- **Deployed staging remains unchanged:** `cpagrip-attribution` v5 ACTIVE/JWT; `public.store_cpagrip_attribution_token(text,uuid,text,timestamptz)` SECURITY DEFINER, ACL `{postgres=X/postgres,service_role=X/postgres}`; public/anon/authenticated EXECUTE false, service_role true; token table 0 rows. No deployment or ACL change.
+- **Proposal review gap:** require an abort if the live ACL differs from expected; verify no PUBLIC grant via `aclexplode(proacl)` or equivalent; specify authenticated staging request for 410 because `verify_jwt=true`. See PR #30 comment 7065972694. No SQL applied.
+- **Cloudflare:** candidate `7b4b4a6` previews [e45e18f4](https://e45e18f4.legitloot.pages.dev) and [177d2bcf](https://177d2bcf.legitloot-preview.pages.dev) succeeded as `environment=preview`. Production remains `main@801f3e7` / `fe4c0f22`.

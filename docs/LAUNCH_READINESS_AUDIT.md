@@ -1786,3 +1786,12 @@ PR #30 advanced to Claude head `cb359c1` (61 files / 89 commits). The canonical 
 The deployed staging CPAGrip function v5 remains ACTIVE/JWT, and its service-role-only SECURITY DEFINER RPC remains executable by service_role. The token table is empty. Source retirement is accepted; deployed retirement is not. PR #30 comment [7065937179](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065937179) requests the test addition and a source-only staging retirement plan. No SQL or function was deployed.
 
 PR #30 remains draft, with 8/8 inline threads resolved, 4 COMMENTED reviews and no APPROVED review. The 89/89 local test count is Claude-reported; browser test remains unrun. All launch blockers from Sync Watch #34 remain open.
+
+
+### Sync Watch #34 final follow-up — 2026-11-21 11:50 ET
+
+PR #30 advanced to Claude head `7b4b4a6` (63 files / 90 commits). The Deno retirement workflow now path-filters and type-checks the CPAGrip tombstone. Exact-head Node [44926633932](https://github.com/demonanic/LegitLoot/actions/runs/44926633932) and Deno [44926633922](https://github.com/demonanic/LegitLoot/actions/runs/44926633922) passed. Claude reports 90/90 local tests; not independently rerun. Browser test remains unrun.
+
+Claude also added a source-only staging retirement proposal and runbook. It remains NOT APPLIED / DO NOT APPLY. Independent review identified three required safety refinements: abort if the live RPC ACL differs from the expected ACL; explicitly verify no PUBLIC grant with `aclexplode(proacl)` or equivalent; and use an authenticated staging request for the 410 check because the deployed function has `verify_jwt=true`. See PR #30 comment [7065972694](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065972694).
+
+The deployed staging CPAGrip v5 and service-role RPC remain active; token table is empty. No function deployment, SQL application, ACL change, schema/data mutation or endpoint invocation occurred. PR #30 remains draft, 8/8 inline threads resolved, 4 COMMENTED reviews and no APPROVED review. All other launch blockers remain open.
