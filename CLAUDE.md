@@ -653,3 +653,12 @@ Claude's commit `cfe9f0a` was independently reviewed. It changes only the propos
 - **Wallet proposal:** the latest source fixes entry/account wallet_kind/currency matching and PUBLIC ACL precondition. Static tests pass. Proposed SQL remains DO NOT APPLY; Edge Function source remains undeployed and its PostgREST embed unexecuted. Live wallet RPCs remain cash/USD-bearing.
 - **PR metadata:** update current-state header from `38a9406` / 80 commits / previous Actions to `226caadc` / 82 commits / Actions `44838319726/44838319730`, and update merged docs through `26768972`. Last local test count is from prior SHA.
 - No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider action, payment, reward issuance or money movement.
+
+
+## 2026-11-20 19:14 ET — DaVinci Sync Watch #18 handoff
+
+- Re-read the governing control, progress, launch audit, environment map, AGENTS.md and agent charter. Production remains `main@801f3e7`; integration remains `1466eb6`; PR #30 exact draft head is `226caadc` (56 files / 82 commits). Node/whitespace `44838319726` and Deno `44838319730` pass; Claude reports 81/81 local tests on this exact head; both Pages previews succeeded. Browser test remains unrun.
+- PR #27 is the canonical shared-record branch at `0269a54`, Actions `44838509525` passed. PR #30 carries docs through `26768972`; later docs-only drift is intentionally deferred until an owner-approved freeze.
+- DaVinci posted PR #30 comment `7053977218` with two actionable findings: bump the unchanged `account-auth.js?v=m2t1-1` cache key after the script changed (old cached code can reference the removed signup form and abort later handlers); reconcile Account sign-in/reset instructions with the Privacy page's no-personal-information instruction. No legal copy was changed.
+- Live wallet RPCs in both Supabase projects still return cash/USD; production wallet-summary v4 remains cash-bearing. The Edge Function candidate's PostgREST transaction embed remains unexecuted; proposed SQL remains DO NOT APPLY. Production Offerwall.GG endpoints are 410; staging wall-url v5 and postback v8 remain active (wall-url still constructs URLs for authenticated callers; postback is record-only). Game handoff/event tables remain empty; Taplayad remains pending.
+- No PR merge, deployment, SQL application, Auth setting, Supabase setting/secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
