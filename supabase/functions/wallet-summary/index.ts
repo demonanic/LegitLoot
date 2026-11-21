@@ -80,7 +80,7 @@ Deno.serve(async (req: Request) => {
   // must be verified against staging before any deploy; accounts/entries mirror the proposed RPC filters): no cash/USD
   // buckets and no currency label. Cash is deferred; LC is not cash-convertible.
   return json({
-    lootCoins: {
+    legitCoins: {
       available: balance("lootcoins_available"),
       provisional: balance("lootcoins_provisional"),
       deferred: balance("lootcoins_deferred"),

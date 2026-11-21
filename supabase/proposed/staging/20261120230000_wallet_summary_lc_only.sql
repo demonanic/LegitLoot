@@ -2,8 +2,8 @@
 -- WALLET-01: LC-only get_wallet_summary() response. Removes cash/USD buckets and the
 -- "LLC" label from the authoritative wallet API. Replaces the function body only;
 -- no table or data change. The trailing REVOKE/GRANT statements only restate the ACL that is live today
--- (authenticated + service_role EXECUTE; anon/PUBLIC none) and must be preceded by the precondition check below. Response key is `lootCoins`, which wallet-summary.js
--- already parses (gameCredits is still accepted for the unchanged environments).
+-- (authenticated + service_role EXECUTE; anon/PUBLIC none) and must be preceded by the precondition check below. Response key is the canonical `legitCoins`, which wallet-summary.js
+-- parses first (legacy gameCredits/lootCoins are read-only client fallbacks for the unchanged environments).
 -- Production and staging still return the cash contract until this is separately approved.
 
 create or replace function public.get_wallet_summary()
@@ -43,7 +43,7 @@ begin
     group by a.account_code
   )
   select jsonb_build_object(
-    'lootCoins', jsonb_build_object(
+    'legitCoins', jsonb_build_object(
       'available', coalesce(sum(balance) filter (where account_code = 'lootcoins_available'),0)::text,
       'provisional', coalesce(sum(balance) filter (where account_code = 'lootcoins_provisional'),0)::text,
       'deferred', coalesce(sum(balance) filter (where account_code = 'lootcoins_deferred'),0)::text,

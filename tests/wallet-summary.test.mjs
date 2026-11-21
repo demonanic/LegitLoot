@@ -100,12 +100,15 @@ test("WALLET-01 source (not deployed): LC-only Edge Function and proposed SQL ca
   const sql = read("supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql");
   for (const [name, src] of [["edge function", fn], ["proposed SQL", sql]]) {
     assert.doesNotMatch(src.replace(/^\s*(--|\/\/).*$/gm, ""), /cash|USD|LLC/i, name + " must not emit cash/USD/LLC");
-    assert.match(src, /lootCoins/, name);
+    assert.match(src, /legitCoins/, name);
+    assert.doesNotMatch(src.replace(/^\s*(--|\/\/).*$/gm, ""), /lootCoins|gameCredits/, name + " must not emit deprecated keys");
   }
   assert.match(sql, /DO NOT APPLY/);
   // The proposed SQL stays outside supabase/migrations so it cannot be applied by accident.
   assert.ok(!read("supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql").includes("create table"));
-  // The client parser already reads the lootCoins key the new contract uses.
+  // The client parser reads the canonical legitCoins key first; legacy keys are read-only fallbacks.
+  assert.equal(parseLegitCoins({ legitCoins: { available: "125000", provisional: "0", deferred: "0", withdrawable: false } }), 12.5);
+  assert.equal(parseLegitCoins({ legitCoins: { available: "10000" }, gameCredits: { available: "20000" } }), 1);
   assert.equal(parseLegitCoins({ lootCoins: { available: "125000", provisional: "0", deferred: "0", withdrawable: false } }), 12.5);
 });
 
@@ -143,4 +146,6 @@ test("account.html cache-busts account-auth.js after the sign-up handler removal
   const html = readFileSync(new URL("../account.html", import.meta.url), "utf8");
   assert.match(html, /account-auth\.js\?v=m2t1-3/);
   assert.doesNotMatch(html, /account-auth\.js\?v=m2t1-[12]/);
+  assert.match(html, /wallet-summary\.js\?v=m2t1-2/);
+  assert.doesNotMatch(html, /wallet-summary\.js\?v=m2t1-1/);
 });
