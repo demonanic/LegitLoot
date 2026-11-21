@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 04:11 ET
+**Last updated:** 2026-11-21 04:13 ET
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
 **Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #26 (2026-11-21 03:52 ET) rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The branch-protection endpoint returned HTTP 403 for detailed rules; branch metadata confirms `main` is unprotected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current head `1466eb6`. Do not describe `main` as technically protected.
@@ -2232,3 +2232,10 @@ Owner explicitly authorized preparation and testing of production containment, p
 - The initial #27 debrief was committed to the canonical docs PR branch, and the stale Sync Watch #25 verified-state block in `CLAUDE.md` was refreshed.
 - The final docs-only branch head includes this follow-up. The last GitHub Actions run available for PR #27 is `44887142188` on pre-update SHA `27edb599`; no workflow run was returned for the final docs-only head. Both Cloudflare Pages projects completed automatic previews for the docs branch with `environment=preview`; production canonical deployment remains `legitloot` / `main@801f3e7` / `fe4c0f22`.
 - No application code, production target, Supabase configuration, schema or data was changed. This follow-up corrects the earlier debrief's PR #27 head/CI timing so the next session does not mistake the pre-update Actions result for a check on the final documentation commit.
+
+
+### Sync Watch #27 verification correction — 2026-11-21 04:13 ET
+
+- Exact docs-only head `27e3fc02` passed GitHub Actions run [44888911552](https://github.com/demonanic/LegitLoot/actions/runs/44888911552).
+- At this check, the Cloudflare preview for project `legitloot` / deployment `f3d69dca` was queued; the `legitloot-preview` / deployment `866b3a1d` had reached the deploy stage but remained active. Both deployments were `environment=preview`, branch `claude/log-ack-charter`, SHA `27e3fc02`. The prior `27edb599` previews had completed successfully. Do not describe the new pair as complete until their deploy stages finish.
+- The current-state note in `CLAUDE.md` was corrected to preserve this distinction. Production canonical deployment remained `fe4c0f22`, `main@801f3e7`; no production deployment occurred.
