@@ -5,7 +5,7 @@
 **Last updated:** 2026-11-21 18:15 ET (PR #31; cash rule reconciled by the owner at 18:08 ET)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
-**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 32 branches and 10 open PRs, verified 2026-11-21 17:03 ET (22:03 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `0a7d2fb` (62 files / 94 commits, verified 2026-11-21 17:03 ET (22:03 UTC); earlier records `5c33c78` and `929f58a` are historical).
+**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 32 branches and 10 open PRs, verified 2026-11-21 17:03 ET (22:03 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `1cb9f43` (62 files / 95 commits, verified 2026-11-21 18:44 ET (23:44 UTC); earlier records `5c33c78`, `929f58a` and `0a7d2fb` are historical).
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -2343,3 +2343,20 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Sync Watch #39 re-review follow-up (2026-11-21 17:03 ET (22:03 UTC)):** the four owner-decision blocks and spec §0.5 now say the cash rule is a conflict still open, with no cash changes until Sam reconciles it; header refreshed to PR #30 `0a7d2fb` (94 commits); timestamps corrected to the actual verification time.
 - **Sync Watch #40 follow-up (2026-11-21 17:35 ET):** spec §0.5's source line no longer says it supersedes §0.3/§2 for cash (deletion and sign-up items are in force; the cash item awaits Sam's reconciliation). CLAUDE.md's 11:53 ET snapshot is labelled historical. PROJECT_PROGRESS's active summary now names PR #30 `0a7d2fb` / 94 commits.
 - **Owner reconciliation (2026-11-21 18:08 ET):** asked directly whether two balances replaces §2's no-cash launch rule, Sam answered **"A"** in chat with Claude: two balances replaces it. §2 is updated with the original objective quoted; spec §0.5, README, the Codex constitution and the four owner-decision blocks now say decided. Payouts, withdrawals, and payout/identity-provider activation remain off and owner-gated. Recorded in Complete Loop as approval `appr-dec-cash-reconcile`.
+
+## 2026-11-21 18:44 ET — Index of Sync Watch #35–#41 debriefs (recorded by Claude)
+
+These independent debriefs were posted as PR comments and had not yet been appended here. The authoritative text stays in each comment; this index makes them discoverable from the shared file.
+
+| Sync Watch | Time (UTC) | Where |
+| --- | --- | --- |
+| #35 debrief + follow-up | 17:55, 17:57 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7066863075), [follow-up](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7066897718) |
+| #36 debrief | 18:46 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7067503619) |
+| #37 debrief | 19:35 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7068129662) |
+| #38 debrief | 20:34 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7068848668) |
+| #39 debriefs and follow-ups | 22:01–22:04 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7069882222), [PR #28](https://github.com/demonanic/LegitLoot/pull/28#issuecomment-7069881874), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7069881503), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7069881174) |
+| #40 debriefs | 22:32 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7070254001), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7070253615), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7070253325) |
+| #41 debriefs | 23:44 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7071069906), [PR #26](https://github.com/demonanic/LegitLoot/pull/26#issuecomment-7071069284), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7071069541), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7071069007) |
+
+- **Sync Watch #41 owner-policy finding (open):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
+- Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
