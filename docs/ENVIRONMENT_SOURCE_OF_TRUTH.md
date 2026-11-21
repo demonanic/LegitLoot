@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 18:39 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:39 ET.
+**Last verified:** 2026-11-20 19:14 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 19:14 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1202,3 +1202,14 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 - Live production/staging RPCs remain cash/USD-bearing; production wallet-summary v4 remains active with cash/USD response. No SQL or Edge Function deployment occurred.
 - PR #30 body remains one commit stale at `38a9406` / 80 commits / previous Actions and says PR #27 merged through `e1146ff`. Update to current head `226caadc`, 82 commits, Actions `44838319726/44838319730`, and merged docs through `26768972`. Local 81/81 is from the prior SHA.
 - No Auth setting, secret, grant, schema, data, callback, provider setting/agreement or financial activity changed.
+
+
+## 2026-11-20 19:14 ET — Sync Watch #18 live environment recheck
+
+- **Supabase project health:** production `gkbqderyjcuxnjbsiffb` and staging `scmnxcsggquwtuyyjnnj` both report ACTIVE_HEALTHY. Production migration history has 7 entries; staging has 21, latest `20261119145340 offerwall_gg_record_only`.
+- **Wallet RPC:** fresh SELECT of `pg_get_functiondef`, ACL and privileges confirms both live `public.get_wallet_summary()` definitions still include cash/USD buckets. Production exposes `lootCoins.available`; staging exposes `gameCredits.available` and label `LLC` while filtering LC ledger accounts. Both grant authenticated EXECUTE; anon EXECUTE is false; observed ACL is `{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}`. No SQL was applied.
+- **Production wallet Edge Function:** `wallet-summary` v4 is ACTIVE, `verify_jwt=false`, and still returns cash/USD plus legacy `gameCredits/LLC` fields from the old `game_credits_*` account codes. Its handler does explicitly require a Bearer token and validate it with `auth.getUser`. The LC-only candidate source has not been deployed.
+- **Offerwall.GG:** production wall-url v2 and postback v4 are ACTIVE tombstones returning HTTP 410. Staging wall-url v5 is ACTIVE/JWT and its deployed source still creates Offerwall.GG URLs for authenticated callers; staging postback v8 is ACTIVE/no-JWT and record-only. No callback was invoked. Retirement source/SQL proposals remain un-deployed/un-applied.
+- **Games:** staging `game_registry` has one placeholder row; `game_events`, `game_saves` and `game_handoff_tickets` each have zero rows. No game handoff or LC event path is proven by these records.
+- **GitHub / Pages:** 31 branches, all `protected:false`; repository rulesets empty. Production `main@801f3e7`; integration `build/legitloot-neon-synthwave@1466eb6`; candidate PR #30 `226caadc`. Candidate previews are reported successful as pages.dev previews. The existing main-based preview's production-auth connection is carried forward from 15:07 ET, not rechecked in this run.
+- This check used read-only Supabase queries. No settings, secrets, grants, schema, data, functions, migrations, deployments, callbacks or financial activity were changed.
