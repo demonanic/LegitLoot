@@ -4,12 +4,14 @@ on:
   pull_request:
     paths:
       - "supabase/functions/offerwall-gg-*/**"
+      - "supabase/functions/cpagrip-attribution/**"
       - ".github/workflows/offerwall-gg-retirement-tests.yml"
   push:
     branches:
       - "build/legitloot-neon-synthwave"
     paths:
       - "supabase/functions/offerwall-gg-*/**"
+      - "supabase/functions/cpagrip-attribution/**"
       - ".github/workflows/offerwall-gg-retirement-tests.yml"
 
 permissions:
@@ -27,6 +29,7 @@ jobs:
         run: |
           deno check supabase/functions/offerwall-gg-postback/index.ts
           deno check supabase/functions/offerwall-gg-wall-url/index.ts
+          deno check supabase/functions/cpagrip-attribution/index.ts
       - name: Test inert tombstone handlers
         run: |
           deno test supabase/functions/offerwall-gg-postback/index_test.ts

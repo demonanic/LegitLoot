@@ -16,3 +16,15 @@ test("CPAGrip tombstone is not wired into the website or registry", () => {
     assert.doesNotMatch(readFileSync(new URL(`../${f}`, import.meta.url), "utf8"), /cpagrip/i, f);
   }
 });
+
+test("CPAGrip staging retirement proposal is source-only, non-destructive and fail-closed", () => {
+  const sql = readFileSync(new URL("../supabase/proposed/staging/20261121120000_cpagrip_attribution_retirement.sql", import.meta.url), "utf8");
+  const exec = sql.replace(/^\s*--.*$/gm, "");
+  assert.match(sql, /NOT APPLIED\. DO NOT APPLY/);
+  assert.match(exec, /revoke all on function public\.store_cpagrip_attribution_token\(text, uuid, text, timestamptz\)\s+from public, anon, authenticated, service_role;/);
+  assert.doesNotMatch(exec, /\bgrant\b|\bdrop\b|\bdelete\b|\btruncate\b|\bupdate\b|\binsert\b|create (or replace )?function|alter table/i);
+  assert.match(sql, /FORWARD-ONLY, FAIL-CLOSED/);
+  const wf = readFileSync(new URL("../.github/workflows/offerwall-gg-retirement-tests.yml", import.meta.url), "utf8");
+  assert.match(wf, /supabase\/functions\/cpagrip-attribution\/\*\*/);
+  assert.match(wf, /deno check supabase\/functions\/cpagrip-attribution\/index\.ts/);
+});
