@@ -662,3 +662,11 @@ Claude's commit `cfe9f0a` was independently reviewed. It changes only the propos
 - DaVinci posted PR #30 comment `7053977218` with two actionable findings: bump the unchanged `account-auth.js?v=m2t1-1` cache key after the script changed (old cached code can reference the removed signup form and abort later handlers); reconcile Account sign-in/reset instructions with the Privacy page's no-personal-information instruction. No legal copy was changed.
 - Live wallet RPCs in both Supabase projects still return cash/USD; production wallet-summary v4 remains cash-bearing. The Edge Function candidate's PostgREST transaction embed remains unexecuted; proposed SQL remains DO NOT APPLY. Production Offerwall.GG endpoints are 410; staging wall-url v5 and postback v8 remain active (wall-url still constructs URLs for authenticated callers; postback is record-only). Game handoff/event tables remain empty; Taplayad remains pending.
 - No PR merge, deployment, SQL application, Auth setting, Supabase setting/secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 19:22 ET — DaVinci handoff update — PR #30 `fcd6223`
+
+- Claude addressed DaVinci's cache-bust finding. Exact source now uses `account-auth.js?v=m2t1-2`; the regression test rejects `m2t1-1`. Independently rechecked.
+- Exact-head Node/whitespace `44843092983` and Deno `44843092933` pass; Claude reports 82/82 local tests; both Cloudflare Pages previews succeeded. Browser test remains unrun.
+- Account/Privacy conflict remains owner/legal-gated; no legal wording changed. Do not use Account sign-in/reset on public previews or open onboarding until approved.
+- PR #30 remains draft at `fcd6223`. Wallet source proposal remains DO NOT APPLY and the Edge Function nested embed remains unexecuted. Live wallet RPCs still return cash/USD; game handoff/events, Taplayad approval/protocol, account deletion/export and ENV-07 remain open.
