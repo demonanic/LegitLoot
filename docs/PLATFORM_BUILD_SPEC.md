@@ -69,7 +69,7 @@ Source: Sam's own GitHub issues in the private Complete Loop repository (`demona
 ### Cash balance — "two balances" (issue #2)
 - Owner's chosen option, verbatim: **"Two balances: cash and coins (my Nov 20 plan)"** — *Agents keep a cash balance, fully separate from coins. Payouts stay switched off until business setup and payout tools are ready.*
 - LegitLoot acts as publisher for Hustle partners. Partners pay LegitLoot; verified completions are credited to the player's **cash balance** (USD ledger), never to LC.
-- Cash and LC must never mix: no conversion either way, no shared ledger, no LC purchase with cash (owner, 2026-11-20 chat: "fuck purchasing LC with cash. Let's stay simple"). §0.1 LC rules are unchanged.
+- Cash and LC must never mix: no conversion either way, no shared ledger, no LC purchase with cash (owner, 2026-11-20 chat: drop buying LC with cash and keep it simple). §0.1 LC rules are unchanged.
 - **Payouts stay off.** Intended future payout rule (owner, 2026-11-20 chat): 18+, identity check, minimum balance, no fraud, and manual owner approval of each request. Live payouts, payout providers, identity-check providers and activation remain **owner-gated**; business setup (LLC/EIN/tax) comes first.
 - Effect for agents: stop treating separate cash fields as a launch blocker to remove. Keep them separate, server-side and inactive; remove only wording that implies cash is withdrawable today.
 
