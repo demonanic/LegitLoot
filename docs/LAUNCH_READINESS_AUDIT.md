@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #24 (2026-11-21 01:15 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #25 (2026-11-21 02:35 ET). Earlier status tables are historical.
 
 ---
 
@@ -1696,3 +1696,20 @@ This does **not** make account functionality launch-ready: the signed-in wallet 
 - **Governance:** 31 GitHub refs currently report `protected:false`; repository rulesets are empty. PR #28 remains draft/owner-gated. Nine PRs remain open: #9, #20, #22, #25, #26, #27, #28, #29, #30.
 
 No PR merge, deployment, legal change, Supabase setting/secret/schema/data change, callback, provider setting/agreement, or financial activity occurred. Database checks were SELECT-only.
+
+
+## 2026-11-21 02:35 ET — Sync Watch #25: current launch-readiness disposition
+
+**Disposition: NOT LAUNCH-READY.** PR #30 remains a draft review candidate at 37763d8; Node/whitespace and Deno Actions pass, Claude reports 86/86 local tests, browser suite unrun, and no formal approval exists. Candidate previews in both Pages projects are successful and staging-bound. No production release occurred.
+
+### Verified blockers and current evidence
+
+- **Wallet policy:** production and staging public.get_wallet_summary() still return cash/USD fields. Production uses lootCoins; staging uses gameCredits/LLC. Both deny anon EXECUTE and allow authenticated/service_role; both have zero journal entries and transactions. Production wallet-summary v4 remains deployed and cash/legacy-LLC-bearing. Candidate LC-only SQL/function remain source-only; SQL is DO NOT APPLY and the PostgREST relationship embed is NOT VERIFIED.
+- **Production UI/policy mismatch:** main@801f3e7 still exposes cash/withdrawal fields in account.html and rewards.html, and earn.html still says the server credits LootCoins after provider completion. account-auth.js still contains public signup and cash response handling. Candidate copy is LC-only and candidate Account auth is paused, but neither candidate change is deployed.
+- **Account/legal:** Terms and Privacy remain draft notices. Candidate Account sign-in/reset and wallet access remain paused by the legal gate. AUTH-03 design is present on integration, but deletion/export is not implemented. payouts@legitloot.site is owner-selected but unverified; draft privacy.html still lists hello@legitloot.site, which the design says is not the selected deletion/export contact. See PR #30 comment 7059451679.
+- **Game integration:** both selected games are playable early access with local saves. Staging registry has only the legacy unlisted Zombie Invasion Defense placeholder; neither selected game is registered. Game events, saves and handoff tickets are zero. Static test tests/launch-games.test.mjs does not prove shared account/session, cloud saves or verified LC events. Existing actionable finding: PR #30 comment 7058531808.
+- **Provider readiness:** Taplayad App 10066 remains pending written incentivized-traffic permission and App-specific signature/transaction/reversal/retry semantics. Preserve the owner URL exactly; no provider callback or publisher reward can issue LC. Offerwall.GG production endpoints are HTTP 410; staging wall-url v5 remains active/JWT and postback v8 active/no-JWT/record-only.
+- **Environment/governance:** main-based preview main.legitloot-preview.pages.dev remains a preview built from main@801f3e7 and targets production Supabase for Account/auth. All 31 refs report protected:false and repository rulesets are empty. PR #28 remains draft/owner-gated.
+- **Release-control side branch:** owner-authored docs/m2-t6-release-runbook@5fe4cea removes the canonical Offerwall.GG rollback exception and recommends generic previous-version redeploy. Do not use or merge it; the integration runbook at blob 4acf171 correctly forbids restoring pre-containment postback v3/wall-url v1.
+
+Two non-blocking candidate review notes were added to PR #30: 7059451348 (Hustle test name overstates its assertions) and 7059451679 (support-contact mismatch). No merge, deployment, setting, schema/data, provider, callback or financial action occurred.

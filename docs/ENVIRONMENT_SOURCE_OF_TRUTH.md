@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 01:15 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and source review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 01:15 ET.
+**Last verified:** 2026-11-21 02:35 ET by DaVinci (read-only GitHub, Cloudflare and Supabase inventory plus source review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 02:35 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1274,3 +1274,36 @@ All database operations in this check were SELECT-only. No settings, secrets, sc
 - Staging `private.providers`: CPAGrip disabled; Offerwall.GG disabled but retains stale LC approved-reward metadata; no Taplayad row. Staging Offerwall.GG wall-url v5 remains ACTIVE/JWT and postback v8 ACTIVE/no-JWT/record-only. Production wall-url v2 and postback v4 remain ACTIVE HTTP 410 tombstones. No callback was invoked.
 
 All database operations in this check were SELECT-only. No settings, secrets, schema, data, functions, provider settings, callbacks, or financial activity were changed.
+
+
+## 2026-11-21 02:35 ET — Sync Watch #25 environment verification
+
+### GitHub
+
+- Production main remains 801f3e7; integration remains 1466eb6; PR #30 candidate is 37763d8; canonical docs PR #27 is 6db6b04; ENV-07 PR #28 is 93f62ac.
+- Nine PRs are open. All 31 branches report protected:false and repository rulesets are empty. No technical branch-protection gate is configured.
+- PR #30 exact-head Node/whitespace 44873409564 and Deno 44873409629 pass; Claude reports 86/86 local tests; browser suite unrun. Eight older review threads are resolved; no formal approval.
+- PR #27 exact-head Actions 44875190144 pass. Both Pages previews for 6db6b04 succeeded as environment=preview. PR #30 previews for 37763d8 also succeeded as environment=preview in both projects.
+
+### Cloudflare Pages
+
+- Production project legitloot remains main@801f3e7, deployment fe4c0f22, environment=production, alias https://legitloot.site.
+- PR #30 preview deployments: 7dc5f1f0 (legitloot) and 30f96ba2 (legitloot-preview), exact commit 37763d8, both successful and staging-bound.
+- PR #27 preview deployments: 7cd4fb63 (legitloot) and 2c4cead6 (legitloot-preview), exact commit 6db6b04, both successful as preview deployments.
+- Main-based preview fdf6b609 remains environment=preview, branch main, commit 801f3e7, alias https://main.legitloot-preview.pages.dev. Its Account/auth source targets production Supabase; do not use those routes until owner-approved ENV-07 remediation is deployed and rechecked.
+
+### Supabase (read-only)
+
+- Production gkbqderyjcuxnjbsiffb and staging scmnxcsggquwtuyyjnnj are both ACTIVE_HEALTHY; migration counts remain 7 and 21.
+- Both live public.get_wallet_summary() definitions return cash/USD fields. Production uses lootCoins; staging uses gameCredits/LLC. ACLs deny anon EXECUTE and allow authenticated/service_role. Both projects have zero journal entries and zero journal transactions.
+- Production wallet-summary Edge Function v4 is ACTIVE, verify_jwt=false, and manually validates the Bearer token; it still returns cash/legacy-LLC fields. Staging has no wallet-summary function.
+- Staging public.game_registry contains only id=zid, slug=zombie-invasion-defense, title=Zombie Invasion Defense, launch_url NULL, status=development, is_listed=false. private.game_events, private.game_saves and private.game_handoff_tickets each have zero rows.
+- Staging provider rows: CPAGrip disabled; Offerwall.GG disabled with stale LC reward metadata; no Taplayad row. Offerwall.GG wall-url v5 remains ACTIVE/JWT with production legitloot.site in its CORS allowlist; postback v8 remains ACTIVE/no-JWT and record-only. Production wall-url v2 and postback v4 remain HTTP 410 tombstones.
+
+### Source and release-control notes
+
+- Candidate PR #30 supabase-config.js pins the exact staging project. Candidate Account gate remains closed while Terms/Privacy are drafts; candidate LC-only SQL and Edge Function are not deployed, SQL remains DO NOT APPLY, and the PostgREST journal_transactions!inner(status) embed remains NOT VERIFIED.
+- The integration release runbook at blob 4acf171 preserves the Offerwall.GG rollback exception. Separate owner-authored branch docs/m2-t6-release-runbook@5fe4cea removes that exception and suggests redeploying previous versions, which could restore pre-containment active v3/v1 handlers. Do not use or merge that side-branch runbook.
+- AUTH-03 design is present on integration. payouts@legitloot.site remains unverified; draft privacy.html still lists hello@legitloot.site. No deletion/export implementation or mailbox verification.
+
+All database operations in this check were SELECT-only. No settings, secrets, schema, data, functions, callbacks, provider settings, agreements, payments or financial activity were changed.
