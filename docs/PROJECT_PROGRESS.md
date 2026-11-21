@@ -1,9 +1,9 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 03:52 ET
+**Updated:** 2026-11-21 05:39 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
-**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the separate canonical documentation branch at `b715436` (exact-head Actions 44881864337 passed).
+**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the separate canonical documentation branch at `f800502` (exact-head Actions 44888974921 passed; both Pages previews completed as `environment=preview`).
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-21 03:52 ET):** #9 head `046019f` stale design draft; #20 head `6e2e51b`; #22 head `332ca07` (stacked on #20); #25 head `135607e` (superseded draft); #26 head `30f5dbf` (Taplayad pending; provider-contract gate); #27 docs branch head `b715436` (Actions `44881864337` passed); #28 head `93f62ac` (draft against main; Actions `44791797759` passed; scoped owner review only); #29 head `cfe9f0a` (DO NOT MERGE STANDALONE; superseded by #30); #30 head `49f209d` consolidated draft (58 files / 86 commits; Node `44881682972` and Deno `44881683000` pass; Claude reports 87/87 local tests; browser test unrun; no formal approval).
+**Current open PRs (2026-11-21 05:39 ET):** #9 head `046019f` stale design draft; #20 head `6e2e51b`; #22 head `332ca07` (stacked on #20); #25 head `135607e` (superseded draft); #26 head `30f5dbf` (Taplayad pending; provider-contract gate); #27 docs branch head `f800502` (Actions `44888974921` passed; both previews successful); #28 head `93f62ac` (draft against main; Actions `44791797759` passed; scoped owner review only); #29 head `cfe9f0a` (DO NOT MERGE STANDALONE; superseded by #30); #30 head `49f209d` consolidated draft (58 files / 86 commits; Node `44881682972` and Deno `44881683000` pass; Claude reports 87/87 local tests; browser test unrun; no formal approval).
 
 ## Current owner-locked operating rules
 
@@ -984,3 +984,11 @@ Claude's response to the account/privacy finding is now verified at PR #30 head 
 - Staging Offerwall.GG is disabled in the provider table but its wall-url v5 remains active/JWT; postback v8 and its database routine are record-only. No callback was invoked.
 - Taplayad's current and indexed legacy public docs describe conflicting signature/acknowledgement/retry contracts; direct legacy-page retrieval returns 404; App-10066 permission and protocol remain unverified. Keep it pending and never map provider points or callbacks into LC. See PR #26 comment `7060202798`.
 - Production-auth-connected main preview, account/legal/deletion gaps, production cash/withdrawal UI, stale Offerwall.GG metadata, unsafe side-branch rollback runbook and unprotected branch refs remain open launch risks.
+
+
+## 2026-11-21 05:39 ET — Sync Watch #28 current-state update
+
+- Production remains `main@801f3e7` / Cloudflare production deployment `fe4c0f22`; integration remains `build/legitloot-neon-synthwave@1466eb6`. PR #30 remains draft at `49f209d` (58 files / 86 commits), with Node/whitespace and Deno Actions passing; Claude reports 87/87 local tests, not independently rerun; browser test unrun; no formal approval. PR #27 docs branch is `f800502` with exact-head Actions `44888974921` passed and both Pages previews successful as preview deployments. PR #28 remains draft/owner-gated at `93f62ac` with Actions `44791797759` passed. Nine PRs remain open; 31 refs report unprotected and rulesets are empty.
+- Both live wallet RPCs still return cash/USD; production wallet-summary v4 remains cash/legacy-LLC-bearing; candidate LC-only SQL/function remain source-only and SQL DO NOT APPLY. Staging game registry remains one legacy unlisted placeholder, with zero game events, saves or handoff tickets. Taplayad remains pending App-10066-specific incentivized-traffic permission and complete callback protocol confirmation; preserve the owner URL and no provider-to-LC issuance.
+- Main-based preview `main.legitloot-preview.pages.dev` remains a preview built from `main@801f3e7` and targets production Supabase for Account/auth. Production main still exposes signup and cash/withdrawal UI. Keep candidate Account gate closed until owner-approved legal notices and support/deletion route are ready.
+- No new code defect or owner decision emerged. M2-T4 remains the active task. No production, financial, provider, schema/data, settings/secrets or legal action occurred.

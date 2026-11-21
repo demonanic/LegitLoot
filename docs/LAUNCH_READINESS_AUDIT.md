@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #26 (2026-11-21 03:52 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #28 (2026-11-21 05:39 ET). Earlier status tables are historical.
 
 ---
 
@@ -1730,3 +1730,20 @@ Two non-blocking candidate review notes were added to PR #30: 7059451348 (Hustle
 - **Governance:** all 31 refs report `protected:false`; rulesets are empty. The owner-authored `docs/m2-t6-release-runbook@5fe4cea` side branch remains unsafe for rollback because it omits the canonical Offerwall.GG v3/v1 prohibition. Use only the integration runbook at blob `4acf171`.
 
 No production merge/deploy, Supabase mutation, provider setting/agreement, callback, financial activity, or legal decision occurred. All database checks were SELECT-only.
+
+
+## 2026-11-21 05:39 ET — Sync Watch #28: current launch-readiness disposition
+
+**Disposition: NOT LAUNCH-READY.** PR #30 remains draft at `49f209d`; its latest change is test-only and accepted for that limited scope. Exact-head Node/whitespace and Deno Actions pass; Claude reports 87/87 local tests, not independently rerun; browser suite remains unrun; no formal approval exists. No new application-code defect was found.
+
+### Current verified blockers
+
+- **Wallet policy:** both live wallet RPCs still return cash/USD fields; production uses `lootCoins`, staging uses `gameCredits/LLC`. Both journal tables remain empty. Production wallet-summary v4 remains active and cash/legacy-LLC-bearing; staging has no wallet-summary function. Candidate LC-only function/SQL remain source-only; SQL is DO NOT APPLY and PostgREST private-schema relationship execution is NOT VERIFIED.
+- **Production UI:** `main@801f3e7` still exposes signup and cash/withdrawal UI; `rewards.html` retains the cash/USD reward and withdrawal model. The production homepage retains the Offerwall verification meta artifact. Candidate changes are not deployed.
+- **Account/legal:** candidate sign-in/reset remain safely paused while Terms/Privacy are drafts. Deletion/export and a verified support route remain incomplete. Do not reopen the Account gate or publish an unverified address.
+- **Game integration:** staging registry contains only the legacy unlisted Zombie Invasion Defense placeholder; neither selected launch game is registered. Game events, saves and handoff tickets are zero. Static game tests do not prove shared account/session, cloud saves or verified LC events.
+- **Providers:** staging Offerwall.GG is disabled but retains stale LC reward metadata; staging wall-url v5 remains active/JWT and postback v8 active/no-JWT/record-only. Production endpoints remain HTTP 410 tombstones. Taplayad App 10066 remains pending written incentivized-traffic permission and complete app-specific signature/transaction/reversal/retry semantics; preserve the exact owner URL and no provider-to-LC issuance.
+- **Environment/governance:** candidate previews for `49f209d` and docs previews for `f800502` are successful staging-bound preview deployments. Production remains `main@801f3e7`. The separate main-based preview remains production-auth-connected; all 31 refs report unprotected and rulesets are empty. PR #28 remains draft/owner-gated.
+- **Release rollback:** owner-authored `docs/m2-t6-release-runbook@5fe4cea` remains unsafe for rollback because it could restore Offerwall.GG v3/v1; canonical integration runbook blob `4acf171` remains authoritative.
+
+No production merge/deploy, Supabase setting/secret/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred. All database queries were SELECT-only.
