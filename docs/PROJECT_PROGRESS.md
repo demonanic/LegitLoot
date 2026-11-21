@@ -3,7 +3,7 @@
 **Updated:** 2026-11-21 07:20 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
-**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the separate canonical documentation branch at `5f99479` (exact-head Actions 44895875827 passed; both Pages previews `07393783` and `6f9a090e` completed as `environment=preview`).
+**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the separate canonical documentation branch now at `4b2228c` (exact-head Actions 44904250535 passed; both Pages previews `9af3dc33` and `457b15d7` completed as `environment=preview`; prior head `5f99479` also passed run 44895875827).
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
@@ -1001,3 +1001,9 @@ Claude's response to the account/privacy finding is now verified at PR #30 head 
 - Both live wallet RPCs still return cash/USD fields. Taplayad App 10066 remains pending permission and complete App-specific protocol confirmation. Main-based preview Account/auth routes still target production Supabase.
 - MIG-02 source and its regression test are present on integration; the migration is already applied to staging and must not be replayed. CPAGrip migration source remains absent from the integration migration directory.
 - Full evidence, exact CI/deployment references and safety boundaries are recorded in the Sync Watch #30 entry in `docs/MASTER_EXECUTION_CONTROL.md`. No production, financial, provider, schema/data, setting/secret or legal action occurred.
+
+### Sync Watch #30 documentation verification follow-up — 2026-11-21 07:20 ET
+
+- Final docs-only PR #27 head: `4b2228cc17eb4403d656cb7b74a7a7398b6d4887`; the two documentation commits changed only the five shared records and `CLAUDE.md`.
+- Exact-head GitHub Actions run [44904250535](https://github.com/demonanic/LegitLoot/actions/runs/44904250535) passed. Automatic Cloudflare previews [9af3dc33](https://9af3dc33.legitloot.pages.dev) and [457b15d7](https://457b15d7.legitloot-preview.pages.dev) completed successfully as `environment=preview`.
+- Production remains `main@801f3e7`, deployment `fe4c0f22`; no production deployment occurred. PR #27 remains open and unmerged.

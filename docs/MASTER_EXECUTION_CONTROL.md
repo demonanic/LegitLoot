@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 05:39 ET
+**Last updated:** 2026-11-21 07:20 ET
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
-**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #28 (2026-11-21 05:39 ET) rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The branch-protection endpoint returned HTTP 403 for detailed rules; branch metadata confirms `main` is unprotected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current head `1466eb6`. Do not describe `main` as technically protected.
+**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #30 (2026-11-21 07:20 ET) rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The branch-protection endpoint returned HTTP 403 for detailed rules; branch metadata confirms `main` is unprotected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current head `1466eb6`. Do not describe `main` as technically protected.
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -2266,3 +2266,9 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Taplayad App 10066:** current official [docs](https://tplayad.com/docs) specify `md5(app_id . user_id . api_secret)`, status 1/2, any-2xx acknowledgement, and suggested `offer_id + user_id` deduplication. The signature omits offer/reward/payout/status; no immutable transaction ID or retry schedule is documented; the sample uses `offer={offer_id}` while the PHP example reads `offer_id`. Direct retrieval of the legacy [postback page](https://www.tplayad.com/doc/postback) returns 404; search-indexed legacy protocol text is not verified and must not be combined with the current guide. Current [Terms](https://tplayad.com/terms), last updated 2026-10-29, do not expressly establish incentivized-traffic permission. Keep Taplayad pending, preserve `https://offerwall.tplayad.com/10066/{user_id}`, and never map publisher points, callback rewards or payout to LC.
 - **Disposition:** NOT LAUNCH-READY. M2-T4 remains active: both selected games are public early access/device-local only; trusted registry, shared account/session handoff, cloud saves and server-verified idempotent LC-event integration remain incomplete. Wallet, legal/account, provider, preview-isolation and branch-protection blockers remain open. No new owner decision or approval-ready milestone emerged.
 - **Safety:** no PR was merged, no manual deployment was initiated, no Supabase setting/secret/schema/data was changed, no callback was invoked, no provider setting/agreement was accepted, and no payment, reward issuance or money movement occurred. All database queries were SELECT-only; Cloudflare activity was read-only and observed builds were automatic branch previews.
+
+### Sync Watch #30 documentation verification follow-up — 2026-11-21 07:20 ET
+
+- Final docs-only PR #27 head: `4b2228cc17eb4403d656cb7b74a7a7398b6d4887`; the two documentation commits changed only the five shared records and `CLAUDE.md`.
+- Exact-head GitHub Actions run [44904250535](https://github.com/demonanic/LegitLoot/actions/runs/44904250535) passed. Automatic Cloudflare previews [9af3dc33](https://9af3dc33.legitloot.pages.dev) and [457b15d7](https://457b15d7.legitloot-preview.pages.dev) completed successfully as `environment=preview`.
+- Production remains `main@801f3e7`, deployment `fe4c0f22`; no production deployment occurred. PR #27 remains open and unmerged.
