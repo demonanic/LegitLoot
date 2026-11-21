@@ -2225,3 +2225,10 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Coordination correction:** the top verified-state block in `CLAUDE.md` still described Sync Watch #25 (02:35 ET) despite the newer #26 handoff. It has been refreshed to the verified #27 state; no application code or environment was changed.
 - **Disposition:** NOT LAUNCH-READY. M2-T4 remains active: both selected games are public early access/device-local, but trusted registry/session/save/event integration is incomplete. Production wallet/UI still violates the LC-only/no-cash rules; account/legal/deletion readiness, ENV-07, provider permission/protocol and branch protection remain unresolved.
 - **Safety:** no PR merged; no manual deployment; no Supabase setting/secret/schema/data change; no callback, provider setting/agreement, payment, reward issuance or money movement. All database operations were SELECT-only; Cloudflare builds were automatic branch previews only.
+
+
+### Sync Watch #27 documentation follow-up — 2026-11-21 04:13 ET
+
+- The initial #27 debrief was committed to the canonical docs PR branch, and the stale Sync Watch #25 verified-state block in `CLAUDE.md` was refreshed.
+- The final docs-only branch head includes this follow-up. The last GitHub Actions run available for PR #27 is `44887142188` on pre-update SHA `27edb599`; no workflow run was returned for the final docs-only head. Both Cloudflare Pages projects completed automatic previews for the docs branch with `environment=preview`; production canonical deployment remains `legitloot` / `main@801f3e7` / `fe4c0f22`.
+- No application code, production target, Supabase configuration, schema or data was changed. This follow-up corrects the earlier debrief's PR #27 head/CI timing so the next session does not mistake the pre-update Actions result for a check on the final documentation commit.
