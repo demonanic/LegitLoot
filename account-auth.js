@@ -1,15 +1,4 @@
 (() => {
-  // Legal gate: Terms and Privacy are still drafts (privacy.html tells visitors not to
-  // submit personal information). While false, no credential form is usable and no
-  // handler is attached. Flip only after the owner approves final legal notices.
-  const LEGAL_NOTICES_FINAL = false;
-  if (!LEGAL_NOTICES_FINAL) {
-    const gateStatus = document.getElementById("auth-status");
-    if (gateStatus) gateStatus.innerHTML = "<b>ACCOUNT ACCESS PAUSED</b><p>Sign-in and password reset are unavailable while the Terms and Privacy Notice are being finalized. Games stay playable without an account.</p>";
-    const gatePanel = document.getElementById("auth-panel");
-    if (gatePanel) gatePanel.hidden = true;
-    return;
-  }
   // Backend target comes only from supabase-config.js. This build branch is
   // staging-only: fail closed unless the config is explicitly the staging
   // project, so a preview can never register or sign in against production.
