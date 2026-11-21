@@ -2,7 +2,7 @@
 
 **Version:** 1.4\
 **Date:** 2026-11-19 (v1.1 2026-11-10)  
-**v1.4 change (2026-11-21):** Adds §0.5, the owner's 2026-11-21 decisions on a separate cash balance and account deletion. They supersede the cash-deferral statements marked inline below.\
+**v1.4 change (2026-11-21):** Adds §0.5: the owner's account-deletion decisions D1–D4 and the applied sign-up pause (in force), and issue #2's cash-balance choice, which is **pending reconciliation** with Master Control §2's no-cash objective. No cash changes until Sam reconciles them.\
 **v1.3 change:** Adds the later 2026-11-19 owner launch decisions in §0.4, which supersede conflicting earlier launch-game and challenge-catalogue assumptions. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — owner-approved early-access publish is live on `main@801f3e7`; all further production merge/deploy/configuration changes remain owner-gated.
@@ -31,7 +31,7 @@ Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2)
 - §1 item 2 and all offerwall/survey/task/referral → LC reward rules in §2, §2A ("Reward destination rules"), §2B ("Offer-to-LC journey"), and §2D are **superseded** for LC. Providers may still be researched and integrated in a disabled state, but they produce no LC.
 - §2A "LootCoins: games only" spend rules are **superseded** by 0.1: spending uses are undecided.
 - §6 game list is **superseded** by 0.2.
-- Cash rewards remain deferred exactly as before (§2, §13). **Partly superseded by §0.5 (2026-11-21):** a separate player cash balance is now approved; live payouts remain off.
+- Cash rewards remain deferred exactly as before (§2, §13). **Pending owner reconciliation (§0.5, 2026-11-21):** owner issue #2 chose a separate USD cash balance for verified Hustle completions with payouts off, but Master Control §2's no-cash objective still applies. Until Sam reconciles them, this rule stays in force and agents make no cash API/UI/credit/payout changes.
 
 ## 0.4 Later owner decisions — launch games and minimum challenges (2026-11-19 13:09 UTC)
 
@@ -91,7 +91,7 @@ LegitLoot is a combined independent games and rewards platform with four public-
 1. Original games: the owner-selected portal launch titles are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere** (see §0.4); Zombie Invasion Defense is not a launch substitute.
 2. Approved third-party offerwalls and activities.
 3. Affiliate marketplace and promotional deals.
-4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval. **Superseded by §0.5 (2026-11-21):** a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; payouts and withdrawals remain off and owner-gated. This does not extend to every offerwall and never maps provider points or rewards to LC.
+4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval. **Pending owner reconciliation (§0.5, 2026-11-21):** owner issue #2 chose a separate USD cash balance for verified Hustle completions with payouts off, but Master Control §2's no-cash objective still applies. Until Sam reconciles them, this rule stays in force and agents make no cash API/UI/credit/payout changes.
 
 Homepage direction: **LegitLoot — an underground organization operating a chaotic digital arcade**. Follow [LEGITLOOT_CREATIVE_BIBLE.md](LEGITLOOT_CREATIVE_BIBLE.md) for the mature western comic visual direction, near-black/charcoal/blood-red/acid-green/bone/industrial-grey identity, character tone, and Skuz continuity. Skuz is the embodiment and spokesperson of LegitLoot; maintain his supplied reference, reference sheet, and expression library. The current owner explicitly authorizes this visual redesign and character-reference work, superseding older character-sheet restrictions. Keep the public interface welcoming, truthful, accessible, and respectful. Official game art remains authoritative; generated art must never masquerade as a game screenshot. Keep important text and UI controls as real HTML, not baked into images. Never use invented balances, streaks, leaderboards, task completion or payout claims to make the interface look populated; show real connected data or clearly label a preview/planned state. No business or financial rules are changed by the visual direction.
 
@@ -104,7 +104,7 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 ### Current player reward account
 - The current player-facing reward account is LootCoins (LC) only.
 - LC is non-transferable, has no cash value, is not withdrawable, and is usable only for eligible in-game purchases and game-related perks.
-- There is no active player cash balance in the current phase. **Superseded by §0.5 (2026-11-21):** a separate cash balance is approved for build; payouts stay off until the owner approves activation.
+- There is no active player cash balance in the current phase. **Pending owner reconciliation (§0.5, 2026-11-21):** owner issue #2 chose a separate USD cash balance for verified Hustle completions with payouts off, but Master Control §2's no-cash objective still applies. Until Sam reconciles them, this rule stays in force and agents make no cash API/UI/credit/payout changes.
 - Any future cash rewards must use a separately approved USD ledger and must never be combined with, funded by, or converted from LC.
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
@@ -143,7 +143,7 @@ These decisions are binding for product design and implementation and supersede 
 
 ### Cash rewards: later phase
 
-> **Superseded by §0.5 (2026-11-21).** The prohibitions below on allocating Hustle rewards to cash and on implementing a cash balance no longer apply: a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; payouts and withdrawals remain off and owner-gated. This does not extend to every offerwall and never maps provider points or rewards to LC. The remaining payout, withdrawal and activation constraints stay in force until the owner approves payout activation.
+> **Pending owner reconciliation (§0.5, 2026-11-21):** owner issue #2 chose a separate USD cash balance for verified Hustle completions with payouts off, but Master Control §2's no-cash objective still applies. Until Sam reconciles them, this rule stays in force and agents make no cash API/UI/credit/payout changes.
 
 - Cash rewards are not part of the initial player reward promise or current earning model.
 - Do not allocate any current offerwall, survey, task, referral, affiliate, mission, or advertising reward to a player cash balance.
@@ -188,7 +188,7 @@ Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affili
 - Games: launch only verified destinations; show game-specific LC rules/catalogs where implemented.
 - Earn: browse eligible offers, read material terms before starting, track attribution/completion, and see verified LC reward states.
 - Deals: curated affiliate offers with adjacent disclosures. This is not an LC redemption store.
-- Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. No cash balance or withdrawal action in the current phase. **Superseded by §0.5 (2026-11-21):** the wallet shows the LC balance and, separately, the player's cash balance from verified Hustle completions; no withdrawal action while payouts are off.
+- Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. No cash balance or withdrawal action in the current phase. **Pending owner reconciliation (§0.5, 2026-11-21):** owner issue #2 chose a separate USD cash balance for verified Hustle completions with payouts off, but Master Control §2's no-cash objective still applies. Until Sam reconciles them, this rule stays in force and agents make no cash API/UI/credit/payout changes.
 - Account: profile, authentication/security, linked game identities, preferences, privacy controls, export/deletion request.
 - Support: account, attribution, missing reward, and safety/reporting paths.
 
@@ -414,7 +414,7 @@ Requires explicit owner approval of the exact commit, production deployment, dom
 
 ## 13. Future withdrawal implementation constraints (deferred; 2026-11-08)
 
-**Status:** Retained as historical design guidance only. This entire withdrawal workflow is out of current scope under the owner-locked 2026-11-10 decision to defer cash rewards. **Partly superseded by §0.5 (2026-11-21):** the cash balance itself is approved; this withdrawal/payout workflow remains unbuilt and inactive until the owner approves payout activation (owner's intended conditions: 18+, identity check, minimum balance, no fraud, manual owner approval). Do not implement or expose it unless a separate future cash-rewards specification is approved.
+**Status:** Retained as historical design guidance only. This entire withdrawal workflow is out of current scope under the owner-locked 2026-11-10 decision to defer cash rewards. **Pending owner reconciliation (§0.5, 2026-11-21):** owner issue #2 chose a separate USD cash balance for verified Hustle completions with payouts off, but Master Control §2's no-cash objective still applies. Until Sam reconciles them, this rule stays in force and agents make no cash API/UI/credit/payout changes.
 
 - Player payout destinations are limited initially to PayPal and Venmo, with manual review only.
 - Never persist plaintext recipient identifiers. Store authenticated-encryption ciphertext, a key-version identifier, and a deliberately masked hint only.
