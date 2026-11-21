@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-20 20:05 ET
+**Last updated:** 2026-11-20 21:18 ET
 **Repository:** `demonanic/LegitLoot`  
 **Authorized working branch:** `build/legitloot-neon-synthwave`  
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API at Sync Watch #18 (2026-11-20 19:14 ET) reports all 31 refs `protected:false` and repository rulesets empty. Authorized integration application baseline is `a529b35` plus documentation-only commits; current head `1466eb6`. Do not describe `main` as technically protected.
@@ -2081,3 +2081,15 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Exact-head Node test and whitespace check `44848038288` passed, including `npm ci` and `npm test`.
 - Cloudflare Pages deployments for both `legitloot` (`e8c67b67`) and `legitloot-preview` (`6d6c9723`) completed successfully as `environment=preview` builds on `claude/log-ack-charter`. Neither deployment targets production.
 - PR #27 remains open; no merge or production action occurred.
+
+
+## 2026-11-20 21:18 ET — DaVinci Sync Watch #20 independent check
+
+- **Exact repository state:** production `main@801f3e7`; integration `build/legitloot-neon-synthwave@1466eb6`; PR #30 remains draft at `fcd62237f6a7afe5ab7622d50039bcb101360aa3` (56 files / 83 commits); canonical docs PR #27 is at `553f6ae`; ENV-07 PR #28 remains draft at `93f62ac`. GitHub reports 31 branches, none protected, and no repository rulesets. Nine PRs remain open; no merge occurred.
+- **PR #30 review:** exact-head Node/whitespace Actions `44843092983` and Deno Actions `44843092933` pass; Claude reports 82/82 local tests. Both candidate Pages deployments are successful `environment=preview` builds for the exact staging-bound candidate. The Python/Playwright browser test remains unrun. All eight older inline review threads are now resolved as addressed in source; this is not PR approval. No new code defect was found in the latest cache-key-only commit.
+- **Account and environment boundary:** production `legitloot.site` remains `main@801f3e7` (deployment `fe4c0f22`). The existing `main.legitloot-preview.pages.dev` remains preview deployment `fdf6b609`, built from `main@801f3e7`; that source still initializes production Supabase and exposes signup. PR #28's code and description now consistently allow only `legitloot.site`, but it remains draft/owner-gated. Keep Account/auth off the existing main-based preview.
+- **Fresh read-only Supabase checks:** production and staging projects both report `ACTIVE_HEALTHY`. Both live `public.get_wallet_summary()` functions still return cash/USD fields and grant authenticated EXECUTE (anon EXECUTE false). Production `wallet-summary` v4 remains cash-bearing. Production Offerwall.GG wall-url v2/postback v4 are active tombstones; staging wall-url v5 remains active/JWT and postback v8 active/no-JWT record-only. Staging game registry/events/saves/handoff counts remain `1/0/0/0`. The staging provider table still has disabled Offerwall.GG/CPAGrip rows and no Taplayad row; the Offerwall.GG row retains historical approved-reward metadata.
+- **Owner-policy and provider review:** production main still contains cash/withdrawal UI and provider-to-LC wording; candidate source is LC-only and keeps Taplayad App 10066 `pending_approval`, `launch: null`, and the exact owner-supplied URL as descriptive data only. Fresh official Tplayad docs still describe `md5(app_id . user_id . api_secret)`, statuses 1/2 and any-2xx acknowledgement without a signed immutable transaction ID/retry contract; the legacy page describes a different protocol. Current Terms (updated 2026-10-29) do not expressly establish incentivized-traffic permission. Do not combine protocol generations or map publisher points, callback reward or payout into LC.
+- **Remaining launch gates:** live wallet contract, unexecuted PostgREST `journal_transactions!inner(status)` embed, Account/Privacy conflict, backend `disable_signup` setting verification, account deletion/export, shared game account/save/verified-event integration, Taplayad permission/protocol and ENV-07. Proposed wallet SQL remains `DO NOT APPLY`.
+- **New coordination finding:** the #19 debrief is present in this file, but the companion `PROJECT_PROGRESS.md`, `LAUNCH_READINESS_AUDIT.md`, `ENVIRONMENT_SOURCE_OF_TRUTH.md` and `CLAUDE.md` remain at #18-era entries. Actionable alignment request posted to PR #27 comment `7055852897`; do not sync docs into PR #30 on each watch.
+- **Safety:** all Supabase queries were SELECT-only. No merge, deployment, SQL application, Auth setting, Supabase setting/secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
