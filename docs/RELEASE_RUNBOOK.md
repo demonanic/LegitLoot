@@ -112,5 +112,6 @@ Owner approval: <quote + date>   <- required before any step in §3
 | Confirm production Supabase backup/PITR tier | OPS-03 | Owner or ChatGPT (read-only) |
 | Production config + test for the release candidate (§6) | ENV-04 | Claude, after PR #11 |
 | Verify `main` branch protection and required checks (last API evidence: `protected:false`, no rulesets) | GOV-01 | Owner / GitHub admin |
+| Production Edge Function `wallet-summary` v4 is ACTIVE, `verify_jwt=false`, returns cash + legacy `gameCredits`/LLC fields, and (per DaVinci's read-only review of deployed source) does not filter journal transactions to `posted` or check entry currency; apparently unused by the current site (`account-auth.js` calls the RPC). Retire it or replace it with the reviewed LC-only contract in the owner-approved release; do not invoke or redeploy it. Cash policy is pending owner reconciliation | WALLET-01 | Owner approval; Claude implements source |
 | Choose an uptime monitor | OPS-01 | Owner |
 | Verify and enable PR-only branch protection, independent review and required checks on `main` | GOV-01 | Owner / GitHub admin |
