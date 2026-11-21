@@ -67,6 +67,8 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 Source: Sam's own GitHub issues in the private Complete Loop repository (`demonanic/complete-loop`): issue #2 (cash rule, 2026-11-21 02:05 ET) and issues #3/#4 (account deletion, identical answers, 2026-11-21 02:25 and 06:37 ET), plus Sam's chat statements to Claude on 2026-11-20. Recorded by Claude; each issue was opened by the owner account `demonanic`. This section supersedes the conflicting cash-deferral statements marked inline in §0.3 and §2. Everything not listed here is unchanged.
 
 ### Cash balance — "two balances" (issue #2)
+
+> **Reconciliation pending (2026-11-21 17:03 ET):** this conflicts with Master Control §2's launch objective ("No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance"). Until Sam explicitly reconciles them, agents make no cash API/UI/credit/payout changes. The text below records issue #2 as written.
 - Owner's chosen option, verbatim: **"Two balances: cash and coins (my Nov 20 plan)"** — *Agents keep a cash balance, fully separate from coins. Payouts stay switched off until business setup and payout tools are ready.*
 - LegitLoot acts as publisher for Hustle partners. Partners pay LegitLoot; verified completions are credited to the player's **cash balance** (USD ledger), never to LC.
 - Cash and LC must never mix: no conversion either way, no shared ledger, no LC purchase with cash (owner, 2026-11-20 chat: drop buying LC with cash and keep it simple). §0.1 LC rules are unchanged.
