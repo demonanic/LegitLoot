@@ -89,7 +89,7 @@ LegitLoot is a combined independent games and rewards platform with four public-
 1. Original games: the owner-selected portal launch titles are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere** (see §0.4); Zombie Invasion Defense is not a launch substitute.
 2. Approved third-party offerwalls and activities.
 3. Affiliate marketplace and promotional deals.
-4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval.
+4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval. **Superseded by §0.5 (2026-11-21):** a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; payouts and withdrawals remain off and owner-gated. This does not extend to every offerwall and never maps provider points or rewards to LC.
 
 Homepage direction: **LegitLoot — an underground organization operating a chaotic digital arcade**. Follow [LEGITLOOT_CREATIVE_BIBLE.md](LEGITLOOT_CREATIVE_BIBLE.md) for the mature western comic visual direction, near-black/charcoal/blood-red/acid-green/bone/industrial-grey identity, character tone, and Skuz continuity. Skuz is the embodiment and spokesperson of LegitLoot; maintain his supplied reference, reference sheet, and expression library. The current owner explicitly authorizes this visual redesign and character-reference work, superseding older character-sheet restrictions. Keep the public interface welcoming, truthful, accessible, and respectful. Official game art remains authoritative; generated art must never masquerade as a game screenshot. Keep important text and UI controls as real HTML, not baked into images. Never use invented balances, streaks, leaderboards, task completion or payout claims to make the interface look populated; show real connected data or clearly label a preview/planned state. No business or financial rules are changed by the visual direction.
 
@@ -140,6 +140,9 @@ These decisions are binding for product design and implementation and supersede 
 - The approved initial games are Demonanic, Gauntlet's Survival, and Harvest//Zero.
 
 ### Cash rewards: later phase
+
+> **Superseded by §0.5 (2026-11-21).** The prohibitions below on allocating Hustle rewards to cash and on implementing a cash balance no longer apply: a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; payouts and withdrawals remain off and owner-gated. This does not extend to every offerwall and never maps provider points or rewards to LC. The remaining payout, withdrawal and activation constraints stay in force until the owner approves payout activation.
+
 - Cash rewards are not part of the initial player reward promise or current earning model.
 - Do not allocate any current offerwall, survey, task, referral, affiliate, mission, or advertising reward to a player cash balance.
 - Do not implement active player cash balances, cash withdrawals, payout requests, or cash reward commitments in the current phase.
@@ -183,7 +186,7 @@ Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affili
 - Games: launch only verified destinations; show game-specific LC rules/catalogs where implemented.
 - Earn: browse eligible offers, read material terms before starting, track attribution/completion, and see verified LC reward states.
 - Deals: curated affiliate offers with adjacent disclosures. This is not an LC redemption store.
-- Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. No cash balance or withdrawal action in the current phase.
+- Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. No cash balance or withdrawal action in the current phase. **Superseded by §0.5 (2026-11-21):** the wallet shows the LC balance and, separately, the player's cash balance from verified Hustle completions; no withdrawal action while payouts are off.
 - Account: profile, authentication/security, linked game identities, preferences, privacy controls, export/deletion request.
 - Support: account, attribution, missing reward, and safety/reporting paths.
 
@@ -409,7 +412,7 @@ Requires explicit owner approval of the exact commit, production deployment, dom
 
 ## 13. Future withdrawal implementation constraints (deferred; 2026-11-08)
 
-**Status:** Retained as historical design guidance only. This entire withdrawal workflow is out of current scope under the owner-locked 2026-11-10 decision to defer cash rewards. Do not implement or expose it unless a separate future cash-rewards specification is approved.
+**Status:** Retained as historical design guidance only. This entire withdrawal workflow is out of current scope under the owner-locked 2026-11-10 decision to defer cash rewards. **Partly superseded by §0.5 (2026-11-21):** the cash balance itself is approved; this withdrawal/payout workflow remains unbuilt and inactive until the owner approves payout activation (owner's intended conditions: 18+, identity check, minimum balance, no fraud, manual owner approval). Do not implement or expose it unless a separate future cash-rewards specification is approved.
 
 - Player payout destinations are limited initially to PayPal and Venmo, with manual review only.
 - Never persist plaintext recipient identifiers. Store authenticated-encryption ciphertext, a key-version identifier, and a deliberately masked hint only.

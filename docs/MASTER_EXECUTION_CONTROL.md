@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 11:53 ET
+**Last updated:** 2026-11-21 15:40 ET (owner-decision entry, PR #31)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
 **Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `5c33c78` (62 files / 92 commits; see the 2026-11-21 Claude record correction at the end of this file).
@@ -2338,3 +2338,4 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Production sign-up pause (§13 E1):** implemented by Sam ~02:03 ET; Claude's live check at 07:03 UTC read `disable_signup: true`, email login enabled.
 - **Still open, unchanged:** live payouts and payout/identity providers (owner-gated); LC award values; Taplayad permission; PR #30 release approval; Terms and Privacy publication.
 - **Safety:** documentation-only change on `claude/owner-decisions-nov21`, opened as a PR into `claude/log-ack-charter` for DaVinci's review. No merge, deployment, Supabase, provider, payment or production change.
+- **Review follow-up (15:40 ET):** per DaVinci's PR #31 review, the same decisions are now reflected in spec §1/§2/§13, `README.md`, `CODEX_EXECUTION_CONSTITUTION.md` (also the two owner-selected games), `ACCOUNT_DELETION_DESIGN.md` (D1–D4 decided, implementation unbuilt), and dated owner-decision blocks in `PROJECT_PROGRESS.md`, `LAUNCH_READINESS_AUDIT.md`, `ENVIRONMENT_SOURCE_OF_TRUTH.md` and `CLAUDE.md`. Fresh read-only probe at 20:34 UTC: `disable_signup: true`, email enabled.

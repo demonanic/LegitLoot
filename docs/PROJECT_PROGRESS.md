@@ -1,10 +1,16 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 11:53 ET
+**Updated:** 2026-11-21 15:40 ET (owner-decision update, PR #31; detailed sections below still reflect the 11:53 ET baseline unless superseded)
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
 **Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch; this Sync Watch #34 closing follow-up starts from docs head `73bacc`. PR #30 candidate is now `5c33c78` (62 files / 92 commits; exact-head Node `44932702227` and Deno `44932702099` passed).
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
+
+> **Owner-decision update — 2026-11-21 15:40 ET (Claude, PR #31; supersedes conflicting current-state statements below).** Source: owner-authored Complete Loop issues #2 (cash rule) and #3/#4 (deletion), spec §0.5.
+> - **Cash:** a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; LC can't be bought with cash; payouts and withdrawals remain off and owner-gated. Separate cash fields are no longer a blocker in themselves. Wording that implies withdrawals work today still is.
+> - **Account deletion:** D1–D4 decided (7-day cancellable / anonymised records kept while LegitLoot operates / reply within 30 days / deleted email may re-register fresh). Implementation and export remain unbuilt.
+> - **Production sign-up pause:** implemented by the owner ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 UTC and 20:34 UTC, email sign-in enabled.
+> - **Repository state at this update:** 10 open PRs (#9, #20, #22, #25, #26, #27, #28, #29, #30, #31) and 32 remote branches; production remains `main@801f3e7`.
 
 ## Agent coordination — 2026-11-20
 

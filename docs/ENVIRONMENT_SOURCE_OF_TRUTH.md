@@ -3,6 +3,12 @@
 **Last verified:** 2026-11-21 11:53 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:53 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
+> **Owner-decision update — 2026-11-21 15:40 ET (Claude, PR #31; supersedes conflicting current-state statements below).** Source: owner-authored Complete Loop issues #2 (cash rule) and #3/#4 (deletion), spec §0.5.
+> - **Cash:** a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; LC can't be bought with cash; payouts and withdrawals remain off and owner-gated. Separate cash fields are no longer a blocker in themselves. Wording that implies withdrawals work today still is.
+> - **Account deletion:** D1–D4 decided (7-day cancellable / anonymised records kept while LegitLoot operates / reply within 30 days / deleted email may re-register fresh). Implementation and export remain unbuilt.
+> - **Production sign-up pause:** implemented by the owner ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 UTC and 20:34 UTC, email sign-in enabled.
+> - **Repository state at this update:** 10 open PRs (#9, #20, #22, #25, #26, #27, #28, #29, #30, #31) and 32 remote branches; production remains `main@801f3e7`.
+
 **MIG-02 correction (2026-11-21 07:20 ET):** Any older section below stating that the `game_platform_foundation` source is missing describes the pre-recovery state. The canonical migration and its regression test are now present on integration; the migration is already applied to staging and must not be replayed. The integration migration directory still has no CPAGrip migration source.
 
 ## 1. Canonical environment map
@@ -65,7 +71,7 @@ Read-only connector inventory rechecked 2026-11-20 05:13 ET (function versions b
 - No service-role or secret values in GitHub, docs, chat, logs, or screenshots. Record secret names and presence only where safely verified.
 - Production settings/secrets/schema/data changes, provider activation, reward posting, live financial activity, and production deployment remain owner-gated. Staging-only migrations, Edge Function deployments, and reversible staging tests are authorized under `docs/MASTER_EXECUTION_CONTROL.md` after independent review and exact-project verification.
 - `main` is the owner-recorded production website source branch; its GitHub API `protected` field currently reports `false` (see §14). `build/legitloot-neon-synthwave` is the authorized integration branch. Agents may merge independently verified work into the integration branch and deploy to staging under standing owner authorization; production merge/deploy remains owner-gated.
-- Production public sign-up pause has been approved by the owner. Preserve existing sign-in. Execution is pending a dashboard-capable authorized operator and must be verified afterward.
+- Production public sign-up pause has been approved by the owner and **applied** (owner, 2026-11-21 ~02:03 ET; `disable_signup: true` verified read-only at 07:03 and 20:34 UTC). Preserve existing sign-in.
 - Legit Coins are awarded only by the future server-authoritative game milestone/challenge/event pipeline; provider offerwall callbacks must not mint LC under the current owner decision.
 
 ## 5. Remaining verification work
@@ -128,6 +134,8 @@ Secrets by name only (inferred from code paths and probe responses, values never
 | LC posting from provider | armed (secrets present; postback reaches validation) | armed | Both violate the 2026-11-19 LC policy. |
 
 ## 10. Production registration pause — status
+
+- **Current status: APPLIED (2026-11-21).** The owner switched it off in the dashboard ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 and 20:34 UTC with email sign-in enabled. The entries below are history.
 
 - **Status: BLOCKED (access).** Probe at 2026-11-19 ~01:40 ET: production `GET /auth/v1/settings` → `disable_signup: false`.
 - Why Claude could not execute: (1) Claude's Supabase connector lists only `gauntlet`; (2) the Supabase MCP toolset has no Auth-configuration tool in any case, and `disable_signup` is not a SQL setting; (3) the cloud browser opened `supabase.com/dashboard/project/gkbqderyjcuxnjbsiffb/auth/providers` and was redirected to the Supabase sign-in page. Agents must not enter the owner's credentials.

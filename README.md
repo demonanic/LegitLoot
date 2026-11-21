@@ -23,7 +23,7 @@ Independent games and rewards platform.
 
 - **Legit Coins (LC)** are the only player reward unit (owner-locked 2026-11-19; spec §0.1). LC come only from server-verified in-game milestones, weekly challenges and seasonal events. No provider/offerwall callback may mint LC. The website wallet is authoritative; games never mint LC.
 - LC are non-transferable, have no cash value, cannot be withdrawn, converted or used in payout requests. At least five launch challenges/milestones are authorized. Use only existing owner-approved LC values; never invent award amounts. Any challenge without a verified approved value remains disabled/pending. Redemption/spending uses, caps, expiry, transfers and cash equivalence remain unapproved.
-- Cash rewards are deferred and excluded from the launch scope. No cash wallet, withdrawals, transfers, USD peg or provider-offerwall-to-LC issuance is permitted under the current owner-locked model.
+- **Cash balance (owner decision 2026-11-21, spec §0.5):** a separate server-side USD cash balance is approved for the owner-selected Hustle model. Only verified, approved Hustle completions may credit it. Cash and LC never share or convert ledgers, and LC can't be bought with cash. Payouts and withdrawals remain off and owner-gated. No LC transfers, USD peg or provider-offerwall-to-LC issuance is permitted.
 - All financial events are server-authoritative, idempotent, auditable, and reconciled.
 - No production LC issuance until game-event verification, anti-abuse, idempotency and owner-approved award values are proven. No cash payout product is in the initial launch scope.
 

@@ -2,6 +2,12 @@
 
 You are an autonomous engineering partner for LegitLoot.
 
+> **Owner-decision update — 2026-11-21 15:40 ET (Claude, PR #31; supersedes conflicting current-state statements below).** Source: owner-authored Complete Loop issues #2 (cash rule) and #3/#4 (deletion), spec §0.5.
+> - **Cash:** a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; LC can't be bought with cash; payouts and withdrawals remain off and owner-gated. Separate cash fields are no longer a blocker in themselves. Wording that implies withdrawals work today still is.
+> - **Account deletion:** D1–D4 decided (7-day cancellable / anonymised records kept while LegitLoot operates / reply within 30 days / deleted email may re-register fresh). Implementation and export remain unbuilt.
+> - **Production sign-up pause:** implemented by the owner ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 UTC and 20:34 UTC, email sign-in enabled.
+> - **Repository state at this update:** 10 open PRs (#9, #20, #22, #25, #26, #27, #28, #29, #30, #31) and 32 remote branches; production remains `main@801f3e7`.
+
 **Before doing any work, read `docs/MASTER_EXECUTION_CONTROL.md` in full.** It is the shared owner-authorized operating agreement for Claude and ChatGPT. It defines the current business priority, single active milestone, exact task assignment, agent-to-agent communication protocol, autonomy boundaries, critical escalation conditions, and append-only coordination log.
 
 Then read:

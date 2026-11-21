@@ -8,6 +8,12 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
+> **Owner-decision update — 2026-11-21 15:40 ET (Claude, PR #31; supersedes conflicting current-state statements below).** Source: owner-authored Complete Loop issues #2 (cash rule) and #3/#4 (deletion), spec §0.5.
+> - **Cash:** a separate server-side USD cash balance is approved for the owner-selected Hustle model; only verified, approved Hustle completions may credit it; cash and LC never share or convert ledgers; LC can't be bought with cash; payouts and withdrawals remain off and owner-gated. Separate cash fields are no longer a blocker in themselves. Wording that implies withdrawals work today still is.
+> - **Account deletion:** D1–D4 decided (7-day cancellable / anonymised records kept while LegitLoot operates / reply within 30 days / deleted email may re-register fresh). Implementation and export remain unbuilt.
+> - **Production sign-up pause:** implemented by the owner ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 UTC and 20:34 UTC, email sign-in enabled.
+> - **Repository state at this update:** 10 open PRs (#9, #20, #22, #25, #26, #27, #28, #29, #30, #31) and 32 remote branches; production remains `main@801f3e7`.
+
 **Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #34 (2026-11-21 11:37 ET). Earlier status tables are historical.
 
 ---
@@ -284,7 +290,7 @@ Status matrix (separate facts, per Master Control §2 step 6):
 |---|---|---|---|
 | CONFLICT-01 | Game lineup: spec/README/branch = Demonanic, Gauntlet's Survival, Harvest//Zero; owner (chat, Nov 2026) + MAIN/LIVE = new games only, ZID first | Spec §1/§2A/§6, README, branch pages vs MAIN `games.html` | Owner decision already exists → agents update docs (GAME-01). No escalation needed unless ChatGPT has contrary evidence. |
 | POLICY-01 | **LC policy.** Spec v1.1 (owner-locked 2026-11-10): "LootCoins", earned via providers/missions, spendable **only in games**, never on marketplace goods. Owner (chat, 2026-11-17): "Legit Coins", awarded one-time per **in-game milestone** plus seasonal/weekly challenges, **shown only in the website wallet, not inside games**, spendable on **website events, merchandise** or monetization items | Spec §2/§2A vs owner statements | **Critical escalation E2** (Master Control §6.5 — LC economics/redemption). Route to owner + LC Economy specialist. Do not implement either until resolved. |
-| CONFLICT-02 | Cash wallet shown on account/rewards pages vs LC-only, cash deferred | `account.html`, `account-auth.js`, `rewards.html` vs spec §2A | Spec wins; fix UI (WALLET-01). |
+| CONFLICT-02 | Cash wallet shown on account/rewards pages vs LC-only, cash deferred | `account.html`, `account-auth.js`, `rewards.html` vs spec §2A | **Resolved by owner decision 2026-11-21 (spec §0.5):** a separate cash balance is approved; keep it separate from LC and remove only wording implying withdrawals or payouts are active. |
 | CONFLICT-03 | Privacy page says "don't submit personal information" while production signup is open | LIVE `/privacy` vs PROD-AUTH | E1 (AUTH-02). |
 | CONFLICT-04 | Branch is the "authorized working branch" but MAIN is newer for public content | Master Control header vs §1 divergence | Merge main into branch (REPO-01); agent-authorized. |
 | CONFLICT-05 | Spec §2C "LC integer units" vs implementation 1/10,000 atoms | Spec vs migration `…130000` | LC Economy specialist records decision (WALLET-04). |
