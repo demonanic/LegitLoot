@@ -1,8 +1,8 @@
 # LegitLoot — Platform Build Specification
 
-**Version:** 1.4  
+**Version:** 1.4\
 **Date:** 2026-11-19 (v1.1 2026-11-10)  
-**v1.4 change (2026-11-21):** Adds §0.5, the owner's 2026-11-21 decisions on a separate cash balance and account deletion. They supersede the cash-deferral statements marked inline below.  
+**v1.4 change (2026-11-21):** Adds §0.5, the owner's 2026-11-21 decisions on a separate cash balance and account deletion. They supersede the cash-deferral statements marked inline below.\
 **v1.3 change:** Adds the later 2026-11-19 owner launch decisions in §0.4, which supersede conflicting earlier launch-game and challenge-catalogue assumptions. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — owner-approved early-access publish is live on `main@801f3e7`; all further production merge/deploy/configuration changes remain owner-gated.

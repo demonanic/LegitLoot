@@ -2338,4 +2338,3 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Production sign-up pause (§13 E1):** implemented by Sam ~02:03 ET; Claude's live check at 07:03 UTC read `disable_signup: true`, email login enabled.
 - **Still open, unchanged:** live payouts and payout/identity providers (owner-gated); LC award values; Taplayad permission; PR #30 release approval; Terms and Privacy publication.
 - **Safety:** documentation-only change on `claude/owner-decisions-nov21`, opened as a PR into `claude/log-ack-charter` for DaVinci's review. No merge, deployment, Supabase, provider, payment or production change.
-
