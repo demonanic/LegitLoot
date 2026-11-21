@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 18:39 ET
+**Updated:** 2026-11-20 19:14 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on `legitloot.site` in early access with device-local saves and no account/LC connection. Remaining: shared account/session handoff, cloud saves, trusted server-verified LC events. Offerwall.GG permanent retirement is a security subtask; the owner reports postback URL removal from all attempted/successful placements, but technical retirement and placement disable/delete are not verified.
 **Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6` (last commit 14:28 ET). PR #27 is a separate documentation branch based on this integration head.
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-20 18:20 ET):** #9 stale draft; #20 head `6e2e51b` (58/58); #22 head `332ca07` (64/64, stacked on #20); #25 superseded draft; #26 head `30f5dbf` (59/59, stacked on #20); #27 docs branch head `8c6aa8c` (Sync Watch #17 follow-up 4; Actions `44838341613` passed); #28 head `93f62ac` DRAFT against main (Actions `44791797759` passed; owner-gated); #29 head `cfe9f0a` (Node `44831268131` and Deno `44831268125` pass; accepted for source-only owner review; SQL unapplied and functions undeployed); #30 head `226caadc` consolidated DRAFT (56 changed files, 82 commits; Node/whitespace `44838319726` and Deno `44838319730` pass; last Claude-reported local 81/81 was on preceding `38a9406`; browser test unrun; preview status for this SHA not yet verified; review only, not for merge/deploy).
+**Current open PRs (2026-11-20 19:14 ET):** #9 stale draft; #20 head `6e2e51b` (58/58); #22 head `332ca07` (64/64, stacked on #20); #25 superseded draft; #26 head `30f5dbf` (59/59, stacked on #20 and redundant with #29); #27 docs branch head `0269a54` (Actions `44838509525` passed); #28 head `93f62ac` DRAFT against main (Actions `44791797759` passed; accepted for owner review, but main-preview ENV-07 remains owner-gated); #29 head `cfe9f0a` (Node `44831268131` and Deno `44831268125` pass; accepted source-only; SQL unapplied/functions undeployed); #30 head `226caadc` consolidated DRAFT (56 files / 82 commits; Node `44838319726` and Deno `44838319730` pass; Claude reports 81/81 local tests on exact head; both Pages previews succeeded; browser test unrun; review comment `7053977218` requests cache-key and privacy-flow corrections; no merge/deploy).
 
 ## Current owner-locked operating rules
 
@@ -911,3 +911,13 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Current and legacy Tplayad docs define incompatible signature and retry/transaction contracts; neither is confirmed for App 10066, and incentivized-traffic permission is not established. Keep the publisher pending.
 - Admin and payout-simulator static shells are publicly fetchable although §630 says inaccessible to anonymous/public users; URL-level restriction/noindex needs an owner decision.
 - No merge, deploy, Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 19:14 ET — Independent Sync Watch #18
+
+- PR #30 remains a draft at `226caadc` (56 files / 82 commits). Node/whitespace `44838319726` and Deno `44838319730` pass; Claude reports 81/81 local tests on the exact SHA; both Pages previews succeeded. Browser test remains unrun. The candidate fixes the two prior proposed-RPC SQL source findings, but SQL is DO NOT APPLY and the Edge Function relationship embed is unexecuted.
+- PR #27 canonical docs head is `0269a54` with Actions `44838509525` passed. PR #30 contains docs through `26768972`; two later PR #27 commits are documentation-only and remain deferred until an owner-approved freeze point.
+- **New review items on PR #30:** `account.html` retains `account-auth.js?v=m2t1-1` despite the changed auth script; bump the cache key and test it because an old cached script can reference the removed signup form and abort later handler registration. Also reconcile Account's sign-in/reset invitation with `privacy.html:4` telling visitors not to submit personal information until final legal notices are approved. Do not alter legal wording without owner approval.
+- Fresh read-only Supabase checks: both projects ACTIVE_HEALTHY; production 7 migrations, staging 21; production and staging wallet RPCs still return cash/USD fields. Production wallet-summary v4 remains cash-bearing (manual Bearer-token validation is present despite `verify_jwt=false`). Production Offerwall.GG v2/v4 are 410; staging wall-url v5 and postback v8 remain active (wall-url still constructs URLs for authenticated callers; postback is record-only).
+- Staging game registry/events/saves/handoff counts remain 1/0/0/0. Both selected games are early access with device-local saves; shared account/session, cloud saves and verified LC-event ingestion remain open. Taplayad remains pending and no provider values map to LC.
+- GitHub reports 31 branches, all unprotected, and no rulesets. Main-based preview's production-auth connection is carried forward from the 15:07 ET check, not reverified here. No merge, deploy, SQL application, settings/secrets, callback, provider, financial or database mutation occurred.
