@@ -137,3 +137,10 @@ test("proposed RPC joins entries on account wallet_kind/currency and asserts exa
   assert.match(sql, /x\.grantee = 0/);
   assert.match(sql, /postgres=X\/postgres,authenticated=X\/postgres,service_role=X\/postgres/);
 });
+
+test("account.html cache-busts account-auth.js after the sign-up handler removal", async () => {
+  const { readFileSync } = await import("node:fs");
+  const html = readFileSync(new URL("../account.html", import.meta.url), "utf8");
+  assert.match(html, /account-auth\.js\?v=m2t1-2/);
+  assert.doesNotMatch(html, /account-auth\.js\?v=m2t1-1/);
+});
