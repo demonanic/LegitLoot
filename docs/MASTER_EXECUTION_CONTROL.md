@@ -3,8 +3,8 @@
 
 **Status:** ACTIVE — owner-authorized
 **Last updated:** 2026-11-20 23:33 ET
-**Repository:** `demonanic/LegitLoot`  
-**Authorized working branch:** `build/legitloot-neon-synthwave`  
+**Repository:** `demonanic/LegitLoot`
+**Authorized working branch:** `build/legitloot-neon-synthwave`
 **Production branch:** `main` — production; merge/deploy remain owner-gated. GitHub API at Sync Watch #18 (2026-11-20 19:14 ET) reports all 31 refs `protected:false` and repository rulesets empty. Authorized integration application baseline is `a529b35` plus documentation-only commits; current head `1466eb6`. Do not describe `main` as technically protected.
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
@@ -41,10 +41,10 @@ There is exactly one active milestone at a time.
 
 ## Active milestone M2: LAUNCH BLOCKER CLOSURE AND BASIC-OPERABLE RELEASE
 
-**Status:** IN PROGRESS  
-**Priority:** P0  
-**Owner:** Claude — platform implementation lead  
-**Partner:** ChatGPT — independent reviewer, architecture/risk reviewer, and staging deployment operator where connector access is available  
+**Status:** IN PROGRESS
+**Priority:** P0
+**Owner:** Claude — platform implementation lead
+**Partner:** ChatGPT — independent reviewer, architecture/risk reviewer, and staging deployment operator where connector access is available
 **Owner involvement:** Not required for routine integration merges, staging deployments, staging-only migrations, reversible staging tests, or implementation work already inside this milestone.
 
 ### Objective
@@ -64,7 +64,7 @@ The release candidate must truthfully provide:
 ### Current active task — M2-T4: integrate the two owner-selected launch games
 
 **Status:** IN PROGRESS — both owner-selected games are present in the production build as early access with device-local saves; shared account/session, cloud saves, and server-verified LC-event integration remain unfinished. The older evidence block below is historical and superseded by Sync Watch #10.
-**Acting lead:** ChatGPT.  
+**Acting lead:** ChatGPT.
 **Partner:** Claude when available; both agents retain standing integration/staging authority under Section 2, subject to the more restrictive instruction governing each individual run.
 
 **Owner-locked launch titles:** **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**.
@@ -93,11 +93,11 @@ The release candidate must truthfully provide:
 7. Record exact evidence and unresolved dependencies. No production release without separate owner approval.
 
 **Immediate next action (as of 2026-11-20 23:33 ET):** Keep PR #30 draft and review-only at exact head `fcd62237f6a7afe5ab7622d50039bcb101360aa3` (56 files / 83 commits; base integration `1466eb6`). Exact-head Node/whitespace Actions `44843092983` and Deno Actions `44843092933` pass; Claude reports 82/82 local tests on this SHA, not independently rerun by DaVinci. The formal browser suite remains unrun. Eight older inline findings are resolved as addressed in source, but no approval exists for this exact head. The latest code commit `fcd6223` changes only the Account auth cache key and its regression test. PR #27's current documentation head is `9c55da4`; PR #30 still carries the earlier docs snapshot through `26768972`. Preserve the documented rule: do not sync PR #27 into #30 on every watch; perform one final sync at an owner-approved freeze point.
- 
+
 Fresh read-only Supabase checks at 23:33 ET confirm both production and staging projects are ACTIVE_HEALTHY. Both live `public.get_wallet_summary()` RPCs still return cash/USD fields; production uses the `lootCoins` key, while staging still returns `gameCredits` labelled `LLC`. Both ACLs grant authenticated and service_role EXECUTE, with anon denied. Production wallet-summary v4 still reads all non-system accounts and journal entries without a posted-transaction filter, uses legacy `game_credits_*` / `LLC` account codes, and returns cash/USD buckets; its handler manually validates a Bearer token. Read-only counts show zero journal-entry rows across all non-system wallet accounts in both environments, so no current wallet posting or misreported balance was observed. Candidate LC-only Edge Function and proposed SQL remain source-only; the SQL stays DO NOT APPLY. The candidate's `journal_transactions!inner(status)` PostgREST embed is still NOT VERIFIED. The FK exists in both environments; the owner's note that the deployed v4 already queries the `private` schema is supporting context, not proof that this relationship embed resolves.
- 
+
 Staging remains at one game-registry placeholder and zero game events, saves, or handoff tickets. CPAGrip and Offerwall.GG provider rows are disabled; the Offerwall.GG row still carries stale LC reward metadata; no Taplayad row exists. Production Offerwall.GG wall-url v2 and postback v4 are active HTTP 410 tombstones. Staging wall-url v5 remains active/JWT and can construct legacy Offerwall.GG URLs for authenticated callers; postback v8 remains active/no-JWT and record-only. No callbacks were invoked.
- 
+
 **Remaining launch gates:** production cash/USD wallet contract and UI/copy, Account/Privacy conflict, unverified Auth `disable_signup`, account deletion/export, shared account/save/verified-event integration for both games, Taplayad App-10066 written permission and complete protocol, ENV-07 main-preview production-auth exposure, and staging Offerwall.GG wall-url containment. Taplayad remains `pending_approval` with the exact owner template only; never map publisher points, callback reward, or payout to LC. No new candidate code defect was found.
 
 ### Supporting M2 work
@@ -138,7 +138,7 @@ The audit must determine which of these already work and which are missing. Do n
 Workstreams are distinct, but share interfaces and evidence.
 
 ## A. Platform foundation and launch coordination
-**Lead:** Claude  
+**Lead:** Claude
 **Reviewer:** ChatGPT
 
 - Website structure and public user journeys.
@@ -149,7 +149,7 @@ Workstreams are distinct, but share interfaces and evidence.
 - Cross-workstream integration.
 
 ## B. Monetization and provider integrations
-**Lead:** Monetization & Provider Integration Specialist  
+**Lead:** Monetization & Provider Integration Specialist
 **Coordination:** Claude + ChatGPT
 
 - Provider research and publisher relationships.
@@ -159,7 +159,7 @@ Workstreams are distinct, but share interfaces and evidence.
 - No provider is production-active solely because its publisher account is approved.
 
 ## C. LegitCoin economy
-**Lead:** Separate LegitCoin Economy Specialist  
+**Lead:** Separate LegitCoin Economy Specialist
 **Coordination:** Claude + ChatGPT
 
 - LC earning rules and values.
@@ -171,7 +171,7 @@ Workstreams are distinct, but share interfaces and evidence.
 Claude owns the technical interfaces and platform integration, not LC economic policy. Do not create a second wallet or ledger.
 
 ## D. Individual game development
-**Lead:** Game-specific development workstream  
+**Lead:** Game-specific development workstream
 **Coordination:** Claude
 
 - Game mechanics, progression, content, balancing, game-specific UI.
@@ -328,11 +328,11 @@ A task is not done because a code change was made or a page renders.
 
 # 10. CURRENT EXECUTION STATUS
 
-**Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release  
-**Active task:** M2-T3a — Staging record-only Offerwall.GG callback containment  
-**Task owner:** ChatGPT — staging deployment and live verification  
-**Implementation partner:** Claude — source, tests, handoff, and supporting fixes  
-**Reviewer:** ChatGPT — independent source review already completed; Claude confirms implementation/test evidence  
+**Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
+**Active task:** M2-T3a — Staging record-only Offerwall.GG callback containment
+**Task owner:** ChatGPT — staging deployment and live verification
+**Implementation partner:** Claude — source, tests, handoff, and supporting fixes
+**Reviewer:** ChatGPT — independent source review already completed; Claude confirms implementation/test evidence
 **Status:** Source is merged to the integration branch, but the deployed staging function/database routine still use the legacy LC-posting path. Ready for staging deployment in a normal implementation turn; this scheduled audit did not deploy.
 
 ### Current verified state
