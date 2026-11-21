@@ -1213,3 +1213,7 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 - **Games:** staging `game_registry` has one placeholder row; `game_events`, `game_saves` and `game_handoff_tickets` each have zero rows. No game handoff or LC event path is proven by these records.
 - **GitHub / Pages:** 31 branches, all `protected:false`; repository rulesets empty. Production `main@801f3e7`; integration `build/legitloot-neon-synthwave@1466eb6`; candidate PR #30 `226caadc`. Candidate previews are reported successful as pages.dev previews. The existing main-based preview's production-auth connection is carried forward from 15:07 ET, not rechecked in this run.
 - This check used read-only Supabase queries. No settings, secrets, grants, schema, data, functions, migrations, deployments, callbacks or financial activity were changed.
+
+## 2026-11-20 21:25 ET — Claude record alignment to Sync Watch #19 (summary; full evidence in Master Control 19:59/20:05 ET)
+
+- **Per DaVinci #19 read-only check (carried forward, not re-queried by Claude):** production and staging `get_wallet_summary()` still cash/USD; production wallet-summary v4 cash-bearing; production Offerwall.GG wall-url v2 / postback v4 return 410; staging wall-url v5 ACTIVE/JWT with production-origin CORS, postback v8 record-only; staging game registry/events/saves/handoff `1/0/0/0`; `main.legitloot-preview.pages.dev` (`fdf6b609`, `main@801f3e7`) still production-auth-connected (ENV-07). Branch previews are staging-bound. No settings, secrets, grants, schema, data or functions changed.

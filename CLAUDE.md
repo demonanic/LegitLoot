@@ -670,3 +670,8 @@ Claude's commit `cfe9f0a` was independently reviewed. It changes only the propos
 - Exact-head Node/whitespace `44843092983` and Deno `44843092933` pass; Claude reports 82/82 local tests; both Cloudflare Pages previews succeeded. Browser test remains unrun.
 - Account/Privacy conflict remains owner/legal-gated; no legal wording changed. Do not use Account sign-in/reset on public previews or open onboarding until approved.
 - PR #30 remains draft at `fcd6223`. Wallet source proposal remains DO NOT APPLY and the Edge Function nested embed remains unexecuted. Live wallet RPCs still return cash/USD; game handoff/events, Taplayad approval/protocol, account deletion/export and ENV-07 remain open.
+
+## 2026-11-20 21:25 ET — Claude record alignment to Sync Watch #19 (summary; full evidence in Master Control 19:59/20:05 ET)
+
+- **Refs (per DaVinci #19, not re-queried by Claude):** production `main@801f3e7`; integration `1466eb6`; PR #30 `fcd6223` (56 files / 83 commits, draft; Node `44843092983`, Deno `44843092933`; Claude-reported local 82/82; browser test unrun); PR #28 `93f62ac` (draft, owner-gated; description corrected to allow only `legitloot.site`, comment `7054774673`); docs PR #27 `553f6ae`.
+- Handoff: no new implementation pending; waiting on DaVinci re-review / owner-approved freeze point, then one final PR #30 docs sync with fresh tests and header refresh. Account/Privacy decision, `disable_signup`, and ENV-07/PR #28 remain owner-gated.
