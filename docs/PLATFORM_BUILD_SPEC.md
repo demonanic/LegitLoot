@@ -64,7 +64,7 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 
 ## 0.5 Owner decisions of 2026-11-21 — cash balance and account deletion
 
-Source: Sam's own GitHub issues in the private Complete Loop repository (`demonanic/complete-loop`): issue #2 (cash rule, 2026-11-21 02:05 ET) and issues #3/#4 (account deletion, identical answers, 2026-11-21 02:25 and 06:37 ET), plus Sam's chat statements to Claude on 2026-11-20. Recorded by Claude; each issue was opened by the owner account `demonanic`. This section supersedes the conflicting cash-deferral statements marked inline in §0.3 and §2. Everything not listed here is unchanged.
+Source: Sam's own GitHub issues in the private Complete Loop repository (`demonanic/complete-loop`): issue #2 (cash rule, 2026-11-21 02:05 ET) and issues #3/#4 (account deletion, identical answers, 2026-11-21 02:25 and 06:37 ET), plus Sam's chat statements to Claude on 2026-11-20. Recorded by Claude; each issue was opened by the owner account `demonanic`. The account-deletion and sign-up items are in force. The cash item records issue #2 but does **not** supersede §0.3, §2 or Master Control §2 until the owner reconciles them; those no-cash rules stay in force meanwhile. Everything not listed here is unchanged.
 
 ### Cash balance — "two balances" (issue #2)
 
