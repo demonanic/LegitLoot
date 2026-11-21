@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-20 19:22 ET
+**Updated:** 2026-11-21 00:47 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on `legitloot.site` in early access with device-local saves and no account/LC connection. Remaining: shared account/session handoff, cloud saves, trusted server-verified LC events. Offerwall.GG permanent retirement is a security subtask; the owner reports postback URL removal from all attempted/successful placements, but technical retirement and placement disable/delete are not verified.
 **Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6` (last commit 14:28 ET). PR #27 is a separate documentation branch based on this integration head.
@@ -934,3 +934,14 @@ Owner explicitly authorized preparation and testing of production containment, p
 
 - **Refs (per DaVinci #19, not re-queried by Claude):** production `main@801f3e7`; integration `1466eb6`; PR #30 `fcd6223` (56 files / 83 commits, draft; Node `44843092983`, Deno `44843092933`; Claude-reported local 82/82; browser test unrun); PR #28 `93f62ac` (draft, owner-gated; description corrected to allow only `legitloot.site`, comment `7054774673`); docs PR #27 `553f6ae`.
 - Status: PR #30 inline threads (8) resolved as addressed in source by DaVinci (not an approval). Open: Account/Privacy owner/legal decision, `disable_signup` unverified, Edge Function `!inner` embed unexecuted, proposed wallet SQL DO NOT APPLY, live wallet RPCs cash/USD, game account/save/verified-event integration, Taplayad permission/protocol, ENV-07. Final PR #30 docs sync deferred to an owner-approved freeze point.
+
+
+## 2026-11-21 00:47 ET — Sync Watch #23
+
+- **Active milestone/task unchanged:** M2 / M2-T4. Zombies vs Heavy Metal and Rocket 2 Nowhere remain early-access games with device-local saves; shared account/session, cloud saves and verified LC events are not connected.
+- **Release candidate:** PR #30 remains draft at `fcd6223`. Exact-head Node/whitespace and Deno Actions passed; Claude reports 82/82 local tests, not independently rerun. Browser suite remains unrun. Both candidate previews are staging-bound and successful. No new code defect was found in the wallet/Hustle/retirement diff.
+- **Security review:** PR #28 at `93f62ac` passes its exact-head host-guard workflow (44791797759) and is accepted for owner review of the narrow preview guard only. It does not disable direct API signup or production signup; `disable_signup` remains unverified. The main-based preview still targets production authentication until owner-approved remediation is merged/deployed.
+- **New account/legal blocker:** candidate `account.html` still allows sign-in/reset while `privacy.html` tells preview visitors not to submit personal information and `terms.html` says formal Terms are unpublished. Account deletion/export is missing. Keep account flows unavailable on public previews until the owner approves final notices or interim wording.
+- **Wallet/game evidence:** both live wallet RPCs still return cash/USD; production uses `lootCoins`, staging uses `gameCredits/LLC`. No journal entries were found. Staging game counts remain registry 1, events 0, saves 0, handoff tickets 0. Offerwall.GG staging wall-url v5 remains active; postback v8 is record-only.
+- **Taplayad:** remains pending. Current docs add generic server IP `176.97.212.58`, but signature/transaction/reversal/retry gaps and missing incentivized-traffic permission remain. Preserve the exact owner template and never award LC from provider callbacks.
+- **Next:** keep M2-T4 active; resolve the account/privacy gate, validate the wallet contract in staging without touching production, and complete the two games' trusted account/save/event path. No production or provider activation.

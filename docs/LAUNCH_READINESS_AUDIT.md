@@ -1651,3 +1651,27 @@ PR #30 remains draft / not launch-ready. Production wallet contract, account/leg
 
 - **Refs (per DaVinci #19, not re-queried by Claude):** production `main@801f3e7`; integration `1466eb6`; PR #30 `fcd6223` (56 files / 83 commits, draft; Node `44843092983`, Deno `44843092933`; Claude-reported local 82/82; browser test unrun); PR #28 `93f62ac` (draft, owner-gated; description corrected to allow only `legitloot.site`, comment `7054774673`); docs PR #27 `553f6ae`.
 - Launch blockers unchanged by #19: cash/USD wallet contract (WALLET-01), production Account/Rewards cash/withdrawal and provider-to-LC copy, incomplete Terms/Privacy and Account/Privacy conflict, unverified signup pause, ENV-07 production-auth preview, shared game account/save/LC-event integration, Taplayad written confirmation and incentivized-traffic permission. No gated action occurred.
+
+
+## 2026-11-21 00:47 ET — Sync Watch #23 addendum
+
+**Disposition: NOT LAUNCH-READY.**
+
+### New owner-review item
+
+PR #28 (`93f62ac`) passes its exact-head host-guard workflow and is accepted for owner review of the limited client-side ENV-07 guard. It blocks production Supabase client initialization on non-production hostnames, matching the only active Cloudflare custom domain, `legitloot.site`. It does not disable direct API signup or production signup; Auth `disable_signup` remains unverified. The main-based preview `main.legitloot-preview.pages.dev` remains an active preview from `main@801f3e7` and still contains production-targeting account-auth code. Do not use its Account/auth routes.
+
+### Account/legal blocker
+
+At PR #30 head `fcd6223`, `account.html` still exposes Sign In and Reset Password and `account-auth.js` submits those actions to staging Supabase. `privacy.html` instructs visitors not to submit personal information through the development preview until final Privacy and Terms are published; `terms.html` says formal Terms are not yet published. Account deletion/export is absent. Keep sign-in/reset unavailable on public previews until the owner approves final notices or explicit interim wording. This finding is recorded in PR #30 comment 7058263269.
+
+### Still-open launch blockers
+
+- Production and staging wallet RPCs still return cash/USD buckets; production uses `lootCoins`, staging uses `gameCredits/LLC`. Both deny anon EXECUTE but allow authenticated/service_role. No journal entries were found. The candidate LC-only SQL is DO NOT APPLY and the nested PostgREST relationship query is unverified.
+- Production pages still expose cash/withdrawal UI and provider-to-LC wording. Production account page still has signup; the Auth signup setting is unverified.
+- Both games are early access/device-local; shared account/session, cloud saves and server-verified LC events remain incomplete. Staging counts: registry 1, events 0, saves 0, handoff tickets 0.
+- Staging Offerwall.GG wall-url v5 remains active/JWT and can create legacy URLs; postback v8 remains active/no-JWT and record-only. Production endpoints are 410 tombstones.
+- Taplayad App 10066 remains pending. Current docs specify generic callback IP 176.97.212.58, but the signature does not authenticate reward/offer/payout/status, no immutable transaction ID or retry schedule is documented, and incentivized-traffic permission is not established. Exact owner template remains unchanged; provider callbacks never issue LC.
+- Browser suite remains unrun. Candidate PR #30 is draft and has no approval for its exact head.
+
+No PR merge, deployment, legal change, Supabase setting/secret/schema/data change, callback, provider setting, or financial activity occurred.

@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 19:14 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 19:14 ET.
+**Last verified:** 2026-11-21 00:47 ET by DaVinci (read-only GitHub, Cloudflare, Supabase, and current provider-documentation checks; no browser test or PostgREST relationship execution). Record edited 2026-11-21 00:47 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1217,3 +1217,33 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 ## 2026-11-20 21:25 ET — Claude record alignment to Sync Watch #19 (summary; full evidence in Master Control 19:59/20:05 ET)
 
 - **Per DaVinci #19 read-only check (carried forward, not re-queried by Claude):** production and staging `get_wallet_summary()` still cash/USD; production wallet-summary v4 cash-bearing; production Offerwall.GG wall-url v2 / postback v4 return 410; staging wall-url v5 ACTIVE/JWT with production-origin CORS, postback v8 record-only; staging game registry/events/saves/handoff `1/0/0/0`; `main.legitloot-preview.pages.dev` (`fdf6b609`, `main@801f3e7`) still production-auth-connected (ENV-07). Branch previews are staging-bound. No settings, secrets, grants, schema, data or functions changed.
+
+
+## 2026-11-21 00:47 ET — Sync Watch #23 environment snapshot
+
+### GitHub
+
+- `main`: `801f3e7ba5564c759228f02b8118765eaa7e0687`; integration: `1466eb6a0930f7cae53f2899e7ffb0487bbda2bb`.
+- PR #30 candidate: `fcd62237f6a7afe5ab7622d50039bcb101360aa3`, draft, 56 files / 83 commits; Node/whitespace run 44843092983 and Deno run 44843092933 passed.
+- PR #27 docs branch: `352560a98484a98d88c989cd50b8c70709809054` before this documentation sync; latest exact-head Node/whitespace run 44867498473 passed.
+- PR #28 ENV-07 guard: `93f62acb2dd5fc6ee58406de96cde2b68b126ed9`; Actions 44791797759 passed. Nine open PRs; 31 branches. Rulesets API empty; branch-protection endpoint returned 403, so current branch protection was not independently verifiable (last successful check at 19:14 ET reported all refs unprotected).
+
+### Cloudflare Pages
+
+- `legitloot` production deployment `fe4c0f22-5d2d-42f8-88ca-dc55b034d1ea`: `environment=production`, branch `main`, commit `801f3e7`, alias `https://legitloot.site`; current custom-domain inventory contains only `legitloot.site`.
+- PR #30 preview commit `fcd6223` succeeded in both Pages projects as `environment=preview`: `claude-m2-release-candidate.legitloot.pages.dev` and `claude-m2-release-candidate.legitloot-preview.pages.dev`.
+- The main-based preview deployment `fdf6b609-72ca-4550-be8d-7ede1ba80bd4` remains `environment=preview`, branch `main`, commit `801f3e7`, alias `https://main.legitloot-preview.pages.dev`. Its Account/auth code still targets production Supabase; do not use those routes.
+
+### Supabase (read-only)
+
+- Production `gkbqderyjcuxnjbsiffb` and staging `scmnxcsggquwtuyyjnnj` are both `ACTIVE_HEALTHY`; migration counts 7 and 21.
+- Production `get_wallet_summary()` returns cash USD buckets plus `lootCoins`; staging returns cash USD buckets plus `gameCredits` labelled `LLC`. Both ACLs: anon EXECUTE false; authenticated/service_role true.
+- Zero journal-entry rows across non-system wallet accounts in both projects. Production `wallet-summary` v4 is active, `verify_jwt=false`, but its handler manually validates the Bearer token; it still returns cash/USD and legacy LLC fields and is not the current Account page's RPC caller.
+- Production Offerwall.GG wall-url v2 and postback v4 are active HTTP 410 tombstones. Staging wall-url v5 is active/JWT and still constructs Offerwall.GG URLs; staging postback v8 is active/no-JWT and record-only.
+- Staging `public.game_registry` has 1 row; `private.game_events`, `private.game_saves`, and `private.game_handoff_tickets` have 0 rows each. Staging provider rows: CPAGrip disabled; Offerwall.GG disabled with stale LC reward metadata; no Taplayad row. No callbacks or mutations performed.
+
+### Provider documentation
+
+- Current official Taplayad guide: `md5(app_id . user_id . api_secret)`; generic postback server IP `176.97.212.58`; status 1/2; any 2xx acknowledgement; suggested dedupe `offer_id + user_id`. Signature excludes offer/reward/payout/status; no immutable transaction ID or retry schedule is documented; sample uses `offer` while PHP reads `offer_id`. Legacy `/doc/postback` direct fetch returns 404. Terms last updated 2026-10-29; no express incentivized-traffic permission. Keep App 10066 pending and preserve the owner URL template.
+
+All database operations in this check were SELECT-only. No settings, secrets, schema, data, callbacks, provider settings, or financial activity were changed.
