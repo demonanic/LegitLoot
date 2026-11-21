@@ -28,9 +28,11 @@ test("no canonical function source allows the production origin", () => {
   }
 });
 
-test("canonical cpagrip-attribution differs from the deployed snapshot only by the production origin", () => {
+test("canonical cpagrip-attribution is a retired tombstone; the staging snapshot is historical deployed evidence", () => {
   const strip = (s) => s.split("\n").filter((l) => !l.trim().startsWith("//")).join("\n");
   const canonical = strip(readFileSync(new URL("supabase/functions/cpagrip-attribution/index.ts", root), "utf8"));
   const snapshot = strip(readFileSync(new URL("supabase/environments/staging/functions/cpagrip-attribution/index.ts", root), "utf8"));
-  assert.equal(canonical, snapshot.replace('  "https://legitloot.site",\n', ""));
+  assert.match(canonical, /status:\s*410/);
+  assert.notEqual(canonical, snapshot, "canonical source no longer mirrors the still-deployed staging v5 (retirement deploy is owner/authorized-staging gated)");
+  assert.match(snapshot, /store_cpagrip_attribution_token/, "snapshot still records the deployed attribution path");
 });
