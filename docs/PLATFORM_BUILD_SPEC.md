@@ -1,7 +1,8 @@
 # LegitLoot — Platform Build Specification
 
-**Version:** 1.3  
+**Version:** 1.4  
 **Date:** 2026-11-19 (v1.1 2026-11-10)  
+**v1.4 change (2026-11-21):** Adds §0.5, the owner's 2026-11-21 decisions on a separate cash balance and account deletion. They supersede the cash-deferral statements marked inline below.  
 **v1.3 change:** Adds the later 2026-11-19 owner launch decisions in §0.4, which supersede conflicting earlier launch-game and challenge-catalogue assumptions. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — owner-approved early-access publish is live on `main@801f3e7`; all further production merge/deploy/configuration changes remain owner-gated.
@@ -30,7 +31,7 @@ Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2)
 - §1 item 2 and all offerwall/survey/task/referral → LC reward rules in §2, §2A ("Reward destination rules"), §2B ("Offer-to-LC journey"), and §2D are **superseded** for LC. Providers may still be researched and integrated in a disabled state, but they produce no LC.
 - §2A "LootCoins: games only" spend rules are **superseded** by 0.1: spending uses are undecided.
 - §6 game list is **superseded** by 0.2.
-- Cash rewards remain deferred exactly as before (§2, §13).
+- Cash rewards remain deferred exactly as before (§2, §13). **Partly superseded by §0.5 (2026-11-21):** a separate player cash balance is now approved; live payouts remain off.
 
 ## 0.4 Later owner decisions — launch games and minimum challenges (2026-11-19 13:09 UTC)
 
@@ -61,6 +62,27 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 - The LegitLoot website remains the only authoritative LC wallet and reward-history surface.
 - Game events may request an award; only the server verifies eligibility and records it.
 
+## 0.5 Owner decisions of 2026-11-21 — cash balance and account deletion
+
+Source: Sam's own GitHub issues in the private Complete Loop repository (`demonanic/complete-loop`): issue #2 (cash rule, 2026-11-21 02:05 ET) and issues #3/#4 (account deletion, identical answers, 2026-11-21 02:25 and 06:37 ET), plus Sam's chat statements to Claude on 2026-11-20. Recorded by Claude; each issue was opened by the owner account `demonanic`. This section supersedes the conflicting cash-deferral statements marked inline in §0.3 and §2. Everything not listed here is unchanged.
+
+### Cash balance — "two balances" (issue #2)
+- Owner's chosen option, verbatim: **"Two balances: cash and coins (my Nov 20 plan)"** — *Agents keep a cash balance, fully separate from coins. Payouts stay switched off until business setup and payout tools are ready.*
+- LegitLoot acts as publisher for Hustle partners. Partners pay LegitLoot; verified completions are credited to the player's **cash balance** (USD ledger), never to LC.
+- Cash and LC must never mix: no conversion either way, no shared ledger, no LC purchase with cash (owner, 2026-11-20 chat: "fuck purchasing LC with cash. Let's stay simple"). §0.1 LC rules are unchanged.
+- **Payouts stay off.** Intended future payout rule (owner, 2026-11-20 chat): 18+, identity check, minimum balance, no fraud, and manual owner approval of each request. Live payouts, payout providers, identity-check providers and activation remain **owner-gated**; business setup (LLC/EIN/tax) comes first.
+- Effect for agents: stop treating separate cash fields as a launch blocker to remove. Keep them separate, server-side and inactive; remove only wording that implies cash is withdrawable today.
+
+### Account deletion — D1 to D4 (issues #3/#4)
+- **D1:** 7-day waiting period; the player can cancel.
+- **D2:** anonymised records are kept while LegitLoot operates.
+- **D3:** emailed deletion requests are answered within 30 days.
+- **D4:** a deleted email may sign up again as a fresh account; nothing carries over.
+- These close the owner decisions in `docs/ACCOUNT_DELETION_DESIGN.md`. Build on staging only; the Privacy notice must describe these terms before public accounts open.
+
+### Production sign-up pause — implemented (for the record)
+- The owner switched off "Allow new users to sign up" in the production Supabase project on 2026-11-21 ~02:03 ET. Claude's live check at 07:03 UTC read `disable_signup: true` with email login still enabled. §13 E1 is implemented, not just approved.
+
 ## 1. Product definition
 
 LegitLoot is a combined independent games and rewards platform with four public-facing pillars:
@@ -80,7 +102,7 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 ### Current player reward account
 - The current player-facing reward account is LootCoins (LC) only.
 - LC is non-transferable, has no cash value, is not withdrawable, and is usable only for eligible in-game purchases and game-related perks.
-- There is no active player cash balance in the current phase.
+- There is no active player cash balance in the current phase. **Superseded by §0.5 (2026-11-21):** a separate cash balance is approved for build; payouts stay off until the owner approves activation.
 - Any future cash rewards must use a separately approved USD ledger and must never be combined with, funded by, or converted from LC.
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
