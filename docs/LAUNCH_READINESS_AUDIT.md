@@ -1639,3 +1639,10 @@ No PR merge, deployment, SQL application, Supabase setting/secret/grant/schema/d
 
 ### Disposition and safety
 PR #30 remains draft / not launch-ready. Production wallet contract, account/legal conflict, account deletion/export, game handoff/verified events, Taplayad approval/protocol and ENV-07 remain open. Main-based preview production-auth connection is carried forward from 15:07 ET and was not re-probed this run. No merge, deployment, SQL application, settings/secrets, callbacks, provider agreements, payments, reward issuance or database mutations occurred.
+
+
+## 2026-11-20 19:22 ET — Sync Watch #18 follow-up — candidate cache fix
+
+- PR #30 advanced to exact head `fcd62237f6a7afe5ab7622d50039bcb101360aa3` (56 files / 83 commits, draft). The previously identified Account script cache-key defect is fixed and independently verified: `account.html` uses `account-auth.js?v=m2t1-2`; a static regression test rejects the old key.
+- Node/whitespace `44843092983` and Deno `44843092933` pass; Claude reports 82/82 local tests; both Pages previews succeeded. Browser test remains unrun.
+- **Still open:** Account sign-in/reset instructions conflict with Privacy's no-personal-information instruction. Keep account use off public previews until owner/legal approval; do not alter legal copy unilaterally. WALLET-01, Edge Function runtime embed, Auth signup setting, Terms/Privacy, account deletion/export, game handoff/events, Taplayad approval/protocol and ENV-07 remain unresolved. PR #30 stays draft.
