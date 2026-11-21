@@ -1,6 +1,7 @@
 -- PROPOSED, NOT APPLIED. DO NOT APPLY without independent staging-ref and rollback review.
 -- WALLET-01: LC-only get_wallet_summary() response. Removes cash/USD buckets and the
--- "LLC" label from the authoritative wallet API. Replaces the function body only;
+-- "LLC" label from the LC wallet API. Cash is a separate approved USD ledger (owner decision 2026-11-21);
+-- it must be served by a separate, independently reviewed cash-summary contract, never merged into this one. Replaces the function body only;
 -- no table or data change. The trailing REVOKE/GRANT statements only restate the ACL that is live today
 -- (authenticated + service_role EXECUTE; anon/PUBLIC none) and must be preceded by the precondition check below. Response key is the canonical `legitCoins`, which wallet-summary.js
 -- parses first (legacy gameCredits/lootCoins are read-only client fallbacks for the unchanged environments).

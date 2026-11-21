@@ -149,3 +149,17 @@ test("account.html cache-busts account-auth.js after the sign-up handler removal
   assert.match(html, /wallet-summary\.js\?v=m2t1-2/);
   assert.doesNotMatch(html, /wallet-summary\.js\?v=m2t1-1/);
 });
+
+test("two-balance decision (2026-11-21): LC contract is separate from the cash ledger; no mixing path", async () => {
+  const { readFileSync } = await import("node:fs");
+  const strip = (s) => s.replace(/^\s*(--|\/\/).*$/gm, "");
+  const parser = strip(readFileSync(new URL("../wallet-summary.js", import.meta.url), "utf8"));
+  assert.doesNotMatch(parser, /\.cash\b|availableCents|parseCash/, "LC parser must not read cash");
+  for (const f of ["../wallet-summary.js", "../supabase/functions/wallet-summary/index.ts", "../supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql"]) {
+    assert.match(readFileSync(new URL(f, import.meta.url), "utf8"), /separate/i, f + " must document that cash is a separate ledger");
+  }
+  const fn = readFileSync(new URL("../supabase/functions/wallet-summary/index.ts", import.meta.url), "utf8");
+  assert.match(fn, /\.eq\("wallet_kind", "game_credits"\)/);
+  assert.match(fn, /\.eq\("currency_code", "LC"\)/);
+  assert.equal(parseLegitCoins({ legitCoins: { available: "125000" }, cash: { availableCents: "999999" } }), 12.5);
+});
