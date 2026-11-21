@@ -71,10 +71,26 @@ test("homepage meta description and LC headline limit LC to the approved sources
   assert.ok(html.includes(`<p>Earned only through ${approved}. Never cash.</p>`), "LC headline must limit LC to approved sources");
 });
 
-test("provider registry and hub never reference LC or open a Taplayad wall", () => {
+test("provider registry and hub: no launch block, no ledger/RPC calls, recorded template not used by hub", () => {
   const reg = readFileSync(new URL("../earn-providers.js", import.meta.url), "utf8");
   const hub = readFileSync(new URL("../earn-hub.js", import.meta.url), "utf8");
   assert.doesNotMatch(reg, /launch:\s*Object\.freeze/);
   assert.doesNotMatch(reg + hub, /journal|ledger|\.rpc\(/i);
   assert.doesNotMatch(hub, /recordedTemplate/);
+});
+
+test("every provider/hub string that mentions LC states that partner offers do not award it", () => {
+  const sources = ["../earn-providers.js", "../earn-hub.js"].map((f) => readFileSync(new URL(f, import.meta.url), "utf8"));
+  const literals = sources.flatMap((src) => [...src.matchAll(/(["'`])((?:\\.|(?!\1)[^\\\n])*)\1/g)].map((m) => m[2]));
+  const mentions = literals.filter((t) => /legit coins|lootcoins?|\bLC\b/i.test(t));
+  assert.ok(mentions.length > 0, "expected the LC disclaimers to be present");
+  for (const text of mentions) {
+    assert.match(text, /(do(es)? not award|never award|not award|no legit coins)/i, `LC mention lacks a no-award statement: ${text}`);
+  }
+  // Positive-claim guard: a string that links provider activity to LC must carry a negation.
+  for (const text of literals) {
+    if (!/\b(legit coins|LC)\b/i.test(text)) continue;
+    if (/\b(not|never|no)\b/i.test(text)) continue;
+    assert.doesNotMatch(text, /\b(offers?|completions?|tasks?|surveys?|partner|provider)\b/i, `provider-to-LC claim without negation: ${text}`);
+  }
 });
