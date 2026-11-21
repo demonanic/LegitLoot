@@ -29,7 +29,10 @@ function runAccountAuth(config) {
     document: { getElementById: (id) => (id === "auth-status" ? status : null), querySelectorAll: () => [] },
     console,
   };
-  try { vm.runInNewContext(read("account-auth.js"), sandbox); } catch (error) {
+  // Test copy only: open the legal gate so the staging-environment guard is what is exercised.
+  // The shipped file keeps the gate closed (tests/account-legal-gate.test.mjs).
+  const source = read("account-auth.js").replace("const LEGAL_NOTICES_FINAL = false;", "const LEGAL_NOTICES_FINAL = true;");
+  try { vm.runInNewContext(source, sandbox); } catch (error) {
     if (error.message !== "stop after client creation") throw error;
   }
   return { created, status: status.innerHTML };

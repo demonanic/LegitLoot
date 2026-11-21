@@ -13,7 +13,9 @@
       "source_sha256": "37b7bc5b5cf923f688f303bb57ba71ca3e9108ed814e20bc8b5c80c71116120e",
       "files": [
         "index.ts"
-      ]
+      ],
+      "retired": true,
+      "do_not_deploy_snapshot": true
     },
     {
       "slug": "offerwall-gg-wall-url",
@@ -23,7 +25,9 @@
       "source_sha256": "386a9af79fcf73d84a1b61a66d7113d2077e2c092b0adf28d6720c9ff784c8df",
       "files": [
         "index.ts"
-      ]
+      ],
+      "retired": true,
+      "do_not_deploy_snapshot": true
     },
     {
       "slug": "wallet-summary",
@@ -35,5 +39,6 @@
         "index.ts"
       ]
     }
-  ]
+  ],
+  "retirement_note": "Offerwall.GG functions are retired (owner decision 2026-11-20). Entries flagged retired/do_not_deploy_snapshot are historical records of what was deployed, not deployment sources; the only deployable source is the inert tombstone under supabase/functions/. Live deployment state must be re-verified separately."
 }

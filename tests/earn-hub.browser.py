@@ -24,12 +24,12 @@ async def main():
             await page.goto(f"{BASE}/earn.html", wait_until="networkidle")
             start_url = page.url
             cards = page.locator("#provider-hub .provider-card")
-            check(await cards.count() == 4, f"[{vp_name}] four hub cards render")
-            for pid, label in [("offerwall-gg", "Pending approval"), ("cpagrip", "Testing · not open"),
+            check(await cards.count() == 3, f"[{vp_name}] three hub cards render")
+            for pid, label in [("taplayad", "Pending approval"),
                                ("surveys", "Unavailable"), ("direct-offers", "Unavailable")]:
                 text = await page.locator(f"#provider-{pid} .provider-state").inner_text()
                 check(label.lower() in text.lower(), f"[{vp_name}] {pid} shows '{label}'")
-            for pid in ["offerwall-gg", "cpagrip"]:
+            for pid in ["taplayad"]:
                 btn = page.locator(f"#open-provider-{pid}")
                 check(await btn.count() == 1 and await btn.is_disabled(), f"[{vp_name}] {pid} has its own entry button and it is disabled")
                 await btn.click(force=True)
@@ -37,13 +37,13 @@ async def main():
             check(page.url == start_url, f"[{vp_name}] clicking disabled buttons navigates nowhere")
             check(not fn_calls, f"[{vp_name}] no server function calls made ({fn_calls})")
             summary = await page.locator("#earn-hub-summary").inner_text()
-            check("No earning provider is open" in summary, f"[{vp_name}] summary says no provider is open")
+            check("No Hustle provider is open" in summary, f"[{vp_name}] summary says no provider is open")
             await page.click("button[data-filter=survey]")
             visible = [c for c in await cards.all() if await c.is_visible()]
             check(len(visible) == 1, f"[{vp_name}] Surveys filter shows 1 card")
             await page.click("button[data-filter=offerwall]")
             visible = [await c.get_attribute("id") for c in await cards.all() if await c.is_visible()]
-            check(visible == ["provider-offerwall-gg", "provider-cpagrip"], f"[{vp_name}] Offerwalls filter shows both offerwalls")
+            check(visible == ["provider-taplayad"], f"[{vp_name}] Offerwalls filter shows only Taplayad")
             await page.click("button[data-filter=all]")
             body = await page.inner_text("body")
             check(not re.search(r"cash out|real payout|\$\d", body, re.I), f"[{vp_name}] no cash/payout/amount claims in page text")

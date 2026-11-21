@@ -1,4 +1,15 @@
 (() => {
+  // Legal gate: Terms and Privacy are still drafts (privacy.html tells visitors not to
+  // submit personal information). While false, no credential form is usable and no
+  // handler is attached. Flip only after the owner approves final legal notices.
+  const LEGAL_NOTICES_FINAL = false;
+  if (!LEGAL_NOTICES_FINAL) {
+    const gateStatus = document.getElementById("auth-status");
+    if (gateStatus) gateStatus.innerHTML = "<b>ACCOUNT ACCESS PAUSED</b><p>Sign-in and password reset are unavailable while the Terms and Privacy Notice are being finalized. Games stay playable without an account.</p>";
+    const gatePanel = document.getElementById("auth-panel");
+    if (gatePanel) gatePanel.hidden = true;
+    return;
+  }
   // Backend target comes only from supabase-config.js. This build branch is
   // staging-only: fail closed unless the config is explicitly the staging
   // project, so a preview can never register or sign in against production.
@@ -30,7 +41,7 @@
   };
   const switchTab = (tab) => {
     document.querySelectorAll("[data-auth-tab]").forEach((button) => button.classList.toggle("active", button.dataset.authTab === tab));
-    ["signin", "signup", "reset", "recovery"].forEach((name) => {
+    ["signin", "reset", "recovery"].forEach((name) => {
       const form = $(name + "-form");
       form.hidden = name !== tab;
     });
@@ -97,28 +108,10 @@
       button.disabled = false;
     }
   });
-  $("signup-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const button = event.currentTarget.querySelector("button[type=submit]");
-    button.disabled = true;
-    try {
-      const { data, error } = await client.auth.signUp({
-        email: $("signup-email").value.trim(),
-        password: $("signup-password").value,
-        options: {
-          data: { display_name: $("signup-name").value.trim() },
-          emailRedirectTo: window.location.origin + "/account.html"
-        }
-      });
-      if (error) throw error;
-      if (data.session && data.user) await showSignedIn(data.user);
-      else showMessage("CHECK YOUR EMAIL", "Your registration was received. Open the confirmation email to activate your account, then return here to sign in.");
-    } catch (error) {
-      showMessage("ACCOUNT NOT CREATED", error.message || "Please try again.", true);
-    } finally {
-      button.disabled = false;
-    }
-  });
+  // UI-only closure: the sign-up form/handler is not wired. Supabase Auth project-level
+  // disable_signup is NOT read or changed here and remains unverified/owner-gated.
+  // Sign-up is intentionally not wired: public onboarding stays closed until Terms, Privacy
+  // and account deletion/export are approved (DaVinci review 6000758245).
   $("reset-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     const button = event.currentTarget.querySelector("button[type=submit]");
