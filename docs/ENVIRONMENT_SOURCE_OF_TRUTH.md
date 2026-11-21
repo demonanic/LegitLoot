@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 11:37 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:37 ET.
+**Last verified:** 2026-11-21 11:47 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:47 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 **MIG-02 correction (2026-11-21 07:20 ET):** Any older section below stating that the `game_platform_foundation` source is missing describes the pre-recovery state. The canonical migration and its regression test are now present on integration; the migration is already applied to staging and must not be replayed. The integration migration directory still has no CPAGrip migration source.
@@ -1408,3 +1408,13 @@ All database operations in this check were SELECT-only. No settings, secrets, sc
 - Current Terms last updated 2026-10-29; no express confirmation of LegitLoot's incentivized-traffic model was found. Preserve `https://offerwall.tplayad.com/10066/{user_id}`, keep pending, and never map publisher points/callback reward/payout to LC.
 
 No setting, secret, schema, data, function, callback, provider configuration, agreement or financial activity was changed. All database queries were SELECT-only.
+
+
+### Sync Watch #34 follow-up — 2026-11-21 11:47 ET
+
+- **Candidate:** PR #30 head `cb359c1`, 61 files / 89 commits. Exact-head Node [44926354502](https://github.com/demonanic/LegitLoot/actions/runs/44926354502) and Deno [44926354503](https://github.com/demonanic/LegitLoot/actions/runs/44926354503) passed. Deno workflow does not yet type-check `cpagrip-attribution/index.ts`.
+- **Canonical CPAGrip source:** `supabase/functions/cpagrip-attribution/index.ts` is now an inert 410 tombstone. `tests/cpagrip-retirement.test.mjs` and the revised staging-function-origin test cover the source/snapshot distinction.
+- **Deployed staging remains unchanged:** Edge Function `cpagrip-attribution` v5 is ACTIVE/JWT. The staging provider row remains disabled. RPC `public.store_cpagrip_attribution_token(text,uuid,text,timestamptz)` is SECURITY DEFINER, owner postgres, ACL `{postgres=X/postgres,service_role=X/postgres}`; public/anon/authenticated EXECUTE are false and service_role EXECUTE true. `private.cpagrip_attribution_tokens` has 0 rows. No deploy, grant change or data mutation occurred.
+- **Cloudflare candidate previews:** `cb359c1` preview [02dabd9a](https://02dabd9a.legitloot.pages.dev) and [fa5f55b8](https://fa5f55b8.legitloot-preview.pages.dev) succeeded as `environment=preview`. The previous docs head `5e02fed` preview [644f1b70](https://644f1b70.legitloot.pages.dev) and [b86fe144](https://b86fe144.legitloot-preview.pages.dev) also succeeded; Actions [44926428447](https://github.com/demonanic/LegitLoot/actions/runs/44926428447) passed.
+- **Production remains:** `main@801f3e7`, deployment `fe4c0f22`; no production deployment. Main-based preview `fdf6b609` remains production-auth-connected and must stay off-limits for Account/auth.
+- **Next:** source-only staging retirement plan only; no SQL application, function deployment, table deletion or provider activation until separately authorized.

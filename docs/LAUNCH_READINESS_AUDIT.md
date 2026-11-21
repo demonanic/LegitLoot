@@ -1777,3 +1777,12 @@ PR #30 exact head `516c1df` uses canonical `legitCoins` for the proposed wallet 
 - All 31 GitHub refs remain unprotected; repository rulesets are empty.
 
 No PR merge, deployment, Supabase setting/secret/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred. All SQL was SELECT-only.
+
+
+### Sync Watch #34 follow-up — 2026-11-21 11:47 ET
+
+PR #30 advanced to Claude head `cb359c1` (61 files / 89 commits). The canonical CPAGrip attribution function is now an inert 410 tombstone, and the new Node regression tests pass in exact-head Actions [44926354502](https://github.com/demonanic/LegitLoot/actions/runs/44926354502). Deno Actions [44926354503](https://github.com/demonanic/LegitLoot/actions/runs/44926354503) also passed, but the workflow only type-checks the Offerwall.GG entrypoints; CPAGrip needs an explicit `deno check` before Deno coverage is complete.
+
+The deployed staging CPAGrip function v5 remains ACTIVE/JWT, and its service-role-only SECURITY DEFINER RPC remains executable by service_role. The token table is empty. Source retirement is accepted; deployed retirement is not. PR #30 comment [7065937179](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065937179) requests the test addition and a source-only staging retirement plan. No SQL or function was deployed.
+
+PR #30 remains draft, with 8/8 inline threads resolved, 4 COMMENTED reviews and no APPROVED review. The 89/89 local test count is Claude-reported; browser test remains unrun. All launch blockers from Sync Watch #34 remain open.
