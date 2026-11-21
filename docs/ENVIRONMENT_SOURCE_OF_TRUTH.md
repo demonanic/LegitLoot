@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 07:20 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current public Tplayad documentation review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 07:20 ET.
+**Last verified:** 2026-11-21 11:37 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:37 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 **MIG-02 correction (2026-11-21 07:20 ET):** Any older section below stating that the `game_platform_foundation` source is missing describes the pre-recovery state. The canonical migration and its regression test are now present on integration; the migration is already applied to staging and must not be replayed. The integration migration directory still has no CPAGrip migration source.
@@ -1380,3 +1380,31 @@ All database operations in this check were SELECT-only. No settings, secrets, sc
 - **MIG-02:** canonical game-platform migration source and test are present on integration; already-applied staging migration must not be replayed. CPAGrip migration source remains absent from the integration migration directory.
 - **Cloudflare:** production remains `legitloot.site` / `main@801f3e7` / `fe4c0f22`. Candidate and documentation builds are branch previews; main-based preview Account/auth remains production-connected. Taplayad remains pending and provider activity cannot issue LC.
 - All database queries were SELECT-only. No settings, secrets, schema, data, functions, callbacks, provider settings, agreements, payments or financial activity were changed. Full deployment IDs and protocol evidence are in the Master Control Sync Watch #30 entry.
+
+
+## 2026-11-21 11:37 ET — Sync Watch #34 — current environment verification
+
+### GitHub and release controls
+- Production: `main@801f3e7`; authorized integration: `build/legitloot-neon-synthwave@1466eb6`.
+- PR #30 candidate: `516c1df4fe38d105d1f435d4db23f95b413e5d98`, 58 files / 87 commits; exact-head Node run [44918076043](https://github.com/demonanic/LegitLoot/actions/runs/44918076043) and Deno run [44918076032](https://github.com/demonanic/LegitLoot/actions/runs/44918076032) passed.
+- PR #27 documentation branch started this sync at `00e71cf59c300d93fb3bc06921c96ff827a8dc21`; this Sync Watch #34 commit updates the five shared records only. PR #27 remains open/unmerged.
+- Nine PRs remain open. All 31 branches report `protected:false`; repository rulesets are empty. Detailed branch-protection endpoint returned HTTP 403.
+
+### Supabase — SELECT-only
+- Both projects are ACTIVE_HEALTHY; production has 7 migrations and staging 21. Staging latest migration remains `20261119145340_offerwall_gg_record_only`.
+- Production `public.game_registry`, `private.game_events`, `private.game_saves` and `private.game_handoff_tickets` are absent. Staging has all four tables, but its registry contains only the legacy unlisted ZID placeholder; game events, saves and handoff tickets are 0.
+- Both live `public.get_wallet_summary()` RPCs still return cash/USD fields (production `lootCoins`; staging `gameCredits/LLC`). Both journal transaction/entry counts are 0. Production wallet-summary v4 remains active and cash/legacy-LLC-bearing; staging has no wallet-summary function. Candidate LC-only SQL remains DO NOT APPLY and the proposed Edge Function is not deployed.
+- Staging provider rows CPAGrip and Offerwall.GG are disabled; Offerwall.GG retains stale LC reward metadata. Taplayad has no provider row.
+- Staging Edge Functions: Offerwall.GG wall-url v5 ACTIVE/JWT; postback v8 ACTIVE/no-JWT/record-only; CPAGrip attribution v5 ACTIVE/JWT. The CPAGrip handler and `public.store_cpagrip_attribution_token` do not check the provider's disabled status before creating an attribution token. The token table has 0 rows; no endpoint was invoked. Production Offerwall.GG wall-url v2 and postback v4 remain HTTP 410 tombstones.
+
+### Cloudflare Pages
+- `legitloot.site`: production branch `main`, commit `801f3e7`, deployment `fe4c0f22`.
+- PR #30 candidate `516c1df`: preview [07f998dd](https://07f998dd.legitloot.pages.dev) in `legitloot`; preview [596166d3](https://596166d3.legitloot-preview.pages.dev) in `legitloot-preview`. Both succeeded as `environment=preview`.
+- Candidate `supabase-config.js` pins staging project `scmnxcsggquwtuyyjnnj`; candidate Account code returns before client creation while the legal gate is false.
+- The separate `main.legitloot-preview.pages.dev` deployment `fdf6b609` remains a preview built from `main@801f3e7`; main's `account-auth.js` hardcodes production Supabase and exposes sign-up. Keep Account/auth routes off this preview until ENV-07 is owner-approved, deployed and reverified.
+
+### Taplayad
+- Current official docs: `md5(app_id . user_id . api_secret)`; status 1/2; any HTTP 2xx acknowledgement; suggested dedupe `offer_id + user_id`. The signature omits offer/reward/payout/status; no immutable transaction ID or retry schedule is documented; sample `offer` parameter and PHP `offer_id` differ.
+- Current Terms last updated 2026-10-29; no express confirmation of LegitLoot's incentivized-traffic model was found. Preserve `https://offerwall.tplayad.com/10066/{user_id}`, keep pending, and never map publisher points/callback reward/payout to LC.
+
+No setting, secret, schema, data, function, callback, provider configuration, agreement or financial activity was changed. All database queries were SELECT-only.

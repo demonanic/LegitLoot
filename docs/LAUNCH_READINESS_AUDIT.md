@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #30 (2026-11-21 07:20 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #34 (2026-11-21 11:37 ET). Earlier status tables are historical.
 
 ---
 
@@ -1755,3 +1755,25 @@ No production merge/deploy, Supabase setting/secret/schema/data change, callback
 The production/staging wallet contracts still expose cash/USD fields; the selected games remain early access/device-local without trusted registry, session, save or verified-event integration; Taplayad remains pending written permission and complete App-specific protocol confirmation; main-based preview Account/auth routes still target production Supabase; and branch protection is not technically enforced. MIG-02 source recovery is complete and must not be replayed.
 
 See the dated Sync Watch #30 entry in `docs/MASTER_EXECUTION_CONTROL.md` for exact evidence, CI runs, deployment IDs and safety record. No PR merge, deployment, database/configuration change, callback, provider agreement or financial action occurred.
+
+
+## 2026-11-21 11:37 ET — Sync Watch #34: independent current launch-readiness disposition
+
+**Disposition: NOT LAUNCH-READY.** This is a fresh read-only review of GitHub, the current candidate, Cloudflare Pages, both Supabase projects and current official Tplayad documentation.
+
+### New finding
+Staging CPAGrip is disabled in `private.providers`, but deployed `cpagrip-attribution` v5 remains ACTIVE/JWT. Its candidate handler at `supabase/functions/cpagrip-attribution/index.ts:83-94` calls `public.store_cpagrip_attribution_token` without a provider-status check; the service-role-only SECURITY DEFINER RPC also lacks that check. The token table is empty and no LC is issued, but authenticated direct invocation can still create CPAGrip attribution despite Taplayad being the only initial Hustle provider. PR #30 comment [7065880195](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065880195) requests retirement or a server-side status/owner-approval gate plus regression coverage.
+
+### Candidate review
+PR #30 exact head `516c1df` uses canonical `legitCoins` for the proposed wallet response; legacy keys remain read-only parser fallbacks. Exact-head Node/whitespace Actions [44918076043](https://github.com/demonanic/LegitLoot/actions/runs/44918076043) and Deno Actions [44918076032](https://github.com/demonanic/LegitLoot/actions/runs/44918076032) passed. The limited correction was accepted in [comment 7065882210](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065882210). The PR remains draft; all 8 inline threads are resolved, 4 reviews are COMMENTED, none APPROVED. Claude's 87/87 local test result is not independently rerun; browser test remains unrun. SQL is DO NOT APPLY and the Edge Function is not deployed.
+
+### Remaining launch blockers
+- Production has no game-platform tables. Staging has only the unlisted legacy ZID placeholder; both selected games lack trusted registry, account/session, cloud-save and verified LC-event integration.
+- Both live wallet RPCs still return cash/USD fields; production wallet-summary v4 remains cash/legacy-LLC-bearing. The proposed LC-only SQL and Edge Function are source-only; the PostgREST transaction embed is not runtime-verified.
+- Staging Offerwall.GG wall-url v5 remains ACTIVE/JWT and does not check the disabled provider row; postback v8 is ACTIVE/no-JWT/record-only. Offerwall.GG retains stale LC metadata.
+- Main-based preview Account/auth routes still target production Supabase. Production main still exposes signup and cash/withdrawal UI and legacy provider wording.
+- Terms/Privacy, account deletion/export, verified support and signup-setting verification remain incomplete.
+- Taplayad App 10066 remains pending written incentivized-traffic permission and complete App-specific transaction/reversal/retry confirmation. Preserve the exact owner URL and never map provider activity into LC.
+- All 31 GitHub refs remain unprotected; repository rulesets are empty.
+
+No PR merge, deployment, Supabase setting/secret/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred. All SQL was SELECT-only.

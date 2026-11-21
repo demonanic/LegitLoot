@@ -1,9 +1,9 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 07:20 ET
+**Updated:** 2026-11-21 11:37 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
-**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the separate canonical documentation branch now at `4b2228c` (exact-head Actions 44904250535 passed; both Pages previews `9af3dc33` and `457b15d7` completed as `environment=preview`; prior head `5f99479` also passed run 44895875827).
+**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch and carries the Sync Watch #34 shared-record update. PR #30 consolidated candidate is at `516c1df` (58 files / 87 commits; exact-head Node `44918076043` and Deno `44918076032` passed).
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-21 07:20 ET):** #9 head `046019f` stale design draft; #20 head `6e2e51b`; #22 head `332ca07` (stacked on #20); #25 head `135607e` (superseded draft); #26 head `30f5dbf` (Taplayad pending; provider-contract gate); #27 docs branch head `5f99479` (Actions `44895875827` passed; previews `07393783` / `6f9a090e` successful); #28 head `93f62ac` (draft against main; Actions `44791797759` passed; scoped owner review only); #29 head `cfe9f0a` (DO NOT MERGE STANDALONE; superseded by #30); #30 head `49f209d` consolidated draft (58 files / 86 commits; Node `44881682972` and Deno `44881683000` pass; Claude reports 87/87 local tests; browser test unrun; no formal approval).
+**Current open PRs (2026-11-21 11:37 ET):** #9 `046019f` stale design draft; #20 `6e2e51b`; #22 `332ca07` stacked on #20; #25 `135607e` superseded containment draft; #26 `30f5dbf` Taplayad pending; #27 `claude/log-ack-charter` canonical docs update; #28 `93f62ac` draft/owner review; #29 `cfe9f0a` DO NOT MERGE STANDALONE; #30 `516c1df` consolidated draft (58 files / 87 commits; Node `44918076043` and Deno `44918076032` pass; Claude reports 87/87 local tests, not independently rerun; browser test unrun; 8/8 inline threads resolved; no APPROVED review).
 
 ## Current owner-locked operating rules
 
@@ -1007,3 +1007,14 @@ Claude's response to the account/privacy finding is now verified at PR #30 head 
 - Final docs-only PR #27 head: `4b2228cc17eb4403d656cb7b74a7a7398b6d4887`; the two documentation commits changed only the five shared records and `CLAUDE.md`.
 - Exact-head GitHub Actions run [44904250535](https://github.com/demonanic/LegitLoot/actions/runs/44904250535) passed. Automatic Cloudflare previews [9af3dc33](https://9af3dc33.legitloot.pages.dev) and [457b15d7](https://457b15d7.legitloot-preview.pages.dev) completed successfully as `environment=preview`.
 - Production remains `main@801f3e7`, deployment `fe4c0f22`; no production deployment occurred. PR #27 remains open and unmerged.
+
+
+## 2026-11-21 11:37 ET — Sync Watch #34 current-state update
+
+- PR #30 advanced to Claude commit `516c1df`; the canonical wallet response key is now `legitCoins` in the proposed SQL/Edge Function, with read-only legacy parser fallbacks. Exact-head Node and Deno Actions passed. The candidate remains draft; SQL is DO NOT APPLY and the new Edge Function is not deployed.
+- New staging finding: disabled CPAGrip still has an ACTIVE v5 attribution function that can create tracking tokens without checking provider status. No tokens exist and it does not issue LC. PR #30 comment [7065880195](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7065880195) requests retirement or a server-side approval/status gate with tests.
+- Production has no game-platform schema. Staging has one legacy unlisted ZID placeholder and zero game events, saves or handoff tickets. M2-T4 remains incomplete.
+- Both live wallet RPCs still return cash/USD fields; production wallet-summary v4 remains cash/legacy-LLC-bearing. Candidate LC-only SQL/function remain source-only and unverified at the PostgREST relationship boundary.
+- Staging Offerwall.GG wall-url v5 remains active without a disabled-provider check; postback v8 is record-only. Taplayad App 10066 remains pending written incentivized-traffic permission and complete App-specific protocol confirmation.
+- Candidate Pages previews for `516c1df` succeeded as preview deployments and use staging configuration. Production remains `main@801f3e7` / `fe4c0f22`; the separate main-based preview still targets production Supabase for Account/auth.
+- No new owner instruction or approval-ready release milestone emerged. No PR merge, production deployment, Supabase setting/secret/schema/data change, callback, provider agreement, payment, reward issuance or money movement occurred.
