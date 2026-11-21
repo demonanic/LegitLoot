@@ -1620,3 +1620,22 @@ No PR merge, deployment, SQL application, Supabase setting/secret/grant/schema/d
 - PR #30 body still reports `38a9406` / 80 commits / old Actions and merged docs through `e1146ff`; update to `226caadc` / 82 commits / Actions `44838319726/44838319730` and docs through `26768972`. Local 81/81 is only verified on prior SHA.
 - Live wallet RPCs and production wallet-summary v4 remain cash/USD-bearing. Auth signup setting, ENV-07, Taplayad permission/protocol, legal/account deletion/export, and shared game/save/verified-event integration remain open.
 - No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 19:14 ET — Sync Watch #18 independent launch-readiness addendum
+
+### Candidate and evidence
+- PR #30 exact head `226caadcfd11d9b69d3b98b310b5b9325306959c`, draft, 56 files / 82 commits. Node/whitespace `44838319726` and Deno `44838319730` pass. Claude reports 81/81 local tests on this exact head; both Cloudflare Pages previews succeeded as pages.dev previews. Browser test `tests/earn-hub.browser.py` remains unrun. PR #27 canonical docs branch is `0269a54`, Actions `44838509525` passed; #30 intentionally carries docs through `26768972` pending a final owner-approved freeze sync.
+- The previous proposed-RPC join and PUBLIC ACL source findings are corrected and covered by static assertions. The SQL remains DO NOT APPLY; the Edge Function's PostgREST `journal_transactions!inner(status)` embed is still not runtime-verified.
+
+### New candidate findings
+- **AUTH-CACHE (new, medium):** `account.html` still requests `account-auth.js?v=m2t1-1` although this PR changes that script. A client reusing the old cached URL may run the old signup-form listener against the removed form and throw before reset/recovery/sign-out/auth-state listeners register. Bump the query version and add a test asserting the current asset version.
+- **PRIVACY-ACCOUNT (launch gate):** `account.html` invites existing users to sign in/reset, while `privacy.html:4` instructs visitors not to submit personal information through the preview until the final Privacy Notice and Terms are published. Both account flows collect email/password. Keep public account use closed or obtain owner/legal-approved interim wording; do not author legal changes without approval.
+
+### Fresh environment state
+- Production and staging Supabase projects are ACTIVE_HEALTHY. Production has 7 migrations; staging has 21 through `20261119145340`. Both live `public.get_wallet_summary()` functions still return cash/USD buckets and grant authenticated EXECUTE; anon EXECUTE is false. Production wallet-summary v4 remains deployed and cash-bearing. Its `verify_jwt=false` setting is paired with an explicit Bearer-token + `auth.getUser` check in the handler; this is not evidence of unauthenticated wallet access.
+- Production Offerwall.GG wall-url v2 and postback v4 return 410. Staging wall-url v5 remains ACTIVE/JWT and can still construct an Offerwall.GG URL for authenticated callers; postback v8 remains ACTIVE/no-JWT and record-only. No callback was invoked.
+- Staging game registry/events/saves/handoff counts are 1/0/0/0. Shared account/session, cloud saves and verified LC events remain incomplete. Taplayad remains pending with no App-10066-specific permission/protocol confirmation.
+
+### Disposition and safety
+PR #30 remains draft / not launch-ready. Production wallet contract, account/legal conflict, account deletion/export, game handoff/verified events, Taplayad approval/protocol and ENV-07 remain open. Main-based preview production-auth connection is carried forward from 15:07 ET and was not re-probed this run. No merge, deployment, SQL application, settings/secrets, callbacks, provider agreements, payments, reward issuance or database mutations occurred.
