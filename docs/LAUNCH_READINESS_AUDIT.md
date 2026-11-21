@@ -8,7 +8,7 @@
 **Original audited branch:** `build/legitloot-neon-synthwave` @ `5045cf111bb588188e0dfc937058992802cdb4ef` (historical M1 baseline)
 **Mode:** Original M1 audit was read-only. Current M2 status and later read-only checks are appended below. No production or staging deployment, schema/data/setting/secret change, callback, or financial action is authorized by this audit record.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #17 follow-up 4 (2026-11-20 18:39 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #24 (2026-11-21 01:15 ET). Earlier status tables are historical.
 
 ---
 
@@ -1682,3 +1682,17 @@ No PR merge, deployment, legal change, Supabase setting/secret/schema/data chang
 The specific candidate-preview privacy contradiction recorded earlier in Sync Watch #23 is **resolved in PR #30 head `3bfa615`**. `account-auth.js` returns while `LEGAL_NOTICES_FINAL=false` before client creation or handlers; `account.html` ships the auth panel hidden and displays the pause notice. I inspected the other Account-page scripts: `supabase-config.js` only declares config, `app.js`/`portal.js` do not create a client, and `wallet-summary.js` is a parser. Exact-head Node/whitespace and Deno Actions passed; both candidate previews are successful and staging-bound.
 
 This does **not** make account functionality launch-ready: the signed-in wallet view is unavailable until owner-approved final Terms/Privacy are published and the gate is deliberately reopened; account deletion/export remains absent. Production main still has signup, and the main-based preview remains production-auth-connected until PR #28 is owner-approved and deployed. PR #30 stays draft. Browser test remains unrun. A runtime VM assertion for zero client/handler calls in the closed-gate path is recommended but non-blocking. No legal wording, Auth setting, merge or deployment changed.
+
+
+## 2026-11-21 01:15 ET — Sync Watch #24 current-state recheck
+
+**Disposition: NOT LAUNCH-READY.** PR #30 remains draft at `37763d8`; latest change is test-only and exact-head Node/whitespace + Deno Actions passed. Both Cloudflare candidate previews for that exact SHA succeeded as preview deployments with staging configuration. No formal approval; browser suite unrun.
+
+- **Wallet:** production and staging `get_wallet_summary()` still expose cash/USD fields (production `lootCoins`; staging `gameCredits/LLC`). Both deny anon EXECUTE, allow authenticated/service_role, and currently have zero journal entries/transactions. Production wallet-summary Edge Function v4 is still cash/LLC-bearing; staging has no wallet-summary Edge Function. Candidate LC-only SQL/Edge Function are source-only; proposed SQL is DO NOT APPLY; PostgREST private-schema exposure/embed remains unverified.
+- **Account/legal:** candidate Account gate is independently accepted for its narrow purpose and now returns before client/handler/config creation; it also makes the wallet view unavailable. Final Terms/Privacy, deletion/export, and Auth `disable_signup` verification remain outstanding. Production main still has signup.
+- **Preview isolation:** PR #30 previews are verified staging-bound. The separate `main.legitloot-preview.pages.dev` deployment is built from `main@801f3e7` and main's Account script targets production Supabase; keep Account/auth routes off-limits until owner-approved remediation is deployed and rechecked.
+- **Games:** both public early-access pages are present and truthfully disclose local saves/no account or LC connection. Staging `public.game_registry` has only the legacy Zombie Invasion Defense row (development/unlisted/no URL); neither selected launch game is registered. Events, saves and handoff tickets are zero. This blocks claiming trusted M2-T4 integration, though it does not invalidate the current early-access page copy. PR #30 comment 7058531808 records the finding.
+- **Hustle:** no provider is active. Staging CPAGrip and Offerwall.GG rows are disabled; Offerwall.GG retains stale LC reward metadata; no Taplayad row. Staging Offerwall.GG wall-url v5 and record-only postback v8 remain active. Taplayad App 10066 remains pending; current public docs do not establish incentivized-traffic permission or a complete transaction/reversal/retry contract. No provider activity may issue LC.
+- **Governance:** 31 GitHub refs currently report `protected:false`; repository rulesets are empty. PR #28 remains draft/owner-gated. Nine PRs remain open: #9, #20, #22, #25, #26, #27, #28, #29, #30.
+
+No PR merge, deployment, legal change, Supabase setting/secret/schema/data change, callback, provider setting/agreement, or financial activity occurred. Database checks were SELECT-only.
