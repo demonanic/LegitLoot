@@ -14,7 +14,7 @@
 > - **Production sign-up pause:** implemented by the owner ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 UTC and 20:34 UTC, email sign-in enabled.
 > - **Repository state at this update:** 10 open PRs (#9, #20, #22, #25, #26, #27, #28, #29, #30, #31) and 32 remote branches; production remains `main@801f3e7`.
 
-**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; the latest independent candidate review is Sync Watch #34 (2026-11-21 11:37 ET). Earlier status tables are historical.
+**Current-state note:** This document began as the M1 baseline audit. Use the latest dated M2 sections together with the current Master Control and Environment Source of Truth for present status; Sync Watch #34 (2026-11-21 11:37 ET) is **historical**; the latest independent review is Sync Watch #39 on PR #31 (2026-11-21 17:01 ET), with the current state in Master Control. Earlier status tables are historical.
 
 ---
 

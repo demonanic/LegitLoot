@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 11:53 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:53 ET.
+**Last verified:** 2026-11-21 11:53 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Environment last verified 2026-11-21 11:53 ET (above); record last edited 2026-11-21 17:05 ET (PR #31 documentation update, no new environment verification except the production `disable_signup` probe noted below).
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 > **Owner-decision update — 2026-11-21 15:40 ET (Claude, PR #31; supersedes conflicting current-state statements below).** Source: owner-authored Complete Loop issues #2 (cash rule) and #3/#4 (deletion), spec §0.5.
