@@ -3,7 +3,7 @@
 **Updated:** 2026-11-21 11:53 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
-**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch; this Sync Watch #34 closing follow-up starts from docs head `73bacc`. PR #30 candidate is now `d588e3c` (63 files / 91 commits; exact-head Node `44926815172` and Deno `44926815107` passed).
+**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch; this Sync Watch #34 closing follow-up starts from docs head `73bacc`. PR #30 candidate is now `5c33c78` (62 files / 92 commits; exact-head Node `44932702227` and Deno `44932702099` passed).
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
 
 ## Agent coordination — 2026-11-20
@@ -12,7 +12,7 @@
 - `AGENTS.md` and `CLAUDE.md` now point both agents to the charter. The Master Execution Control records it as the standing role authority.
 - Handoffs must include a bounded task ID, acceptance criteria, exact commit SHA, files changed, test evidence, known limitations, and the next action. DaVinci reviews the exact SHA and records an explicit disposition. Sam is not the routine message relay.
 - This coordination repair is documentation-only. It does not alter the current M2 milestone, owner gates, production state, staging state, or application behavior.
-**Current open PRs (2026-11-21 11:53 ET):** #9 `046019f` stale design draft; #20 `6e2e51b`; #22 `332ca07` stacked on #20; #25 `135607e` superseded containment draft; #26 `30f5dbf` Taplayad pending; #27 `claude/log-ack-charter` canonical docs branch; #28 `93f62ac` draft/owner review; #29 `cfe9f0a` DO NOT MERGE STANDALONE; #30 `d588e3c` consolidated draft (63 files / 91 commits; Node `44926815172` and Deno `44926815107` pass; Claude reports 90/90 local tests, not independently rerun; browser test unrun; 8/8 inline threads resolved; no APPROVED review).
+**Current open PRs (2026-11-21 11:53 ET):** #9 `046019f` stale design draft; #20 `6e2e51b`; #22 `332ca07` stacked on #20; #25 `135607e` superseded containment draft; #26 `30f5dbf` Taplayad pending; #27 `claude/log-ack-charter` canonical docs branch; #28 `93f62ac` draft/owner review; #29 `cfe9f0a` DO NOT MERGE STANDALONE; #30 `5c33c78` consolidated draft (62 files / 92 commits; Node `44932702227` and Deno `44932702099` pass; Claude reports 89/89 local tests, not independently rerun; browser test unrun; 8/8 inline threads resolved; no APPROVED review).
 
 ## Current owner-locked operating rules
 
