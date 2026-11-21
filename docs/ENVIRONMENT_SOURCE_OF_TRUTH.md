@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 00:47 ET by DaVinci (read-only GitHub, Cloudflare, Supabase, and current provider-documentation checks; no browser test or PostgREST relationship execution). Record edited 2026-11-21 00:47 ET.
+**Last verified:** 2026-11-21 00:59 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and source review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 00:59 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -1247,3 +1247,11 @@ No environment setting, secret, function, grant, schema, data, callback, provide
 - Current official Taplayad guide: `md5(app_id . user_id . api_secret)`; generic postback server IP `176.97.212.58`; status 1/2; any 2xx acknowledgement; suggested dedupe `offer_id + user_id`. Signature excludes offer/reward/payout/status; no immutable transaction ID or retry schedule is documented; sample uses `offer` while PHP reads `offer_id`. Legacy `/doc/postback` direct fetch returns 404. Terms last updated 2026-10-29; no express incentivized-traffic permission. Keep App 10066 pending and preserve the owner URL template.
 
 All database operations in this check were SELECT-only. No settings, secrets, schema, data, callbacks, provider settings, or financial activity were changed.
+
+
+## 2026-11-21 00:59 ET — Sync Watch #23 follow-up: PR #30 account gate
+
+- PR #30 advanced from `fcd6223` to exact head `3bfa615bd8de6a624222fe86d3e4b572f9a35a5b` (58 changed files / 84 commits; still draft). New code: `LEGAL_NOTICES_FINAL=false` returns before Supabase client creation or auth handlers; Account auth panel is hidden. No client is created by other Account-page scripts before the gate.
+- Exact-head Node/whitespace run 44873202212 and Deno run 44873202199 passed. Claude reports 85/85 local tests; browser suite remains unrun.
+- Cloudflare deployment `30b91602-8334-4014-b363-aff022516248` in `legitloot` and `4e852597-85e7-469b-b9d3-e9234af58aa6` in `legitloot-preview` both completed successfully as `environment=preview`, branch `claude/m2-release-candidate`, commit `3bfa615`. No production deployment.
+- Account sign-in/reset are unavailable in candidate until owner-approved legal notices; wallet view is also unavailable. Production main remains `801f3e7` with signup; main-based preview remains production-auth-connected. No Auth settings, secrets, schema, data or legal text changed.

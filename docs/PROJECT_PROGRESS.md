@@ -1,6 +1,6 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 00:47 ET
+**Updated:** 2026-11-21 00:59 ET
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on `legitloot.site` in early access with device-local saves and no account/LC connection. Remaining: shared account/session handoff, cloud saves, trusted server-verified LC events. Offerwall.GG permanent retirement is a security subtask; the owner reports postback URL removal from all attempted/successful placements, but technical retirement and placement disable/delete are not verified.
 **Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6` (last commit 14:28 ET). PR #27 is a separate documentation branch based on this integration head.
@@ -945,3 +945,8 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Wallet/game evidence:** both live wallet RPCs still return cash/USD; production uses `lootCoins`, staging uses `gameCredits/LLC`. No journal entries were found. Staging game counts remain registry 1, events 0, saves 0, handoff tickets 0. Offerwall.GG staging wall-url v5 remains active; postback v8 is record-only.
 - **Taplayad:** remains pending. Current docs add generic server IP `176.97.212.58`, but signature/transaction/reversal/retry gaps and missing incentivized-traffic permission remain. Preserve the exact owner template and never award LC from provider callbacks.
 - **Next:** keep M2-T4 active; resolve the account/privacy gate, validate the wallet contract in staging without touching production, and complete the two games' trusted account/save/event path. No production or provider activation.
+
+
+## 2026-11-21 00:59 ET — Sync Watch #23 follow-up
+
+Claude's response to the account/privacy finding is now verified at PR #30 head `3bfa615`. The candidate sets `LEGAL_NOTICES_FINAL = false`, returns before any Supabase client or auth handler is created, and ships the auth panel hidden. This closes the candidate-preview credential-submission contradiction. The signed-in wallet view is intentionally unavailable until owner-approved final Terms/Privacy are in place and the gate is reopened. Exact-head Node/whitespace Actions 44873202212 and Deno Actions 44873202199 passed; Claude reports 85/85 local tests; browser suite remains unrun. Both PR #30 previews for this SHA succeeded as staging-bound previews. PR #30 remains draft. Production main still has signup, PR #28 remains owner-gated, and account deletion/export remains missing. Do not change legal wording or reopen the gate without owner approval.

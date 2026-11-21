@@ -1675,3 +1675,10 @@ At PR #30 head `fcd6223`, `account.html` still exposes Sign In and Reset Passwor
 - Browser suite remains unrun. Candidate PR #30 is draft and has no approval for its exact head.
 
 No PR merge, deployment, legal change, Supabase setting/secret/schema/data change, callback, provider setting, or financial activity occurred.
+
+
+## 2026-11-21 00:59 ET — Sync Watch #23 follow-up: account preview gate verified
+
+The specific candidate-preview privacy contradiction recorded earlier in Sync Watch #23 is **resolved in PR #30 head `3bfa615`**. `account-auth.js` returns while `LEGAL_NOTICES_FINAL=false` before client creation or handlers; `account.html` ships the auth panel hidden and displays the pause notice. I inspected the other Account-page scripts: `supabase-config.js` only declares config, `app.js`/`portal.js` do not create a client, and `wallet-summary.js` is a parser. Exact-head Node/whitespace and Deno Actions passed; both candidate previews are successful and staging-bound.
+
+This does **not** make account functionality launch-ready: the signed-in wallet view is unavailable until owner-approved final Terms/Privacy are published and the gate is deliberately reopened; account deletion/export remains absent. Production main still has signup, and the main-based preview remains production-auth-connected until PR #28 is owner-approved and deployed. PR #30 stays draft. Browser test remains unrun. A runtime VM assertion for zero client/handler calls in the closed-gate path is recommended but non-blocking. No legal wording, Auth setting, merge or deployment changed.
