@@ -141,6 +141,6 @@ test("proposed RPC joins entries on account wallet_kind/currency and asserts exa
 test("account.html cache-busts account-auth.js after the sign-up handler removal", async () => {
   const { readFileSync } = await import("node:fs");
   const html = readFileSync(new URL("../account.html", import.meta.url), "utf8");
-  assert.match(html, /account-auth\.js\?v=m2t1-2/);
-  assert.doesNotMatch(html, /account-auth\.js\?v=m2t1-1/);
+  assert.match(html, /account-auth\.js\?v=m2t1-3/);
+  assert.doesNotMatch(html, /account-auth\.js\?v=m2t1-[12]/);
 });
