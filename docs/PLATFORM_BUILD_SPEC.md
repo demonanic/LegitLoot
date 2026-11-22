@@ -117,7 +117,7 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 ### Current LC reversals and future cash reserves
 - LC reversals must use compensating ledger entries, preserve the original event, and follow the provider/campaign's verified reversal lifecycle.
 - Ordinary provider reversals do not automatically create player debt. Any recovery of already-spent LC requires a documented fraud exception, review, and approved policy.
-- Cash-liability reserves, reversal buffers for cash, and withdrawal funding controls apply only if a future cash product is separately approved. They are not current player-facing features.
+- Cash-liability tracking and reversal buffers apply to the separate USD cash ledger (§0.5, two balances). Withdrawal funding controls apply only once Sam separately approves payouts; payouts and withdrawals are not current player-facing features.
 - Unsettled provider receivables must never be treated as available player cash in any future cash phase.
 - A circuit breaker pauses new reward commitments when provider status is suspended, validation fails, or material reconciliation discrepancies occur.
 
