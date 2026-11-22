@@ -1,6 +1,14 @@
 # TapResearch — Eligibility API integration (staging)
 
-**Status:** built; local handler tests pass. Deno CI, PGlite database tests and staging verification remain pending. Not deployed. Provider state in `earn-providers.js` is `testing` (cannot be opened by players).
+**Status: ON HOLD — publisher eligibility not approved.** TapResearch's business development team advised LegitLoot to revisit the partnership after reaching at least **2,500 US daily active users/site visitors**, or **5,000 combined DAU** across the US, Canada, UK, Germany, France and Australia. This is a publisher-audience threshold, not a technical rejection.
+
+**Current safeguards (2026-11-22):**
+- Provider registry is `pending_approval`; `launch: null`. The provider cannot be opened by players.
+- Staging Edge Functions are intentionally disabled: both endpoints return HTTP 410. The original handlers remain preserved in GitHub commit `7b4d17a233d0d400c54d9a00a971ce6bff4ed148`.
+- The staging-only record table and service-role-only RPC migration remain applied for future reactivation. No credentials were configured, no TapResearch dashboard postback URL was changed, and no rewards or wallet credits were processed.
+- Production was not changed. Do not press **Go Live**, configure provider credentials, or restore the live handlers without fresh written provider approval and explicit owner authorization.
+
+**Reactivation path:** confirm audience eligibility and written approval with TapResearch; obtain owner approval; restore the original handlers from the preserved commit; configure staging-only secrets; verify the correct preview origin and provider callback payload; test signed callbacks, duplicate/retry behavior and `pending_review` storage; then separately review any production release. Cash posting, LC credits and payouts remain outside this integration.
 **Source of truth:** https://supply-docs.tapresearch.com/llms-eligibility-api.txt (read 2026-11-22). Anything not in that file is listed under "Not covered by the docs" — nothing there was guessed into the code.
 **Policy:** spec §0.1 (no provider callback mints Legit Coins) and §0.5 (two balances; cash only from verified *and approved* Hustle completions; payouts off). Rewards are recorded `pending_review`; nothing posts to any ledger.
 
