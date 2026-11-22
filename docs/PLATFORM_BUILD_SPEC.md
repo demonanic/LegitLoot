@@ -4,9 +4,11 @@
 **Date:** 2026-11-19 (v1.1 2026-11-10)  
 **v1.3 change:** Adds the later 2026-11-19 owner launch decisions in §0.4, which supersede conflicting earlier launch-game and challenge-catalogue assumptions. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
-**Production:** `https://legitloot.site/` — untouched; no production deployment authorized.  
+**Production:** `https://legitloot.site/` — owner-approved early-access publish is live on `main@801f3e7`; all further production merge/deploy/configuration changes remain owner-gated.
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
-**Authorization:** Owner has now explicitly authorized development. This supersedes v1.3's earlier "no development authorized" status for work on the isolated build branch only. It does not authorize paid services, account creation, provider agreements, live money movement, or production deployment.
+**Authorization:** Owner has explicitly authorized development on the isolated build branch. This does not authorize paid services, provider agreements, live money movement, or further production deployment.
+
+**Operational status update — 2026-11-20:** PR #23 was owner-approved and published Rocket 2 Nowhere to production as early access at `main@801f3e7`. This historical publish does not authorize any subsequent production merge/deploy or live financial/provider action.
 
 ## 0. Owner-locked decisions of 2026-11-19 — read first
 
@@ -37,16 +39,14 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 ### Selected launch games
 - The official initial-launch titles are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere**.
 - The owner states both are playable as-is. This is a product decision, not independent technical evidence; each still requires verification of its actual playable URL/source, mobile behavior, central account integration, and save persistence.
-- The earlier reference title Zombie Invasion Defense (repository `demonanic/Legitloot-2`) is not a substitute for either selected launch title. Do not list it as a launch game unless the owner changes the selection.
-- Exact source repositories and playable hosting URLs remain UNLOCATED in the connected GitHub account and handoffs. Do not invent URLs or wire unrelated projects.
+- **Corrected 2026-11-20 (owner decision, supersedes the earlier exclusion sentence):** `demonanic/Legitloot-2` (https://demonanic.github.io/Legitloot-2/) **is** the owner-approved Zombies vs Heavy Metal build. Its working title was Zombie Invasion Defense; the repository was renamed in commit `fcf4000` and the player-facing title is Zombies vs Heavy Metal. The owner identified it on 2026-11-19 19:40 ET (see Master Execution Control) and re-confirmed it on 2026-11-20. It is a launch game. Do not treat the old working title as a separate game.
+- **Sources now located (2026-11-20):** Zombies vs Heavy Metal = `demonanic/Legitloot-2`, played at https://demonanic.github.io/Legitloot-2/ and embedded at `/zombies-vs-heavy-metal`. Rocket 2 Nowhere = the in-repository build `games/rocket-2-nowhere/index.html`, played at `/rocket-2-nowhere`. Still unverified: shared account/session handoff, cloud saves, server-verified LC events, and independent mobile-control testing.
 
-### Implementation status recheck — 2026-11-20 04:55 ET (status only; owner decision unchanged)
+### Implementation status — 2026-11-20 (supersedes the 04:55 ET recheck, which is withdrawn)
 
-- The production and PR #22 Zombies vs Heavy Metal wrapper uses an iframe to https://demonanic.github.io/Legitloot-2/. This is the repository §0.4 explicitly identifies as Zombie Invasion Defense and not a substitute for the selected ZVHM game. The wrapper's title/branding does not establish game identity. The actual owner-approved ZVHM source/build remains unverified; do not publish this route as the selected game.
-- PR #22 tests/launch-games.test.mjs currently asserts that excluded URL. The test must be changed to reject the excluded repository, and the ZVHM card must remain unavailable/unverified until the correct build is identified.
-- Rocket 2 Nowhere has a self-contained in-repository build at games/rocket-2-nowhere/index.html in PR #22/#23. It is preview-only with device-local saves and no shared account/LC connection.
-- This note does not change the owner-selected game titles or authorize any substitute source.
-
+- The 04:55 ET recheck relied on the earlier exclusion sentence and missed the 2026-11-19 19:40 ET owner decision. DaVinci withdrew the resulting blocker in PR #22 comment `7041463948`; PR #22's URL assertion is consistent with the owner decision.
+- Zombies vs Heavy Metal is live on legitloot.site (PR #21, main `4e0f533`). Rocket 2 Nowhere is live on legitloot.site (PR #23, main `801f3e7`), early access, device-local saves, no account or LC connection.
+- Still open for both games: shared account/session handoff, cloud saves and server-verified LC-event ingestion.
 
 ### Launch challenges and LC awards
 - The owner authorizes creation of **at least five** launch challenges/milestones and integration with the central reward system.
@@ -399,3 +399,5 @@ Requires explicit owner approval of the exact commit, production deployment, dom
 - Rejected/cancelled requests release reserved funds through a compensating journal transaction; they must never edit or delete prior journal entries.
 - Mark a request paid only after a reconciled, trusted payout confirmation. Admin approval alone is not payment.
 - No payout function may be deployed to the production Supabase project until an isolated staging project exists and all required tests pass.
+
+> Record note 2026-11-20 15:20 ET: Taplayad App 10066 protocol/permission status is recorded in `docs/MASTER_EXECUTION_CONTROL.md` (Sync Watch #13); the spec text above is unchanged and Taplayad remains `pending_approval`, record-only, never mapped to LC.

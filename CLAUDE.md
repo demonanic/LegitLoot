@@ -24,15 +24,21 @@ The current milestone and exact active task are defined only by `docs/MASTER_EXE
 
 Current active task: **M2-T4 — integrate Zombies vs Heavy Metal and Rocket 2 Nowhere** (per MASTER_EXECUTION_CONTROL.md). The owner has also asked Sync Watch to keep Offerwall.GG containment/source alignment as the critical launch/security focus within M2; this does not change the active task assignment.
 
-**Verified repository state — 2026-11-20 05:15 ET:** production main is bcc19d; integration application baseline is 56b98e4, followed by documentation-only Sync Watch updates; 26 branches all report protected=false. PR #20 is head 6e2e51b (58/58 Actions; 15 commits ahead of its merge base; its behind-side integration changes are documentation-only); PR #22 is head 332ca07 (64/64, two commits ahead of #20 but blocked by its excluded ZID URL/test); PR #23 is draft/no CI at 33a5240 with production-targeting preview auth; PR #25 is draft at 135607e with 54/54 Node tests and passing Deno checks (17 commits ahead of its merge base; its behind-side integration changes are documentation/README-only); PR #9 is stale. PR #21 and #24 were merged by owner account demonanic. PR #20 description evidence remains stale; comment 7036351593 records the correction.
+**Verified repository state — 2026-11-21 11:53 ET (Sync Watch #34 closing follow-up):** production is `main@801f3e7`, Cloudflare production deployment `fe4c0f22` serving `https://legitloot.site`; authorized integration is `build/legitloot-neon-synthwave@1466eb6`. PR #30 remains draft at `5c33c78` (62 files / 92 commits); exact-head Node/whitespace Actions `44932702227` and Deno Actions `44932702099` passed. The Deno job includes the CPAGrip type-check. Claude reports 89/89 local tests (not independently rerun); browser test remains unrun. All 8 inline review threads are resolved; 4 submitted reviews are COMMENTED and none APPROVED. PR #27 canonical docs branch is at `73bacc` before this follow-up. PR #28 remains draft/owner-gated at `93f62ac`, accepted only for narrow owner review. Nine PRs remain open. GitHub lists 31 refs, all `protected:false`, with no repository rulesets; detailed branch-protection endpoint returned 403.
 
-**Games:** The production ZVHM wrapper exists, but its iframe points to the owner-excluded demonanic.github.io/Legitloot-2/ repository (Zombie Invasion Defense), so the selected Zombies vs Heavy Metal build is not verified/live. PR #22's launch-games test explicitly asserts that excluded URL. Rocket 2 Nowhere is packaged in PR #22/#23 and playable in preview only. Both still lack shared account/session handoff, cloud saves and verified LC-event ingestion. PR #23's Claude-authored head 33a5240 is a verified artifact, but its Cloudflare deployment is a preview whose Account/auth bundle hardcodes production Supabase and active signup. Do not use Account/auth on that preview; comment 7036403044 records the production-targeting blocker.
+PR #30 previews for exact `5c33c78` succeeded in both Pages projects as `environment=preview`: [404d2ccd](https://404d2ccd.legitloot.pages.dev) and [fec0ab67](https://fec0ab67.legitloot-preview.pages.dev). Candidate `supabase-config.js` pins staging project `scmnxcsggquwtuyyjnnj`; candidate `account-auth.js` preserves existing sign-in/reset, has no signup UI or handler, and keeps the staging fail-closed guard before `createClient` (per Master Control §13 E1; backend `disable_signup` unverified/owner-gated; privacy.html:4 conflict with sign-in is an open owner decision). The separate `main.legitloot-preview.pages.dev` deployment `fdf6b609` remains built from `main@801f3e7`; main's Account/auth code hardcodes production Supabase and exposes sign-up. Keep those routes off-limits pending owner-approved ENV-07 remediation.
 
-**Offerwall.GG:** production wall-url v2 and postback v4 are deployed inert HTTP 410; checked callback EXECUTE grants are revoked and callback/conversion counts are zero. Main's wall-url source remains active, while main's postback source is inert. The integration branch still has an active wall-url source and active record-only postback source. PR #25 head 135607e makes only the wall-url source inert; it does not align postback or change deployed staging functions. Its recursive import-graph guard was added by demonanic in test-only commit 135607e; Node and Deno Actions runs 44713338718 and 44713338856 passed. Both Pages builds for that exact head are environment=preview and pages.dev-only. Staging wall-url v5 remains active/JWT with production-origin CORS; staging postback v8 remains active/no-JWT and record-only, but its HMAC covers only userId:transactionId:currencyAmount while payout/offer/timestamp metadata is unsigned and can be updated on duplicate results. Live staging routines have no journal/ledger/LC references and callback/conversion counts are zero. PR #25's additional containment boundary is recorded in comment 7036350760. New comment 7037024928 records that the recursive guard excludes environment snapshots which exactly match the active staging deployments; a separate deployment-source/manifest guard is required.
+Both Supabase projects are `ACTIVE_HEALTHY`; production has 7 migrations and staging 21. Both live `public.get_wallet_summary()` RPCs still return cash/USD fields. Production `wallet-summary` v4 remains cash/legacy-LLC-bearing; staging has no deployed wallet-summary function. Both journal tables remain empty. Candidate LC-only SQL/Edge Function changes are source-only; SQL remains **DO NOT APPLY**, and private-schema/PostgREST relationship execution remains unverified.
 
-**Wallet and launch:** production and staging wallet RPCs and production wallet-summary v4 still return cash USD buckets; staging labels gameCredits as LLC. Production account/rewards pages still show cash/withdrawal UI; production earn.html still describes provider-confirmed LC; production signup remains active in source; Terms/Privacy are placeholders. PR #20's integration UI is LC-only and Hustle copy excludes provider-to-LC issuance, but it does not change the backend response contract. Account deletion/export and shared game/account/LC-event integration remain incomplete.
+Staging's game registry still contains only the unlisted legacy `zid` placeholder; neither owner-selected game is registered, and game events, saves and handoff tickets are zero. Both public game pages remain early access with device-local saves; shared account/session, cloud saves and server-verified LC events remain incomplete. The MIG-02 migration and tests are already present on integration; the stale `claude/mig-02-game-platform-source` branch carries identical migration/test blobs and no new source delta. Taplayad App 10066 remains pending: current docs specify `md5(app_id . user_id . api_secret)`, statuses 1/2, any-2xx acknowledgement and suggested `offer_id + user_id` deduplication, but the signature omits offer/reward/payout/status and no immutable transaction ID or retry schedule is documented. Terms last updated 2026-10-29 do not expressly confirm incentivized-traffic permission. Preserve the exact owner-supplied URL and never map provider activity to LC. Production main still contains cash/withdrawal UI and provider-to-LC wording; the candidate copy is LC-only. Candidate Account access remains paused while Terms/Privacy and the deletion/export/support route are unresolved. Do not use or merge `docs/m2-t6-release-runbook@5fe4cea`; integration `docs/RELEASE_RUNBOOK.md` at blob `4acf171` remains authoritative.
 
-**Taplayad:** preserve the owner-supplied App 10066 template exactly: https://offerwall.tplayad.com/10066/{user_id}. Current official docs specify md5(app_id . user_id . api_secret), status 1/2 and any-2xx acknowledgement, but no transaction-ID macro or retry schedule; sample URL/PHP parameter names disagree. The cached www legacy page returns 404 when opened directly. Current Terms (last updated 2026-10-29) require publishers to be 18+ and defer payment details to the dashboard; no App-10066-specific permission for LegitLoot's placement/traffic was verified. Keep Taplayad unintegrated; never map its points multiplier, callback reward or payout to LC.
+**Games:** Both owner-selected games are LIVE on legitloot.site as early access with device-local saves and no account/LC connection. Zombies vs Heavy Metal is `demonanic/Legitloot-2` (owner-approved; the earlier exclusion finding was withdrawn, comment 7041463948); Rocket 2 Nowhere is the in-repo build. Remaining under M2-T4: authenticated game handoff, cloud saves and server-verifiable event hooks. M2-T4b-R1 is accepted as a design only: no generic event endpoint, browser-submitted events are `client_reported_telemetry` and never LC-eligible, handoff tickets/verified-tier idempotency keys are server-issued, and one game's hook is piloted first. Staging registry rows, if any, stay `status=development`, `is_listed=false`, `launch_url=null`. **ENV-07:** main-based previews (e.g. `main.legitloot-preview.pages.dev`) still inherit production-targeting `account-auth.js`; do not use Account/auth there. PR #28 is the prepared fix.
+
+**Offerwall.GG / CPAGrip:** production wall-url v2 and postback v4 return HTTP 410. Staging Offerwall.GG wall-url v5 remains ACTIVE/JWT and does not check the disabled provider row; postback v8 remains ACTIVE/no-JWT/record-only. The disabled Offerwall.GG row retains stale LC reward metadata. Canonical CPAGrip attribution source is an inert 410 tombstone; its staging retirement runbook/SQL are source-only, DO NOT APPLY, and now include ACL mismatch abort, PUBLIC-grant verification and authenticated 410 requirements. Deployed staging CPAGrip v5 remains ACTIVE/JWT; its SECURITY DEFINER RPC remains executable by service_role, with 0 token rows. No deployment or SQL application occurred.
+
+**Wallet and launch:** production and staging `public.get_wallet_summary()` still return cash USD buckets; production grants `authenticated` EXECUTE. Production `account.html`, `account-auth.js` and `rewards.html` still expose cash/withdrawal or USD reward fields; production `earn-providers.js` still lists CPAGrip and provider-to-LootCoins copy. PR #20's LC-only UI is not live and does not fix the backend contract. Both selected games are live early access with device-local saves, but shared account/session, cloud saves and trusted LC-event integration remain incomplete. Staging registry contains only the unlisted `zid` placeholder; game_events, game_saves and game_handoff_tickets are zero rows. Terms/Privacy approval, account deletion/export and monitored support remain incomplete or unverified.
+
+**Taplayad:** preserve the owner-supplied App 10066 template exactly: `https://offerwall.tplayad.com/10066/{user_id}`. The current official guide `https://tplayad.com/docs` specifies `md5(app_id . user_id . api_secret)`, generic postback server IP `176.97.212.58`, status 1/2, any-2xx acknowledgement, and suggested deduplication `offer_id + user_id`. The signature does not bind offer/reward/payout/status; no immutable transaction ID or retry schedule is documented; the sample URL uses `offer={offer_id}` while the PHP example reads `offer_id`; the generic iframe is `https://app.tplayad.com/app/iframe/{APP_ID}/{USER_ID}`. Direct retrieval of the legacy `https://www.tplayad.com/doc/postback` page returns 404; search-indexed older protocol text is not verified and must not be combined with the current guide. Current Terms (last updated 2026-10-29) do not expressly establish incentivized-traffic permission. Require written App-10066-specific confirmation of exact URL, callback IP, signature coverage, transaction identity, reversal linkage, retry/duplicate behavior and traffic permission. Keep Taplayad `pending_approval`, `launch: null`; never map publisher points, callback reward or payout to LC.
 
 Production and business-critical gates remain unchanged.
 ## Collaboration with ChatGPT / DaVinci
@@ -537,3 +543,259 @@ The production and PR #22 Zombies vs Heavy Metal wrapper loads https://demonanic
 - Open PRs are #9, #20, #22, #23, #25 and #26. Branch count is 27; every branch still reports `protected=false`. PR #23 remains draft/no CI with production-targeted Account/auth on its preview. PR #22 retains the ZVHM identity/test blocker. No new standalone Claude handoff was found; PR #26 is the new verified Claude-authored artifact.
 - The documentation-only update sequence passed GitHub Actions through run [44729867195](https://github.com/demonanic/LegitLoot/actions/runs/44729867195), including npm tests and whitespace checks; no application code changed. PR #26's branch previews are not production deployments.
 - No PR was merged, no production/staging deploy was initiated, and no Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 13:30 ET — Current-state refresh (history above preserved)
+
+The "Verified repository state" and "Games" paragraphs above were refreshed; earlier dated sections remain as history. Offerwall.GG is permanently retired from scope: the approved contract is `docs/security/OFFERWALL_GG_RETIREMENT.md`; implement it as one consolidated PR on the integration branch with no migration apply, function deploy, callback or production change. Taplayad stays record-only.
+
+## 2026-11-20 14:45 ET — Claude record refresh (amended 15:20 ET per Sync Watch #13; history — superseded by the 16:28 ET entries) (PR #28/#29 evidence; Sync Watch #12 facts)
+
+- **Repository:** production `main` `801f3e7` (owner-approved PR #23 publish); integration `1466eb6` at this sync (authorized baseline `a529b35` plus documentation-only commits; PR #29 is accepted at `0014d3a` for source-only review at 14:43 ET, review 5998408454). 30 refs all `protected:false`; rulesets empty. Do not describe `main` as protected.
+- **Open PRs:** #9 stale draft; #20 (head `6e2e51b`, 58/58) with #22 (`332ca07`, 64/64) and #26 (`778081a`, 59/59) stacked on it; #25 superseded draft (demonanic); #27 this documentation sync; #28 ENV-07 guard (draft to `main`); #29 Offerwall.GG retirement (integration). #20 must not be released alone: the combined release needs the LC-only UI plus the Taplayad-only pending registry from a reviewed exact head.
+- **PR #28 (`93f62ac`):** Actions run 44791797759 passed; accepted by DaVinci for **owner review only**. The existing `main.legitloot-preview.pages.dev` deployment still runs the unguarded production-Supabase auth until the owner approves a production merge/deploy. Client-side defense-in-depth only.
+- **PR #29 (source only; DaVinci ACCEPTED source-only at `0014d3a` in review 5998408454, then raised a test-evidence-wording CHANGES REQUIRED follow-up, comment 7049589082 — acceptance is therefore qualified):** previous head `cb1f999` got CHANGES REQUIRED solely because the proposed staging SQL rollback reactivated record-only callback RPCs, re-granted `service_role` and restored stale provider metadata. Fixed at `0014d3a`: the SQL header is now a **forward-only, fail-closed recovery plan**; test added (Actions 44802436878 / 44802436895 success). Follow-up fixed at `230b7bf` (tests only): the staging routine snapshot is labelled **historical pre-record-only evidence**, not current deployment state, with a guard test (Actions Node/whitespace 44809587659, Deno 44809587433 success). Re-review of `230b7bf` requested. Nothing deployed or applied; SQL stays unapplied until the exact staging ref and recovery plan are independently checked.
+- **Offerwall.GG dashboard evidence:** owner-provided screen recording (PR #29 comment 7047980474): five visible placements with postback fields cleared, including a successful save on the remaining Pending placement. **Not an independent readback**; placement disable/delete remains PARTIAL/UNVERIFIED.
+- **Production blockers unchanged:** Earn label, CPAGrip `testing` with provider-set LootCoin copy, no Taplayad entry; cash/withdrawal fields in account/rewards and `get_wallet_summary()`/wallet-summary cash contracts (WALLET-01); incomplete Terms/Privacy; unverified signup pause; Taplayad written confirmation and incentivized-traffic permission missing (keep record-only; never map points/reward/payout to LC).
+- **M2-T4:** IN PROGRESS. Both games are early access with device-local saves and no account/LC link. M2-T4b-R1 is accepted as design only; no code, registry row or endpoint exists.
+- **Owner gates (unchanged):** production merge/deploy (including PR #28), production config/data, staging deploy/SQL application for retirement, provider agreements/activation, paid commitments, live money/reward movement, signup/legal decisions, branch protection.
+- No merge, deploy, SQL application, callback, provider setting, secret change or money movement occurred.
+- **Taplayad App 10066 (Sync Watch #13 / DaVinci, 15:07 ET):** current official docs (tplayad.com/docs) define `md5(app_id . user_id . api_secret)`, status 1 credited / 2 reversed, any-2xx acknowledgement and `offer_id + user_id` deduplication, but no immutable transaction ID or retry schedule; the signature does not bind offer, reward, payout or status. The sample URL uses `offer={offer_id}` while its PHP example reads `$_GET['offer_id']`. The indexed legacy page (`www.tplayad.com/doc/postback`, conflicting `md5(subId . transId . reward . secret)`, OK/DUP, retries) returns 404 when opened directly: treat it as **unverified, not a second protocol**. Terms (updated 2026-10-29) require 18+ and prohibit fraud but do not expressly permit LegitLoot's incentivized-traffic model or an App-10066 placement. Required: written support confirmation of exact parameter names, full signature byte sequence, immutable transaction identity, retry/ack/duplicate behavior, reversal linkage and explicit permission. Until then Taplayad stays `pending_approval`, `launch: null`, owner template record-only; never map points/reward/payout to LC.
+
+## 2026-11-20 16:28 ET — Fresh read-only evidence from DaVinci (16:17 ET); recorded by Claude, not re-run
+
+- **Supabase (read-only, DaVinci):** both projects ACTIVE_HEALTHY. Production Edge Functions: postback v4 / wall-url v2 tombstones and wallet-summary v4. Staging: postback v8 and wall-url v5 ACTIVE plus CPAGrip v5. Staging callback routines remain record-only with `service_role` EXECUTE; the staging Offerwall.GG provider row is disabled but retains stale LC reward metadata. Production's private callback routine still contains the historical LC journal-posting body, although EXECUTE is false for anon/authenticated/service_role; its provider row also retains stale LC metadata. Production and staging `get_wallet_summary()` still return cash/USD buckets (staging labels game credits LLC). Staging `game_registry` has only the unlisted `zid` placeholder; `game_events`, `game_saves`, `game_handoff_tickets` are empty. No SQL, data, settings, grants or functions were changed.
+- **Cloudflare (read-only, DaVinci):** production `legitloot` remains `main@801f3e7`, deployment `fe4c0f22`, alias `legitloot.site`. PR #27 `a6ef02d` and PR #29 `230b7bf` built successfully in both Pages projects as `environment=preview`, pages.dev aliases, no deployment env vars. The main-based preview `fdf6b609` (`main@801f3e7`, `main.legitloot-preview.pages.dev`, no env vars) still runs `account-auth.js` with the hardcoded production Supabase project and `auth.signUp()`. **ENV-07 remains critical;** keep Account/auth off that preview; PR #28 is draft and owner-gated.
+- **Taplayad (DaVinci, re-checked today):** unchanged: `md5(app_id . user_id . api_secret)`, statuses 1/2, any-2xx ack, suggested `offer_id + user_id` dedupe; signature does not bind offer/reward/payout/status; no immutable transaction ID or retry schedule; `offer={offer_id}` vs PHP `offer_id`; Terms (2026-10-29) grant no express incentivized-traffic permission. App 10066 stays `pending_approval`, owner template record-only; never map points/reward/payout to LC.
+- **Last-verified bookkeeping:** this entry records DaVinci's 16:17 ET read-only observations; Claude did not query Supabase or Cloudflare. Earlier inventory in this file is carried forward from the last independent verification unless superseded here.
+- No merge, deploy, SQL application, callback, provider setting, secret change or money movement occurred.
+
+## 2026-11-20 16:28 ET — Claude record sync to DaVinci's 16:17–16:26 ET findings (PR #27 review)
+
+- **PR #29 exact heads:** `0014d3a` source-only acceptance (qualified) -> `230b7bf` incomplete test wording -> `24950f3` historical-only test correction **accepted by DaVinci** (Node 44819720446, Deno 44819720582) -> `dad8fd7` fixes the last finding, the proposed SQL label "reversible" -> "non-destructive, no data deleted; forward-only", with a regression assertion (Node 44820230399, Deno 44820229990 pass). Re-review of `dad8fd7` requested. SQL unapplied; functions undeployed.
+- **Branch previews are staging-bound (DaVinci source inspection, 16:17 ET):** the PR #27 and PR #29 branches' `supabase-config.js` selects the staging project and `account-auth.js` fails closed unless the environment is `staging` and the URL matches that exact staging project before `createClient`. These previews are therefore not production-bound. This does **not** apply to the main-based preview `fdf6b609` (`main@801f3e7`, `main.legitloot-preview.pages.dev`): main `account-auth.js` still hardcodes the production Supabase project and exposes `auth.signUp()`. **ENV-07 remains critical**; keep Account/auth off that preview; PR #28 is draft and owner-gated.
+- **Next:** after #29 and #27 re-review, review #20 + #22 + #26 as one release unit (do not release #20 alone). No merge, deploy, SQL application, provider activation or financial action occurred.
+
+## 2026-11-20 17:30 ET — Sync Watch #15 handoff
+
+- DaVinci reviewed PR #29 exact head `dad8fd7` and marked it **ACCEPTED for source-only owner review**. Node/whitespace and Deno CI pass. No deployment or SQL application.
+- PR #29 contains byte-identical Taplayad registry/test files to PR #26; reconcile to one copy. PR #20/#22/#26 remain 119 commits behind current integration and require one synchronized release candidate.
+- Current and old Tplayad docs are distinct protocol generations. Require written App-10066-specific protocol and incentivized-traffic confirmation; do not guess or map provider values to LC.
+- Latest Claude implementation handoffs are PR #27 comment `7051054842` and PR #29 comment `7051020358`. No new standalone M2 handoff file exists; `docs/CLAUDE_START_HANDOFF_M1.md` is historical.
+- Exact next action: Claude reconciles the stacked release sequence and posts one current combined candidate SHA; DaVinci reviews that exact SHA. Production, provider-agreement/activation and live financial actions remain owner-gated.
+
+## 2026-11-20 17:44 ET — PR #29 follow-up handoff
+
+Claude's commit `cfe9f0a` was independently reviewed. It changes only the proposed SQL header, retirement-contract wording and a static regression assertion; no executable SQL or runtime code changed. The owner-execution exception is now explicit. Exact-head Node/whitespace and Deno Actions pass. DaVinci's source-only acceptance now applies to `cfe9f0a`; `tests/earn-hub.browser.py` remains unrun. SQL remains unapplied and functions undeployed.
+
+## 2026-11-20 17:50 ET — PR #30 candidate handoff
+
+- Claude's verifiable combined candidate is draft PR #30, head `272a1c1`, base current integration `1466eb6`, 30 commits ahead/0 behind, 43 files. It combines #20/#22/#29/#26 without duplicate registry/test blobs; the unique #26 public-copy test remains. Node/Deno Actions and both Pages previews pass.
+- Owner decision PR #22 comment `7041463948` confirms `demonanic/Legitloot-2` is the approved Zombies vs Heavy Metal source. Candidate code/test match; candidate PR description, README and Platform Build Spec still carry stale pre-decision wording.
+- Candidate `index.html` retains an unexplained `offerwall-verification` meta token; confirm whether it is Offerwall.GG and remove or document accordingly.
+- Branch-only payout simulator remains a staging/admin test tool under Master Control §630; exact staging guards and server-side owner/admin checks are present. It does not move real funds.
+- Browser test `tests/earn-hub.browser.py` remains unrun. Terms/Privacy placeholders, account deletion/export, shared account/save handoff, cloud saves and trusted LC-event ingestion remain launch blockers. No merge or deployment.
+
+## 2026-11-20 17:55 ET — Claude record sync: PR #30 head `b773274`; internal-tool access boundary
+
+- **PR #30 current head `b773274`** (supersedes `272a1c1`, `9f2c9a0`): merged PR #27 `4c7dfc3` (production `main@801f3e7`, owner ZVHM-source decision in README/Platform Build Spec), removed the `offerwall-verification` meta from `index.html` with a regression test (origin inferred from tag name and the 2026-11-08 release commit, not provider-confirmed), and documented the internal-tool access boundary. Local `npm test` 76/76; Actions Node `44832701771` and Deno `44832701665` pass; browser test `tests/earn-hub.browser.py` unrun. DaVinci withdrew the ZVHM source blocker (PR #22 comment 7052568879, PR #30 comment 7052569293). Re-review requested. The candidate carries PR #27's records as of the merge point; a further sync to this PR #27 head follows.
+- **Internal-tool access boundary (Master Control §630):** `/admin.html` and `/payout-simulator.html` are static Pages routes whose HTML shells are publicly fetchable (not linked from other pages or `sitemap.xml`; no `noindex`). Access is gated at the **data/action level** only: exact-staging-URL guards (ENV-06), authenticated Edge Functions and owner/admin-role RPCs; no production payout-simulator function and no PayPal/Venmo call. This is **not** URL-level denial. A URL-level gate (e.g. Cloudflare Access) or `noindex` needs separate owner approval; no Cloudflare/security setting was changed.
+- No merge, deploy, SQL application, callback, provider setting or financial action occurred.
+
+
+## 2026-11-20 17:58 ET — DaVinci Sync Watch #16 handoff
+
+- Production main still exposes cash/withdrawal UI and signup; production wallet RPC/Edge Function return cash/USD fields. The main-based preview remains production-auth-connected. Do not use Account/auth there. Owner-approved signup pause is not independently verified.
+- Staging Offerwall.GG wall-url v5 remains active/JWT and postback v8 active/no-JWT record-only; disabled Offerwall.GG metadata still names LC. Staging game-event/save/handoff tables are empty. No callback was invoked.
+- PR #30 candidate is LC-only and Taplayad-pending with the exact owner URL; current and legacy Tplayad docs differ in signature/transaction/retry semantics, and App-10066-specific permission remains unverified. Keep pending; no provider values map to LC.
+- Static admin/payout-simulator HTML shells remain publicly fetchable; data/actions are gated. Strict URL-level denial/noindex is a separate owner decision under §630.
+- See the 17:58 Sync Watch #16 debrief in Master Control and Project Progress. No merge, deploy, settings/secret/grant/schema/data change, callback, provider setting, agreement, payment or reward issuance occurred.
+
+
+## 2026-11-20 18:20 ET — DaVinci Sync Watch #17 handoff
+
+- **Exact candidate reviewed:** PR #30 `0e9b9329846d5c4e4cbc65903f7e6bfd28fea4f3`, draft, 52 files / 71 commits. Node/whitespace `44834506860` and Deno `44834506806` pass. Browser test remains unrun. Review disposition: CHANGES REQUIRED; keep draft.
+- **Fix the wallet-test provenance:** `tests/wallet-summary.test.mjs:4–6` references repository migration versions that do not match live Supabase history (staging `20261109050922`, production `20261108081619`). Establish and document the exact source mapping or relabel as static fixture coverage. The new alias test does not remove cash/USD fields from the backend.
+- **Keep WALLET-01 open:** production and staging `public.get_wallet_summary()` still return cash/USD buckets; production wallet-summary v4 also returns cash fields. Prepare a candidate server-side LC-only response contract and tests as source-only work; do not apply SQL or alter deployed functions in this task.
+- **Keep onboarding gated:** candidate Account still exposes `auth.signUp()` while Terms/Privacy are placeholders and deletion/export is incomplete. Do not change Supabase Auth settings; document the required pre-launch state and do not invite users to register.
+- **Refresh PR metadata:** update PR #30 description and current-state docs to exact head `0e9b932`, 52 files, 71 commits, 77 local tests (Claude-reported), Node/Deno Actions above, both preview builds, and the unrun browser test.
+- **Provider / game limits:** Taplayad remains pending with the exact owner URL; written App-10066 traffic permission and exact protocol are missing. No provider values may become LC. Staging game registry/events/saves/handoff remain incomplete; both games stay early access.
+- No merge, deploy, SQL application, callback, settings/secret/grant/schema/data change, provider agreement/activation, payment, reward issuance or money movement.
+
+
+## 2026-11-20 18:31 ET — DaVinci Sync Watch #17 follow-up handoff
+
+- **Candidate:** PR #30 `ab505225`, 55 files / 74 commits, still draft. Node/whitespace `44837137548` and Deno `44837137501` pass; Claude reports 79/79 local tests. Browser test remains unrun and preview for this SHA is not verified.
+- **Progress accepted:** wallet test provenance is now correctly static-only; candidate sign-up UI/client handler is removed; source-only LC response proposal is outside migrations and marked DO NOT APPLY. Live account catalog confirms `lootcoins_available` is the LC-coded account family in both environments.
+- **Review before any further approval:** Edge Function source must filter LC accounts and posted transactions; proposed SQL grant statements must match the ACL claim; account copy and the signup test name need correction; `wallet-summary.js` still has stale migration comments; Auth backend `disable_signup` is unverified. Live RPCs remain cash-bearing until a separately approved migration/deployment.
+- **Coordination:** PR #27 head `aae268f` passed Actions `44837195049`; PR #30 includes docs only through `e199df3`. Sync latest PR #27 docs once, update PR #30 body to exact head `ab505225` / 55 files / 74 commits / 79 local tests (Claude-reported) / Actions `44837137548` and `44837137501`, and keep the browser-test limitation.
+- No Auth setting, Supabase secret/grant/schema/data, function deployment, SQL application, provider action, payment, reward issuance or money movement.
+
+
+## 2026-11-20 18:36 ET — DaVinci Sync Watch #17 follow-up 2 handoff
+
+- **Latest candidate:** PR #30 `7f1e1c61`, 56 files / 77 commits, draft. Node/whitespace `44837793174` and Deno `44837793169` pass. The last Claude-reported 79/79 local result is on `ab505225`, not this SHA. Browser test remains unrun and preview for the latest SHA is unverified.
+- **Accepted:** Edge Function source now filters LC accounts and posted LC entries; account copy is corrected; signup test is UI-only and backend Auth status is explicitly unverified; parser migration comments are corrected; SQL ACL intent is documented.
+- **Fix before owner review:** add journal-entry wallet_kind/currency matching to the proposed RPC join and add a PUBLIC-grantee ACL precondition check. Keep SQL DO NOT APPLY.
+- **Coordination:** PR #27 `e1146ff` passed Actions `44837816280`; PR #30 still includes docs only through `e199df3`. Sync the latest docs branch once. The PR #30 body still cites `9f2c9a0` and old Actions; update to exact head `7f1e1c61`, 56 files / 77 commits, Actions `44837793174/44837793169`, and browser-test limitation.
+- **Owner gates remain:** no Auth setting change; no provider permission or protocol assumption; no production merge/deploy; no financial or irreversible action.
+
+
+## 2026-11-20 18:38 ET — DaVinci Sync Watch #17 follow-up 3 handoff
+
+- **Latest candidate:** PR #30 `38a9406`, 56 files / 80 commits, draft. Node/whitespace `44838085850` and Deno `44838085857` pass. Last Claude-reported local 80/80 belongs to prior `7f1e1c61`; browser test unrun and latest preview unverified.
+- **Accepted source fixes:** proposed RPC now checks journal-entry wallet_kind/currency match and posted status; ACL precondition checks PUBLIC; Edge Function source filters LC accounts/entries and posted transactions; Account copy and signup UI-only test are corrected.
+- **Still source-only:** proposed staging RPC remains DO NOT APPLY; Edge Function source not deployed. Live RPCs and deployed production wallet-summary v4 still return cash/USD fields.
+- **Runtime gate:** PostgREST `journal_transactions!inner(status)` embed is unexecuted; underlying FK exists in both environments. Validate on staging only after separately authorized action; do not deploy now.
+- **Coordination:** PR #27 `26768972` passed Actions `44838133420`; PR #30 contains docs only through `e1146ff`, one commit behind. Update PR #30 current-state header from `7f1e1c6` to exact head `38a9406`, 56 files / 80 commits, Actions `44838085850/44838085857`; last local test count is from the previous SHA.
+- **Owner gates:** Auth `disable_signup` unverified; ENV-07, Taplayad terms/protocol, legal/account deletion/export, game/save/verified-event integration remain open.
+- No merge, deploy, SQL application, Auth setting, secret/grant/schema/data change, callback, provider action, payment, reward issuance or money movement.
+
+
+## 2026-11-20 18:39 ET — DaVinci Sync Watch #17 follow-up 4 handoff
+
+- **Latest candidate:** PR #30 `226caadc`, 56 files / 82 commits, draft. Node/whitespace `44838319726` and Deno `44838319730` pass. Last Claude-reported local 81/81 is on prior `38a9406`; browser test unrun and preview for `226caadc` unverified.
+- **Docs sync:** PR #30 merged PR #27 through `26768972`; current PR #27 head is `8c6aa8c`, Actions `44838341613` passed. PR #30 remains one docs commit behind.
+- **Wallet proposal:** the latest source fixes entry/account wallet_kind/currency matching and PUBLIC ACL precondition. Static tests pass. Proposed SQL remains DO NOT APPLY; Edge Function source remains undeployed and its PostgREST embed unexecuted. Live wallet RPCs remain cash/USD-bearing.
+- **PR metadata:** update current-state header from `38a9406` / 80 commits / previous Actions to `226caadc` / 82 commits / Actions `44838319726/44838319730`, and update merged docs through `26768972`. Last local test count is from prior SHA.
+- No merge, deployment, SQL application, Auth setting, Supabase secret/grant/schema/data change, callback, provider action, payment, reward issuance or money movement.
+
+
+## 2026-11-20 19:14 ET — DaVinci Sync Watch #18 handoff
+
+- Re-read the governing control, progress, launch audit, environment map, AGENTS.md and agent charter. Production remains `main@801f3e7`; integration remains `1466eb6`; PR #30 exact draft head is `226caadc` (56 files / 82 commits). Node/whitespace `44838319726` and Deno `44838319730` pass; Claude reports 81/81 local tests on this exact head; both Pages previews succeeded. Browser test remains unrun.
+- PR #27 is the canonical shared-record branch at `0269a54`, Actions `44838509525` passed. PR #30 carries docs through `26768972`; later docs-only drift is intentionally deferred until an owner-approved freeze.
+- DaVinci posted PR #30 comment `7053977218` with two actionable findings: bump the unchanged `account-auth.js?v=m2t1-1` cache key after the script changed (old cached code can reference the removed signup form and abort later handlers); reconcile Account sign-in/reset instructions with the Privacy page's no-personal-information instruction. No legal copy was changed.
+- Live wallet RPCs in both Supabase projects still return cash/USD; production wallet-summary v4 remains cash-bearing. The Edge Function candidate's PostgREST transaction embed remains unexecuted; proposed SQL remains DO NOT APPLY. Production Offerwall.GG endpoints are 410; staging wall-url v5 and postback v8 remain active (wall-url still constructs URLs for authenticated callers; postback is record-only). Game handoff/event tables remain empty; Taplayad remains pending.
+- No PR merge, deployment, SQL application, Auth setting, Supabase setting/secret/grant/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 19:22 ET — DaVinci handoff update — PR #30 `fcd6223`
+
+- Claude addressed DaVinci's cache-bust finding. Exact source now uses `account-auth.js?v=m2t1-2`; the regression test rejects `m2t1-1`. Independently rechecked.
+- Exact-head Node/whitespace `44843092983` and Deno `44843092933` pass; Claude reports 82/82 local tests; both Cloudflare Pages previews succeeded. Browser test remains unrun.
+- Account/Privacy conflict remains owner/legal-gated; no legal wording changed. Do not use Account sign-in/reset on public previews or open onboarding until approved.
+- PR #30 remains draft at `fcd6223`. Wallet source proposal remains DO NOT APPLY and the Edge Function nested embed remains unexecuted. Live wallet RPCs still return cash/USD; game handoff/events, Taplayad approval/protocol, account deletion/export and ENV-07 remain open.
+
+## 2026-11-20 21:25 ET — Claude record alignment to Sync Watch #19 (summary; full evidence in Master Control 19:59/20:05 ET)
+
+- **Refs (per DaVinci #19, not re-queried by Claude):** production `main@801f3e7`; integration `1466eb6`; PR #30 `fcd6223` (56 files / 83 commits, draft; Node `44843092983`, Deno `44843092933`; Claude-reported local 82/82; browser test unrun); PR #28 `93f62ac` (draft, owner-gated; description corrected to allow only `legitloot.site`, comment `7054774673`); docs PR #27 `553f6ae`.
+- Handoff: no new implementation pending; waiting on DaVinci re-review / owner-approved freeze point, then one final PR #30 docs sync with fresh tests and header refresh. Account/Privacy decision, `disable_signup`, and ENV-07/PR #28 remain owner-gated.
+
+
+## 2026-11-21 00:47 ET — DaVinci Sync Watch #23 handoff
+
+- Active milestone/task remains M2 / M2-T4. Do not expand scope.
+- PR #30 remains draft at `fcd6223`; exact-head Node and Deno workflows pass. Browser test is still unrun. Both candidate previews are staging-bound. No new wallet/Hustle/retirement source defect was found.
+- PR #28 at `93f62ac` passes exact Actions run 44791797759 and is accepted for owner review of the narrow non-production host guard. Do not merge/deploy without owner approval. The main-based preview remains production-auth-connected until that approved remediation is deployed and rechecked.
+- PR #30 account page still enables sign-in/reset while Privacy and Terms say personal information should not be submitted until final notices are approved. Keep those flows unavailable on public previews until owner approval of final notices or interim wording; account deletion/export remains missing.
+- Current Taplayad docs now publish generic postback IP `176.97.212.58`; this requires App-10066-specific confirmation. Signature/transaction/reversal/retry gaps and missing incentivized-traffic permission remain. Preserve the owner URL and no-provider-to-LC rule.
+- Companion working records were stale at Sync Watch #19; this documentation commit aligns them to #23. PR #30's snapshot remains untouched until the owner-approved freeze point.
+- No merge, deployment, Supabase mutation, callback, provider setting/agreement, or financial activity was performed.
+
+
+## 2026-11-21 00:59 ET — Sync Watch #23 follow-up: account legal gate verified
+
+Claude's commit `3bfa615` on PR #30 pauses sign-in/reset while Terms/Privacy remain drafts. Independent review confirmed the gate returns before the Supabase client and auth handlers; the Account auth panel is hidden, and other page scripts do not create a client. Exact-head Node/whitespace and Deno Actions passed; both previews are staging-bound. The signed-in wallet view is also unavailable until owner-approved legal notices are published and the gate is reopened. Do not flip `LEGAL_NOTICES_FINAL` or alter legal copy without owner approval. Production main and the separate main-based preview remain unchanged; PR #28 is still owner-gated. Runtime VM coverage of the closed-gate path is recommended but non-blocking. No merge/deploy or Supabase/legal/financial change occurred.
+
+
+## 2026-11-21 01:15 ET — DaVinci Sync Watch #24 handoff
+
+- Active milestone/task remains M2 / M2-T4. Do not expand scope.
+- PR #30 is draft at `37763d8` (58 files / 85 commits). Latest commit is test-only; the closed-gate VM test asserts zero client creations, zero handlers, zero config reads, hidden panel and pause notice. Exact-head Node/whitespace and Deno Actions #44873409564/#44873409629 passed. Claude reports 86/86 local tests; browser suite remains unrun. Both Cloudflare previews for exact `37763d8` are successful and staging-bound. Eight prior inline review threads are resolved; no formal approval for this SHA.
+- Candidate Account gate is accepted for the narrow purpose of preventing credential submission while legal notices are drafts. It also hides the signed-in wallet. Do not reopen `LEGAL_NOTICES_FINAL` or change legal wording without owner approval.
+- **New M2-T4 evidence:** staging game registry has only legacy Zombie Invasion Defense (development, unlisted, no launch URL); neither Zombies vs Heavy Metal nor Rocket 2 Nowhere is registered. Events/saves/handoff tickets are zero. The public pages are honestly labelled early access and local-only; the registry gap blocks any claim of trusted account/save/reward integration. See PR #30 comment 7058531808. Do not seed or mutate staging from this handoff.
+- Fresh live wallet read: both production and staging RPCs still return cash/USD; production Edge Function v4 is cash/LLC-bearing; staging has no wallet-summary Edge Function. Candidate LC-only SQL/function are source-only, SQL DO NOT APPLY, PostgREST schema exposure/embed unverified. No Supabase changes.
+- Taplayad App 10066 remains pending written incentivized-traffic permission and full signed transaction/reversal/retry semantics. Preserve `https://offerwall.tplayad.com/10066/{user_id}`; provider activity never issues LC. Offerwall.GG staging functions remain deployed (wall-url v5, record-only postback v8); no callbacks.
+- PR #28 at `93f62ac` remains draft/owner-gated despite passing Actions #44791797759. The main-based preview still targets production Supabase. Keep Account/auth routes off-limits until owner-approved ENV-07 remediation is deployed and rechecked.
+- Next: keep M2-T4 active; coordinate registry/session/save/event implementation with staging-only evidence. Do not claim integration complete from static game pages. No merge, deploy, Supabase mutation, callback, provider activation, legal decision or financial action was performed.
+
+
+## 2026-11-21 02:35 ET — DaVinci Sync Watch #25 handoff
+
+- Keep PR #30 draft at 37763d8; do not merge, deploy, apply proposed SQL, or reopen Account auth. Candidate tests pass, but browser coverage remains unrun and no formal approval exists.
+- Review PR #30 comments 7059451348 (Hustle test name/assertion scope) and 7059451679 (draft Privacy contact versus AUTH-03 support design). Both are non-blocking documentation/test corrections; do not invent or publish an unverified support address.
+- M2-T4 remains incomplete: selected game registry rows, shared account/session handoff, cloud saves and server-verified LC events are absent. Existing actionable finding is PR #30 comment 7058531808.
+- Keep Taplayad pending; exact owner URL is descriptive only; require App-10066-specific written permission and complete protocol confirmation. Provider activity never issues LC.
+- Critical release-control warning: do not use or merge owner-authored docs/m2-t6-release-runbook@5fe4cea. It removes the Offerwall.GG rollback exception and could restore pre-containment active postback v3/wall-url v1. Integration docs/RELEASE_RUNBOOK.md at blob 4acf171 remains authoritative.
+- Production main remains 801f3e7 with cash/withdrawal and provider-to-LC copy. Main-based preview remains production-auth-connected. All 31 refs are unprotected; production gates remain owner-controlled.
+- No production, Supabase, provider, callback, financial or legal action was performed in this check.
+
+
+## 2026-11-21 03:52 ET — DaVinci Sync Watch #26 handoff
+
+- Start by rereading Master Execution Control and the four working records. Latest task-specific Claude response is PR #30 comment 7059459276; latest independent review of its test-only follow-up is PR #30 comment 7060202497.
+- Keep PR #30 draft at exact head `49f209d` (58 files / 86 commits). Its latest change is test-only and accepted for that scope. Exact-head Node/whitespace and Deno Actions passed; 87/87 local tests are Claude-reported, not independently rerun; browser test remains unrun. No formal approval exists. Do not merge or deploy.
+- M2-T4 remains active. Staging registry contains only the legacy Zombie Invasion Defense placeholder; neither Zombies vs Heavy Metal nor Rocket 2 Nowhere is registered, and game events, cloud saves and handoff tickets are zero. Prepare a bounded, reviewable source/test plan for correct game registry, shared account/session handoff, cloud saves and server-verified idempotent events for milestones, weekly challenges and seasonal events. Do not claim integration complete from static game pages.
+- Both live wallet RPCs still return cash/USD fields; production wallet-summary v4 remains cash/legacy-LLC-bearing. Candidate LC-only SQL/function are source-only; SQL DO NOT APPLY; private-schema/PostgREST relationship execution remains unverified. Do not apply SQL or change database settings/data in this run.
+- Candidate Account gate remains closed while Terms/Privacy and the support/deletion route are unresolved. Do not flip `LEGAL_NOTICES_FINAL`, reopen sign-in/reset, or publish an unverified email address.
+- Taplayad App 10066 remains pending. Current docs and the indexed legacy snapshot conflict on signature, transaction identity, acknowledgement and retries; direct legacy-page retrieval returns 404. Obtain App-specific written permission and protocol confirmation. Preserve `https://offerwall.tplayad.com/10066/{user_id}`; no provider points, callback rewards or payout amounts become LC.
+- Keep Account/auth routes off `main.legitloot-preview.pages.dev`; it is `main@801f3e7` and main `account-auth.js` targets production Supabase. PR #28 remains draft/owner-gated.
+- Do not use or merge `docs/m2-t6-release-runbook@5fe4cea`; its rollback wording could restore pre-containment Offerwall.GG v3/v1. Canonical integration runbook blob `4acf171` is authoritative.
+- All 31 refs remain unprotected and repository rulesets are empty. Production merge/deploy, production settings/secrets/schema/data, financial activity, provider agreements/settings, legal publication, destructive changes and security weakening remain owner-gated.
+- Sync Watch #26 made no merge, manual deployment, Supabase mutation, callback, provider setting/agreement, payment, reward issuance or money movement. All database queries were SELECT-only.
+
+
+## 2026-11-21 05:39 ET — DaVinci Sync Watch #28 handoff
+
+- Start from the current Master Execution Control and working records. No newer standalone Claude handoff exists beyond historical `docs/CLAUDE_START_HANDOFF_M1.md`; the latest task-specific Claude handoff remains PR #30 comment `7059459276`.
+- Keep M2-T4 active. The two selected games remain early-access/device-local only; staging has only the legacy unlisted `zid` placeholder and zero game events, saves or handoff tickets. Static game tests do not prove trusted integration. Next bounded implementation is the correct registry, shared account/session handoff, cloud saves and server-verified idempotent events for milestones, weekly challenges and seasonal events.
+- PR #30 remains draft at `49f209d`; its last accepted change is test-only. Node/Deno Actions pass; 87/87 local tests are Claude-reported; browser test remains unrun; no formal approval. Do not merge or deploy.
+- Both live wallet RPCs remain cash/USD-bearing. Candidate LC-only function/SQL are source-only; SQL DO NOT APPLY and PostgREST relationship execution remains NOT VERIFIED. Do not apply SQL or alter production/staging settings/data in this handoff.
+- Keep candidate Account access paused until owner-approved Terms/Privacy and a verified support/deletion/export path. Keep Account/auth routes off `main.legitloot-preview.pages.dev`, which still targets production Supabase.
+- Taplayad App 10066 remains pending written incentivized-traffic permission and complete app-specific transaction/reversal/retry confirmation. Preserve the owner-supplied template; no provider points, callbacks or payouts become LC.
+- Do not use `docs/m2-t6-release-runbook@5fe4cea`; its rollback wording could restore Offerwall.GG v3/v1. Canonical integration runbook blob `4acf171` is authoritative.
+- Sync Watch #28 found no new application-code defect or owner decision. The companion working records were stale at #26 and are now aligned to #28. No production, financial, provider, callback, schema/data, settings/secrets or legal action occurred.
+
+## 2026-11-21 07:20 ET — DaVinci Sync Watch #30 handoff
+
+- Reread Master Execution Control and all working records. No newer standalone Claude handoff or owner instruction was found; latest task-specific Claude response remains PR #30 comment `7059459276` and latest independent test-only review remains `7060202497`.
+- Keep PR #30 draft at `49f209d`; exact-head Node/whitespace and Deno Actions pass. Claude's 87/87 local tests are reported but not independently rerun; browser test remains unrun because Browser Use credits were unavailable. No formal approval exists.
+- M2-T4 remains active. Both selected game pages are early access/device-local only. Staging still has one unlisted legacy ZID placeholder and zero events, saves or handoff tickets. Next bounded work remains the correct registry, shared account/session handoff, cloud saves and server-verified idempotent LC events; do not infer completion from static pages.
+- MIG-02 source and PGlite regression test are present on integration (blob SHAs recorded in the working records) and the migration is already applied to staging; never replay it. CPAGrip migration source remains absent from the integration migration directory.
+- Both live wallet RPCs still return cash/USD fields. Candidate LC-only SQL/function remain source-only; SQL DO NOT APPLY and PostgREST relationship execution remains unverified. Keep Account access paused pending owner-approved Terms/Privacy and verified support/deletion/export path.
+- Taplayad App 10066 remains pending written incentivized-traffic permission and complete App-specific protocol confirmation. Preserve the owner template exactly; never map publisher points, callback rewards or payouts to LC.
+- Keep Account/auth routes off `main.legitloot-preview.pages.dev`, which still targets production Supabase. PR #28 remains draft/owner-gated. Do not use or merge `docs/m2-t6-release-runbook@5fe4cea`; canonical integration runbook blob `4acf171` remains authoritative.
+- No merge, deployment, Supabase setting/secret/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred in this check.
+
+### Sync Watch #30 documentation verification follow-up — 2026-11-21 07:20 ET
+
+- Final docs-only PR #27 head: `4b2228cc17eb4403d656cb7b74a7a7398b6d4887`; the two documentation commits changed only the five shared records and `CLAUDE.md`.
+- Exact-head GitHub Actions run [44904250535](https://github.com/demonanic/LegitLoot/actions/runs/44904250535) passed. Automatic Cloudflare previews [9af3dc33](https://9af3dc33.legitloot.pages.dev) and [457b15d7](https://457b15d7.legitloot-preview.pages.dev) completed successfully as `environment=preview`.
+- Production remains `main@801f3e7`, deployment `fe4c0f22`; no production deployment occurred. PR #27 remains open and unmerged.
+
+
+## 2026-11-21 11:37 ET — DaVinci Sync Watch #34 handoff
+
+- Exact Claude candidate commit `516c1df` was independently reviewed. Canonical wallet key correction to `legitCoins` is accepted for source/test scope only; exact-head Node and Deno Actions passed. SQL remains DO NOT APPLY, Edge Function not deployed, PostgREST embed unverified, and PR #30 remains draft with no APPROVED review.
+- New staging finding: CPAGrip attribution v5 remains callable for authenticated sessions while its provider row is disabled. The handler/RPC do not check provider status; no tokens exist and no LC is issued. See PR #30 comment 7065880195. Retire or gate before any staging release.
+- M2-T4 remains active: production game schema is absent; staging registry has only the legacy ZID placeholder and zero events/saves/handoff tickets. Complete trusted integration for Zombies vs Heavy Metal and Rocket 2 Nowhere.
+- Both live wallet RPCs still return cash/USD. Production main still exposes cash/withdrawal and legacy provider wording. Taplayad App 10066 remains pending written permission and complete protocol confirmation; preserve the owner URL and never convert provider points or callbacks to LC.
+- Main-based preview Account/auth remains production-connected; keep those routes off-limits pending owner-approved ENV-07. All 31 branches remain unprotected.
+- No merge, deployment, Supabase setting/secret/schema/data change, callback, provider setting/agreement, payment, reward issuance or money movement occurred. No new owner instruction was found.
+
+
+### Sync Watch #34 follow-up — 2026-11-21 11:47 ET
+
+- Claude's latest verified PR #30 head is `cb359c1`; source-only CPAGrip attribution tombstone and snapshot-test correction are accepted. Exact-head Node/Deno Actions passed; Deno workflow still needs a CPAGrip type-check. See PR #30 comment 7065937179.
+- Deployed staging CPAGrip v5 and its service-role RPC remain active until separately authorized retirement. No tokens exist; no LC issuance. No SQL, grant or function deployment occurred.
+- PR #30 remains draft with 61 files / 89 commits, 8/8 inline review threads resolved and no APPROVED review. Browser test remains unrun.
+- Prepare only a source-only staging retirement proposal and add CPAGrip to the Deno type-check. Do not apply SQL or deploy.
+- No production merge/deploy, Supabase settings/secrets/schema/data changes, callback, provider agreement, payment, reward issuance or money movement occurred. No new owner instruction was found.
+
+
+### Sync Watch #34 final follow-up — 2026-11-21 11:50 ET
+
+- Claude's latest verified PR #30 head is `7b4b4a6`; the Deno workflow now type-checks CPAGrip. Exact-head Node/Deno Actions passed. Claude reports 90/90 local tests; not independently rerun. Browser test remains unrun.
+- The CPAGrip staging retirement runbook and proposed SQL are source-only and DO NOT APPLY. Independent review requires an ACL mismatch abort condition, PUBLIC-grant verification, and authenticated 410 check. See PR #30 comment 7065972694.
+- Deployed staging CPAGrip v5 and service-role RPC remain active until separately authorized retirement. No tokens exist; no LC issuance. No SQL, grant or function deployment occurred.
+- PR #30 remains draft, 63 files / 90 commits, 8/8 inline threads resolved and no APPROVED review.
+- No production merge/deploy, Supabase settings/secrets/schema/data changes, callback, provider agreement, payment, reward issuance or money movement occurred. No new owner instruction was found.
+
+
+### Sync Watch #34 closing follow-up — 2026-11-21 11:53 ET
+
+- Claude's latest verified PR #30 head is `d588e3c`; the CPAGrip staging retirement proposal now includes the ACL mismatch abort, PUBLIC-grant check and authenticated 410 verification. Exact-head Node/Deno Actions passed; Claude reports 90/90 local tests, not independently rerun. Browser test remains unrun.
+- The source-only CPAGrip proposal is accepted for documentation/test quality only; SQL remains DO NOT APPLY and the deployed staging v5/RPC remain active. No deployment, ACL change, SQL or data change occurred.
+- PR #30 remains draft, 63 files / 91 commits, 8/8 inline threads resolved and no APPROVED review.
+- No production merge/deploy, Supabase settings/secrets/schema/data changes, callback, provider agreement, payment, reward issuance or money movement occurred. No new owner instruction was found.
