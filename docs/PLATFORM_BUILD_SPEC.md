@@ -97,7 +97,7 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 
 ## 2. Hard business rules (must be enforced in code and UX)
 
-> **Superseded for LC by §0.1 (2026-11-19).** The cash-deferral, no-payout, ledger-integrity and reversal-by-compensating-entry rules below still apply. Every statement that providers/campaigns earn LC, or that LC is spendable only in games, is replaced by §0.1.
+> **Superseded for LC by §0.1 (2026-11-19).** The no-payout, ledger-integrity and reversal-by-compensating-entry rules below still apply. Cash rules follow §0.5 (two balances, 2026-11-21): only verified, approved Hustle completions may credit the separate USD cash ledger. Every statement that providers/campaigns earn LC, or that LC is spendable only in games, is replaced by §0.1.
 
 **Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. Cash rewards are deferred to a separately approved future phase. The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
 
@@ -130,7 +130,7 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 
 ## 2A. Owner-locked platform model decisions (2026-11-10)
 
-> **Partly superseded by §0 (2026-11-19).** "LootCoins: games only", the initial-games list, and "Reward destination rules" for offerwalls/surveys/tasks/referrals are replaced by §0.1–0.2. Cash-deferral rules here remain in force.
+> **Partly superseded by §0 (2026-11-19).** "LootCoins: games only", the initial-games list, and "Reward destination rules" for offerwalls/surveys/tasks/referrals are replaced by §0.1–0.2. Cash rules here follow §0.5 (two balances, 2026-11-21): only verified, approved Hustle completions credit the separate USD ledger; payouts and withdrawals stay off.
 
 These decisions are binding for product design and implementation and supersede any conflicting earlier proposal in this document.
 
@@ -141,13 +141,13 @@ These decisions are binding for product design and implementation and supersede 
 - Each catalog item must state whether it is game-specific or platform-wide. No cross-game entitlement is implied.
 - The approved initial games are Demonanic, Gauntlet's Survival, and Harvest//Zero.
 
-### Cash rewards: later phase
+### Cash balance: two ledgers (owner, 2026-11-21)
 
 > **Superseded (2026-11-21, §0.5):** two balances is in force — separate USD cash and LC ledgers; cash only from verified, approved Hustle completions; no conversion, shared ledger, LC purchase with cash, or partner-issued LC. Payouts, withdrawals and payout/identity-check providers stay off until Sam separately approves activation. The remaining payout, withdrawal and activation constraints below stay in force until the owner approves payout activation.
 
-- *(Superseded by §0.5 where they conflict with two balances; kept for history.)* Cash rewards are not part of the initial player reward promise or current earning model.
-- Do not allocate any current offerwall, survey, task, referral, affiliate, mission, or advertising reward to a player cash balance.
-- Do not implement active player cash balances, cash withdrawals, payout requests, or cash reward commitments in the current phase.
+- Players have a separate USD cash balance. Only **verified, approved Hustle completions** may credit it. No other earning channel (survey, task, referral, affiliate, mission or advertising reward outside an approved Hustle completion) may credit player cash.
+- Partner offers and callbacks never issue LC. Cash and LC never convert either way, never share a ledger, and LC can't be bought with cash.
+- Do not implement or activate cash withdrawals, payout requests, payout providers or identity-check services, and make no cash payout commitments, until Sam separately approves activation.
 - Preserve architectural separation for a possible future cash product. It requires a separate owner-approved specification and approvals for provider terms, legal review, eligibility, tax treatment, identity verification, reserves, reconciliation, payout provider, support, and production release.
 - The previously proposed $10 minimum withdrawal and PayPal/Venmo manual payout workflow are deferred, not current commitments.
 
@@ -267,7 +267,7 @@ Channel-specific controls:
 No existing Demonanic database, auth project, secrets, or provider accounts may be reused without explicit owner approval.
 
 ### Ledger
-Use an append-only, double-entry-capable transaction ledger. In the current phase, implement the player-facing LC ledger only. Business accounting records for provider and affiliate revenue are separate from player rewards. A player cash ledger is deferred until a separately approved future cash-rewards phase. No direct balance edits. Every financial event has:
+Use an append-only, double-entry-capable transaction ledger. Implement two separate player ledgers: the LC ledger, and a USD cash ledger credited only by verified, approved Hustle completions (§0.5). They never convert or share accounts. Business accounting records for provider and affiliate revenue are separate from player rewards. Payout, withdrawal and payout/identity-check flows stay off until Sam separately approves activation. No direct balance edits. Every financial event has:
 - immutable internal transaction ID;
 - provider + provider event ID;
 - idempotency key;

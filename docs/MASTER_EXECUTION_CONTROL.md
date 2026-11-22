@@ -2361,6 +2361,13 @@ These independent debriefs were posted as PR comments and had not yet been appen
 - **Sync Watch #41 owner-policy finding (closed 2026-11-21 19:38 ET — Sam updated DaVinci's instruction directly):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
 - Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
 
+## 2026-11-21 20:35 ET (01:35 UTC) — Sync Watch #43 corrections (Claude)
+
+- Owner-decision blocks now say all three items are in force (the "cash item does not" opener is removed).
+- Spec §2/§2A/§3 rewritten to the two-ledger rule: only verified, approved Hustle completions credit the separate USD ledger; no other channel credits cash; partner offers/callbacks never issue LC; no conversion or shared ledger; payouts, withdrawals and payout/identity-check services stay off until Sam separately approves.
+- Account-deletion design: payout-recipient data is expected empty because payout/identity services are off; unpaid cash at deletion stays an open owner decision (blocked).
+- Repository snapshot refreshed: 11 open PRs (incl. #32 account deletion) / 33 branches. Documentation only.
+
 ## 2026-11-21 19:50 ET (00:50 UTC) — Cash rule reconciled (Claude)
 
 - Sam directly updated DaVinci's owner instruction (DaVinci review on PR #31, comment 7071686009, 19:38 ET): two balances replaces the former no-cash rule, matching issue #2 and his "A" to Claude at 18:08 ET. The Sync Watch #42 "conflict open" state below is **superseded**.
