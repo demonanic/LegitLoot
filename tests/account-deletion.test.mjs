@@ -130,21 +130,56 @@ test("no new postings to a closed wallet", { skip }, async () => {
   await assert.rejects(db.exec(`insert into private.journal_entries(transaction_id, account_id, wallet_kind, currency_code, direction, amount) values ('00000000-0000-4000-8000-0000000000f1', '${acct.id}', 'game_credits', 'LC', 'credit', 1)`), /closed/);
 });
 
-test("unpaid cash or an open payout request blocks processing and moves nothing (owner decision pending)", { skip }, async () => {
+async function postCash(db, user, code, n) {
+  const acct = await one(db, `select id from private.ledger_accounts where owner_user_id='${user}' and account_code='${code}'`);
+  const tx = `00000000-0000-4000-8000-${String(n).padStart(12, "0")}`;
+  await db.exec(`insert into private.journal_transactions(id, idempotency_key, event_type, source_system, description) values ('${tx}', 'test-cash-${n}', 'test', 'test', 'test');
+    insert into private.journal_entries(transaction_id, account_id, wallet_kind, currency_code, direction, amount) values ('${tx}', '${acct.id}', 'cash_usd', 'USD', 'credit', 250)`);
+}
+async function dueRequest(db, user) {
+  await as(db, user); await db.query("select public.request_account_deletion()");
+  await asOwner(db); await dueNow(db, user);
+  return reqOf(db, user);
+}
+
+for (const bucket of ["cash_available", "cash_pending", "cash_withdrawal_reserved", "cash_held"]) {
+  test(`unpaid cash in ${bucket} blocks processing and moves nothing (owner decision pending)`, { skip }, async () => {
+    const db = await freshDb();
+    const req = await dueRequest(db, A);
+    await postCash(db, A, bucket, 900);
+    assert.equal((await one(db, `select private.process_account_deletion('${req.id}') s`)).s, "blocked");
+    assert.equal((await reqOf(db, A)).blocked_reason, "cash_balance_owner_decision");
+    assert.equal((await one(db, `select username from public.profiles where id='${A}'`)).username, "player_a", "nothing cleared");
+    await as(db, A);
+    const st = (await one(db, "select public.account_deletion_status() r")).r;
+    assert.equal(st.status, "blocked");
+    assert.equal(st.blockedReason, "cash_balance_owner_decision");
+    assert.equal((await one(db, "select public.cancel_account_deletion() r")).r.cancelled, true, "blocked request can be cancelled");
+  });
+}
+
+test("cash already paid out does not block deletion", { skip }, async () => {
   const db = await freshDb();
-  await as(db, A); await db.query("select public.request_account_deletion()");
-  await asOwner(db); await dueNow(db, A);
-  const cash = await one(db, `select id from private.ledger_accounts where owner_user_id='${A}' and account_code='cash_available'`);
-  await db.exec(`insert into private.journal_transactions(id, idempotency_key, event_type, source_system, description) values ('00000000-0000-4000-8000-0000000000f2', 'test-cash-1', 'test', 'test', 'test');
-    insert into private.journal_entries(transaction_id, account_id, wallet_kind, currency_code, direction, amount) values ('00000000-0000-4000-8000-0000000000f2', '${cash.id}', 'cash_usd', 'USD', 'credit', 250)`);
-  const req = await reqOf(db, A);
+  const req = await dueRequest(db, A);
+  await postCash(db, A, "cash_paid", 901);
+  assert.equal((await one(db, `select private.process_account_deletion('${req.id}') s`)).s, "data_cleared");
+});
+
+test("an open payout request blocks processing", { skip }, async () => {
+  const db = await freshDb();
+  const req = await dueRequest(db, A);
+  await db.exec(`insert into private.payout_requests(user_id, amount_minor, idempotency_key) values ('${A}', 500, 'payout-test-1')`);
   assert.equal((await one(db, `select private.process_account_deletion('${req.id}') s`)).s, "blocked");
-  const r = await reqOf(db, A);
-  assert.equal(r.blocked_reason, "cash_balance_owner_decision");
-  assert.equal((await one(db, `select username from public.profiles where id='${A}'`)).username, "player_a", "nothing cleared");
-  // The player can still cancel a blocked request.
-  await as(db, A);
-  assert.equal((await one(db, "select public.cancel_account_deletion() r")).r.cancelled, true);
+  assert.equal((await reqOf(db, A)).blocked_reason, "open_payout_request");
+});
+
+test("wallet RPC returns the canonical LC-only contract", { skip }, async () => {
+  const db = await freshDb();
+  await as(db, B);
+  const w = (await one(db, "select public.get_wallet_summary() w")).w;
+  assert.deepEqual(Object.keys(w), ["legitCoins"]);
+  assert.equal(w.legitCoins.available, "0");
+  assert.equal(w.legitCoins.withdrawable, false);
 });
 
 test("players cannot call the server-only steps or read the requests table", { skip }, async () => {
@@ -173,6 +208,41 @@ test("account page offers deletion with a typed confirmation, password check and
   assert.match(html, /id="deletion-cancel"/);
   assert.match(js, /client\.rpc\("request_account_deletion"\)/);
   assert.match(js, /client\.rpc\("cancel_account_deletion"\)/);
+  for (const state of ["pending", "blocked", "data_cleared"]) assert.match(js, new RegExp(`"${state}"`), state);
   assert.ok(js.indexOf("signInWithPassword({ email, password") < js.indexOf('client.rpc("request_account_deletion")'), "password re-checked before the request");
   assert.doesNotMatch(html.match(/id="deletion-panel"[\s\S]*?<\/section>/)[0], /cash|withdraw/i, "no cash promises in deletion copy");
+});
+
+test("account page shows distinct pending, blocked and data-cleared states", async () => {
+  const vm = await import("node:vm");
+  const els = {};
+  const el = (id) => (els[id] ??= { id, hidden: false, textContent: "", dataset: {}, innerHTML: "", classList: { toggle() {} },
+    addEventListener() {}, querySelector: () => ({ disabled: false }), reset() {}, append() {}, value: "" });
+  const document = { getElementById: el, querySelectorAll: () => [], createElement: () => el("tmp") };
+  const client = { rpc: async () => ({ data: null }), from: () => ({ select: () => ({ eq: () => ({ maybeSingle: async () => ({}) }) }) }),
+    auth: { onAuthStateChange() {}, getSession: () => new Promise(() => {}), getUser: async () => ({ data: {} }) } };
+  const window = { LEGITLOOT_SUPABASE_CONFIG: { environment: "staging", url: "https://scmnxcsggquwtuyyjnnj.supabase.co", publishableKey: "k" },
+    supabase: { createClient: () => client }, setTimeout, clearTimeout, location: { origin: "https://x" } };
+  // Expose showDeletion for the test by appending a hook inside the IIFE.
+  const src = read("account-auth.js").replace(/\}\)\(\);\s*$/, "window.__showDeletion = showDeletion;\n})();");
+  vm.runInNewContext(src, { window, document, console });
+  const show = window.__showDeletion;
+  const text = () => els["deletion-scheduled-text"].textContent;
+
+  show({ status: "pending", scheduledFor: "2026-11-29T00:00:00Z" });
+  assert.match(text(), /scheduled for deletion on/);
+  assert.equal(els["deletion-cancel"].hidden, false);
+
+  show({ status: "blocked", scheduledFor: "2026-11-29T00:00:00Z", blockedReason: "cash_balance_owner_decision" });
+  assert.match(text(), /on hold because your account still holds unpaid cash/);
+  assert.doesNotMatch(text(), /scheduled for deletion on/, "blocked is not shown as scheduled");
+  assert.equal(els["deletion-cancel"].hidden, false);
+
+  show({ status: "data_cleared" });
+  assert.match(text(), /personal data has been cleared/);
+  assert.equal(els["deletion-cancel"].hidden, true, "cannot cancel after data is cleared");
+  assert.equal(els["deletion-request"].hidden, true, "request form stays hidden");
+
+  show({ status: "none" });
+  assert.equal(els["deletion-request"].hidden, false);
 });

@@ -78,7 +78,11 @@ create trigger journal_entries_closed_account
   before insert on private.journal_entries
   for each row execute function private.reject_posting_to_closed_account();
 
--- The wallet RPC refuses deleted players (staging lineage body, unchanged apart from the guard).
+-- The wallet RPC refuses deleted players. Body is the canonical LC-only contract from
+-- supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql (legitCoins key, LC accounts
+-- and LC entries only, which wallet-summary.js parses first) plus the deleted-account guard.
+-- Applying this migration therefore also applies that reviewed response contract; cash buckets are
+-- no longer returned by this RPC. A future cash-balance view needs its own reviewed RPC.
 create or replace function public.get_wallet_summary()
 returns jsonb
 language plpgsql
@@ -100,12 +104,11 @@ begin
     select id, account_code, wallet_kind, currency_code
     from private.ledger_accounts
     where owner_user_id = v_user_id and is_system = false
+      and wallet_kind = 'game_credits' and currency_code = 'LC'
   ),
   balances as (
     select
       a.account_code,
-      a.wallet_kind::text as wallet_kind,
-      a.currency_code,
       coalesce(sum(case
         when e.direction::text = 'credit' then e.amount
         when e.direction::text = 'debit' then -e.amount
@@ -113,25 +116,17 @@ begin
       end), 0)::numeric(30,0) as balance
     from user_accounts a
     left join private.journal_entries e on e.account_id = a.id
+      and e.wallet_kind = a.wallet_kind and e.currency_code = a.currency_code
     left join private.journal_transactions t on t.id = e.transaction_id
       and t.status::text = 'posted'
     where e.id is null or t.id is not null
-    group by a.account_code, a.wallet_kind, a.currency_code
+    group by a.account_code
   )
   select jsonb_build_object(
-    'currency', jsonb_build_object('cash', 'USD', 'gameCredits', 'LLC'),
-    'cash', jsonb_build_object(
-      'availableCents', coalesce(sum(balance) filter (where account_code = 'cash_available' and wallet_kind = 'cash_usd' and currency_code = 'USD'),0)::text,
-      'pendingCents', coalesce(sum(balance) filter (where account_code = 'cash_pending' and wallet_kind = 'cash_usd' and currency_code = 'USD'),0)::text,
-      'withdrawalReservedCents', coalesce(sum(balance) filter (where account_code = 'cash_withdrawal_reserved' and wallet_kind = 'cash_usd' and currency_code = 'USD'),0)::text,
-      'paidCents', coalesce(sum(balance) filter (where account_code = 'cash_paid' and wallet_kind = 'cash_usd' and currency_code = 'USD'),0)::text,
-      'heldCents', coalesce(sum(balance) filter (where account_code = 'cash_held' and wallet_kind = 'cash_usd' and currency_code = 'USD'),0)::text
-    ),
-    'gameCredits', jsonb_build_object(
-      'available', coalesce(sum(balance) filter (where account_code = 'lootcoins_available' and wallet_kind = 'game_credits' and currency_code = 'LC'),0)::text,
-      'provisional', coalesce(sum(balance) filter (where account_code = 'lootcoins_provisional' and wallet_kind = 'game_credits' and currency_code = 'LC'),0)::text,
-      'deferred', coalesce(sum(balance) filter (where account_code = 'lootcoins_deferred' and wallet_kind = 'game_credits' and currency_code = 'LC'),0)::text,
-      'cashValue', null,
+    'legitCoins', jsonb_build_object(
+      'available', coalesce(sum(balance) filter (where account_code = 'lootcoins_available'),0)::text,
+      'provisional', coalesce(sum(balance) filter (where account_code = 'lootcoins_provisional'),0)::text,
+      'deferred', coalesce(sum(balance) filter (where account_code = 'lootcoins_deferred'),0)::text,
       'withdrawable', false
     )
   ) into v_result
@@ -141,7 +136,7 @@ begin
 end;
 $function$;
 revoke all on function public.get_wallet_summary() from public, anon;
-grant execute on function public.get_wallet_summary() to authenticated;
+grant execute on function public.get_wallet_summary() to authenticated, service_role;
 
 -- Player: request deletion. Needs a sign-in within the last 10 minutes (Supabase "amr" claim).
 create or replace function public.request_account_deletion()
@@ -235,7 +230,8 @@ begin
   if not found then
     return jsonb_build_object('status', 'none');
   end if;
-  return jsonb_build_object('status', v_req.status, 'requestedAt', v_req.requested_at, 'scheduledFor', v_req.scheduled_for);
+  return jsonb_build_object('status', v_req.status, 'requestedAt', v_req.requested_at,
+    'scheduledFor', v_req.scheduled_for, 'blockedReason', v_req.blocked_reason);
 end;
 $fn$;
 revoke all on function public.account_deletion_status() from public, anon;
@@ -276,12 +272,20 @@ begin
     values ('system', 'account.deletion_blocked', 'account_deletion_request', v_req.id::text, 'open_payout_request');
     return 'blocked';
   end if;
-  select coalesce(sum(case when e.direction::text = 'credit' then e.amount else -e.amount end), 0)
-    into v_cash
-  from private.ledger_accounts a
-  join private.journal_entries e on e.account_id = a.id
-  join private.journal_transactions t on t.id = e.transaction_id and t.status::text = 'posted'
-  where a.owner_user_id = v_req.user_id and a.wallet_kind = 'cash_usd';
+  -- Unpaid buckets only. cash_paid is a cumulative record of money already paid out and
+  -- must not block deletion. Any non-zero unpaid bucket blocks.
+  select count(*) into v_cash
+  from (
+    select a.id
+    from private.ledger_accounts a
+    join private.journal_entries e on e.account_id = a.id
+      and e.wallet_kind = 'cash_usd' and e.currency_code = 'USD'
+    join private.journal_transactions t on t.id = e.transaction_id and t.status::text = 'posted'
+    where a.owner_user_id = v_req.user_id and a.wallet_kind = 'cash_usd' and a.currency_code = 'USD'
+      and a.account_code in ('cash_available', 'cash_pending', 'cash_withdrawal_reserved', 'cash_held')
+    group by a.id
+    having sum(case when e.direction::text = 'credit' then e.amount else -e.amount end) <> 0
+  ) unpaid;
   if v_cash <> 0 then
     update private.account_deletion_requests set status = 'blocked', blocked_reason = 'cash_balance_owner_decision' where id = v_req.id;
     insert into private.audit_log (actor_type, action, target_type, target_id, reason)

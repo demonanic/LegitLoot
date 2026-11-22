@@ -83,13 +83,31 @@
   };
   // Account deletion (AUTH-03): 7-day cancellable wait, then server-side processing.
   // The server requires a sign-in within the last 10 minutes, so the password is re-checked first.
+  // Three distinct server states: pending (in the 7-day wait, cancellable), blocked (wait over,
+  // held for an unpaid cash balance or open payout request; cancellable) and data_cleared
+  // (personal data cleared; the sign-in removal step is still to run; not cancellable).
+  const BLOCKED_TEXT = {
+    cash_balance_owner_decision: "your account still holds unpaid cash, and how that is handled hasn't been decided yet",
+    open_payout_request: "you have a payout request that is still open",
+  };
+  const deletionText = (info) => {
+    if (info.status === "pending") {
+      return "Your account is scheduled for deletion on " + new Date(info.scheduledFor).toLocaleString() + ". Until then you can cancel.";
+    }
+    if (info.status === "blocked") {
+      const why = BLOCKED_TEXT[info.blockedReason] || "it needs a manual check";
+      return "Your deletion is on hold because " + why + ". Nothing has been deleted. Contact support, or cancel the request.";
+    }
+    return "Your personal data has been cleared. The final step, removing your sign-in, is still running. No further action is needed.";
+  };
   const showDeletion = (info) => {
-    const scheduled = info && (info.status === "pending" || info.status === "blocked");
-    $("deletion-request").hidden = !!scheduled;
-    $("deletion-scheduled").hidden = !scheduled;
-    if (scheduled) {
-      const when = new Date(info.scheduledFor).toLocaleString();
-      $("deletion-scheduled-text").textContent = "Your account is scheduled for deletion on " + when + ". Until then you can cancel.";
+    const open = !!info && ["pending", "blocked", "data_cleared"].includes(info.status);
+    $("deletion-request").hidden = open;
+    $("deletion-scheduled").hidden = !open;
+    if (open) {
+      $("deletion-scheduled").dataset.state = info.status;
+      $("deletion-scheduled-text").textContent = deletionText(info);
+      $("deletion-cancel").hidden = info.status === "data_cleared";
     }
   };
   const loadDeletionStatus = async () => {
