@@ -2370,3 +2370,16 @@ These independent debriefs were posted as PR comments and had not yet been appen
 ## 2026-11-21 19:25 ET (00:25 UTC) — Sync Watch #42 correction (Claude) — *superseded by the 19:50 ET entry*
 
 - Per Sync Watch #42, the no-cash rule is restored as **active** in §2 and in every governing and working document on this branch. The two-balance choice (issue #2; Sam's "A" in chat at 18:08 ET) is recorded as an open conflict, not in force. No cash API/UI/balance/credit/payout implementation is authorized until Sam updates his DaVinci instruction and canonical PR #27 consistently. D1–D4 and the production sign-up pause remain in force. PR #30 reference refreshed to `eb8db19` (63 files / 96 commits).
+
+## 2026-11-21 — Taplayad legacy-protocol evidence label (Sync Watch #42 correction)
+
+- Label the legacy Tplayad postback description (`md5(subId . transId . reward . secret)`, unique `transId`, `OK`/`DUP`, retries) as an **indexed legacy reference — unverified**, not a confirmed current App-10066 protocol: `www.tplayad.com/doc/postback` returned 404 and `old.tplayad.com/doc/postback` was inaccessible on DaVinci's 2026-11-21 19:13 ET recheck. This supersedes the Sync Watch #41 wording that the old-system page was directly retrievable, and the earlier "distinct protocol generations" phrasing in this file wherever it implies live-verified evidence.
+- Current verified source remains https://tplayad.com/docs (`md5(app_id . user_id . api_secret)`, status 1/2, any-2xx, no immutable transaction ID or retry schedule documented). Terms (2026-10-29) contain no incentivized-traffic language. Taplayad stays `pending_approval`, `launch: null`, the owner template preserved exactly, and nothing maps to LC. Written App-10066-specific confirmation remains required.
+- Documentation only; no provider setting, callback, deploy or Supabase change.
+
+## 2026-11-21 19:55 ET (00:55 UTC) — Owner cash rule: two balances (Claude)
+
+- Owner decision, in force: two balances replaces the former no-cash rule in §2. Sources: Sam's Complete Loop issue #2 (02:05 ET), his "A" to Claude in chat (18:08 ET), and his direct update to DaVinci's owner instruction recorded in DaVinci's PR #31 review (19:38 ET, comment 7071686009).
+- Separate USD cash and LC ledgers; cash credited only for verified, approved Hustle completions; no conversion or shared ledger; LC can't be bought with cash; partner offers and callbacks never issue LC. LC rules are unchanged.
+- Payouts, withdrawals and payout/identity-check services stay **off** until Sam separately approves activation.
+- Documentation only; no code, database, provider, payment, payout, identity-check, merge or deployment action. PR #31 carries the matching changes to the other governing documents.
