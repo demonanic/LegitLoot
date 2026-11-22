@@ -13,9 +13,8 @@
 // Both read the `lootcoins_available` LC ledger account. Amounts are integer
 // atom strings; LC accounts use currency_scale 10000 (1 LC = 10,000 atoms),
 // set by the offerwall_gg_callback_pipeline migration in both lineages.
-// Cash: Complete Loop issue #2 proposed a separate cash ledger, but that conflicts with Master Control §2 (no cash
-// balance) and is PENDING owner reconciliation. No cash implementation changes until Sam resolves it. This LC parser
-// deliberately has no cash path, so cash can never influence, convert into or be mixed with the LC balance.
+// Cash: the separate USD cash ledger is approved by owner policy but is NOT implemented or exposed by this candidate yet; only verified, approved Hustle completions may credit it; LC stays game-only; payouts/withdrawals and payout/identity-check services remain off
+// (owner policy confirmed to DaVinci 2026-11-21, Sync Watch #43). This LC parser deliberately has no cash path, so cash can never influence, convert into or be mixed with the LC balance.
 (() => {
   const ATOMS_PER_LC = 10000;
 

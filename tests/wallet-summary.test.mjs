@@ -150,16 +150,16 @@ test("account.html cache-busts account-auth.js after the sign-up handler removal
   assert.doesNotMatch(html, /wallet-summary\.js\?v=m2t1-1/);
 });
 
-// Scope: static checks only. This proves the LC parser ignores cash fields and that the LC sources mark cash as pending owner
-// reconciliation (not approved). It does NOT prove a cash-summary contract; none exists, and cash credits/payouts remain off.
-// Master Control §2 vs the Nov 21 owner decision (PR #31) still needs owner reconciliation.
-test("LC parser ignores cash fields; LC sources mark cash as pending owner reconciliation (static check, no cash contract exists)", async () => {
+// Scope: static checks only. This proves the LC parser ignores cash fields and that the LC sources say the separate cash ledger is
+// approved by policy but not implemented here. It does NOT prove a cash-summary contract; none exists, and cash credits/payouts remain off.
+// Owner policy confirmed to DaVinci 2026-11-21 (Sync Watch #43); shared records may still lag it.
+test("LC parser ignores cash fields; LC sources say cash is approved by policy but not implemented here (static check, no cash contract exists)", async () => {
   const { readFileSync } = await import("node:fs");
   const strip = (s) => s.replace(/^\s*(--|\/\/).*$/gm, "");
   const parser = strip(readFileSync(new URL("../wallet-summary.js", import.meta.url), "utf8"));
   assert.doesNotMatch(parser, /\.cash\b|availableCents|parseCash/, "LC parser must not read cash");
   for (const f of ["../wallet-summary.js", "../supabase/functions/wallet-summary/index.ts", "../supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql"]) {
-    assert.match(readFileSync(new URL(f, import.meta.url), "utf8"), /PENDING owner reconciliation|pending owner reconciliation/, f + " must mark cash as pending owner reconciliation");
+    assert.match(readFileSync(new URL(f, import.meta.url), "utf8"), /approved by owner policy but (is )?NOT implemented/, f + " must say cash is approved by policy but not implemented");
   }
   const fn = readFileSync(new URL("../supabase/functions/wallet-summary/index.ts", import.meta.url), "utf8");
   assert.match(fn, /\.eq\("wallet_kind", "game_credits"\)/);
