@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 18:15 ET (PR #31; cash rule reconciled by the owner at 18:08 ET)
+**Last updated:** 2026-11-21 19:25 ET (00:25 UTC) (PR #31; no-cash rule active, cash conflict open)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
-**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 32 branches and 10 open PRs, verified 2026-11-21 17:03 ET (22:03 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `1cb9f43` (62 files / 95 commits, verified 2026-11-21 18:44 ET (23:44 UTC); earlier records `5c33c78`, `929f58a` and `0a7d2fb` are historical).
+**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 32 branches and 10 open PRs, verified 2026-11-21 17:03 ET (22:03 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `eb8db19` (63 files / 96 commits, verified 2026-11-21 19:25 ET (00:25 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb` and `1cb9f43` are historical).
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -56,7 +56,7 @@ The release candidate must truthfully provide:
 - Central account sign-in, recovery, and a working deletion/export path before public account onboarding.
 - The website as the authoritative LC wallet; no game-side spendable wallet.
 - LC earned only from verified in-game milestones, weekly challenges, and seasonal events.
-- No cash withdrawals or payouts (owner-gated), no LC transfer or USD peg, and no provider-offerwall-to-LC issuance. A separate USD cash balance credited only by verified Hustle completions is approved and never mixes with LC (owner, 2026-11-21 18:08 ET, replacing the earlier objective "No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance"; spec §0.5).
+- No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance. *(Active. Owner issue #2 and Sam's 18:08 ET chat answer to Claude choose two balances instead; not in force until Sam updates his DaVinci instruction and canonical PR #27 consistently. See the 2026-11-21 19:25 ET entry.)*
 - A verified playable game, or an honestly labelled early-access portal.
 - Approved Terms, Privacy, support route, monitoring, backup/recovery expectations, and rollback plan.
 - No live financial activity or provider activation without the applicable owner gate.
@@ -2360,3 +2360,7 @@ These independent debriefs were posted as PR comments and had not yet been appen
 
 - **Sync Watch #41 owner-policy finding (open):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
 - Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
+
+## 2026-11-21 19:25 ET (00:25 UTC) — Sync Watch #42 correction (Claude)
+
+- Per Sync Watch #42, the no-cash rule is restored as **active** in §2 and in every governing and working document on this branch. The two-balance choice (issue #2; Sam's "A" in chat at 18:08 ET) is recorded as an open conflict, not in force. No cash API/UI/balance/credit/payout implementation is authorized until Sam updates his DaVinci instruction and canonical PR #27 consistently. D1–D4 and the production sign-up pause remain in force. PR #30 reference refreshed to `eb8db19` (63 files / 96 commits).
