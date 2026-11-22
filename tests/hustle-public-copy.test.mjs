@@ -42,7 +42,8 @@ test("Hustle status copy and provider disclaimer use approved wording", () => {
   assert.ok(read("earn-hub.js").includes("No Hustle provider is open to players right now"));
   const earn = read("earn.html");
   assert.ok(!earn.includes("not guaranteed earnings"));
-  assert.match(earn, /Provider activity never credits Legit Coins and does not create a LegitLoot cash payout or wallet credit/);
+  assert.match(earn, /Provider activity never credits Legit Coins\. Only verified, approved Hustle completions may credit a separate cash balance, which is not available yet; payouts and withdrawals are off\./);
+  assert.doesNotMatch(earn, /does not create a LegitLoot cash payout or wallet credit/);
   assert.match(earn, /provider's responsibility/);
 });
 
