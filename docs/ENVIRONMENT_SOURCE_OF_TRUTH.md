@@ -1,7 +1,13 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-21 11:53 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Record edited 2026-11-21 11:53 ET.
+**Last verified:** 2026-11-21 11:53 ET by DaVinci (read-only GitHub, Cloudflare, Supabase and current official Tplayad docs/Terms review; no browser test or PostgREST relationship execution). Environment last verified 2026-11-21 11:53 ET (above); record last edited 2026-11-21 17:03 ET (22:03 UTC) (PR #31 documentation update, no new environment verification except the production `disable_signup` probe noted below).
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
+
+> **Owner-decision update — 2026-11-21 15:40 ET, revised 22:45 ET (Claude, PR #31).** All three items (deletion, sign-up pause, and the two-balance cash rule) are in force and supersede conflicting current-state statements; payouts, withdrawals and payout/identity-check services stay off until Sam separately approves activation. Source: owner-authored Complete Loop issues #2 (cash rule) and #3/#4 (deletion), spec §0.5.
+> - **Cash: two balances — in force (owner, 2026-11-21).** Owner issue #2, Sam's "A" in chat with Claude at 18:08 ET, and Sam's direct update to DaVinci's owner instruction (DaVinci review on PR #31, 19:38 ET) agree: the former no-cash rule is replaced. Separate USD cash and LC ledgers; cash is credited only for verified, approved Hustle completions; no conversion or shared ledger; LC can't be bought with cash; partner offers and callbacks never issue LC. **Payouts, withdrawals, and payout or identity-check services/providers stay OFF until Sam separately approves activation.** This is a documentation decision; building the cash ledger is separate, staged, reviewed work.
+> - **Account deletion:** D1–D4 decided (7-day cancellable / anonymised records kept while LegitLoot operates / reply within 30 days / deleted email may re-register fresh). Implementation and export remain unbuilt.
+> - **Production sign-up pause:** implemented by the owner ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 UTC and 20:34 UTC, email sign-in enabled.
+> - **Repository state (verified 2026-11-21 22:45 ET (03:45 UTC)):** 11 open PRs (#9, #20, #22, #25, #26, #27, #28, #29, #30, #31, #32) and 33 remote branches; PR #30 candidate at `e25273d` (63 files / 98 commits); production remains `main@801f3e7`.
 
 **MIG-02 correction (2026-11-21 07:20 ET):** Any older section below stating that the `game_platform_foundation` source is missing describes the pre-recovery state. The canonical migration and its regression test are now present on integration; the migration is already applied to staging and must not be replayed. The integration migration directory still has no CPAGrip migration source.
 
@@ -65,7 +71,7 @@ Read-only connector inventory rechecked 2026-11-20 05:13 ET (function versions b
 - No service-role or secret values in GitHub, docs, chat, logs, or screenshots. Record secret names and presence only where safely verified.
 - Production settings/secrets/schema/data changes, provider activation, reward posting, live financial activity, and production deployment remain owner-gated. Staging-only migrations, Edge Function deployments, and reversible staging tests are authorized under `docs/MASTER_EXECUTION_CONTROL.md` after independent review and exact-project verification.
 - `main` is the owner-recorded production website source branch; its GitHub API `protected` field currently reports `false` (see §14). `build/legitloot-neon-synthwave` is the authorized integration branch. Agents may merge independently verified work into the integration branch and deploy to staging under standing owner authorization; production merge/deploy remains owner-gated.
-- Production public sign-up pause has been approved by the owner. Preserve existing sign-in. Execution is pending a dashboard-capable authorized operator and must be verified afterward.
+- Production public sign-up pause has been approved by the owner and **applied** (owner, 2026-11-21 ~02:03 ET; `disable_signup: true` verified read-only at 07:03 and 20:34 UTC). Preserve existing sign-in.
 - Legit Coins are awarded only by the future server-authoritative game milestone/challenge/event pipeline; provider offerwall callbacks must not mint LC under the current owner decision.
 
 ## 5. Remaining verification work
@@ -128,6 +134,8 @@ Secrets by name only (inferred from code paths and probe responses, values never
 | LC posting from provider | armed (secrets present; postback reaches validation) | armed | Both violate the 2026-11-19 LC policy. |
 
 ## 10. Production registration pause — status
+
+- **Current status: APPLIED (2026-11-21).** The owner switched it off in the dashboard ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 and 20:34 UTC with email sign-in enabled. The entries below are history.
 
 - **Status: BLOCKED (access).** Probe at 2026-11-19 ~01:40 ET: production `GET /auth/v1/settings` → `disable_signup: false`.
 - Why Claude could not execute: (1) Claude's Supabase connector lists only `gauntlet`; (2) the Supabase MCP toolset has no Auth-configuration tool in any case, and `disable_signup` is not a SQL setting; (3) the cloud browser opened `supabase.com/dashboard/project/gkbqderyjcuxnjbsiffb/auth/providers` and was redirected to the Supabase sign-in page. Agents must not enter the owner's credentials.
@@ -1009,7 +1017,7 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Production `gkbqderyjcuxnjbsiffb`: `offerwall-gg-wall-url` v2/JWT and `offerwall-gg-postback` v4/no-JWT are runtime tombstones; `wallet-summary` v4 remains deployed. Production `private.providers` has an Offerwall.GG row `disabled`, but its `approved_reward_model` still names LC/LootCoins.
 - Staging `scmnxcsggquwtuyyjnnj`: `offerwall-gg-wall-url` v5/JWT and `offerwall-gg-postback` v8/no-JWT remain ACTIVE; `cpagrip-attribution` v5/JWT also remains ACTIVE. The Offerwall.GG provider row is `disabled` but retains LC/LootCoins reward metadata. No callbacks were invoked.
 - Staging `public.game_registry` has only `zid` / Zombie Invasion Defense, `status=development`, `is_listed=false`, `launch_url=null`. No ZVHM or R2N registry entries exist. `private.game_events`, `private.game_saves`, and `private.game_handoff_tickets` each contain 0 rows. No `game-event` Edge Function is deployed.
-- Production `public.get_wallet_summary()` still returns `cash` USD buckets and `lootCoins.available`; this remains incompatible with the owner-locked no-cash wallet model.
+- Production `public.get_wallet_summary()` still returns `cash` USD buckets and `lootCoins.available`; this remains incompatible with the owner-locked no-cash wallet model. *(Historical finding. Since 2026-11-21 the two-balance rule allows a separate cash ledger, but `cash` must stay separate from LC and payouts/withdrawals stay off until owner approval.)*
 
 ### GitHub
 - 28 refs enumerated; every ref reports `protected=false`. Repository rulesets endpoint returns an empty list. No technical branch protection is in place.

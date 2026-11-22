@@ -1,6 +1,6 @@
 # LegitLoot — Account Deletion Design (AUTH-03)
 
-**Status:** DRAFT v0.1 (Claude, 2026-11-19) for ChatGPT review. Design only: no code, schema, setting or data is changed by this document.
+**Status:** DRAFT v0.2 (Claude, 2026-11-21): owner decisions D1–D4 are **decided** (§ owner decisions, Complete Loop issues #3/#4). Implementation and data export remain **unbuilt**. Design only: no code, schema, setting or data is changed by this document.
 **Closes when:** audit AUTH-03 (no account deletion or data-export path) is RESOLVED, meaning implemented **and** verified.
 **Scope:** staging-first. Production rollout needs the normal release approval (`docs/RELEASE_RUNBOOK.md`).
 **Legal note:** this is an engineering design, not legal advice. Retention periods and the player-facing wording in the Privacy Notice need owner (and, if used, counsel) approval.
@@ -17,8 +17,9 @@
 | Also `on delete restrict` to `auth.users`: `provider_events`, `reward_allocations`, `payout_requests`, `offerwall_gg_conversions`, `offerwall_gg_callback_events`, `admin_users`, payout-simulator tables (staging only) | `initial_schema.sql:334-367`; `migrations/20261109130000_*`, `20261109070000_*`, `20261108200000_*` | Same: these rows survive and keep only the user UUID. |
 | `audit_log.actor_user_id` is `on delete set null` | `initial_schema.sql:384` | Not a blocker. |
 | Supabase Auth supports **soft delete**, `auth.admin.deleteUser(id, shouldSoftDelete: true)`. Deleting a user does not invalidate JWTs already issued; they stay valid until expiry. | Supabase docs: Auth admin `deleteUser` reference; "User Management → Deleting users" | Soft delete keeps the `auth.users` row, so restrict FKs hold. Which fields soft delete clears is **UNVERIFIED** and must be checked on staging (§6). Sessions must also be revoked explicitly. |
-| Personal data held by LegitLoot itself: email (Auth), `profiles.username`, `display_name`, `avatar_path`, `raw_user_meta_data.display_name` (Auth). Payout recipient data is ciphertext plus a hint (cash deferred; expected empty). Staging only: `payout_simulator_withdrawals.destination_label`, CPAGrip attribution tokens, game saves, game events, handoff tickets. | schema files and staging snapshots | These are the fields to clear or remove. |
+| Personal data held by LegitLoot itself: email (Auth), `profiles.username`, `display_name`, `avatar_path`, `raw_user_meta_data.display_name` (Auth). Payout recipient data is ciphertext plus a hint (expected empty, because payout and identity-check services remain off until Sam approves them; the cash balance itself is an approved separate ledger). Staging only: `payout_simulator_withdrawals.destination_label`, CPAGrip attribution tokens, game saves, game events, handoff tickets. | schema files and staging snapshots | These are the fields to clear or remove. |
 | LC have no cash value and cannot be paid out (spec §0.1) | `docs/PLATFORM_BUILD_SPEC.md` §0.1 | There is no balance to settle. The balance is simply left frozen on the closed account. **No ledger entry is posted for deletion** (no LC movement). |
+| **Cash balance (two balances, owner 2026-11-21)** | `docs/PLATFORM_BUILD_SPEC.md` §0.5 | **Open owner decision.** A closing account may hold unpaid cash from verified Hustle completions, and payouts are off. What happens to that balance at deletion must be decided by Sam before deletion ships with a live cash ledger. Until then, the build treats cash like LC: frozen on the closed account, no ledger entry. |
 
 ## 2. Approach
 
@@ -41,7 +42,9 @@
 4. **Processing.** After the grace period, a service-role job (manual admin action at first, scheduled later) calls `private.process_account_deletion(user_id)` and then the Auth admin API (§4).
 5. **Done.** The request becomes `completed` with a timestamp. The audit log records who or what processed it.
 
-**Interim procedure (required now).** Production sign-up is **still open**: `disable_signup:false` at the 2026-11-19 12:18 UTC probe, and two production profiles were inventoried. The owner-approved pause has not yet been applied or verified. Until it is applied **and** the self-serve flow ships, assume accounts can still be created and keep an interim deletion/export request path available. That path is a documented support-email request. The owner-designated intended address is `payouts@legitloot.site`, but it remains **UNVERIFIED**: there is no evidence yet that the mailbox exists, receives inbound mail, can send replies, or is monitored. The former `hello@legitloot.site` address is not the selected contact. Test `payouts@` end to end and record the evidence before publishing it as an operational deletion/export route. An admin verifies the requester controls the account email, then runs the §4 steps. The response time is **not yet a commitment**: 30 days is only a proposal pending owner decision D3. The Privacy Notice must describe this path once the address and D3 are confirmed. This document changes no production setting.
+**Update 2026-11-21:** the owner switched off production sign-up (~02:03 ET). Claude's live read-only checks returned `disable_signup: true` at 07:03 UTC and again at 20:34 UTC, with email sign-in still enabled. Existing accounts remain, so the interim procedure below still applies to them.
+
+**Interim procedure (historical context, 2026-11-19).** Production sign-up was **still open**: `disable_signup:false` at the 2026-11-19 12:18 UTC probe, and two production profiles were inventoried. The owner-approved pause has not yet been applied or verified. Until it is applied **and** the self-serve flow ships, assume accounts can still be created and keep an interim deletion/export request path available. That path is a documented support-email request. The owner-designated intended address is `payouts@legitloot.site`, but it remains **UNVERIFIED**: there is no evidence yet that the mailbox exists, receives inbound mail, can send replies, or is monitored. The former `hello@legitloot.site` address is not the selected contact. Test `payouts@` end to end and record the evidence before publishing it as an operational deletion/export route. An admin verifies the requester controls the account email, then runs the §4 steps. The response time is **not yet a commitment**: 30 days is only a proposal pending owner decision D3. The Privacy Notice must describe this path once the address and D3 are confirmed. This document changes no production setting.
 
 ## 4. Processing steps (`private.process_account_deletion`, service_role only)
 
@@ -86,10 +89,10 @@ Self-serve **export** returns profile fields, LC balance and the user's own ledg
 
 | ID | Decision | Proposal | Who |
 |---|---|---|---|
-| D1 | Grace period before processing | 7 days, cancellable | Owner |
-| D2 | Retention of pseudonymised ledger, provider and audit records | Keep while the platform operates, or a fixed period (e.g. 6 years) if counsel advises | Owner / counsel |
-| D3 | Interim manual deletion response time (if accounts open before self-serve) | 30 days | Owner |
-| D4 | Whether a deleted email may re-register immediately | Yes, as a new account with nothing carried over | Owner |
+| D1 | Grace period before processing | **Decided:** 7 days, cancellable | Owner (issues #3/#4, 2026-11-21) |
+| D2 | Retention of pseudonymised ledger, provider and audit records | **Decided:** keep while LegitLoot operates (the 6-year alternative was not chosen) | Owner (issues #3/#4, 2026-11-21) |
+| D3 | Interim manual deletion response time (if accounts open before self-serve) | **Decided:** within 30 days | Owner (issues #3/#4, 2026-11-21) |
+| D4 | Whether a deleted email may re-register immediately | **Decided:** yes, as a fresh account with nothing carried over | Owner (issues #3/#4, 2026-11-21) |
 | D5 | Re-auth threshold for the delete action | Session younger than 10 minutes, or re-enter password | Agents (routine) |
 
 ## 8. Implementation tasks (after review)

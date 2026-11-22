@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 19:55 ET (two-balance cash rule in force; payouts off)
+**Last updated:** 2026-11-21 23:20 ET (04:20 UTC) (PR #31; Sync Watch #46 sync; two-balance cash rule in force, payouts off)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
-**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `5c33c78` (62 files / 92 commits; see the 2026-11-21 Claude record correction at the end of this file).
+**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 33 branches and 11 open PRs, verified 2026-11-21 21:50 ET (02:50 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `e25273d` (63 files / 98 commits, verified 2026-11-21 22:45 ET (03:45 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb`, `1cb9f43`, `eb8db19` and `da5be09` are historical).
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -339,29 +339,21 @@ A task is not done because a code change was made or a page renders.
 # 10. CURRENT EXECUTION STATUS
 
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T3a — Staging record-only Offerwall.GG callback containment
-**Task owner:** ChatGPT — staging deployment and live verification
-**Implementation partner:** Claude — source, tests, handoff, and supporting fixes
-**Reviewer:** ChatGPT — independent source review already completed; Claude confirms implementation/test evidence
-**Status:** Source is merged to the integration branch, but the deployed staging function/database routine still use the legacy LC-posting path. Ready for staging deployment in a normal implementation turn; this scheduled audit did not deploy.
+**Active task:** M2-T4 — integrate the two owner-selected launch games (see §2, "Current active task — M2-T4")
+**Acting lead:** ChatGPT; **Implementation partner:** Claude (standing roles per `docs/AGENT_OPERATING_CHARTER.md`)
+**Status (2026-11-21 21:50 ET):** IN PROGRESS. Both games are live as early access with device-local saves; shared account/session, cloud saves and server-verified LC-event integration remain unfinished.
 
-### Current verified state
-- PR #11 (M2-T1) merged to the build branch at `2824563`.
-- PR #13 (M2-T3 source) merged to the build branch at `1faf854`; record-only migration/function not deployed.
-- PR #12 (M2-T6 runbook), PR #14 (ENV-03), and PR #15 (AUTH-03 design) were refreshed onto integration head `19aa0f4` with zero commits behind.
-- Claude reports 34/34 tests on PR #12 head `dfc0e53`, 37/37 on PR #14 head `8d80e8a`, and 34/34 on PR #15 head `9c8a365`; all report clean PR diff checks. GitHub Actions/status queries returned no CI checks. These are Claude-reported local results, not GitHub CI.
-- Fresh read-only Supabase evidence: production postback v3 and staging v7 remain ACTIVE; both deployed SQL routines still call `private.post_journal_transaction`; callback events/conversions are 0/0 in both environments; staging has not applied the record-only migration.
-- PR #12 has an outstanding runbook monitoring correction; PR #15 has outstanding support-route and staging-authority wording corrections; PR #14's PR description still needs its obsolete staging-deploy gate wording removed.
+### Launch-blocker work alongside M2-T4 (owner decisions 2026-11-21)
+- **Account deletion (AUTH-03):** owner D1–D4 decided; source in PR #32 (stacked on PR #30), draft, not applied or deployed. Unpaid cash at deletion is an open owner decision; processing blocks until then.
+- **Cash ledger:** two balances in force (§2); payouts, withdrawals and payout/identity-check services stay off until Sam separately approves.
+- **Launch scope (owner, Complete Loop issue #5):** Hustle (Taplayad) and LC must both be live at launch. Taplayad stays `pending_approval` until written App-10066 permission and protocol confirmation.
+- **Release:** PR #30 consolidated candidate (`da5be09`, 63 files / 97 commits); Terms/Privacy still to be written.
 
-### Immediate sequence
-1. Claude resolves the remaining PR #12/#14/#15 review comments and updates the affected PR descriptions.
-2. ChatGPT completes the authorized staging migration-first/function-second deployment of M2-T3a in a non-audit execution turn, then verifies the live routine and function version without invoking callbacks.
-3. Claude and ChatGPT complete independent final reviews and merge verified PR #12/#14/#15 into the integration branch.
-4. Continue AUTH-03 implementation after D1–D4 owner/legal decisions are resolved; use a dedicated staging-only test identity and cleanup plan.
-5. Close the remaining launch blockers: production sign-up pause, approved Terms/Privacy/support route, playable-game or truthful early-access scope, monitoring, backup/PITR, mobile/accessibility QA, and release manifest.
+### Superseded instruction
+The earlier M2-T3a staging callback deployment instruction in this section is **withdrawn**. Do not deploy the Offerwall.GG callback; Offerwall.GG is retired (`docs/security/OFFERWALL_GG_RETIREMENT.md`).
 
 ### Owner gates
-Production Offerwall.GG containment; production sign-up pause execution where dashboard access is needed; AUTH-03 D1–D4 and legal/privacy choices; paid monitoring/backup commitments; production merge/deploy/config/data changes; provider agreements and all live financial activity.
+Production merge/deploy/config/data; production sign-up re-enable; payouts, withdrawals and payout/identity-check activation; unpaid cash at account deletion; provider agreements and live activation; paid commitments; legal/business commitments.
 
 M1 audit remains accepted with qualifications. Its original task details and findings remain in the dated audit/history above; M2 is the active milestone now.
 
@@ -771,7 +763,7 @@ This entry records the owner's explicit decisions in the 2026-11-19 conversation
 - LC may be earned only from server-verified in-game milestones, weekly challenges, and seasonal events.
 - At least five launch challenges/milestones must be authored and configured by Claude, integrated with the central reward system, and covered by tests. This is a minimum. The exact challenge definitions and LC values must follow existing owner-approved LC economics; agents may author non-economic objectives and propose values but must not change reward values/economic policy without the required specialist/owner approval.
 - Reward integration must be server-authoritative, idempotent, auditable, abuse-resistant, and tested with synthetic staging identities. Prove that each eligible event credits the website wallet once and only once; prove invalid, replayed, client-forged, and provider-originated events cannot credit LC.
-- No cash, withdrawals, user-to-user transfers, USD peg, provider-offerwall-to-LC issuance, or other cash-equivalent promise.
+- No cash, withdrawals, user-to-user transfers, USD peg, provider-offerwall-to-LC issuance, or other cash-equivalent promise. *(Superseded for the cash balance only by the 2026-11-21 two-balance rule in §2: a separate USD cash ledger from verified, approved Hustle completions is allowed. LC rules here are unchanged; withdrawals and payouts stay off until Sam separately approves activation.)*
 
 ### Games and Hustle implementation authorization
 - Claude is authorized to integrate the two selected games under the exact public names above and to build the launch challenge/milestone catalogue and verified in-game LC reward wiring, subject to the LC policy and owner gates.
@@ -2329,6 +2321,70 @@ Owner explicitly authorized preparation and testing of production containment, p
 - **Account (supersedes earlier "Account access remains paused" wording):** the full legal gate was reverted because §13 E1 pauses only new public registration and preserves existing sign-in and account access. Existing sign-in and password reset are restored; there is no signup UI or `auth.signUp()` handler; the staging-only config guard still precedes `createClient`. `tests/account-registration-closed.test.mjs` asserts UI/source behavior only. Backend Auth `disable_signup` remains unverified and owner-gated; no Auth setting was changed.
 - **Owner/legal decision still required (not resolved in code):** restored sign-in conflicts with privacy.html:4 and unpublished Terms. Either approve a limited interim privacy notice covering existing-account sign-in/reset, or explicitly supersede E1 and pause existing access. Legal copy is unchanged.
 - **Safety:** documentation-only change. No merge, deployment, SQL application, Supabase setting/secret/schema/data/grant change, callback, provider setting/agreement, payment, reward issuance or money movement.
+
+## 2026-11-21 15:20 ET — Claude: owner decisions recorded from Complete Loop (docs only)
+
+- **Context:** Sam now answers decisions in the private Complete Loop cockpit (`demonanic/complete-loop`, owner-only Cloudflare Access login). Each answer is a GitHub issue opened by `demonanic`. DaVinci's M1 review of Complete Loop found the LegitLoot build spec still contradicts these answers, and Sam authorized this documentation-only reconciliation (chat, 2026-11-21 15:14 ET).
+- **Cash rule (issue #2, 02:05 ET):** two balances. A separate player cash balance is approved; cash and LC never mix; LC can't be bought with cash; **payouts stay off** until business setup and payout tools are ready and the owner approves activation. Recorded in `PLATFORM_BUILD_SPEC.md` §0.5; inline cash-deferral statements marked superseded. Agents should stop removing separate cash fields as a launch blocker, while still removing any wording that implies withdrawals work today.
+- **Account deletion D1–D4 (issues #3/#4):** 7-day cancellable waiting period; anonymised records kept while LegitLoot operates; email requests answered within 30 days; a deleted email may re-register as a fresh account. Closes the D1–D4 owner gate in `ACCOUNT_DELETION_DESIGN.md`.
+- **Production sign-up pause (§13 E1):** implemented by Sam ~02:03 ET; Claude's live check at 07:03 UTC read `disable_signup: true`, email login enabled.
+- **Still open, unchanged:** live payouts and payout/identity providers (owner-gated); LC award values; Taplayad permission; PR #30 release approval; Terms and Privacy publication.
+- **Safety:** documentation-only change on `claude/owner-decisions-nov21`, opened as a PR into `claude/log-ack-charter` for DaVinci's review. No merge, deployment, Supabase, provider, payment or production change.
+- **Review follow-up (15:40 ET):** per DaVinci's PR #31 review, the same decisions are now reflected in spec §1/§2/§13, `README.md`, `CODEX_EXECUTION_CONSTITUTION.md` (also the two owner-selected games), `ACCOUNT_DELETION_DESIGN.md` (D1–D4 decided, implementation unbuilt), and dated owner-decision blocks in `PROJECT_PROGRESS.md`, `LAUNCH_READINESS_AUDIT.md`, `ENVIRONMENT_SOURCE_OF_TRUTH.md` and `CLAUDE.md`. Fresh read-only probe at 20:34 UTC: `disable_signup: true`, email enabled.
+- **Sync Watch #39 follow-up (about 17:00 ET; the earlier "17:05" was wrong):** header facts refreshed (PR #30 `929f58a`, 10 open PRs, 32 branches); EST record-edit time separated from its verification time; LRA points to the current review. **Open conflict, not resolved by this PR:** §2's launch objective ("No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance") contradicts issue #2's two-balance decision. Per the charter, agents keep cash API/UI/credits/payouts unchanged until the owner explicitly reconciles them; the owner has been asked.
+- **Sync Watch #39 re-review follow-up (2026-11-21 17:03 ET (22:03 UTC)):** the four owner-decision blocks and spec §0.5 now say the cash rule is a conflict still open, with no cash changes until Sam reconciles it; header refreshed to PR #30 `0a7d2fb` (94 commits); timestamps corrected to the actual verification time.
+- **Sync Watch #40 follow-up (2026-11-21 17:35 ET):** spec §0.5's source line no longer says it supersedes §0.3/§2 for cash (deletion and sign-up items are in force; the cash item awaits Sam's reconciliation). CLAUDE.md's 11:53 ET snapshot is labelled historical. PROJECT_PROGRESS's active summary now names PR #30 `0a7d2fb` / 94 commits.
+- **Owner reconciliation (2026-11-21 18:08 ET):** asked directly whether two balances replaces §2's no-cash launch rule, Sam answered **"A"** in chat with Claude: two balances replaces it. §2 is updated with the original objective quoted; spec §0.5, README, the Codex constitution and the four owner-decision blocks now say decided. Payouts, withdrawals, and payout/identity-provider activation remain off and owner-gated. Recorded in Complete Loop as approval `appr-dec-cash-reconcile`.
+
+## 2026-11-21 18:44 ET — Index of Sync Watch #35–#41 debriefs (recorded by Claude)
+
+These independent debriefs were posted as PR comments and had not yet been appended here. The authoritative text stays in each comment; this index makes them discoverable from the shared file.
+
+| Sync Watch | Time (UTC) | Where |
+| --- | --- | --- |
+| #35 debrief + follow-up | 17:55, 17:57 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7066863075), [follow-up](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7066897718) |
+| #36 debrief | 18:46 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7067503619) |
+| #37 debrief | 19:35 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7068129662) |
+| #38 debrief | 20:34 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7068848668) |
+| #39 debriefs and follow-ups | 22:01–22:04 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7069882222), [PR #28](https://github.com/demonanic/LegitLoot/pull/28#issuecomment-7069881874), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7069881503), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7069881174) |
+| #40 debriefs | 22:32 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7070254001), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7070253615), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7070253325) |
+| #41 debriefs | 23:44 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7071069906), [PR #26](https://github.com/demonanic/LegitLoot/pull/26#issuecomment-7071069284), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7071069541), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7071069007) |
+
+- **Sync Watch #41 owner-policy finding (closed 2026-11-21 19:38 ET — Sam updated DaVinci's instruction directly):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
+- Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
+
+## 2026-11-21 23:20 ET (04:20 UTC) — Sync Watch #46 corrections (Claude)
+
+- Spec §2A/§2D: LC sources narrowed to exactly the three owner-approved game sources; affiliate, referral and rewarded-ad rules made unconditional (no player LC or cash); surveys never issue LC. §0.1's provider rule no longer has an "unless the owner later authorizes" exception.
+- `tests/policy-docs.test.mjs`: no longer skips whole lines labelled superseded/historical (only struck-through text); catches "LC ... unless" and conditional player-reward exceptions; asserts the §2A and §2D channel rules. Documentation and docs test only.
+
+## 2026-11-21 22:45 ET (03:45 UTC) — Sync Watch #45 corrections (Claude)
+
+- Spec §2A liability, §2B Hustle states and §2D affiliate journey rewritten to the two-ledger rule; `tests/policy-docs.test.mjs` now fails if spec text says LC is the only player liability, shows LC reward states for Hustle, or lets affiliate/referral/partner activity issue LC.
+- Merged canonical PR #27 tip `55a823d` into this branch; PR #30 now `e25273d` (63 files / 98 commits). Documentation and a docs test only.
+
+## 2026-11-21 21:50 ET (02:50 UTC) — Sync Watch #44 corrections (Claude)
+
+- Spec §2/§2A/§2D/§3: remaining cash-deferral and offerwall/referral-to-LC statements rewritten or marked superseded (LC only from verified game milestones, weekly challenges and seasonal events; only verified, approved Hustle completions credit the separate USD ledger; payouts/withdrawals off).
+- §10 now names M2-T4 as the active task, matching §2; the M2-T3a staging callback deployment instruction is withdrawn (Offerwall.GG retired).
+- Repository metadata: 11 open PRs / 33 branches; PR #30 `da5be09` (63 files / 97 commits). Working-record timestamps refreshed. Documentation only.
+
+## 2026-11-21 20:35 ET (01:35 UTC) — Sync Watch #43 corrections (Claude)
+
+- Owner-decision blocks now say all three items are in force (the "cash item does not" opener is removed).
+- Spec §2/§2A/§3 rewritten to the two-ledger rule: only verified, approved Hustle completions credit the separate USD ledger; no other channel credits cash; partner offers/callbacks never issue LC; no conversion or shared ledger; payouts, withdrawals and payout/identity-check services stay off until Sam separately approves.
+- Account-deletion design: payout-recipient data is expected empty because payout/identity services are off; unpaid cash at deletion stays an open owner decision (blocked).
+- Repository snapshot refreshed: 11 open PRs (incl. #32 account deletion) / 33 branches. Documentation only.
+
+## 2026-11-21 19:50 ET (00:50 UTC) — Cash rule reconciled (Claude)
+
+- Sam directly updated DaVinci's owner instruction (DaVinci review on PR #31, comment 7071686009, 19:38 ET): two balances replaces the former no-cash rule, matching issue #2 and his "A" to Claude at 18:08 ET. The Sync Watch #42 "conflict open" state below is **superseded**.
+- §2 and every current-state block on this branch now state the two-ledger rule. Payouts, withdrawals and payout/identity-check providers stay **off** until Sam separately approves activation. No code, database, provider, payment, payout, identity-check, merge or deployment action is part of this change.
+- Earlier no-cash statements in the spec are kept only where labelled superseded/historical.
+
+## 2026-11-21 19:25 ET (00:25 UTC) — Sync Watch #42 correction (Claude) — *superseded by the 19:50 ET entry*
+
+- Per Sync Watch #42, the no-cash rule is restored as **active** in §2 and in every governing and working document on this branch. The two-balance choice (issue #2; Sam's "A" in chat at 18:08 ET) is recorded as an open conflict, not in force. No cash API/UI/balance/credit/payout implementation is authorized until Sam updates his DaVinci instruction and canonical PR #27 consistently. D1–D4 and the production sign-up pause remain in force. PR #30 reference refreshed to `eb8db19` (63 files / 96 commits).
 
 ## 2026-11-21 — Taplayad legacy-protocol evidence label (Sync Watch #42 correction)
 

@@ -1,10 +1,16 @@
 # LegitLoot project progress
 
-**Updated:** 2026-11-21 11:53 ET
+**Updated:** 2026-11-21 22:45 ET (owner-decision update, PR #31; detailed sections below still reflect the 11:53 ET baseline unless superseded)
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
 **Active task:** M2-T4 — both owner-selected games are present on legitloot.site as early access with device-local saves and no account/LC connection. Staging still has only the legacy unlisted Zombie Invasion Defense registry placeholder; neither selected game is registered, and game events, saves and handoff tickets are zero. Remaining: shared account/session handoff, cloud saves and trusted server-verified LC events. Offerwall.GG retirement and staging wall-url containment remain security subtasks.
-**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch; this Sync Watch #34 closing follow-up starts from docs head `73bacc`. PR #30 candidate is now `5c33c78` (62 files / 92 commits; exact-head Node `44932702227` and Deno `44932702099` passed).
+**Integration branch:** `build/legitloot-neon-synthwave`; authorized application baseline `a529b35`; current head `1466eb6`. PR #27 is the canonical documentation branch; this Sync Watch #34 closing follow-up starts from docs head `73bacc`. PR #30 candidate is now `e25273d` (63 files / 98 commits, verified 2026-11-21 22:45 ET (03:45 UTC); `da5be09`, `eb8db19`, `1cb9f43` and `0a7d2fb` are historical); the earlier `5c33c78` head (92 commits; Node `44932702227` and Deno `44932702099` passed) is historical.
 **Production branch:** main @ 801f3e7; Cloudflare production deployment fe4c0f22 remains the production deployment and aliases https://legitloot.site.
+
+> **Owner-decision update — 2026-11-21 15:40 ET, revised 22:45 ET (Claude, PR #31).** All three items (deletion, sign-up pause, and the two-balance cash rule) are in force and supersede conflicting current-state statements; payouts, withdrawals and payout/identity-check services stay off until Sam separately approves activation. Source: owner-authored Complete Loop issues #2 (cash rule) and #3/#4 (deletion), spec §0.5.
+> - **Cash: two balances — in force (owner, 2026-11-21).** Owner issue #2, Sam's "A" in chat with Claude at 18:08 ET, and Sam's direct update to DaVinci's owner instruction (DaVinci review on PR #31, 19:38 ET) agree: the former no-cash rule is replaced. Separate USD cash and LC ledgers; cash is credited only for verified, approved Hustle completions; no conversion or shared ledger; LC can't be bought with cash; partner offers and callbacks never issue LC. **Payouts, withdrawals, and payout or identity-check services/providers stay OFF until Sam separately approves activation.** This is a documentation decision; building the cash ledger is separate, staged, reviewed work.
+> - **Account deletion:** D1–D4 decided (7-day cancellable / anonymised records kept while LegitLoot operates / reply within 30 days / deleted email may re-register fresh). Implementation and export remain unbuilt.
+> - **Production sign-up pause:** implemented by the owner ~02:03 ET; Claude's read-only checks returned `disable_signup: true` at 07:03 UTC and 20:34 UTC, email sign-in enabled.
+> - **Repository state (verified 2026-11-21 22:45 ET (03:45 UTC)):** 11 open PRs (#9, #20, #22, #25, #26, #27, #28, #29, #30, #31, #32) and 33 remote branches; PR #30 candidate at `e25273d` (63 files / 98 commits); production remains `main@801f3e7`.
 
 ## Agent coordination — 2026-11-20
 

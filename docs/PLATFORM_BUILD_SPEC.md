@@ -1,7 +1,8 @@
 # LegitLoot — Platform Build Specification
 
-**Version:** 1.3  
+**Version:** 1.4\
 **Date:** 2026-11-19 (v1.1 2026-11-10)  
+**v1.4 change (2026-11-21):** Adds §0.5: the owner's account-deletion decisions D1–D4 and the applied sign-up pause (in force), and the owner's two-balance cash rule (issue #2, confirmed 2026-11-21), which is **in force** and replaces the former no-cash rule; payouts stay off until separately approved.\
 **v1.3 change:** Adds the later 2026-11-19 owner launch decisions in §0.4, which supersede conflicting earlier launch-game and challenge-catalogue assumptions. Superseded passages are marked inline and retained only as history.  
 **Build branch:** `build/legitloot-neon-synthwave`  
 **Production:** `https://legitloot.site/` — owner-approved early-access publish is live on `main@801f3e7`; all further production merge/deploy/configuration changes remain owner-gated.
@@ -17,7 +18,7 @@ Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2)
 ### 0.1 Legit Coins (LC)
 - **LC means Legit Coins.** "LootCoins", "game credits" and "LLC" are obsolete names for the same player reward unit and must not be used in new UI, code or docs.
 - LC are earned **only** through verified in-game milestones/achievements, weekly challenges, and seasonal events, validated server-side.
-- **No offerwall, survey, CPA, affiliate, ad or other provider callback may mint LC.** Provider integrations are kept separate from the LC award path unless the owner later explicitly authorizes otherwise.
+- **No offerwall, survey, CPA, affiliate, ad or other provider callback may mint LC.** Provider integrations are kept separate from the LC award path.
 - The **website LC wallet is the only authoritative balance.** Games must not mint LC or keep a spendable duplicate balance. A game may show a short notice such as "Milestone completed — check your LC wallet" and send a trusted completion event; the platform decides and posts the award.
 - LC are not cash, not withdrawable, not transferable, never eligible for cash/payout requests, and have no LC↔USD peg or cash-equivalent claim.
 - **Not yet approved (do not implement or infer):** challenge catalogue, award amounts, caps, expiry, event rules, anti-cheat evidence, appeals, reversals, and any spending/redemption use (including merchandise or events). The full LC economy is not authorized for expansion. The later owner decision in §0.4 authorizes the minimum launch challenge catalogue and verified award wiring using only existing approved LC values.
@@ -30,7 +31,7 @@ Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2)
 - §1 item 2 and all offerwall/survey/task/referral → LC reward rules in §2, §2A ("Reward destination rules"), §2B ("Offer-to-LC journey"), and §2D are **superseded** for LC. Providers may still be researched and integrated in a disabled state, but they produce no LC.
 - §2A "LootCoins: games only" spend rules are **superseded** by 0.1: spending uses are undecided.
 - §6 game list is **superseded** by 0.2.
-- Cash rewards remain deferred exactly as before (§2, §13).
+- The former no-cash rule (§2, §13) is replaced by §0.5's two-balance rule. Payouts, withdrawals and payout/identity-check providers stay off until Sam separately approves activation.
 
 ## 0.4 Later owner decisions — launch games and minimum challenges (2026-11-19 13:09 UTC)
 
@@ -61,27 +62,50 @@ This later owner decision supersedes earlier conflicting statements in §§0.1�
 - The LegitLoot website remains the only authoritative LC wallet and reward-history surface.
 - Game events may request an award; only the server verifies eligibility and records it.
 
+## 0.5 Owner decisions of 2026-11-21 — cash balance and account deletion
+
+Source: Sam's own GitHub issues in the private Complete Loop repository (`demonanic/complete-loop`): issue #2 (cash rule, 2026-11-21 02:05 ET) and issues #3/#4 (account deletion, identical answers, 2026-11-21 02:25 and 06:37 ET), plus Sam's chat statements to Claude on 2026-11-20. Recorded by Claude; each issue was opened by the owner account `demonanic`. The account-deletion and sign-up items are in force. The cash item is **in force** (2026-11-21): issue #2, Sam's 18:08 ET chat answer, and Sam's direct update to DaVinci's owner instruction (19:38 ET) agree. It replaces the no-cash statements in §0.3, §1, §2, §13 and Master Control §2; where those remain below they are labelled superseded. Everything not listed here is unchanged.
+
+### Cash balance — "two balances" (issue #2)
+
+> **In force (2026-11-21).** Confirmed by issue #2, Sam's "A" to Claude at 18:08 ET, and Sam's direct update to DaVinci's owner instruction. Payouts, withdrawals and payout/identity-check providers remain **off** until Sam separately approves activation.
+- Owner's chosen option, verbatim: **"Two balances: cash and coins (my Nov 20 plan)"** — *Agents keep a cash balance, fully separate from coins. Payouts stay switched off until business setup and payout tools are ready.*
+- LegitLoot acts as publisher for Hustle partners. Partners pay LegitLoot; verified completions are credited to the player's **cash balance** (USD ledger), never to LC.
+- Cash and LC must never mix: no conversion either way, no shared ledger, no LC purchase with cash (owner, 2026-11-20 chat: drop buying LC with cash and keep it simple). §0.1 LC rules are unchanged.
+- **Payouts stay off.** Intended future payout rule (owner, 2026-11-20 chat): 18+, identity check, minimum balance, no fraud, and manual owner approval of each request. Live payouts, payout providers, identity-check providers and activation remain **owner-gated**; business setup (LLC/EIN/tax) comes first.
+- Effect for agents: stop treating separate cash fields as a launch blocker to remove. Keep them separate, server-side and inactive; remove only wording that implies cash is withdrawable today.
+
+### Account deletion — D1 to D4 (issues #3/#4)
+- **D1:** 7-day waiting period; the player can cancel.
+- **D2:** anonymised records are kept while LegitLoot operates.
+- **D3:** emailed deletion requests are answered within 30 days.
+- **D4:** a deleted email may sign up again as a fresh account; nothing carries over.
+- These close the owner decisions in `docs/ACCOUNT_DELETION_DESIGN.md`. Build on staging only; the Privacy notice must describe these terms before public accounts open.
+
+### Production sign-up pause — implemented (for the record)
+- The owner switched off "Allow new users to sign up" in the production Supabase project on 2026-11-21 ~02:03 ET. Claude's live check at 07:03 UTC read `disable_signup: true` with email login still enabled. §13 E1 is implemented, not just approved.
+
 ## 1. Product definition
 
 LegitLoot is a combined independent games and rewards platform with four public-facing pillars:
 1. Original games: the owner-selected portal launch titles are **Zombies vs Heavy Metal** and **Rocket 2 Nowhere** (see §0.4); Zombie Invasion Defense is not a launch substitute.
 2. Approved third-party offerwalls and activities.
 3. Affiliate marketplace and promotional deals.
-4. A transparent player rewards experience centered on game-only LootCoins; any future cash product is separate, deferred, and requires its own approval.
+4. A transparent player rewards experience centered on game-only LootCoins; cash from verified Hustle completions is a separate USD ledger (§0.5); payouts stay off until separately approved.
 
 Homepage direction: **LegitLoot — an underground organization operating a chaotic digital arcade**. Follow [LEGITLOOT_CREATIVE_BIBLE.md](LEGITLOOT_CREATIVE_BIBLE.md) for the mature western comic visual direction, near-black/charcoal/blood-red/acid-green/bone/industrial-grey identity, character tone, and Skuz continuity. Skuz is the embodiment and spokesperson of LegitLoot; maintain his supplied reference, reference sheet, and expression library. The current owner explicitly authorizes this visual redesign and character-reference work, superseding older character-sheet restrictions. Keep the public interface welcoming, truthful, accessible, and respectful. Official game art remains authoritative; generated art must never masquerade as a game screenshot. Keep important text and UI controls as real HTML, not baked into images. Never use invented balances, streaks, leaderboards, task completion or payout claims to make the interface look populated; show real connected data or clearly label a preview/planned state. No business or financial rules are changed by the visual direction.
 
 ## 2. Hard business rules (must be enforced in code and UX)
 
-> **Superseded for LC by §0.1 (2026-11-19).** The cash-deferral, no-payout, ledger-integrity and reversal-by-compensating-entry rules below still apply. Every statement that providers/campaigns earn LC, or that LC is spendable only in games, is replaced by §0.1.
+> **Superseded for LC by §0.1 (2026-11-19).** The no-payout, ledger-integrity and reversal-by-compensating-entry rules below still apply. Cash rules follow §0.5 (two balances, 2026-11-21): only verified, approved Hustle completions may credit the separate USD cash ledger. Every statement that providers/campaigns earn LC, or that LC is spendable only in games, is replaced by §0.1.
 
-**Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. Cash rewards are deferred to a separately approved future phase. The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
+**Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. *(The 2026-11-10 cash deferral is superseded by §0.5, 2026-11-21: a separate USD cash ledger credited only by verified, approved Hustle completions is in force; payouts and withdrawals stay off.)* The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
 
 ### Current player reward account
 - The current player-facing reward account is LootCoins (LC) only.
 - LC is non-transferable, has no cash value, is not withdrawable, and is usable only for eligible in-game purchases and game-related perks.
-- There is no active player cash balance in the current phase.
-- Any future cash rewards must use a separately approved USD ledger and must never be combined with, funded by, or converted from LC.
+- ~~There is no active player cash balance in the current phase.~~ **Superseded (2026-11-21, §0.5):** two balances is in force — separate USD cash and LC ledgers; cash only from verified, approved Hustle completions; no conversion, shared ledger, LC purchase with cash, or partner-issued LC. Payouts, withdrawals and payout/identity-check providers stay off until Sam separately approves activation.
+- Player cash uses the separate USD ledger in force under §0.5 (credited only by verified, approved Hustle completions) and is never combined with, funded by, or converted from LC.
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
 ### Reward calculation — campaign-specific, LC only
@@ -93,7 +117,7 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 ### Current LC reversals and future cash reserves
 - LC reversals must use compensating ledger entries, preserve the original event, and follow the provider/campaign's verified reversal lifecycle.
 - Ordinary provider reversals do not automatically create player debt. Any recovery of already-spent LC requires a documented fraud exception, review, and approved policy.
-- Cash-liability reserves, reversal buffers for cash, and withdrawal funding controls apply only if a future cash product is separately approved. They are not current player-facing features.
+- Cash-liability tracking and reversal buffers apply to the separate USD cash ledger (§0.5, two balances). Withdrawal funding controls apply only once Sam separately approves payouts; payouts and withdrawals are not current player-facing features.
 - Unsettled provider receivables must never be treated as available player cash in any future cash phase.
 - A circuit breaker pauses new reward commitments when provider status is suspended, validation fails, or material reconciliation discrepancies occur.
 
@@ -106,7 +130,7 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 
 ## 2A. Owner-locked platform model decisions (2026-11-10)
 
-> **Partly superseded by §0 (2026-11-19).** "LootCoins: games only", the initial-games list, and "Reward destination rules" for offerwalls/surveys/tasks/referrals are replaced by §0.1–0.2. Cash-deferral rules here remain in force.
+> **Partly superseded by §0 (2026-11-19).** "LootCoins: games only", the initial-games list, and "Reward destination rules" for offerwalls/surveys/tasks/referrals are replaced by §0.1–0.2. Cash rules here follow §0.5 (two balances, 2026-11-21): only verified, approved Hustle completions credit the separate USD ledger; payouts and withdrawals stay off.
 
 These decisions are binding for product design and implementation and supersede any conflicting earlier proposal in this document.
 
@@ -117,11 +141,14 @@ These decisions are binding for product design and implementation and supersede 
 - Each catalog item must state whether it is game-specific or platform-wide. No cross-game entitlement is implied.
 - The approved initial games are Demonanic, Gauntlet's Survival, and Harvest//Zero.
 
-### Cash rewards: later phase
-- Cash rewards are not part of the initial player reward promise or current earning model.
-- Do not allocate any current offerwall, survey, task, referral, affiliate, mission, or advertising reward to a player cash balance.
-- Do not implement active player cash balances, cash withdrawals, payout requests, or cash reward commitments in the current phase.
-- Preserve architectural separation for a possible future cash product. It requires a separate owner-approved specification and approvals for provider terms, legal review, eligibility, tax treatment, identity verification, reserves, reconciliation, payout provider, support, and production release.
+### Cash balance: two ledgers (owner, 2026-11-21)
+
+> **Superseded (2026-11-21, §0.5):** two balances is in force — separate USD cash and LC ledgers; cash only from verified, approved Hustle completions; no conversion, shared ledger, LC purchase with cash, or partner-issued LC. Payouts, withdrawals and payout/identity-check providers stay off until Sam separately approves activation. The remaining payout, withdrawal and activation constraints below stay in force until the owner approves payout activation.
+
+- Players have a separate USD cash balance. Only **verified, approved Hustle completions** may credit it. No other earning channel (survey, task, referral, affiliate, mission or advertising reward outside an approved Hustle completion) may credit player cash.
+- Partner offers and callbacks never issue LC. Cash and LC never convert either way, never share a ledger, and LC can't be bought with cash.
+- Do not implement or activate cash withdrawals, payout requests, payout providers or identity-check services, and make no cash payout commitments, until Sam separately approves activation.
+- Keep the USD cash ledger architecturally separate from LC. Activating payouts or withdrawals requires a separate owner-approved specification and approvals for provider terms, legal review, eligibility, tax treatment, identity verification, reserves, reconciliation, payout provider, support, and production release.
 - The previously proposed $10 minimum withdrawal and PayPal/Venmo manual payout workflow are deferred, not current commitments.
 
 ### Earning channels: all supported categories
@@ -137,15 +164,15 @@ The long-term earning catalog must be designed to support:
 These are product categories, not claims that providers or offers are approved or live. Each provider, campaign, and channel stays disabled until its terms and technical integration are verified.
 
 ### Reward destination rules
-- Internal missions, achievements, events, and game activity may grant LC after server-side validation, published rules, and abuse controls.
-- Offerwalls, surveys, and tasks may grant LC only where the specific provider and advertiser permit incentivized traffic and the exact game-only reward model.
-- Affiliate commissions are initially business revenue, tracked separately. Do not promise or issue LC for an affiliate click, purchase, or referral unless the specific program expressly permits incentivized referrals and the owner approves a campaign rule.
-- Rewarded ads may grant only the non-cash in-game benefit permitted by the ad network. Never reward ad views/clicks with cash.
-- Referrals may grant LC only after a defined qualifying event, server-side verification, fraud checks, and partner permission.
+- LC comes from exactly three sources (§0.1): server-verified in-game milestones, weekly challenges and seasonal events, each with published rules and abuse controls. Nothing else credits LC.
+- Partner offers, surveys, tasks and callbacks (Hustle) never issue LC. Only verified, approved Hustle completions may credit the separate USD cash ledger (§0.5); payouts and withdrawals stay off until Sam separately approves.
+- Affiliate commissions are business revenue only, tracked separately. Affiliate clicks, purchases and referrals never credit player LC or player cash.
+- Rewarded ads give only a non-currency in-game benefit permitted by the ad network. They never credit LC or cash.
+- Referrals never credit player LC or player cash.
 - A browser redirect, client event, screenshot, or user assertion alone can never credit LC.
 
 ### Current financial model
-- Player reward liability is denominated only in LC.
+- Player reward liability is held in two separate ledgers (§0.5): LC (from server-verified in-game milestones, weekly challenges and seasonal events only) and USD cash (from verified, approved Hustle completions only). They never convert or share accounts.
 - Provider commissions, affiliate income, operating costs, receivables, and settlement amounts are business accounting data in their actual currencies, not player cash balances.
 - Reward amounts are campaign-specific, configurable, disclosed before participation, and disabled until provider terms and economics are verified.
 - The prior 50% cash / 50% game-credit split and 75%/25% provisional/deferred split are explicitly retired.
@@ -159,9 +186,9 @@ Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affili
 ### Signed-in player portal
 - Dashboard: account status, approved games, LC balance from the ledger, real recent activity, missions, and notices. Never seed fake activity.
 - Games: launch only verified destinations; show game-specific LC rules/catalogs where implemented.
-- Earn: browse eligible offers, read material terms before starting, track attribution/completion, and see verified LC reward states.
+- Earn: browse eligible offers, read material terms before starting, track attribution/completion, and see verified Hustle completion states. Hustle completions never issue LC; verified, approved completions may credit only the separate USD cash ledger (§0.5); payouts stay off until Sam separately approves.
 - Deals: curated affiliate offers with adjacent disclosures. This is not an LC redemption store.
-- Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. No cash balance or withdrawal action in the current phase.
+- Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. A separate USD cash balance (§0.5) with no withdrawal action until Sam approves payouts.
 - Account: profile, authentication/security, linked game identities, preferences, privacy controls, export/deletion request.
 - Support: account, attribution, missing reward, and safety/reporting paths.
 
@@ -178,7 +205,7 @@ Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affili
 10. Reconciliation compares provider events and settlement/reporting data; discrepancies enter an operations queue.
 
 ### Affiliate journey
-A disclosed deal click creates a privacy-conscious attribution record. A merchant/network conversion is tracked as business commission revenue. No player LC is issued unless the program permits incentivized referrals and an approved campaign rule defines the reward.
+A disclosed deal click creates a privacy-conscious attribution record. A merchant/network conversion is tracked as business commission revenue. Affiliate and referral activity never creates or credits player LC (§0.1); it is business revenue only.
 
 ### Internal mission journey
 Publish rules, eligibility, dates, limits, and LC reward first. Track progress from trusted game/platform events. Verify completion server-side, evaluate each unique completion once, and post LC with idempotency and audit history.
@@ -211,19 +238,19 @@ Every provider adapter must expose equivalent internal operations for capabiliti
 Track these states independently: configured, credentials present, sandbox/production, provider approval, incentive permission, event verification, reward-posting switch, and reconciliation health. Unknown states default to disabled. A successful callback is not business approval; account approval does not mean every campaign permits incentives.
 
 Channel-specific controls:
-- Offerwalls: written permission for incentivized traffic, game-only LC redemption, traffic sources, and campaign terms.
-- Surveys: disclose screening, qualification, completion rules, privacy, and disqualification/no-reward cases. Never imply every attempt earns LC.
+- Offerwalls (Hustle): written permission for incentivized traffic, traffic sources and campaign terms. Completions never issue LC; only verified, approved Hustle completions may credit the separate USD ledger (§0.5); payouts and withdrawals stay off.
+- Surveys (Hustle): disclose screening, qualification, completion rules, privacy, and disqualification/no-reward cases. Surveys never issue LC; never imply every attempt earns cash.
 - Tasks: classify task type, evidence, completion criteria, prohibited actions, and provider policy.
-- Affiliate deals: commissions are business revenue; no user reward unless the program expressly permits it.
+- Affiliate deals: commissions are business revenue only; no player LC or cash reward.
 - Rewarded ads: grant only permitted non-cash in-game benefits and follow current network rules.
 - Missions/events/achievements: trusted server events, published rules, windows, caps, and abuse checks.
-- Referrals: qualifying new-user event, anti-self-referral controls, delayed issuance where needed, and partner permission.
+- Referrals: no player LC or cash reward. Any referral tracking is for business attribution only, with anti-self-referral and privacy controls.
 
 ### CPAGrip initial adapter status
 - Publisher account exists; that does not establish approval for every campaign or for the current LC model.
 - Existing staging work includes an attribution token table, RPC, and an Edge Function named `cpagrip-attribution`.
 - End-to-end completion is not established. Callback receiver/authentication, final macro mapping, secret configuration, duplicate/replay tests, reversals, reconciliation, and a verified test conversion remain outstanding unless later repository inspection proves otherwise.
-- Verify current official CPAGrip documentation and account terms for incentivized traffic, domain, game-only LC redemption, macros, callback authentication, statuses, reversals, and settlement.
+- Verify current official CPAGrip documentation and account terms for incentivized traffic, domain, macros, callback authentication, statuses, reversals, and settlement. Provider completions never issue LC (§0.1).
 - CPAGrip remains disabled for live player rewards until those checks and tests pass.
 
 ## 3. System architecture — proposed, no vendor is presumed approved
@@ -240,7 +267,7 @@ Channel-specific controls:
 No existing Demonanic database, auth project, secrets, or provider accounts may be reused without explicit owner approval.
 
 ### Ledger
-Use an append-only, double-entry-capable transaction ledger. In the current phase, implement the player-facing LC ledger only. Business accounting records for provider and affiliate revenue are separate from player rewards. A player cash ledger is deferred until a separately approved future cash-rewards phase. No direct balance edits. Every financial event has:
+Use an append-only, double-entry-capable transaction ledger. Implement two separate player ledgers: the LC ledger, and a USD cash ledger credited only by verified, approved Hustle completions (§0.5). They never convert or share accounts. Business accounting records for provider and affiliate revenue are separate from player rewards. Payout, withdrawal and payout/identity-check flows stay off until Sam separately approves activation. No direct balance edits. Every financial event has:
 - immutable internal transaction ID;
 - provider + provider event ID;
 - idempotency key;
@@ -387,7 +414,7 @@ Requires explicit owner approval of the exact commit, production deployment, dom
 
 ## 13. Future withdrawal implementation constraints (deferred; 2026-11-08)
 
-**Status:** Retained as historical design guidance only. This entire withdrawal workflow is out of current scope under the owner-locked 2026-11-10 decision to defer cash rewards. Do not implement or expose it unless a separate future cash-rewards specification is approved.
+**Status:** Retained as historical design guidance only. This entire withdrawal workflow is out of current scope under the owner-locked 2026-11-10 decision to defer cash rewards. That decision is superseded by §0.5 for the cash balance only; withdrawals and payouts remain off until Sam separately approves activation, so this workflow stays historical.
 
 - Player payout destinations are limited initially to PayPal and Venmo, with manual review only.
 - Never persist plaintext recipient identifiers. Store authenticated-encryption ciphertext, a key-version identifier, and a deliberately masked hint only.
