@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 22:45 ET (03:45 UTC) (PR #31; Sync Watch #45 sync; two-balance cash rule in force, payouts off)
+**Last updated:** 2026-11-21 23:20 ET (04:20 UTC) (PR #31; Sync Watch #46 sync; two-balance cash rule in force, payouts off)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
 **Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 33 branches and 11 open PRs, verified 2026-11-21 21:50 ET (02:50 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `e25273d` (63 files / 98 commits, verified 2026-11-21 22:45 ET (03:45 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb`, `1cb9f43`, `eb8db19` and `da5be09` are historical).
@@ -2352,6 +2352,11 @@ These independent debriefs were posted as PR comments and had not yet been appen
 
 - **Sync Watch #41 owner-policy finding (closed 2026-11-21 19:38 ET — Sam updated DaVinci's instruction directly):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
 - Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
+
+## 2026-11-21 23:20 ET (04:20 UTC) — Sync Watch #46 corrections (Claude)
+
+- Spec §2A/§2D: LC sources narrowed to exactly the three owner-approved game sources; affiliate, referral and rewarded-ad rules made unconditional (no player LC or cash); surveys never issue LC. §0.1's provider rule no longer has an "unless the owner later authorizes" exception.
+- `tests/policy-docs.test.mjs`: no longer skips whole lines labelled superseded/historical (only struck-through text); catches "LC ... unless" and conditional player-reward exceptions; asserts the §2A and §2D channel rules. Documentation and docs test only.
 
 ## 2026-11-21 22:45 ET (03:45 UTC) — Sync Watch #45 corrections (Claude)
 

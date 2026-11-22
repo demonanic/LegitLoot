@@ -18,7 +18,7 @@ Source: owner decisions recorded in `docs/MASTER_EXECUTION_CONTROL.md` §13 (E2)
 ### 0.1 Legit Coins (LC)
 - **LC means Legit Coins.** "LootCoins", "game credits" and "LLC" are obsolete names for the same player reward unit and must not be used in new UI, code or docs.
 - LC are earned **only** through verified in-game milestones/achievements, weekly challenges, and seasonal events, validated server-side.
-- **No offerwall, survey, CPA, affiliate, ad or other provider callback may mint LC.** Provider integrations are kept separate from the LC award path unless the owner later explicitly authorizes otherwise.
+- **No offerwall, survey, CPA, affiliate, ad or other provider callback may mint LC.** Provider integrations are kept separate from the LC award path.
 - The **website LC wallet is the only authoritative balance.** Games must not mint LC or keep a spendable duplicate balance. A game may show a short notice such as "Milestone completed — check your LC wallet" and send a trusted completion event; the platform decides and posts the award.
 - LC are not cash, not withdrawable, not transferable, never eligible for cash/payout requests, and have no LC↔USD peg or cash-equivalent claim.
 - **Not yet approved (do not implement or infer):** challenge catalogue, award amounts, caps, expiry, event rules, anti-cheat evidence, appeals, reversals, and any spending/redemption use (including merchandise or events). The full LC economy is not authorized for expansion. The later owner decision in §0.4 authorizes the minimum launch challenge catalogue and verified award wiring using only existing approved LC values.
@@ -164,11 +164,11 @@ The long-term earning catalog must be designed to support:
 These are product categories, not claims that providers or offers are approved or live. Each provider, campaign, and channel stays disabled until its terms and technical integration are verified.
 
 ### Reward destination rules
-- Internal missions, achievements, events, and game activity may grant LC after server-side validation, published rules, and abuse controls. *(Current rule, §0.1: LC comes only from verified game milestones, weekly challenges and seasonal events.)*
-- ~~Offerwalls, surveys, and tasks may grant LC only where~~ **Superseded by §0.1/§0.5:** partner offers, surveys, tasks and callbacks never issue LC; only verified, approved Hustle completions may credit the separate USD ledger. Historical text: offerwalls, surveys, and tasks may grant LC only where the specific provider and advertiser permit incentivized traffic and the exact game-only reward model.
-- Affiliate commissions are initially business revenue, tracked separately. Do not promise or issue LC for an affiliate click, purchase, or referral unless the specific program expressly permits incentivized referrals and the owner approves a campaign rule.
-- Rewarded ads may grant only the non-cash in-game benefit permitted by the ad network. Never reward ad views/clicks with cash.
-- ~~Referrals may grant LC only after a defined qualifying event, server-side verification, fraud checks, and partner permission.~~ **Superseded by §0.1:** referrals do not grant LC.
+- LC comes from exactly three sources (§0.1): server-verified in-game milestones, weekly challenges and seasonal events, each with published rules and abuse controls. Nothing else credits LC.
+- Partner offers, surveys, tasks and callbacks (Hustle) never issue LC. Only verified, approved Hustle completions may credit the separate USD cash ledger (§0.5); payouts and withdrawals stay off until Sam separately approves.
+- Affiliate commissions are business revenue only, tracked separately. Affiliate clicks, purchases and referrals never credit player LC or player cash.
+- Rewarded ads give only a non-currency in-game benefit permitted by the ad network. They never credit LC or cash.
+- Referrals never credit player LC or player cash.
 - A browser redirect, client event, screenshot, or user assertion alone can never credit LC.
 
 ### Current financial model
@@ -239,12 +239,12 @@ Track these states independently: configured, credentials present, sandbox/produ
 
 Channel-specific controls:
 - Offerwalls (Hustle): written permission for incentivized traffic, traffic sources and campaign terms. Completions never issue LC; only verified, approved Hustle completions may credit the separate USD ledger (§0.5); payouts and withdrawals stay off.
-- Surveys: disclose screening, qualification, completion rules, privacy, and disqualification/no-reward cases. Never imply every attempt earns LC.
+- Surveys (Hustle): disclose screening, qualification, completion rules, privacy, and disqualification/no-reward cases. Surveys never issue LC; never imply every attempt earns cash.
 - Tasks: classify task type, evidence, completion criteria, prohibited actions, and provider policy.
-- Affiliate deals: commissions are business revenue; no user reward unless the program expressly permits it.
+- Affiliate deals: commissions are business revenue only; no player LC or cash reward.
 - Rewarded ads: grant only permitted non-cash in-game benefits and follow current network rules.
 - Missions/events/achievements: trusted server events, published rules, windows, caps, and abuse checks.
-- Referrals: qualifying new-user event, anti-self-referral controls, delayed issuance where needed, and partner permission.
+- Referrals: no player LC or cash reward. Any referral tracking is for business attribution only, with anti-self-referral and privacy controls.
 
 ### CPAGrip initial adapter status
 - Publisher account exists; that does not establish approval for every campaign or for the current LC model.
