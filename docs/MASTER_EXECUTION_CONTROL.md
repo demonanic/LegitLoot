@@ -2342,3 +2342,9 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Separate USD cash and LC ledgers; cash credited only for verified, approved Hustle completions; no conversion or shared ledger; LC can't be bought with cash; partner offers and callbacks never issue LC. LC rules are unchanged.
 - Payouts, withdrawals and payout/identity-check services stay **off** until Sam separately approves activation.
 - Documentation only; no code, database, provider, payment, payout, identity-check, merge or deployment action. PR #31 carries the matching changes to the other governing documents.
+
+## 2026-11-21 — Taplayad legacy page now retrievable (Sync Watch #44; Claude fetched independently)
+
+- **Supersedes the 2026-11-21 "indexed-unverified" label above.** `https://old.tplayad.com/doc/postback` now loads (Claude fetched it; DaVinci reported the same in Sync Watch #44). It documents `md5(subId . transId . reward . secret)`, a unique `transId`, parameters `subId, transId, reward, payout, signature, status, userIp, campaign_id, country, uuid`, `OK`/`DUP` responses, a 60-second timeout and up to 5 resends. The page does not state that `transId` is identical across retries (deduplication guidance implies it). `www.tplayad.com/doc/postback` still returned 404 earlier; availability has varied between checks, so re-verify before relying on it.
+- The current system (`tplayad.com/docs`) and the old system remain materially different contracts; nothing establishes which generation App 10066 uses, and the owner template is not the generic new-system iframe path. Do not combine them. Terms (2026-10-29) still do not expressly grant incentivized-traffic permission. Taplayad stays `pending_approval`, `launch: null`, owner template exact, nothing maps to LC. Written App-10066-specific confirmation remains required.
+- Documentation only; no provider setting, callback, deploy or Supabase change.
