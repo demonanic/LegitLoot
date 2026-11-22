@@ -96,7 +96,7 @@
     }
     if (info.status === "blocked") {
       const why = BLOCKED_TEXT[info.blockedReason] || "it needs a manual check";
-      return "Your deletion is on hold because " + why + ". Nothing has been deleted. Contact support, or cancel the request.";
+      return "Your deletion is on hold because " + why + ". Nothing has been deleted. You can cancel the request below.";
     }
     return "Your personal data has been cleared. The final step, removing your sign-in, is still running. No further action is needed.";
   };
