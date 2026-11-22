@@ -1,1 +1,3 @@
 node_modules/
+# Local TapResearch smoke-test credentials (never commit)
+.env.tapresearch

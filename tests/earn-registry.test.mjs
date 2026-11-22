@@ -30,11 +30,17 @@ test("no provider is open to players in this release", () => {
   assert.equal(providers.filter((p) => p.state === "active").length, 0);
 });
 
-test("Offerwall.GG is pending approval; CPAGrip is testing with no launch endpoint", () => {
-  assert.equal(byId["offerwall-gg"].state, "pending_approval");
-  assert.equal(byId.cpagrip.state, "testing");
-  assert.equal(byId.cpagrip.kind, "provider");
-  assert.equal(byId.cpagrip.launch, null);
+test("Taplayad is the initial Hustle provider: pending, no launch, recorded template only", () => {
+  const live = providers.filter((p) => p.kind === "provider");
+  // TapResearch (owner request 2026-11-22) is listed in "testing" with no launch block.
+  assert.deepEqual([...live.map((p) => p.id)], ["taplayad", "tapresearch"]);
+  assert.equal(byId.tapresearch.state, "testing");
+  assert.equal(byId.tapresearch.launch, null);
+  const t = byId.taplayad;
+  assert.equal(t.state, "pending_approval");
+  assert.equal(t.launch, null);
+  assert.equal(t.recordedTemplate, "https://offerwall.tplayad.com/10066/{user_id}");
+  assert.ok(!byId["offerwall-gg"] && !byId.cpagrip, "Offerwall.GG and CPAGrip are not initial Hustle providers");
 });
 
 test("launch blocks only allow https origins and name a server function", () => {

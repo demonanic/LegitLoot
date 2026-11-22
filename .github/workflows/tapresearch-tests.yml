@@ -1,0 +1,32 @@
+name: TapResearch Deno tests
+
+on:
+  pull_request:
+    paths:
+      - "supabase/functions/tapresearch-*/**"
+      - ".github/workflows/tapresearch-tests.yml"
+      - "deno.lock"
+  push:
+    branches:
+      - "build/legitloot-neon-synthwave"
+    paths:
+      - "supabase/functions/tapresearch-*/**"
+      - ".github/workflows/tapresearch-tests.yml"
+      - "deno.lock"
+
+permissions:
+  contents: read
+
+jobs:
+  deno-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.9.8
+      # node:crypto (HMAC-MD5) needs @types/node; auto node_modules lets Deno fetch it.
+      - name: Type-check entrypoints
+        run: deno check --frozen --node-modules-dir=auto supabase/functions/tapresearch-eligibility/index.ts supabase/functions/tapresearch-postback/index.ts
+      - name: Test handlers
+        run: deno test --frozen --node-modules-dir=auto --allow-env supabase/functions/tapresearch-eligibility/index_test.ts supabase/functions/tapresearch-postback/index_test.ts

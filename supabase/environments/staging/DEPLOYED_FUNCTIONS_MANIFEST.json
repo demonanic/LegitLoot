@@ -18,7 +18,9 @@
         {
           "name": "index.ts"
         }
-      ]
+      ],
+      "retired": true,
+      "do_not_deploy_snapshot": true
     },
     {
       "id": "b3d91b6b-0c8a-419b-b382-3676b5cdf3df",
@@ -93,7 +95,10 @@
         {
           "name": "index.ts"
         }
-      ]
+      ],
+      "retired": true,
+      "do_not_deploy_snapshot": true
     }
-  ]
+  ],
+  "retirement_note": "Offerwall.GG functions are retired (owner decision 2026-11-20). Entries flagged retired/do_not_deploy_snapshot are historical records of what was deployed, not deployment sources; the only deployable source is the inert tombstone under supabase/functions/. Live deployment state must be re-verified separately."
 }

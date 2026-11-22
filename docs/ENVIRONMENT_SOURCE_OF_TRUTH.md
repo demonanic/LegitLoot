@@ -1,6 +1,6 @@
 # LegitLoot — Environment Source of Truth
 
-**Last verified:** 2026-11-20 12:51 ET
+**Last verified:** 2026-11-20 18:36 ET by DaVinci (read-only GitHub and Supabase review; no preview result yet for the newest candidate SHA). Record edited 2026-11-20 18:36 ET.
 **Purpose:** Single canonical map for GitHub, Supabase, and deployment environments. Update this file whenever a project, branch binding, deployment target, or backend function changes.
 
 ## 1. Canonical environment map
@@ -975,6 +975,19 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - The documentation-only update sequence passed GitHub Actions through run [44729867195](https://github.com/demonanic/LegitLoot/actions/runs/44729867195), including npm tests and whitespace checks; no application code changed. PR #26's branch previews are not production deployments.
 - No PR was merged, no production/staging deploy was initiated, and no Supabase setting/secret/grant/schema/data change, callback, publisher setting, provider agreement, payment, reward issuance or money movement occurred.
 
+## 2026-11-20 10:30 ET — Production main 801f3e7 and main-based preview isolation
+
+- Production `main` is `801f3e7ba5564c759228f02b8118765eaa7e0687` (PR #23, Rocket 2 Nowhere; owner-approved). Cloudflare `legitloot` production deployment is commit `801f3e7`, environment `production`, alias https://legitloot.site (evidence: PR #22 comment 7041993494). Earlier `bcc19d6` entries above are historical.
+- Live fetches after the merge returned HTTP 200 for `/rocket-2-nowhere`, `/games/rocket-2-nowhere/index.html` and `/games` with the title present and no prototype names.
+- **Preview isolation (ENV-07, open):** Cloudflare `legitloot-preview` has an `environment=preview` deployment from branch `main`, commit `801f3e7`, alias `https://main.legitloot-preview.pages.dev`, no environment variables. Main `account-auth.js` hardcodes `https://gkbqderyjcuxnjbsiffb.supabase.co` (line 2) and exposes `client.auth.signUp()` (lines 111-116), so the Account/sign-up/reset routes on that preview can contact production Supabase. Do not use Account/auth routes there. The integration branch's `account-auth.js` requires the exact staging configuration and fails closed. A separate owner-approved PR against main is required. No Cloudflare or Supabase setting was changed.
+
+## 2026-11-20 11:14 ET — Recheck of production deployment and preview isolation (10:30 ET entry above preserved)
+
+- Current Cloudflare production deployment is `fe4c0f22` on `main` @ `801f3e7`, alias https://legitloot.site. `75207a07` was the earlier `bcc19d6` deployment.
+- ENV-07 reverified open: Cloudflare `legitloot-preview` deployment `fdf6b609` is an `environment=preview` deployment from `main` @ `801f3e7`, alias `main.legitloot-preview.pages.dev`, with no environment variables. Main `account-auth.js` hardcodes production Supabase and exposes signup. Keep Account/auth routes off that preview. No setting was changed.
+- Branch refs: 28 enumerated at 11:14 ET; the last protection check covered 26 refs at 05:13 ET (all `protected:false`); the two newer refs are unchecked.
+- Source: DaVinci review of PR #27 (comment 7044587804). Recorded by Claude; not independently re-queried by Claude.
+
 ## 2026-11-20 11:28 ET — Offerwall.GG retirement decision and environment boundary
 
 - Owner decision: permanently retire Offerwall.GG; no repair, fallback, or reactivation. See docs/security/OFFERWALL_GG_RETIREMENT.md for acceptance criteria.
@@ -1001,3 +1014,177 @@ Main-based Cloudflare previews inherit production-targeting `account-auth.js`. P
 - Production main is `801f3e7`; integration branch is `a4d1b538`. PR #27 head `a6a01e9` is 10 commits ahead / 5 behind integration and GitHub reports it dirty/unmergeable. Its exact-head Actions run `44772928022` succeeded.
 - No Supabase settings, secrets, grants, schema or data were changed; this section records read-only evidence only.
 - The documentation-only integration commit `ac224c9` automatically triggered Cloudflare Pages builds in both projects. Both deployments were classified `environment=preview` on `build/legitloot-neon-synthwave`; the `legitloot` project build and `legitloot-preview` deployment were still active at last read. Production remained `main` @ `801f3e7` / deployment `fe4c0f22`. Integration pushes can trigger preview builds automatically; verify branch and environment before treating any Pages deployment as production.
+
+## 2026-11-20 14:45 ET — Claude record refresh (amended 15:20 ET per Sync Watch #13; history — superseded by the 16:28 ET entries) (PR #28/#29 evidence; Sync Watch #12 facts)
+
+- **Repository:** production `main` `801f3e7` (owner-approved PR #23 publish); integration `1466eb6` at this sync (authorized baseline `a529b35` plus documentation-only commits; PR #29 is accepted at `0014d3a` for source-only review at 14:43 ET, review 5998408454). 30 refs all `protected:false`; rulesets empty. Do not describe `main` as protected.
+- **Open PRs:** #9 stale draft; #20 (head `6e2e51b`, 58/58) with #22 (`332ca07`, 64/64) and #26 (`778081a`, 59/59) stacked on it; #25 superseded draft (demonanic); #27 this documentation sync; #28 ENV-07 guard (draft to `main`); #29 Offerwall.GG retirement (integration). #20 must not be released alone: the combined release needs the LC-only UI plus the Taplayad-only pending registry from a reviewed exact head.
+- **PR #28 (`93f62ac`):** Actions run 44791797759 passed; accepted by DaVinci for **owner review only**. The existing `main.legitloot-preview.pages.dev` deployment still runs the unguarded production-Supabase auth until the owner approves a production merge/deploy. Client-side defense-in-depth only.
+- **PR #29 (source only; DaVinci ACCEPTED source-only at `0014d3a` in review 5998408454, then raised a test-evidence-wording CHANGES REQUIRED follow-up, comment 7049589082 — acceptance is therefore qualified):** previous head `cb1f999` got CHANGES REQUIRED solely because the proposed staging SQL rollback reactivated record-only callback RPCs, re-granted `service_role` and restored stale provider metadata. Fixed at `0014d3a`: the SQL header is now a **forward-only, fail-closed recovery plan**; test added (Actions 44802436878 / 44802436895 success). Follow-up fixed at `230b7bf` (tests only): the staging routine snapshot is labelled **historical pre-record-only evidence**, not current deployment state, with a guard test (Actions Node/whitespace 44809587659, Deno 44809587433 success). Re-review of `230b7bf` requested. Nothing deployed or applied; SQL stays unapplied until the exact staging ref and recovery plan are independently checked.
+- **Offerwall.GG dashboard evidence:** owner-provided screen recording (PR #29 comment 7047980474): five visible placements with postback fields cleared, including a successful save on the remaining Pending placement. **Not an independent readback**; placement disable/delete remains PARTIAL/UNVERIFIED.
+- **Production blockers unchanged:** Earn label, CPAGrip `testing` with provider-set LootCoin copy, no Taplayad entry; cash/withdrawal fields in account/rewards and `get_wallet_summary()`/wallet-summary cash contracts (WALLET-01); incomplete Terms/Privacy; unverified signup pause; Taplayad written confirmation and incentivized-traffic permission missing (keep record-only; never map points/reward/payout to LC).
+- **M2-T4:** IN PROGRESS. Both games are early access with device-local saves and no account/LC link. M2-T4b-R1 is accepted as design only; no code, registry row or endpoint exists.
+- **Owner gates (unchanged):** production merge/deploy (including PR #28), production config/data, staging deploy/SQL application for retirement, provider agreements/activation, paid commitments, live money/reward movement, signup/legal decisions, branch protection.
+- No merge, deploy, SQL application, callback, provider setting, secret change or money movement occurred.
+- **Verification vs edit time:** this refresh edited records only. Live Supabase/Cloudflare state was **not** re-verified; inventory entries above are carried forward from the last independent verification (Sync Watch 2026-11-20 12:51 ET; Sync Watch #12 14:23 ET for repo/PR state).
+- **Taplayad App 10066 (Sync Watch #13 / DaVinci, 15:07 ET):** current official docs (tplayad.com/docs) define `md5(app_id . user_id . api_secret)`, status 1 credited / 2 reversed, any-2xx acknowledgement and `offer_id + user_id` deduplication, but no immutable transaction ID or retry schedule; the signature does not bind offer, reward, payout or status. The sample URL uses `offer={offer_id}` while its PHP example reads `$_GET['offer_id']`. The indexed legacy page (`www.tplayad.com/doc/postback`, conflicting `md5(subId . transId . reward . secret)`, OK/DUP, retries) returns 404 when opened directly: treat it as **unverified, not a second protocol**. Terms (updated 2026-10-29) require 18+ and prohibit fraud but do not expressly permit LegitLoot's incentivized-traffic model or an App-10066 placement. Required: written support confirmation of exact parameter names, full signature byte sequence, immutable transaction identity, retry/ack/duplicate behavior, reversal linkage and explicit permission. Until then Taplayad stays `pending_approval`, `launch: null`, owner template record-only; never map points/reward/payout to LC.
+- **Cloudflare read-only check (DaVinci, 15:07 ET; carried into this record, not re-run by Claude):** PR #27 (`418b0d8`) and PR #29 (`0014d3a`) previews succeeded in both Pages projects as `environment=preview` with pages.dev aliases; production deployment `fe4c0f22` is `main@801f3e7` at `legitloot.site`. **ENV-07 remains critical:** main-based preview `fdf6b609` is `environment=preview`, branch `main@801f3e7`, alias `main.legitloot-preview.pages.dev`; main `account-auth.js` line 2 hardcodes production Supabase, line 4 creates the client, line 114 exposes `auth.signUp()`. PR #28's guard is draft/unmerged; keep Account/auth routes off that preview. Supabase was not queried; the 12:51 ET last-verified time is carried forward.
+
+## 2026-11-20 16:28 ET — Fresh read-only evidence from DaVinci (16:17 ET); recorded by Claude, not re-run
+
+- **Supabase (read-only, DaVinci):** both projects ACTIVE_HEALTHY. Production Edge Functions: postback v4 / wall-url v2 tombstones and wallet-summary v4. Staging: postback v8 and wall-url v5 ACTIVE plus CPAGrip v5. Staging callback routines remain record-only with `service_role` EXECUTE; the staging Offerwall.GG provider row is disabled but retains stale LC reward metadata. Production's private callback routine still contains the historical LC journal-posting body, although EXECUTE is false for anon/authenticated/service_role; its provider row also retains stale LC metadata. Production and staging `get_wallet_summary()` still return cash/USD buckets (staging labels game credits LLC). Staging `game_registry` has only the unlisted `zid` placeholder; `game_events`, `game_saves`, `game_handoff_tickets` are empty. No SQL, data, settings, grants or functions were changed.
+- **Cloudflare (read-only, DaVinci):** production `legitloot` remains `main@801f3e7`, deployment `fe4c0f22`, alias `legitloot.site`. PR #27 `a6ef02d` and PR #29 `230b7bf` built successfully in both Pages projects as `environment=preview`, pages.dev aliases, no deployment env vars. The main-based preview `fdf6b609` (`main@801f3e7`, `main.legitloot-preview.pages.dev`, no env vars) still runs `account-auth.js` with the hardcoded production Supabase project and `auth.signUp()`. **ENV-07 remains critical;** keep Account/auth off that preview; PR #28 is draft and owner-gated.
+- **Taplayad (DaVinci, re-checked today):** unchanged: `md5(app_id . user_id . api_secret)`, statuses 1/2, any-2xx ack, suggested `offer_id + user_id` dedupe; signature does not bind offer/reward/payout/status; no immutable transaction ID or retry schedule; `offer={offer_id}` vs PHP `offer_id`; Terms (2026-10-29) grant no express incentivized-traffic permission. App 10066 stays `pending_approval`, owner template record-only; never map points/reward/payout to LC.
+- **Last-verified bookkeeping:** this entry records DaVinci's 16:17 ET read-only observations; Claude did not query Supabase or Cloudflare. Earlier inventory in this file is carried forward from the last independent verification unless superseded here.
+- No merge, deploy, SQL application, callback, provider setting, secret change or money movement occurred.
+
+## 2026-11-20 16:28 ET — Claude record sync to DaVinci's 16:17–16:26 ET findings (PR #27 review)
+
+- **PR #29 exact heads:** `0014d3a` source-only acceptance (qualified) -> `230b7bf` incomplete test wording -> `24950f3` historical-only test correction **accepted by DaVinci** (Node 44819720446, Deno 44819720582) -> `dad8fd7` fixes the last finding, the proposed SQL label "reversible" -> "non-destructive, no data deleted; forward-only", with a regression assertion (Node 44820230399, Deno 44820229990 pass). Re-review of `dad8fd7` requested. SQL unapplied; functions undeployed.
+- **Branch previews are staging-bound (DaVinci source inspection, 16:17 ET):** the PR #27 and PR #29 branches' `supabase-config.js` selects the staging project and `account-auth.js` fails closed unless the environment is `staging` and the URL matches that exact staging project before `createClient`. These previews are therefore not production-bound. This does **not** apply to the main-based preview `fdf6b609` (`main@801f3e7`, `main.legitloot-preview.pages.dev`): main `account-auth.js` still hardcodes the production Supabase project and exposes `auth.signUp()`. **ENV-07 remains critical**; keep Account/auth off that preview; PR #28 is draft and owner-gated.
+- **Next:** after #29 and #27 re-review, review #20 + #22 + #26 as one release unit (do not release #20 alone). No merge, deploy, SQL application, provider activation or financial action occurred.
+
+## 2026-11-20 17:30 ET — DaVinci read-only verification (Sync Watch #15)
+
+### GitHub
+- Production `main@801f3e7`; integration `build/legitloot-neon-synthwave@1466eb6`. GitHub lists 30 refs and every ref has `protected:false`; repository rulesets are empty.
+- Open PR heads: #20 `6e2e51b`; #22 `332ca07`; #26 `30f5dbf`; #27 `ba8160d` at the previous documentation check; #28 `93f62ac`; #29 `cfe9f0a` (plus stale draft #9 and superseded draft #25).
+- PR #20 is 15 ahead/119 behind integration; #22 and #26 are 17 ahead/119 behind. PR #29 is 6 ahead/1 behind. PR #27 is based on current integration.
+- PR #29's `earn-providers.js`, `tests/earn-registry.test.mjs` and `tests/earn-hub.browser.py` blob SHAs are identical to PR #26. Avoid duplicate integration.
+- Actions: #20 `44661202504` success; #22 `44661225287` success; #26 `44729695582` success; #27 prior head `b33745a` `44820503105` success and docs head `ba8160d` `44831088272` success; #28 `44791797759` success; #29 exact current head `cfe9f0a` Node `44831268131` and Deno `44831268125` success. Browser test `tests/earn-hub.browser.py` remains unrun.
+
+### Supabase
+- Production project `gkbqderyjcuxnjbsiffb`: ACTIVE_HEALTHY. Functions: Offerwall.GG wall-url v2 and postback v4 (ACTIVE, deployed handlers return HTTP 410), wallet-summary v4 (ACTIVE).
+- Staging project `scmnxcsggquwtuyyjnnj`: ACTIVE_HEALTHY. Functions: Offerwall.GG wall-url v5 and postback v8 (ACTIVE), CPAGrip attribution v5, provision-initial-owner v7, admin-dashboard v7 and payout-simulator v6.
+- Production `private.process_offerwall_gg_postback` still contains a journal-posting LC path, but its ACL is `postgres=X/postgres`; the public wrapper is also postgres-only. This is not callable by application roles in the current ACL, but the historical code remains a production cleanup risk.
+- Staging callback routines contain no journal/ledger path and remain record-only; `service_role` can execute the callback routines. Offerwall.GG callback-event and conversion tables each have zero rows in both environments.
+- Production and staging `public.get_wallet_summary()` both contain cash USD fields. Production ACL includes `authenticated` and `service_role`; staging ACL includes `authenticated` and `service_role`. Production account/rewards source still renders cash/withdrawal values.
+- Both environments have disabled Offerwall.GG provider rows with stale LC reward-model metadata; Taplayad is absent from both provider tables.
+
+### Game platform
+- Staging `public.game_registry` contains only the `zid` development placeholder with `is_listed=false` and `launch_url=null`.
+- Staging `private.game_events`, `private.game_saves` and `private.game_handoff_tickets` each have zero rows.
+
+### Cloudflare Pages
+- Project `legitloot`: production branch `main`; only active custom domain is `legitloot.site`. Production deployment `fe4c0f22` is successful on `main@801f3e7`.
+- Project `legitloot-preview`: no custom domains; production branch is `design/industrial-cyberpunk-rebuild`.
+- Main-based preview `fdf6b609-72ca-4550-be8d-7ede1ba80bd4` is still `environment=preview`, branch `main@801f3e7`, alias `https://main.legitloot-preview.pages.dev`. Main `account-auth.js` hardcodes production Supabase; do not use Account/auth there.
+- PR #27 `b33745a` and PR #29 `dad8fd7` each built successfully as `environment=preview` in both Pages projects. Source inspection of PR #20/#22/#26/#27/#29 `supabase-config.js` confirms staging URL and environment label; their account scripts fail closed unless the exact staging config matches. PR #28 uses the production URL but blocks non-`legitloot.site` hosts before client creation.
+
+### Provider documentation
+- Current-system docs: `https://tplayad.com/docs` — `md5(app_id . user_id . api_secret)`, status 1/2, any 2xx acknowledgement, suggested `offer_id + user_id` deduplication, no immutable transaction ID/retry schedule, signature excludes offer/reward/payout/status, sample `offer=` vs PHP `offer_id`.
+- Old-system docs: `https://old.tplayad.com/doc/postback` — distinct `md5(subId . transId . reward . secret)`, unique `transId`, `OK`/`DUP`, 60-second timeout and up to five retries. Do not combine the protocols or assume either applies to App 10066.
+- The owner template `https://offerwall.tplayad.com/10066/{user_id}` remains descriptive only. Written App-10066-specific platform-generation, wall URL, signature, transaction/reversal/retry and incentivized-traffic confirmation is outstanding.
+
+No settings, secrets, functions, grants, schema, data, callbacks, provider settings or financial records were changed.
+
+## 2026-11-20 17:44 ET — PR #29 source-only follow-up
+
+- Exact head `cfe9f0a` changes only the proposed SQL header, retirement-contract wording and static regression test. It now explicitly states the postgres function-owner exception. Node/whitespace `44831268131` and Deno `44831268125` pass.
+- DaVinci accepted this exact head for source-only owner review. The browser test remains unrun; SQL remains unapplied and functions undeployed.
+- Owner-provided Offerwall.GG recording shows all five visible placements with postback fields cleared and a successful save on the Pending placement; it is not independent dashboard readback. Placement disable/delete remains PARTIAL/UNVERIFIED.
+- No live environment state changed during this follow-up.
+
+## 2026-11-20 — Internal staging tools: access boundary is data/action-level, not URL-level (PR #30 review)
+
+Master Control M2-T1 rule 4 ("keep branch-only admin, payout simulator … verify they remain inaccessible to anonymous/public users and are not wired into production") is satisfied at the **data and action level only**; it is **not** URL-level inaccessibility.
+
+- `/admin.html` and `/payout-simulator.html` are static Cloudflare Pages routes, so their HTML shells are publicly fetchable on any deployment that contains them. They are not linked from any other page or `sitemap.xml`, and carry no `noindex` meta.
+- `admin.js` and `payout-simulator.js` fail closed unless the environment label is `staging`, the URL is the exact staging project and a publishable key is present (ENV-06, `tests/internal-pages-staging-guard.test.mjs`). The Edge Functions require an authenticated caller and the staging RPCs enforce owner/admin roles. No production payout-simulator function exists and nothing calls PayPal/Venmo or moves real funds.
+- A URL-level gate (for example Cloudflare Access or a `_headers`/Functions guard) or a `noindex` tag would be a separate, owner-approved security-configuration change. None is made or proposed as done here.
+
+## 2026-11-20 17:50 ET — PR #30 and staging-tool recheck
+
+### GitHub and Cloudflare
+- GitHub lists 31 refs; every ref reports `protected:false`; repository rulesets are empty.
+- PR #30 `272a1c1` is based on current integration `1466eb6`, 30 commits ahead/0 behind, 43 changed files. Node/whitespace `44831521863` and Deno `44831521848` pass.
+- Cloudflare candidate previews `a2c66c56` (`legitloot`) and `4e14c250` (`legitloot-preview`) both succeeded as `environment=preview` on exact SHA `272a1c1`.
+- Candidate `supabase-config.js` and `account-auth.js` select the exact staging project. `admin.js` and `payout-simulator.js` also fail closed unless the exact staging URL/environment is present.
+
+### Staging simulator
+- Staging payout-simulator Edge Function exists only in staging; production has no matching function.
+- Its RPCs are SECURITY DEFINER but ACL-restricted to postgres/service_role and enforce owner/admin role checks. The Edge Function makes no PayPal/Venmo API call.
+- Staging simulator tables currently contain 2 wallet rows, 2 withdrawal rows and 6 event rows. These are simulator records, not real payments; no rows were changed.
+
+### Candidate and provider
+- The owner-confirmed ZVHM source is `demonanic/Legitloot-2`; candidate wrapper/test match. Candidate README/Platform Build Spec/PR description remain stale.
+- Candidate `index.html` retains an unexplained `offerwall-verification` meta token; confirm origin and remove if Offerwall.GG, or document another owner-approved purpose.
+- Taplayad remains pending with `launch: null`; no provider-to-LC issuance path is enabled.
+
+No environment setting, secret, function, grant, schema, data, callback, provider setting or financial record was changed.
+
+
+## 2026-11-20 17:58 ET — Sync Watch #16 environment recheck
+
+### Cloudflare Pages
+- Production project `legitloot`: deployment `fe4c0f22`, branch `main`, commit `801f3e7`, successful; alias `https://legitloot.site` remains production.
+- PR #30 candidate `b85aa8b`: deployments in both `legitloot` and `legitloot-preview` succeeded as `environment=preview`, with pages.dev-only preview aliases. Candidate `supabase-config.js` and `account-auth.js` select the exact staging project; no production target was observed in those candidate files.
+- Main-based preview `fdf6b609` in `legitloot-preview` remains a preview deployment of branch `main` / commit `801f3e7`. The main bundle's `account-auth.js` hardcodes production Supabase and calls `auth.signUp()`; do not use Account/auth routes on that preview. PR #28 remains draft/owner-gated.
+
+### Supabase — production `gkbqderyjcuxnjbsiffb`
+- Project remains ACTIVE_HEALTHY. `offerwall-gg-postback` v4 and `offerwall-gg-wall-url` v2 are deployed but their canonical handlers are HTTP 410 tombstones. `wallet-summary` v4 still returns cash/USD buckets plus `gameCredits/LLC`.
+- Read-only catalog inspection confirms `private.process_offerwall_gg_postback` still contains the historical LC journal-posting body. Current EXECUTE checks: `anon=false`, `authenticated=false`, `service_role=false`, `postgres=true`. This is not currently callable by application roles, but it remains dormant production LC-issuance code and requires owner-gated cleanup/containment planning.
+- Production `public.get_wallet_summary()` still returns cash USD fields; authenticated users have EXECUTE. No auth setting or secret was read or changed in this pass; the owner-approved signup-pause state remains unverified.
+
+### Supabase — staging `scmnxcsggquwtuyyjnnj`
+- Project remains ACTIVE_HEALTHY. `offerwall-gg-wall-url` v5 remains ACTIVE/JWT and its CORS configuration includes `https://legitloot.site`; `offerwall-gg-postback` v8 remains ACTIVE/no-JWT but its handler routes to a record-only database routine. The staging postback routine remains service_role-executable; its current body has no journal/ledger path. The wall-url can still construct an Offerwall.GG URL for an authenticated direct caller even though the public registry no longer exposes that provider.
+- `private.providers`: CPAGrip disabled with no approval/terms; Offerwall.GG disabled but retains `approved_reward_model.currency_code=LC` / `currency_name=LootCoins` metadata; no Taplayad row. No provider settings were changed.
+- Row counts: `public.game_registry=1`; `private.game_events=0`; `private.game_saves=0`; `private.game_handoff_tickets=0`. The game registry is still a placeholder rather than the two approved launch games.
+- Staging `public.get_wallet_summary()` returns cash USD buckets and labels the `gameCredits` field `LLC`, while its ledger filter uses currency code `LC`. Candidate `wallet-summary.js` ignores cash and reads `gameCredits`/ `lootCoins` without validating that currency label. Clarify/normalize this response contract and test it before release.
+
+### Access boundary and safety
+- `/admin.html` and `/payout-simulator.html` are publicly fetchable static shells; data/actions are gated by exact staging configuration, authentication and owner/admin RPCs. This is not URL-level denial and does not literally satisfy §630's “inaccessible to anonymous/public users” wording. A URL-level gate or `noindex` is a separate owner decision; no Cloudflare/security setting changed.
+- All queries in this recheck were read-only. No function deployment, setting/secret/grant/schema/data change, callback, provider setting, agreement, payment, reward issuance or money movement occurred.
+
+
+## 2026-11-20 18:20 ET — Sync Watch #17 fresh read-only environment check
+
+### GitHub and Cloudflare source targeting
+- Production remains `main@801f3e7`; integration remains `build/legitloot-neon-synthwave@1466eb6`.
+- PR #30 is a draft at `0e9b9329846d5c4e4cbc65903f7e6bfd28fea4f3`. GitHub Actions Node/whitespace `44834506860` and Deno `44834506806` pass. Both Pages projects reported successful pages.dev branch-preview builds. Candidate `supabase-config.js` selects the exact staging project; `account-auth.js` refuses to initialize unless the staging environment and exact staging URL match.
+- The separate main-based preview `fdf6b609` remains a preview deployment of `main@801f3e7` with production-targeting `account-auth.js`; keep Account/auth routes off it. PR #28 remains draft and production-targeting/owner-gated.
+- GitHub API reports 31 branches, all `protected:false`, and an empty repository-ruleset list. No branch-protection change was made.
+
+### Supabase — production
+- Project `gkbqderyjcuxnjbsiffb` is `ACTIVE_HEALTHY`; migration history has 7 entries, including `20261108081619 standard_lootcoins_wallet`.
+- Edge Functions: Offerwall.GG postback v4 and wall-url v2 remain ACTIVE tombstones; wallet-summary v4 remains ACTIVE (`verify_jwt=false`; handler source must continue its own bearer validation).
+- `public.get_wallet_summary()` is SECURITY DEFINER, returns cash USD buckets plus `lootCoins.available`, and grants EXECUTE to `authenticated` and `service_role`. `private.process_offerwall_gg_postback` still contains the historical LC journal path; EXECUTE is false for anon/authenticated/service_role and true for postgres only.
+- The production Offerwall.GG provider row remains disabled but its `approved_reward_model` still says LC/LootCoins.
+
+### Supabase — staging
+- Project `scmnxcsggquwtuyyjnnj` is `ACTIVE_HEALTHY`; migration history has 21 entries through `20261119145340 offerwall_gg_record_only`, including `20261109050922 align_wallet_summary_response_with_staging_frontend`.
+- Edge Functions include Offerwall.GG postback v8 ACTIVE/no-JWT, wall-url v5 ACTIVE/JWT, CPAGrip attribution v5, payout-simulator v6, admin-dashboard v7 and owner provisioning v7.
+- `public.get_wallet_summary()` is SECURITY DEFINER, returns cash USD buckets plus `gameCredits` (label `LLC`, ledger currency filter `LC`), and grants EXECUTE to `authenticated` and `service_role`.
+- `private.process_offerwall_gg_postback` remains `service_role`-executable, but its current body has no LC journal/ledger path. The staging wall-url remains callable by an authenticated direct caller. No callback was invoked.
+- `private.providers`: Offerwall.GG disabled with stale LC/LootCoins reward metadata; CPAGrip disabled with no approval/terms; no Taplayad row.
+- `public.game_registry` contains only the unlisted `zid` development placeholder. `private.game_events`, `private.game_saves`, and `private.game_handoff_tickets` each contain zero rows.
+
+### Migration-provenance discrepancy
+- Candidate `tests/wallet-summary.test.mjs:4–6,31–35,81–85` names repository files `20261109010000_align_wallet_summary_response.sql` and `20261108120000_standard_lootcoins_wallet.sql` as the applied staging/production migrations. Live Supabase migration history lists `20261109050922 align_wallet_summary_response_with_staging_frontend` and `20261108081619 standard_lootcoins_wallet`. The source-to-applied mapping is not established; correct the provenance or label the test as static source/fixture coverage.
+- No Supabase auth setting, secret, function, grant, schema, data, migration or provider configuration was changed. All SQL calls were SELECT-only.
+
+
+## 2026-11-20 18:31 ET — Sync Watch #17 follow-up: source-only wallet proposal and account UI gate
+
+- PR #30 latest head is `ab5052250db976ceb7f2274ed5a8d79d45ec7bac`, draft. It adds an LC-only response shape to `supabase/functions/wallet-summary/index.ts`, a proposed staging RPC file at `supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql` (DO NOT APPLY), removes the candidate Create Account UI/client handler, and clarifies the wallet test as static fixture/parser coverage. Node/whitespace `44837137548` and Deno `44837137501` pass; Claude reports local 79/79. Browser test unrun; no new Pages preview status returned for this SHA.
+- **No deployed change:** production/staging `public.get_wallet_summary()` remain cash/USD-bearing; production `wallet-summary` v4 remains active with its old cash response. The proposed SQL is outside `supabase/migrations` and was not applied; the Edge Function source was not deployed.
+- **Ledger-account confirmation:** fresh aggregate SELECTs found `lootcoins_available` rows with `wallet_kind=game_credits,currency_code=LC` in both projects. Production also has legacy `game_credits_available/provisional/deferred` accounts with `currency_code=LLC`. The candidate's new `lootcoins_*` response keys align with the LC-coded account family.
+- **Edge Function parity defect:** `supabase/functions/wallet-summary/index.ts:41–67` still selects all non-system accounts and all journal entries, does not filter `currency_code='LC'`, does not check entry currency against account currency, and does not filter journal transactions to `status='posted'`. The proposed RPC does those checks. Align the Edge Function with the RPC or retire it before any deployment; account page currently calls the RPC directly.
+- **Proposed SQL ACL wording:** `supabase/proposed/staging/20261120230000_wallet_summary_lc_only.sql:3–5,57–58` claims no grant change but includes REVOKE/GRANT statements. Current live RPC ACLs are authenticated + service_role EXECUTE; anon/public false. Preserve and assert this exact ACL or accurately document the intended change. File remains DO NOT APPLY.
+- **Account onboarding UI:** candidate removes the Create Account tab/form and client `auth.signUp()`, but `account.html:5` still says “Sign in or create an account”; line 9 says no personal information is collected while sign-in/reset fields remain. Test title “public sign-up stays closed” is UI-only; Auth `disable_signup` was not read or changed and the last recorded production probe was false. `wallet-summary.js:4–8` still has stale migration-applied wording.
+- **Migration provenance:** `tests/wallet-summary.test.mjs` now correctly labels its fixtures static and lists staging applied version `20261109050922` / production `20261108081619`; equivalence to the differently-prefixed repository SQL remains unproven. Do not treat the test as live DB verification.
+- **Docs/candidate alignment:** PR #27 is at `aae268f`, Actions `44837195049` passed. PR #30 contains docs through `e199df3` only, so it is one docs commit behind. Current PR #30 body still cites `9f2c9a0` and old Actions even though Claude's comment `7053199149` says it was refreshed. New candidate preview status is unverified.
+- All Supabase calls were SELECT-only. No Auth settings, secrets, grants, functions, migrations, schema, data, callbacks, provider settings or financial activity changed.
+
+
+## 2026-11-20 18:36 ET — Sync Watch #17 follow-up 2: latest candidate source review
+
+- PR #30 latest head `7f1e1c6113873d62058ae0454249a1658d21913f`, draft, 56 files / 77 commits. Node/whitespace `44837793174` and Deno `44837793169` pass. The last Claude-reported local 79/79 run was on preceding `ab505225`; browser test remains unrun; no preview status for this SHA has been returned.
+- Candidate source fixes now include: UI-only signup closure with backend `disable_signup` explicitly unverified; accurate account copy; wallet parser migration comments that distinguish applied versions from repository filenames; LC-only Edge Function account/entry filters and posted-transaction join; and a proposed staging RPC file outside migrations marked DO NOT APPLY.
+- **Live ledger confirmation:** aggregate SELECTs show `lootcoins_available` rows with `wallet_kind=game_credits,currency_code=LC` in both projects. Production also has legacy `game_credits_*` accounts with `currency_code=LLC`. The candidate's use of `lootcoins_*` for LC is consistent with live account metadata.
+- **Remaining proposed-RPC integrity gap:** SQL joins `journal_entries` to LC accounts by account_id and posted transaction only; it does not verify `e.wallet_kind=a.wallet_kind` and `e.currency_code=a.currency_code`. Add these predicates or reject mismatches, with a static regression test.
+- **Remaining ACL precondition gap:** SQL comment expects authenticated=true, service_role=true, anon=false, PUBLIC=false; the precondition query does not check PUBLIC. Fresh `proacl` for both environments is `{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}`. Add explicit PUBLIC-grantee verification via `aclexplode(proacl)` before any future application.
+- Current live RPCs remain cash/USD-bearing; production wallet-summary v4 remains deployed with its cash response. No SQL or Edge Function source is deployed. The proposed SQL is not applied.
+- Account sign-up UI is now closed, but the Supabase Auth `disable_signup` setting was not read/changed in this run; last recorded production probe was false. Backend registration remains owner-gated/unverified.
+- PR #27 is at `e1146ff`, Actions `44837816280` passed. PR #30 contains docs through `e199df3`, one docs commit behind. Its live PR body still cites `9f2c9a0` and old Actions even though Claude comment `7053199149` says it was refreshed. No preview result for the latest candidate SHA is verified.
+- No Auth setting, Supabase secret/grant/schema/data, callback, provider setting, agreement, payment, reward issuance or money movement occurred; all database queries were SELECT-only.
