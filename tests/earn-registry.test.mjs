@@ -30,9 +30,12 @@ test("no provider is open to players in this release", () => {
   assert.equal(providers.filter((p) => p.state === "active").length, 0);
 });
 
-test("Taplayad is the only initial Hustle provider: pending, no launch, recorded template only", () => {
+test("Taplayad is the initial Hustle provider: pending, no launch, recorded template only", () => {
   const live = providers.filter((p) => p.kind === "provider");
-  assert.deepEqual([...live.map((p) => p.id)], ["taplayad"]);
+  // TapResearch (owner request 2026-11-22) is listed in "testing" with no launch block.
+  assert.deepEqual([...live.map((p) => p.id)], ["taplayad", "tapresearch"]);
+  assert.equal(byId.tapresearch.state, "testing");
+  assert.equal(byId.tapresearch.launch, null);
   const t = byId.taplayad;
   assert.equal(t.state, "pending_approval");
   assert.equal(t.launch, null);

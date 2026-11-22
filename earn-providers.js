@@ -76,6 +76,20 @@
       launch: null
     }),
     Object.freeze({
+      id: "tapresearch",
+      kind: "provider",
+      name: "TapResearch",
+      symbol: "▤",
+      categories: Object.freeze(["survey"]),
+      kicker: "Surveys",
+      description: "Third-party survey provider. Survey availability and rewards are decided by TapResearch; screen-outs and disqualifications earn nothing. Surveys do not award Legit Coins.",
+      state: "testing",
+      stateDetail: "Built; local handler tests pass. Deno CI and staging verification remain pending. Not open to players.",
+      // Server function tapresearch-eligibility exists (staging only). No launch block until
+      // TapResearch "Go Live", owner approval and verified rewards handling are complete.
+      launch: null
+    }),
+    Object.freeze({
       id: "surveys",
       kind: "category",
       name: "Surveys",
