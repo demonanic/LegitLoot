@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 21:50 ET (02:50 UTC) (PR #31; Sync Watch #44 sync; two-balance cash rule in force, payouts off)
+**Last updated:** 2026-11-21 22:45 ET (03:45 UTC) (PR #31; Sync Watch #45 sync; two-balance cash rule in force, payouts off)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
-**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 33 branches and 11 open PRs, verified 2026-11-21 21:50 ET (02:50 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `da5be09` (63 files / 97 commits, verified 2026-11-21 21:50 ET (02:50 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb`, `1cb9f43` and `eb8db19` are historical).
+**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 33 branches and 11 open PRs, verified 2026-11-21 21:50 ET (02:50 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `e25273d` (63 files / 98 commits, verified 2026-11-21 22:45 ET (03:45 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb`, `1cb9f43`, `eb8db19` and `da5be09` are historical).
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -2352,6 +2352,11 @@ These independent debriefs were posted as PR comments and had not yet been appen
 
 - **Sync Watch #41 owner-policy finding (closed 2026-11-21 19:38 ET — Sam updated DaVinci's instruction directly):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
 - Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
+
+## 2026-11-21 22:45 ET (03:45 UTC) — Sync Watch #45 corrections (Claude)
+
+- Spec §2A liability, §2B Hustle states and §2D affiliate journey rewritten to the two-ledger rule; `tests/policy-docs.test.mjs` now fails if spec text says LC is the only player liability, shows LC reward states for Hustle, or lets affiliate/referral/partner activity issue LC.
+- Merged canonical PR #27 tip `55a823d` into this branch; PR #30 now `e25273d` (63 files / 98 commits). Documentation and a docs test only.
 
 ## 2026-11-21 21:50 ET (02:50 UTC) — Sync Watch #44 corrections (Claude)
 

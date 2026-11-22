@@ -172,7 +172,7 @@ These are product categories, not claims that providers or offers are approved o
 - A browser redirect, client event, screenshot, or user assertion alone can never credit LC.
 
 ### Current financial model
-- Player reward liability is denominated only in LC.
+- Player reward liability is held in two separate ledgers (§0.5): LC (from server-verified in-game milestones, weekly challenges and seasonal events only) and USD cash (from verified, approved Hustle completions only). They never convert or share accounts.
 - Provider commissions, affiliate income, operating costs, receivables, and settlement amounts are business accounting data in their actual currencies, not player cash balances.
 - Reward amounts are campaign-specific, configurable, disclosed before participation, and disabled until provider terms and economics are verified.
 - The prior 50% cash / 50% game-credit split and 75%/25% provisional/deferred split are explicitly retired.
@@ -186,7 +186,7 @@ Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affili
 ### Signed-in player portal
 - Dashboard: account status, approved games, LC balance from the ledger, real recent activity, missions, and notices. Never seed fake activity.
 - Games: launch only verified destinations; show game-specific LC rules/catalogs where implemented.
-- Earn: browse eligible offers, read material terms before starting, track attribution/completion, and see verified LC reward states.
+- Earn: browse eligible offers, read material terms before starting, track attribution/completion, and see verified Hustle completion states. Hustle completions never issue LC; verified, approved completions may credit only the separate USD cash ledger (§0.5); payouts stay off until Sam separately approves.
 - Deals: curated affiliate offers with adjacent disclosures. This is not an LC redemption store.
 - Wallet: LC balance, transaction history, earned/spent/reversed states, and game-only usage explanation. A separate USD cash balance (§0.5) with no withdrawal action until Sam approves payouts.
 - Account: profile, authentication/security, linked game identities, preferences, privacy controls, export/deletion request.
@@ -205,7 +205,7 @@ Home; Games; Earn; Deals/Marketplace; How It Works/Trust; Terms; Privacy; Affili
 10. Reconciliation compares provider events and settlement/reporting data; discrepancies enter an operations queue.
 
 ### Affiliate journey
-A disclosed deal click creates a privacy-conscious attribution record. A merchant/network conversion is tracked as business commission revenue. No player LC is issued unless the program permits incentivized referrals and an approved campaign rule defines the reward.
+A disclosed deal click creates a privacy-conscious attribution record. A merchant/network conversion is tracked as business commission revenue. Affiliate and referral activity never creates or credits player LC (§0.1); it is business revenue only.
 
 ### Internal mission journey
 Publish rules, eligibility, dates, limits, and LC reward first. Track progress from trusted game/platform events. Verify completion server-side, evaluate each unique completion once, and post LC with idempotency and audit history.
@@ -250,7 +250,7 @@ Channel-specific controls:
 - Publisher account exists; that does not establish approval for every campaign or for the current LC model.
 - Existing staging work includes an attribution token table, RPC, and an Edge Function named `cpagrip-attribution`.
 - End-to-end completion is not established. Callback receiver/authentication, final macro mapping, secret configuration, duplicate/replay tests, reversals, reconciliation, and a verified test conversion remain outstanding unless later repository inspection proves otherwise.
-- Verify current official CPAGrip documentation and account terms for incentivized traffic, domain, game-only LC redemption, macros, callback authentication, statuses, reversals, and settlement.
+- Verify current official CPAGrip documentation and account terms for incentivized traffic, domain, macros, callback authentication, statuses, reversals, and settlement. Provider completions never issue LC (§0.1).
 - CPAGrip remains disabled for live player rewards until those checks and tests pass.
 
 ## 3. System architecture — proposed, no vendor is presumed approved
