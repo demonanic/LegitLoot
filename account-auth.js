@@ -43,7 +43,7 @@
   };
   const loadWalletSummary = async () => {
     // Only the Legit Coins balance is shown to players. Any cash fields the
-    // server still returns are deliberately ignored (cash is deferred; spec §0.1).
+    // server still returns are deliberately ignored: the separate USD cash ledger is approved by owner policy but is NOT implemented or exposed by this candidate yet; only verified, approved Hustle completions may credit it; LC stays game-only; payouts/withdrawals and payout/identity-check services remain off.
     const fields = ["wallet-lootcoins-available"];
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Loading…"; });
     let timeoutId;
