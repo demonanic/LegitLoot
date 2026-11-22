@@ -99,13 +99,13 @@ Homepage direction: **LegitLoot — an underground organization operating a chao
 
 > **Superseded for LC by §0.1 (2026-11-19).** The no-payout, ledger-integrity and reversal-by-compensating-entry rules below still apply. Cash rules follow §0.5 (two balances, 2026-11-21): only verified, approved Hustle completions may credit the separate USD cash ledger. Every statement that providers/campaigns earn LC, or that LC is spendable only in games, is replaced by §0.1.
 
-**Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. Cash rewards are deferred to a separately approved future phase. The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
+**Owner-locked decision, 2026-11-10:** LootCoins are redeemable only for eligible games and in-game perks. *(The 2026-11-10 cash deferral is superseded by §0.5, 2026-11-21: a separate USD cash ledger credited only by verified, approved Hustle completions is in force; payouts and withdrawals stay off.)* The former proposed cash/LC allocation is superseded. The full model and channel rules are in Sections 2A–2D below.
 
 ### Current player reward account
 - The current player-facing reward account is LootCoins (LC) only.
 - LC is non-transferable, has no cash value, is not withdrawable, and is usable only for eligible in-game purchases and game-related perks.
 - ~~There is no active player cash balance in the current phase.~~ **Superseded (2026-11-21, §0.5):** two balances is in force — separate USD cash and LC ledgers; cash only from verified, approved Hustle completions; no conversion, shared ledger, LC purchase with cash, or partner-issued LC. Payouts, withdrawals and payout/identity-check providers stay off until Sam separately approves activation.
-- Any future cash rewards must use a separately approved USD ledger and must never be combined with, funded by, or converted from LC.
+- Player cash uses the separate USD ledger in force under §0.5 (credited only by verified, approved Hustle completions) and is never combined with, funded by, or converted from LC.
 - Any sample/demo balances must be visibly labeled DEMO and must never be stored as real user funds.
 
 ### Reward calculation — campaign-specific, LC only
@@ -148,7 +148,7 @@ These decisions are binding for product design and implementation and supersede 
 - Players have a separate USD cash balance. Only **verified, approved Hustle completions** may credit it. No other earning channel (survey, task, referral, affiliate, mission or advertising reward outside an approved Hustle completion) may credit player cash.
 - Partner offers and callbacks never issue LC. Cash and LC never convert either way, never share a ledger, and LC can't be bought with cash.
 - Do not implement or activate cash withdrawals, payout requests, payout providers or identity-check services, and make no cash payout commitments, until Sam separately approves activation.
-- Preserve architectural separation for a possible future cash product. It requires a separate owner-approved specification and approvals for provider terms, legal review, eligibility, tax treatment, identity verification, reserves, reconciliation, payout provider, support, and production release.
+- Keep the USD cash ledger architecturally separate from LC. Activating payouts or withdrawals requires a separate owner-approved specification and approvals for provider terms, legal review, eligibility, tax treatment, identity verification, reserves, reconciliation, payout provider, support, and production release.
 - The previously proposed $10 minimum withdrawal and PayPal/Venmo manual payout workflow are deferred, not current commitments.
 
 ### Earning channels: all supported categories
@@ -164,11 +164,11 @@ The long-term earning catalog must be designed to support:
 These are product categories, not claims that providers or offers are approved or live. Each provider, campaign, and channel stays disabled until its terms and technical integration are verified.
 
 ### Reward destination rules
-- Internal missions, achievements, events, and game activity may grant LC after server-side validation, published rules, and abuse controls.
-- Offerwalls, surveys, and tasks may grant LC only where the specific provider and advertiser permit incentivized traffic and the exact game-only reward model.
+- Internal missions, achievements, events, and game activity may grant LC after server-side validation, published rules, and abuse controls. *(Current rule, §0.1: LC comes only from verified game milestones, weekly challenges and seasonal events.)*
+- ~~Offerwalls, surveys, and tasks may grant LC only where~~ **Superseded by §0.1/§0.5:** partner offers, surveys, tasks and callbacks never issue LC; only verified, approved Hustle completions may credit the separate USD ledger. Historical text: offerwalls, surveys, and tasks may grant LC only where the specific provider and advertiser permit incentivized traffic and the exact game-only reward model.
 - Affiliate commissions are initially business revenue, tracked separately. Do not promise or issue LC for an affiliate click, purchase, or referral unless the specific program expressly permits incentivized referrals and the owner approves a campaign rule.
 - Rewarded ads may grant only the non-cash in-game benefit permitted by the ad network. Never reward ad views/clicks with cash.
-- Referrals may grant LC only after a defined qualifying event, server-side verification, fraud checks, and partner permission.
+- ~~Referrals may grant LC only after a defined qualifying event, server-side verification, fraud checks, and partner permission.~~ **Superseded by §0.1:** referrals do not grant LC.
 - A browser redirect, client event, screenshot, or user assertion alone can never credit LC.
 
 ### Current financial model
@@ -238,7 +238,7 @@ Every provider adapter must expose equivalent internal operations for capabiliti
 Track these states independently: configured, credentials present, sandbox/production, provider approval, incentive permission, event verification, reward-posting switch, and reconciliation health. Unknown states default to disabled. A successful callback is not business approval; account approval does not mean every campaign permits incentives.
 
 Channel-specific controls:
-- Offerwalls: written permission for incentivized traffic, game-only LC redemption, traffic sources, and campaign terms.
+- Offerwalls (Hustle): written permission for incentivized traffic, traffic sources and campaign terms. Completions never issue LC; only verified, approved Hustle completions may credit the separate USD ledger (§0.5); payouts and withdrawals stay off.
 - Surveys: disclose screening, qualification, completion rules, privacy, and disqualification/no-reward cases. Never imply every attempt earns LC.
 - Tasks: classify task type, evidence, completion criteria, prohibited actions, and provider policy.
 - Affiliate deals: commissions are business revenue; no user reward unless the program expressly permits it.

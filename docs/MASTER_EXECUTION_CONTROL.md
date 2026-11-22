@@ -2,10 +2,10 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 19:50 ET (00:50 UTC) (PR #31; two-balance cash rule in force, payouts off)
+**Last updated:** 2026-11-21 21:50 ET (02:50 UTC) (PR #31; Sync Watch #44 sync; two-balance cash rule in force, payouts off)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
-**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 32 branches and 10 open PRs, verified 2026-11-21 17:03 ET (22:03 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `eb8db19` (63 files / 96 commits, verified 2026-11-21 19:25 ET (00:25 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb` and `1cb9f43` are historical).
+**Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 33 branches and 11 open PRs, verified 2026-11-21 21:50 ET (02:50 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `da5be09` (63 files / 97 commits, verified 2026-11-21 21:50 ET (02:50 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb`, `1cb9f43` and `eb8db19` are historical).
 **Purpose:** One shared source of truth for priorities, decisions, agent coordination, and the next executable task.
 **Standing role authority:** `docs/AGENT_OPERATING_CHARTER.md` is the role/handoff authority: Sam owns the business; Claude is primary implementation lead; ChatGPT/DaVinci is technical director and independent auditor. Task-specific acting leads do not change these standing roles. Read the charter before work. It supplements this control document and does not change owner gates.
 
@@ -339,29 +339,21 @@ A task is not done because a code change was made or a page renders.
 # 10. CURRENT EXECUTION STATUS
 
 **Active milestone:** M2 — Launch Blocker Closure and Basic-Operable Release
-**Active task:** M2-T3a — Staging record-only Offerwall.GG callback containment
-**Task owner:** ChatGPT — staging deployment and live verification
-**Implementation partner:** Claude — source, tests, handoff, and supporting fixes
-**Reviewer:** ChatGPT — independent source review already completed; Claude confirms implementation/test evidence
-**Status:** Source is merged to the integration branch, but the deployed staging function/database routine still use the legacy LC-posting path. Ready for staging deployment in a normal implementation turn; this scheduled audit did not deploy.
+**Active task:** M2-T4 — integrate the two owner-selected launch games (see §2, "Current active task — M2-T4")
+**Acting lead:** ChatGPT; **Implementation partner:** Claude (standing roles per `docs/AGENT_OPERATING_CHARTER.md`)
+**Status (2026-11-21 21:50 ET):** IN PROGRESS. Both games are live as early access with device-local saves; shared account/session, cloud saves and server-verified LC-event integration remain unfinished.
 
-### Current verified state
-- PR #11 (M2-T1) merged to the build branch at `2824563`.
-- PR #13 (M2-T3 source) merged to the build branch at `1faf854`; record-only migration/function not deployed.
-- PR #12 (M2-T6 runbook), PR #14 (ENV-03), and PR #15 (AUTH-03 design) were refreshed onto integration head `19aa0f4` with zero commits behind.
-- Claude reports 34/34 tests on PR #12 head `dfc0e53`, 37/37 on PR #14 head `8d80e8a`, and 34/34 on PR #15 head `9c8a365`; all report clean PR diff checks. GitHub Actions/status queries returned no CI checks. These are Claude-reported local results, not GitHub CI.
-- Fresh read-only Supabase evidence: production postback v3 and staging v7 remain ACTIVE; both deployed SQL routines still call `private.post_journal_transaction`; callback events/conversions are 0/0 in both environments; staging has not applied the record-only migration.
-- PR #12 has an outstanding runbook monitoring correction; PR #15 has outstanding support-route and staging-authority wording corrections; PR #14's PR description still needs its obsolete staging-deploy gate wording removed.
+### Launch-blocker work alongside M2-T4 (owner decisions 2026-11-21)
+- **Account deletion (AUTH-03):** owner D1–D4 decided; source in PR #32 (stacked on PR #30), draft, not applied or deployed. Unpaid cash at deletion is an open owner decision; processing blocks until then.
+- **Cash ledger:** two balances in force (§2); payouts, withdrawals and payout/identity-check services stay off until Sam separately approves.
+- **Launch scope (owner, Complete Loop issue #5):** Hustle (Taplayad) and LC must both be live at launch. Taplayad stays `pending_approval` until written App-10066 permission and protocol confirmation.
+- **Release:** PR #30 consolidated candidate (`da5be09`, 63 files / 97 commits); Terms/Privacy still to be written.
 
-### Immediate sequence
-1. Claude resolves the remaining PR #12/#14/#15 review comments and updates the affected PR descriptions.
-2. ChatGPT completes the authorized staging migration-first/function-second deployment of M2-T3a in a non-audit execution turn, then verifies the live routine and function version without invoking callbacks.
-3. Claude and ChatGPT complete independent final reviews and merge verified PR #12/#14/#15 into the integration branch.
-4. Continue AUTH-03 implementation after D1–D4 owner/legal decisions are resolved; use a dedicated staging-only test identity and cleanup plan.
-5. Close the remaining launch blockers: production sign-up pause, approved Terms/Privacy/support route, playable-game or truthful early-access scope, monitoring, backup/PITR, mobile/accessibility QA, and release manifest.
+### Superseded instruction
+The earlier M2-T3a staging callback deployment instruction in this section is **withdrawn**. Do not deploy the Offerwall.GG callback; Offerwall.GG is retired (`docs/security/OFFERWALL_GG_RETIREMENT.md`).
 
 ### Owner gates
-Production Offerwall.GG containment; production sign-up pause execution where dashboard access is needed; AUTH-03 D1–D4 and legal/privacy choices; paid monitoring/backup commitments; production merge/deploy/config/data changes; provider agreements and all live financial activity.
+Production merge/deploy/config/data; production sign-up re-enable; payouts, withdrawals and payout/identity-check activation; unpaid cash at account deletion; provider agreements and live activation; paid commitments; legal/business commitments.
 
 M1 audit remains accepted with qualifications. Its original task details and findings remain in the dated audit/history above; M2 is the active milestone now.
 
@@ -2360,6 +2352,12 @@ These independent debriefs were posted as PR comments and had not yet been appen
 
 - **Sync Watch #41 owner-policy finding (closed 2026-11-21 19:38 ET — Sam updated DaVinci's instruction directly):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
 - Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
+
+## 2026-11-21 21:50 ET (02:50 UTC) — Sync Watch #44 corrections (Claude)
+
+- Spec §2/§2A/§2D/§3: remaining cash-deferral and offerwall/referral-to-LC statements rewritten or marked superseded (LC only from verified game milestones, weekly challenges and seasonal events; only verified, approved Hustle completions credit the separate USD ledger; payouts/withdrawals off).
+- §10 now names M2-T4 as the active task, matching §2; the M2-T3a staging callback deployment instruction is withdrawn (Offerwall.GG retired).
+- Repository metadata: 11 open PRs / 33 branches; PR #30 `da5be09` (63 files / 97 commits). Working-record timestamps refreshed. Documentation only.
 
 ## 2026-11-21 20:35 ET (01:35 UTC) — Sync Watch #43 corrections (Claude)
 
