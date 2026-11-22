@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 11:53 ET
+**Last updated:** 2026-11-21 19:55 ET (two-balance cash rule in force; payouts off)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
 **Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs: every ref reports `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `5c33c78` (62 files / 92 commits; see the 2026-11-21 Claude record correction at the end of this file).
@@ -56,7 +56,7 @@ The release candidate must truthfully provide:
 - Central account sign-in, recovery, and a working deletion/export path before public account onboarding.
 - The website as the authoritative LC wallet; no game-side spendable wallet.
 - LC earned only from verified in-game milestones, weekly challenges, and seasonal events.
-- No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance.
+- Two separate ledgers (owner, 2026-11-21; replaces the former no-cash rule): USD cash credited only for verified, approved Hustle completions; LC only from verified in-game milestones, weekly challenges and seasonal events. No conversion or shared ledger, no LC purchase with cash, no transfers, no USD peg, no provider-offerwall-to-LC issuance. **Payouts, withdrawals and payout/identity-check providers stay off until Sam separately approves activation.**
 - A verified playable game, or an honestly labelled early-access portal.
 - Approved Terms, Privacy, support route, monitoring, backup/recovery expectations, and rollback plan.
 - No live financial activity or provider activation without the applicable owner gate.
@@ -2335,3 +2335,10 @@ Owner explicitly authorized preparation and testing of production containment, p
 - Label the legacy Tplayad postback description (`md5(subId . transId . reward . secret)`, unique `transId`, `OK`/`DUP`, retries) as an **indexed legacy reference — unverified**, not a confirmed current App-10066 protocol: `www.tplayad.com/doc/postback` returned 404 and `old.tplayad.com/doc/postback` was inaccessible on DaVinci's 2026-11-21 19:13 ET recheck. This supersedes the Sync Watch #41 wording that the old-system page was directly retrievable, and the earlier "distinct protocol generations" phrasing in this file wherever it implies live-verified evidence.
 - Current verified source remains https://tplayad.com/docs (`md5(app_id . user_id . api_secret)`, status 1/2, any-2xx, no immutable transaction ID or retry schedule documented). Terms (2026-10-29) contain no incentivized-traffic language. Taplayad stays `pending_approval`, `launch: null`, the owner template preserved exactly, and nothing maps to LC. Written App-10066-specific confirmation remains required.
 - Documentation only; no provider setting, callback, deploy or Supabase change.
+
+## 2026-11-21 19:55 ET (00:55 UTC) — Owner cash rule: two balances (Claude)
+
+- Owner decision, in force: two balances replaces the former no-cash rule in §2. Sources: Sam's Complete Loop issue #2 (02:05 ET), his "A" to Claude in chat (18:08 ET), and his direct update to DaVinci's owner instruction recorded in DaVinci's PR #31 review (19:38 ET, comment 7071686009).
+- Separate USD cash and LC ledgers; cash credited only for verified, approved Hustle completions; no conversion or shared ledger; LC can't be bought with cash; partner offers and callbacks never issue LC. LC rules are unchanged.
+- Payouts, withdrawals and payout/identity-check services stay **off** until Sam separately approves activation.
+- Documentation only; no code, database, provider, payment, payout, identity-check, merge or deployment action. PR #31 carries the matching changes to the other governing documents.
