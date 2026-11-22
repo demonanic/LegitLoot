@@ -2,7 +2,7 @@
 ## Shared operating agreement for ChatGPT, Claude, and the project owner
 
 **Status:** ACTIVE — owner-authorized
-**Last updated:** 2026-11-21 19:25 ET (00:25 UTC) (PR #31; no-cash rule active, cash conflict open)
+**Last updated:** 2026-11-21 19:50 ET (00:50 UTC) (PR #31; two-balance cash rule in force, payouts off)
 **Repository:** `demonanic/LegitLoot`
 **Authorized working branch:** `build/legitloot-neon-synthwave`
 **Production branch:** `main` — production; merge/deploy remain owner-gated. Sync Watch #34 rechecked all 31 refs (now 32 branches and 10 open PRs, verified 2026-11-21 17:03 ET (22:03 UTC)): every ref then reported `protected:false`; repository rulesets are empty. The detailed branch-protection endpoint returned HTTP 403; do not describe `main` as technically protected. Authorized integration application baseline is `a529b35` plus documentation-only commits; current integration head remains `1466eb6`. PR #27 is the canonical documentation branch; PR #30 candidate is now `eb8db19` (63 files / 96 commits, verified 2026-11-21 19:25 ET (00:25 UTC); earlier records `5c33c78`, `929f58a`, `0a7d2fb` and `1cb9f43` are historical).
@@ -56,7 +56,7 @@ The release candidate must truthfully provide:
 - Central account sign-in, recovery, and a working deletion/export path before public account onboarding.
 - The website as the authoritative LC wallet; no game-side spendable wallet.
 - LC earned only from verified in-game milestones, weekly challenges, and seasonal events.
-- No cash, withdrawal, transfer, USD peg, or provider-offerwall-to-LC issuance. *(Active. Owner issue #2 and Sam's 18:08 ET chat answer to Claude choose two balances instead; not in force until Sam updates his DaVinci instruction and canonical PR #27 consistently. See the 2026-11-21 19:25 ET entry.)*
+- Two separate ledgers (owner, 2026-11-21; replaces the former no-cash rule): USD cash credited only for verified, approved Hustle completions; LC only from verified in-game milestones, weekly challenges and seasonal events. No conversion or shared ledger, no LC purchase with cash, no transfers, no USD peg, no provider-offerwall-to-LC issuance. **Payouts, withdrawals and payout/identity-check providers stay off until Sam separately approves activation.**
 - A verified playable game, or an honestly labelled early-access portal.
 - Approved Terms, Privacy, support route, monitoring, backup/recovery expectations, and rollback plan.
 - No live financial activity or provider activation without the applicable owner gate.
@@ -771,7 +771,7 @@ This entry records the owner's explicit decisions in the 2026-11-19 conversation
 - LC may be earned only from server-verified in-game milestones, weekly challenges, and seasonal events.
 - At least five launch challenges/milestones must be authored and configured by Claude, integrated with the central reward system, and covered by tests. This is a minimum. The exact challenge definitions and LC values must follow existing owner-approved LC economics; agents may author non-economic objectives and propose values but must not change reward values/economic policy without the required specialist/owner approval.
 - Reward integration must be server-authoritative, idempotent, auditable, abuse-resistant, and tested with synthetic staging identities. Prove that each eligible event credits the website wallet once and only once; prove invalid, replayed, client-forged, and provider-originated events cannot credit LC.
-- No cash, withdrawals, user-to-user transfers, USD peg, provider-offerwall-to-LC issuance, or other cash-equivalent promise.
+- No cash, withdrawals, user-to-user transfers, USD peg, provider-offerwall-to-LC issuance, or other cash-equivalent promise. *(Superseded for the cash balance only by the 2026-11-21 two-balance rule in §2: a separate USD cash ledger from verified, approved Hustle completions is allowed. LC rules here are unchanged; withdrawals and payouts stay off until Sam separately approves activation.)*
 
 ### Games and Hustle implementation authorization
 - Claude is authorized to integrate the two selected games under the exact public names above and to build the launch challenge/milestone catalogue and verified in-game LC reward wiring, subject to the LC policy and owner gates.
@@ -2358,9 +2358,15 @@ These independent debriefs were posted as PR comments and had not yet been appen
 | #40 debriefs | 22:32 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7070254001), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7070253615), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7070253325) |
 | #41 debriefs | 23:44 | [PR #27](https://github.com/demonanic/LegitLoot/pull/27#issuecomment-7071069906), [PR #26](https://github.com/demonanic/LegitLoot/pull/26#issuecomment-7071069284), [PR #30](https://github.com/demonanic/LegitLoot/pull/30#issuecomment-7071069541), [PR #31](https://github.com/demonanic/LegitLoot/pull/31#issuecomment-7071069007) |
 
-- **Sync Watch #41 owner-policy finding (open):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
+- **Sync Watch #41 owner-policy finding (closed 2026-11-21 19:38 ET — Sam updated DaVinci's instruction directly):** DaVinci's active run instruction still locks no cash, and it can't independently see the chat where Sam chose "A" at 18:08 ET. Until Sam updates that instruction and the shared control consistently, cash API/UI/credits/payouts stay unchanged and PR #31 is not merged. The owner has been asked to give DaVinci the updated instruction directly.
 - Header facts refreshed: PR #30 `1cb9f43` (95 commits); 10 open PRs; 32 branches (2026-11-21 18:44 ET (23:44 UTC)).
 
-## 2026-11-21 19:25 ET (00:25 UTC) — Sync Watch #42 correction (Claude)
+## 2026-11-21 19:50 ET (00:50 UTC) — Cash rule reconciled (Claude)
+
+- Sam directly updated DaVinci's owner instruction (DaVinci review on PR #31, comment 7071686009, 19:38 ET): two balances replaces the former no-cash rule, matching issue #2 and his "A" to Claude at 18:08 ET. The Sync Watch #42 "conflict open" state below is **superseded**.
+- §2 and every current-state block on this branch now state the two-ledger rule. Payouts, withdrawals and payout/identity-check providers stay **off** until Sam separately approves activation. No code, database, provider, payment, payout, identity-check, merge or deployment action is part of this change.
+- Earlier no-cash statements in the spec are kept only where labelled superseded/historical.
+
+## 2026-11-21 19:25 ET (00:25 UTC) — Sync Watch #42 correction (Claude) — *superseded by the 19:50 ET entry*
 
 - Per Sync Watch #42, the no-cash rule is restored as **active** in §2 and in every governing and working document on this branch. The two-balance choice (issue #2; Sam's "A" in chat at 18:08 ET) is recorded as an open conflict, not in force. No cash API/UI/balance/credit/payout implementation is authorized until Sam updates his DaVinci instruction and canonical PR #27 consistently. D1–D4 and the production sign-up pause remain in force. PR #30 reference refreshed to `eb8db19` (63 files / 96 commits).
