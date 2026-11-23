@@ -366,6 +366,13 @@ begin
   if v_event.status = 'approved' and v_event.approval_journal_transaction_id is not null then
     return v_event.approval_journal_transaction_id;
   end if;
+  if exists (
+    select 1 from private.moonetix_reward_events r
+    where r.original_event_id=v_event.id and r.provider_status=2
+      and r.status in ('reversal_pending','held','reversed')
+  ) then
+    raise exception 'Reward has a provider reversal and cannot be approved';
+  end if;
   if v_event.status <> 'pending_review' or v_event.provider_status <> 1
     or not v_event.signature_valid or v_event.reconciled_at is null
     or v_event.reconciliation_reference is null or v_event.reward_atoms is null
