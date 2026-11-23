@@ -121,23 +121,25 @@ Required automated and database tests:
 - Existing `private.post_journal_transaction` accepts an idempotency-key hit without checking payload equality. It does not enforce available-balance nonnegativity.
 - Existing `private.reward_allocations` is shaped around legacy cash/game-credit fields and should not be silently repurposed as the EL model.
 
-## Implementation blockers to resolve before migration execution
+## Implementation blockers to resolve before live activation
 
-1. **EL precision:** confirm Moonetix publisher reward currency, smallest EL unit, conversion ratio, and rounding with the actual publisher configuration and small-award tests. No live award approval or cash-equivalent calculation until then.
-2. **Migration ordering:** PostgreSQL enum labels added by `ALTER TYPE ... ADD VALUE` cannot safely be used in the same transaction that adds them. Enum extension and functions/tables that reference new labels must be separate ordered migrations.
-3. **Environment authorization parity:** staging has `private.admin_users`; production does not. Do not copy staging admin IDs or assume the production authorization table exists. Production migration remains gated.
-4. **Moonetix event contract:** confirm exact callback fields and the publisher settlement/reconciliation source before enabling callback intake. The provider's already-split player reward must not be re-split.
-5. **Account/system counterpart mapping:** verify all legacy account codes and currency scales in both environments before adding new EL/LC system accounts. Preserve legacy records unchanged.
+1. **Actual Moonetix configuration:** the code supports EL to three decimal places, versioned conversion rates, split, bonus, and rounding snapshots. The actual currency/rate/rounding settings still must be recorded from the created publisher app and verified with small-award tests before enabling live approvals.
+2. **Migration ordering:** PostgreSQL enum labels are added in a separate migration before any tables/functions use them.
+3. **Environment authorization parity:** staging has `private.admin_users`; production does not. The staging-only approval migration deliberately fails closed if that table is absent. Do not copy staging admin IDs or assume production authorization exists.
+4. **Provider operations:** Moonetix's HMAC postback fields and Reporting API credit/reversal fields are now reflected in code. The postback and reporting Edge Functions remain source-only; secrets, deployment, daily schedule, and live offerwall are not configured.
+5. **Account/system counterpart mapping:** staging legacy account codes and currency scales were inspected. New EL/LC accounts are separate; old cash/game-credit account codes and balances are preserved. Production parity remains gated.
 
 ## Branch implementation progress
 
-- Added a journal-hardening migration draft at `supabase/migrations/202611230001_harden_journal_posting.sql`. It fingerprints canonical journal requests, rejects conflicting or unverifiable idempotency-key reuse, locks affected accounts in stable order, validates independent currency balances, and prevents negative player-owned account balances. It has not been applied to any database.
-- Added a separate enum-extension migration at `supabase/migrations/202611230002_add_earned_loot_wallet_kinds.sql`. It adds EL and LC wallet kinds in a separate migration so PostgreSQL enum labels are committed before later migrations use them. It has not been applied.
-- Added `earned-loot-reward.js` and tests. It preserves Moonetix's raw player reward and USD payout, snapshots the split/rate/bonus/rounding configuration, converts up to three decimal reward units to integer thousandth atoms, computes the cash-equivalent with integer arithmetic, rejects non-EL provider currency, and checks reversal transaction/reward identity.
-- Updated the wallet parser to accept EL amounts to three decimal places and format them without floating-point conversion. Updated the account page integration to use that formatter and removed a duplicate `const status` declaration present in the inherited account script.
-- Added a branch CI workflow for both the Moonetix reward and wallet contract tests. The workflow has not yet reported a GitHub Actions run; the corresponding Node test suites were run locally in the working environment and passed (7 reward tests, 8 wallet tests).
+- **Step 1 — Journal integrity:** migration draft fingerprints canonical journal requests, rejects conflicting or unverifiable idempotency-key reuse, locks accounts in stable order, enforces one wallet kind per journal transaction, balances entries, and prevents negative player-owned balances.
+- **Step 2 — Separate ledgers:** migration drafts add EL and LC wallet kinds/accounts, EL thousandth atoms, LC 10,000 atoms, versioned Moonetix config, reward lots, packages, game issuance records, and reconciliation-gap records. Legacy account rows are not reinterpreted.
+- **Step 3 — Reward lifecycle:** signed Moonetix postback intake records pending-only events. The Reporting API reconciliation function matches transaction, user, reward, payout, status, and provider timestamps; it records missing postbacks/config versions as gaps and never auto-credits a missing callback. Owner/active-admin approval moves reconciled EL to available.
+- **Step 4 — Reversals:** exact provider reversal matching, compensating entries when unspent EL covers the reversal, held cases when it exceeds unspent EL, and safe closure when the provider reverses before owner approval.
+- **Step 5 — Wallet and LC paths:** authenticated-user-only `get_player_wallet_summary()`; EL value tracked per reward lot; atomic, idempotent EL-to-LC packages; server-role-only gameplay LC issuance; provider-origin LC issuance rejected.
+- **Step 6 — Verification:** Node wallet/reward tests, Deno type-checks, and disposable PostgreSQL migration/lifecycle tests are in CI. A concurrent EL-to-LC overspend race test has also been added. The latest Node and Deno jobs passed; the latest PostgreSQL job is still running. An earlier PostgreSQL run caught a malformed payout constraint, which has been corrected; do not call the current migration set verified until the latest PostgreSQL job passes.
+- **Step 7 — Production gate:** no production migration, merge, deployment, provider activation, payout, withdrawal, or identity-check activation has occurred.
 
-These are code changes only. Staging database verification, provider event lifecycle, reward approval/reversal SQL, EL-to-LC purchase, gameplay LC issuance, and production gating remain in progress.
+All implementation is still on the isolated draft PR. No migration has been applied to staging or production; no Supabase data/settings have been changed.
 
 ## Explicitly not done
 
