@@ -109,7 +109,7 @@ end;
 $fn$;
 revoke all on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean)
   from public,anon,authenticated;
-grant execute on function private.record_moonetix_event(uuid,text,text,smallint,text,text,text,text,boolean)
+grant execute on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean)
   to service_role;
 
 create or replace function private.reconcile_moonetix_credit(
