@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { parseWallet, formatUsd, formatInteger, formatLootCoins } = require("../earned-loot-wallet.js");
+const { parseWallet, formatUsd, formatInteger, formatEarnedLootUnits, formatLootCoins } = require("../earned-loot-wallet.js");
 
 const valid = () => ({
   contractVersion: 1,
@@ -28,6 +28,17 @@ test("accepts canonical Earned Loot and LootCoins wallet contract", () => {
   assert.equal(parsed.earnedLoot.availableUnits, "1250");
   assert.equal(parsed.earnedLoot.pendingValueCents, "350");
   assert.equal(parsed.lootCoins.availableAtoms, "2400000");
+});
+
+test("accepts fractional Earned Loot units to thousandth precision", () => {
+  const raw = valid();
+  raw.earnedLoot.availableUnits = "1.375";
+  raw.earnedLoot.pendingUnits = "0.005";
+  const parsed = parseWallet(raw);
+  assert.equal(parsed.earnedLoot.availableUnits, "1.375");
+  assert.equal(formatEarnedLootUnits(parsed.earnedLoot.availableUnits), "1.375");
+  assert.equal(formatEarnedLootUnits("1250.000"), "1,250");
+  assert.throws(() => formatEarnedLootUnits("1.0001"));
 });
 
 test("rejects legacy wallet response shapes", () => {
