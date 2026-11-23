@@ -1,0 +1,106 @@
+# LegitLoot financial foundation — backend implementation plan
+
+**Status:** implementation design in progress; no database migration applied.  
+**Branch:** `feature/earned-loot-ledger-backend`  
+**Base:** PR #36 head `3ad5ec22b9fa4dce6c2d6f57daa4cfc381b02b62`  
+**Production safety:** no production writes, migrations, deploys, provider activation, payouts, withdrawals, or identity checks.
+
+## Owner rules that this implementation must preserve
+
+- Earned Loot (EL) and LootCoins (LC) are separate player balances and separate ledgers.
+- Moonetix's configured user split is adjustable. The initial intended setting is 50%, not a hardcoded platform constant.
+- Moonetix's player-facing reward field is already the player's share after the provider split. Record that value as the player's reward. **Never apply another 50% deduction in LegitLoot.**
+- Record the provider payout and player reward separately, together with the split/configuration snapshot applicable to that event. A later split change affects future events only.
+- A callback is evidence of an event, not authorization to credit available EL. Validate, deduplicate, reconcile/settle, then require owner or authorized-admin approval.
+- Pending EL is excluded from available EL and cannot be converted.
+- EL-to-LC is one-way, atomic, configurable by package, and uses available EL only. LC has no cash value, redemption, withdrawal, transfer, or reverse conversion.
+- LC gameplay issuance is server-authoritative and separate from provider rewards.
+- Append-only journal/audit history; reversals are compensating records. No negative available EL or LC and no automatic player debt.
+- Payouts, withdrawals, identity checks, provider activation, and production changes remain separately gated by owner approval.
+
+## Seven implementation steps
+
+### 1. Journal integrity
+- Replace idempotency-key early-return with a canonical request fingerprint.
+- Identical retry returns the original transaction; conflicting reuse raises an error.
+- Serialize concurrent postings by locking affected ledger accounts in deterministic order.
+- Validate balanced postings independently by wallet/currency.
+- Check post-transaction available balances while holding the same locks; reject any negative EL/LC available balance.
+- Keep historical transactions and entries immutable.
+
+### 2. Separate EL and LC accounting
+- Preserve existing legacy `cash_usd` and `game_credits` enum/account history; do not reinterpret old rows.
+- Add dedicated EL and LC account types/codes and system counterpart accounts.
+- EL unit precision is configuration, not assumed cents. LC remains 10,000 atoms per LC.
+- Provision separate pending, available, and held EL accounts plus LC available account for each player.
+- Never put EL and LC in the same journal transaction.
+
+### 3. Provider reward lifecycle
+- Store callback facts idempotently: provider event ID, player ID, provider payout, player reward value/currency, split snapshot, signature result, payload digest, and timestamps.
+- The Moonetix player reward is the already-split player amount; do not split it again.
+- Callback receipt creates pending/review data only. No callback path posts available EL or LC.
+- A separate trusted reconciliation operation records provider verification and settlement evidence.
+- Owner/active-admin approval checks server-side role membership, unit conversion configuration, and verified settlement before posting EL.
+- Rejection records reason and audit history without deleting source events.
+
+### 4. Reversals and holds
+- Preserve original approval and journal history.
+- Record provider reversal as a new case/event.
+- If unspent available EL covers the reversal, use a balanced compensating transaction after authorized review.
+- If it exceeds unspent available EL, hold/dispute the excess. Do not create player debt or negative balances.
+- LC reversals follow the same no-negative rule; no automatic conversion of LC back to EL.
+
+### 5. Authenticated wallet RPC
+- Implement `public.get_player_wallet_summary()` using `auth.uid()` only.
+- Return only the authenticated player's calculated EL available/pending and LC balances.
+- Only posted journal entries count.
+- Return the exact PR #36 contract: `contractVersion=1`, EL unit strings and value-cent strings, LC atom string, `cashValue=null`, `withdrawable=false`, `transferable=false`, `pendingAvailable=false`, `pendingConvertible=false`.
+- Do not expose journal rows or another user's balances.
+- If EL precision/value conversion is not verified/configured, fail closed rather than inventing an EL cash-equivalent.
+
+### 6. Staging verification
+Required automated and database tests:
+- same idempotency key + same payload is safe; same key + changed payload rejected;
+- concurrent attempts cannot overspend EL or LC;
+- mixed-currency/wallet journal transaction rejected;
+- provider callback duplicate and conflicting duplicate handling;
+- callback alone never credits available EL or LC;
+- provider payout and player reward are stored separately; player reward is not halved again;
+- split setting changes apply only to later events;
+- unverified/unsettled/rejected reward excluded from available;
+- owner/admin approval succeeds only with verification, settlement, and valid unit config;
+- non-admin approval rejected;
+- reversal within available balance compensates correctly; excess reversal held without debt;
+- RPC auth isolation, no legacy fallback, pending exclusion;
+- EL-to-LC purchase atomic/idempotent, package limits/expiry enforced, pending EL rejected;
+- gameplay LC issuance rejects provider-origin sources.
+
+### 7. Production gate
+- Staging migration and tests must pass and be reviewed first.
+- No production migration, deployment, provider activation, payout/withdrawal activation, or live-money movement without separate explicit owner approval.
+- Keep the Terms draft unpublished until owner/legal review.
+
+## Environment facts verified during implementation
+
+- PR #36 is open/draft and its wallet parser expects the contract described above.
+- The staging `private.wallet_kind` enum currently contains `cash_usd` and `game_credits`; the ledger account currency constraint allows legacy `LLC` and `LC` game-credit currencies. Staging also has `currency_scale` with existing values 1 and 10,000.
+- Staging `private.admin_users` columns are `user_id`, `admin_role`, `is_active`, `created_at`, `created_by`, `deactivated_at`, and `deactivated_by`. Its active role set includes an owner. Production was previously observed not to have this table; production authorization must not be assumed equivalent.
+- Existing `private.post_journal_transaction` accepts an idempotency-key hit without checking payload equality. It does not enforce available-balance nonnegativity.
+- Existing `private.reward_allocations` is shaped around legacy cash/game-credit fields and should not be silently repurposed as the EL model.
+
+## Implementation blockers to resolve before migration execution
+
+1. **EL precision:** confirm Moonetix publisher reward currency, smallest EL unit, conversion ratio, and rounding with the actual publisher configuration and small-award tests. No live award approval or cash-equivalent calculation until then.
+2. **Migration ordering:** PostgreSQL enum labels added by `ALTER TYPE ... ADD VALUE` cannot safely be used in the same transaction that adds them. Enum extension and functions/tables that reference new labels must be separate ordered migrations.
+3. **Environment authorization parity:** staging has `private.admin_users`; production does not. Do not copy staging admin IDs or assume the production authorization table exists. Production migration remains gated.
+4. **Moonetix event contract:** confirm exact callback fields and the publisher settlement/reconciliation source before enabling callback intake. The provider's already-split player reward must not be re-split.
+5. **Account/system counterpart mapping:** verify all legacy account codes and currency scales in both environments before adding new EL/LC system accounts. Preserve legacy records unchanged.
+
+## Explicitly not done
+
+- No Supabase migration applied.
+- No Supabase data/settings modified.
+- No production change.
+- No provider wall created or activated.
+- No payout, withdrawal, or identity-check service enabled.
+- No legal copy published.
