@@ -43,6 +43,14 @@ References:
 - https://docs.moonetix.com/postbacks
 - https://moonetix.com/academy/publisher-basics/set-up-app-currency
 
+### Reporting API reconciliation
+
+The Moonetix Reporting API provides `/v1/conversions` records with transaction ID, user ID, current status, reward, publisher USD payout, credited timestamp, and reversal timestamp. It supports pagination and up to 92-day date windows. Moonetix recommends daily reconciliation of the last 7 days of credited transactions and a longer reversal lookback (for example, 92 days).
+
+The database reconciliation functions now require the Reporting API transaction/user/reward/payout/status to match the signed postback. The credited timestamp must fall inside the verified event-time configuration interval. Reversals require a matching Reporting API reversed status, reward, user, transaction, and reversed timestamp before an admin can process the compensating journal entry.
+
+The signed postback Edge Function source is at `supabase/functions/moonetix-postback/index.ts`. It verifies HMAC-SHA256, stores only the raw event, and returns a retryable error if storage fails. It is not deployed and has no secrets configured.
+
 ## Seven implementation steps
 
 ### 1. Journal integrity
