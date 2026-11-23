@@ -121,6 +121,16 @@ Required automated and database tests:
 4. **Moonetix event contract:** confirm exact callback fields and the publisher settlement/reconciliation source before enabling callback intake. The provider's already-split player reward must not be re-split.
 5. **Account/system counterpart mapping:** verify all legacy account codes and currency scales in both environments before adding new EL/LC system accounts. Preserve legacy records unchanged.
 
+## Branch implementation progress
+
+- Added a journal-hardening migration draft at `supabase/migrations/202611230001_harden_journal_posting.sql`. It fingerprints canonical journal requests, rejects conflicting or unverifiable idempotency-key reuse, locks affected accounts in stable order, validates independent currency balances, and prevents negative player-owned account balances. It has not been applied to any database.
+- Added a separate enum-extension migration at `supabase/migrations/202611230002_add_earned_loot_wallet_kinds.sql`. It adds EL and LC wallet kinds in a separate migration so PostgreSQL enum labels are committed before later migrations use them. It has not been applied.
+- Added `earned-loot-reward.js` and tests. It preserves Moonetix's raw player reward and USD payout, snapshots the split/rate/bonus/rounding configuration, converts up to three decimal reward units to integer thousandth atoms, computes the cash-equivalent with integer arithmetic, rejects non-EL provider currency, and checks reversal transaction/reward identity.
+- Updated the wallet parser to accept EL amounts to three decimal places and format them without floating-point conversion. Updated the account page integration to use that formatter and removed a duplicate `const status` declaration present in the inherited account script.
+- Added a branch CI workflow for both the Moonetix reward and wallet contract tests. The workflow has not yet reported a GitHub Actions run; the corresponding Node test suites were run locally in the working environment and passed (7 reward tests, 8 wallet tests).
+
+These are code changes only. Staging database verification, provider event lifecycle, reward approval/reversal SQL, EL-to-LC purchase, gameplay LC issuance, and production gating remain in progress.
+
 ## Explicitly not done
 
 - No Supabase migration applied.
