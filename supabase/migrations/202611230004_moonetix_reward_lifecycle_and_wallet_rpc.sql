@@ -615,7 +615,7 @@ end;
 $fn$;
 revoke all on function public.reconcile_moonetix_reversal_report(text,text,text,text,timestamptz,text)
   from public,anon,authenticated;
-grant execute on function public.reconcile_moonetix_reversal_report(text,text,text,timestamptz,text)
+grant execute on function public.reconcile_moonetix_reversal_report(text,text,text,text,timestamptz,text)
   to service_role;
 
 create or replace function public.get_player_wallet_summary()
