@@ -233,7 +233,7 @@ begin
   if not v_failed then raise exception 'Provider-origin LC issuance was accepted'; end if;
 
   -- Reversal 1 fits the unspent EL balance and posts a compensating journal entry.
-  v_reversal1:=private.record_moonetix_event(v_user,'mx-tx-1','mx-event-1-reversal',2,'EL','250','0.5','digest-reversal-1',true);
+  v_reversal1:=private.record_moonetix_event(v_user,'mx-tx-1','mx-event-1-reversal',2,'EL','250.000','0.500','digest-reversal-1',true);
   v_failed:=false;
   begin
     perform public.reconcile_moonetix_reversal_report('mx-tx-1',v_user::text,'125','0.5',now()+interval '2 hours','bad-reversal-report');
