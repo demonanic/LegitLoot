@@ -9,6 +9,7 @@ on:
       - "tests/earned-loot-reward.test.cjs"
       - "tests/earned-loot-wallet.test.cjs"
       - "tests/sql/**"
+      - "supabase/functions/moonetix-postback/**"
       - "supabase/migrations/20261123000*.sql"
       - ".github/workflows/earned-loot-backend.yml"
   push:
