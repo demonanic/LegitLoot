@@ -113,6 +113,8 @@ create table if not exists private.moonetix_reward_events (
   signature_valid boolean not null default false,
   status text not null default 'pending_verification'
     check (status in ('pending_verification','pending_review','approved','rejected','reversal_pending','reversed','held')),
+  provider_credited_at timestamptz,
+  provider_reversed_at timestamptz,
   reconciled_at timestamptz,
   reconciliation_reference text,
   approval_actor uuid references auth.users(id),
