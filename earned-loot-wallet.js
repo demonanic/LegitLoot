@@ -56,7 +56,14 @@
     return n.toLocaleString("en-US");
   };
 
-  const api = Object.freeze({ parseWallet, formatUsd, formatInteger });
+  const formatLootCoins = (atoms) => {
+    const n = BigInt(integerString(atoms, "LootCoins atoms"));
+    const whole = n / 10000n;
+    const fraction = (n % 10000n).toString().padStart(4, "0").replace(/0+$/, "");
+    return whole.toLocaleString("en-US") + (fraction ? "." + fraction : "") + " LC";
+  };
+
+  const api = Object.freeze({ parseWallet, formatUsd, formatInteger, formatLootCoins });
   root.LEGITLOOT_EARNED_WALLET = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);
