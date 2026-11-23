@@ -127,7 +127,7 @@ create table if not exists private.moonetix_reward_events (
   provider_status smallint not null check (provider_status in (1,2)),
   currency_code text not null check (currency_code = 'EL'),
   reward_raw text not null check (reward_raw ~ '^(0|[1-9][0-9]*)(\.[0-9]{1,3})?$'),
-  payout_usd_raw text not null check (payout_usd_raw ~ '^(0|[1-9][0-9]*)(\\.[0-9]{1,12})?$'),
+  payout_usd_raw text not null check (payout_usd_raw ~ '^(0|[1-9][0-9]*)(\.[0-9]{1,12})?$'),
   reward_atoms bigint,
   cash_equivalent_cents bigint,
   split_percent_snapshot smallint check (split_percent_snapshot between 1 and 100),
