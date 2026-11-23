@@ -62,23 +62,29 @@ async function fetchPage(
   });
   if (after) params.set("after", after);
 
-  const response = await fetch("https://api.moonetix.com/v1/conversions?" + params.toString(), {
-    method: "GET",
-    headers: { Authorization: "Bearer " + apiKey },
-  });
-  if (response.status === 429) {
-    const retryAfter = Number(response.headers.get("Retry-After") ?? "10");
-    await new Promise((resolve) => setTimeout(resolve, Math.min(Math.max(retryAfter, 1), 30) * 1000));
-    return await fetchPage(apiKey, from, to, timeZone, status, after);
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    const response = await fetch("https://api.moonetix.com/v1/conversions?" + params.toString(), {
+      method: "GET",
+      headers: { Authorization: "Bearer " + apiKey },
+    });
+    if (response.status === 429) {
+      if (attempt === 4) {
+        throw new Error("Moonetix Reporting API rate limit persisted after bounded retries");
+      }
+      const retryAfter = Number(response.headers.get("Retry-After") ?? "10");
+      await new Promise((resolve) => setTimeout(resolve, Math.min(Math.max(retryAfter, 1), 30) * 1000));
+      continue;
+    }
+    if (!response.ok) {
+      throw new Error("Moonetix Reporting API returned HTTP " + response.status);
+    }
+    const page = await response.json() as ReportPage;
+    if (!page.ok || page.currency !== "EL" || !Array.isArray(page.conversions)) {
+      throw new Error("Moonetix Reporting API returned an unexpected report contract");
+    }
+    return page;
   }
-  if (!response.ok) {
-    throw new Error("Moonetix Reporting API returned HTTP " + response.status);
-  }
-  const page = await response.json() as ReportPage;
-  if (!page.ok || page.currency !== "EL" || !Array.isArray(page.conversions)) {
-    throw new Error("Moonetix Reporting API returned an unexpected report contract");
-  }
-  return page;
+  throw new Error("Moonetix Reporting API request did not complete");
 }
 
 Deno.serve(async (request: Request) => {
