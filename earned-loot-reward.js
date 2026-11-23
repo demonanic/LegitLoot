@@ -43,7 +43,7 @@
     if (splitPercent < 1) throw new Error("Split percentage must be at least 1");
     const bonusPercent = parsePercent(input.bonusPercent, "bonus percentage", 500);
     if (typeof input.conversionRate !== "string") throw new Error("Conversion rate is required");
-    const rate = decimalParts(input.conversionRate, 2, "conversion rate", false);
+    const rate = decimalParts(input.conversionRate, 8, "conversion rate", false);
     const rewardAtoms = rewardToAtoms(input.reward);
     const payoutMicros = payoutToUsdMicros(input.payoutUsd);
     const mode = input.roundingMode;
@@ -60,7 +60,7 @@
 
     // Cash-equivalent cents = (already-split reward / units-per-USD) * 100.
     // All arithmetic is integer/rational; round half up to cents.
-    const numerator = BigInt(rewardAtoms) * 10n;
+    const numerator = BigInt(rewardAtoms) * 10000000n;
     const denominator = rate.atoms;
     const cents = (numerator * 2n + denominator) / (2n * denominator);
 
