@@ -45,7 +45,7 @@ begin
     raise exception 'Callback did not remain pending-only with value withheld';
   end if;
 
-  perform private.reconcile_moonetix_credit(v_event1,v_config,'statement-line-1');
+  perform private.reconcile_moonetix_credit(v_event1,v_config,'mx-tx-1',v_user,'250','0.5','credited',now()-interval '1 hour','statement-line-1');
   v_summary:=public.get_player_wallet_summary();
   if v_summary#>>'{earnedLoot,availableUnits}' <> '0'
     or v_summary#>>'{earnedLoot,pendingUnits}' <> '250' then
@@ -150,7 +150,7 @@ begin
   returning id into v_config2;
 
   v_event2:=private.record_moonetix_event(v_user,'mx-tx-2','mx-event-2',1,'EL','300','0.5','digest-2',true);
-  perform private.reconcile_moonetix_credit(v_event2,v_config2,'statement-line-2');
+  perform private.reconcile_moonetix_credit(v_event2,v_config2,'mx-tx-2',v_user,'300','0.5','credited',now()+interval '1 minute','statement-line-2');
   perform private.approve_moonetix_reward(v_event2,'owner approval');
   if (select split_percent_snapshot from private.moonetix_reward_events where id=v_event1) <> 50
     or (select split_percent_snapshot from private.moonetix_reward_events where id=v_event2) <> 60 then
@@ -187,6 +187,7 @@ begin
 
   -- Reversal 1 fits the unspent EL balance and posts a compensating journal entry.
   v_reversal1:=private.record_moonetix_event(v_user,'mx-tx-1','mx-event-1-reversal',2,'EL','250','0.5','digest-reversal-1',true);
+  perform private.reconcile_moonetix_reversal(v_reversal1,'mx-tx-1',v_user,'250','reversed',now()+interval '2 hours','report-reversal-1');
   perform private.process_moonetix_reversal(v_reversal1,'provider reversal confirmed');
   if (select status from private.moonetix_reward_events where id=v_reversal1) <> 'reversed' then
     raise exception 'Funded reversal was not compensated';
@@ -194,6 +195,7 @@ begin
 
   -- Reversal 2 exceeds unspent EL; it must be held without creating debt.
   v_reversal2:=private.record_moonetix_event(v_user,'mx-tx-2','mx-event-2-reversal',2,'EL','300','0.5','digest-reversal-2',true);
+  perform private.reconcile_moonetix_reversal(v_reversal2,'mx-tx-2',v_user,'300','reversed',now()+interval '3 hours','report-reversal-2');
   perform private.process_moonetix_reversal(v_reversal2,'excess provider reversal');
   if (select status from private.moonetix_reward_events where id=v_reversal2) <> 'held' then
     raise exception 'Excess reversal was not held';
@@ -205,7 +207,7 @@ begin
 
   -- A different authenticated player sees only their own wallet and cannot approve.
   v_event3:=private.record_moonetix_event(v_other,'mx-tx-3','mx-event-3',1,'EL','100','0.2','digest-3',true);
-  perform private.reconcile_moonetix_credit(v_event3,v_config2,'statement-line-3');
+  perform private.reconcile_moonetix_credit(v_event3,v_config2,'mx-tx-3',v_other,'100','0.2','credited',now()+interval '2 minutes','statement-line-3');
   perform set_config('request.jwt.claim.sub',v_other::text,true);
   v_failed:=false;
   begin
