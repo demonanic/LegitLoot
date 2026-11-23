@@ -9,8 +9,10 @@ declare
   v_event1 uuid;
   v_event2 uuid;
   v_event3 uuid;
+  v_event4 uuid;
   v_test_event uuid;
   v_reversal1 uuid;
+  v_reversal3 uuid;
   v_reversal2 uuid;
   v_purchase uuid;
   v_purchase_retry uuid;
@@ -270,6 +272,28 @@ begin
   if v_summary#>>'{earnedLoot,availableUnits}' <> '0'
     or v_summary#>>'{earnedLoot,pendingUnits}' <> '100' then
     raise exception 'Wallet RPC leaked another player balance or lost pending reward';
+  end if;
+
+  -- If the provider reverses before approval, cancel the pending credit without debiting the player.
+  perform set_config('request.jwt.claim.sub',v_user::text,true);
+  v_event4:=private.record_moonetix_event(v_user,'mx-tx-4','mx-event-4',1,'EL','50','0.05','digest-4',true);
+  perform public.reconcile_moonetix_credit_report(
+    'mx-tx-4',v_user::text,'50','0.05',now()+interval '4 minutes','statement-line-4'
+  );
+  v_reversal3:=private.record_moonetix_event(v_user,'mx-tx-4','mx-event-4-reversal',2,'EL','50','0.05','digest-reversal-4',true);
+  perform public.reconcile_moonetix_reversal_report(
+    'mx-tx-4',v_user::text,'50','0.05',now()+interval '5 minutes','report-reversal-4'
+  );
+  perform private.process_moonetix_reversal(v_reversal3,'reversed before owner approval');
+  if (select status from private.moonetix_reward_events where id=v_event4) <> 'rejected'
+    or (select status from private.moonetix_reward_events where id=v_reversal3) <> 'reversed'
+    or (select journal_transaction_id from private.moonetix_reward_events where id=v_reversal3) is not null then
+    raise exception 'Pre-approval reversal was not closed without a player debit';
+  end if;
+  v_summary:=public.get_player_wallet_summary();
+  if v_summary#>>'{earnedLoot,availableUnits}' <> '200'
+    or v_summary#>>'{earnedLoot,pendingUnits}' <> '0' then
+    raise exception 'Pre-approval reversal changed available or pending EL incorrectly';
   end if;
 
   raise notice 'Financial foundation integration tests passed';
