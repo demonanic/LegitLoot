@@ -225,6 +225,25 @@ create table if not exists private.earned_loot_reward_audit (
   created_at timestamptz not null default now()
 );
 
+create table if not exists private.earned_loot_lot_movements (
+  id bigint generated always as identity primary key,
+  lot_id uuid not null references private.earned_loot_lots(id) on delete restrict,
+  user_id uuid not null references auth.users(id) on delete restrict,
+  movement_type text not null check (movement_type in ('el_to_lc_purchase','provider_reversal')),
+  movement_id uuid not null,
+  amount_atoms bigint not null check (amount_atoms>0),
+  value_cents bigint not null check (value_cents>=0),
+  created_at timestamptz not null default now(),
+  unique(lot_id,movement_type,movement_id)
+);
+create index earned_loot_lot_movements_user_idx
+  on private.earned_loot_lot_movements(user_id,created_at desc);
+
+drop trigger if exists earned_loot_lot_movements_immutable on private.earned_loot_lot_movements;
+create trigger earned_loot_lot_movements_immutable
+before update or delete on private.earned_loot_lot_movements
+for each row execute function private.reject_ledger_mutation();
+
 create table if not exists private.earned_loot_reversal_cases (
   id uuid primary key default gen_random_uuid(),
   original_reward_event_id uuid not null references private.moonetix_reward_events(id) on delete restrict,
