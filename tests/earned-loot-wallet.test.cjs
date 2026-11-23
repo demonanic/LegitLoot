@@ -51,7 +51,7 @@ test("rejects legacy wallet response shapes", () => {
 });
 
 test("rejects non-integer, negative, and unsafe-looking amount strings", () => {
-  for (const value of ["-1", "1.5", "1e3", "01", 100, null]) {
+  for (const value of ["-1", "1e3", "01", "1.1234", 100, null]) {
     const raw = valid();
     raw.earnedLoot.availableUnits = value;
     assert.throws(() => parseWallet(raw));
