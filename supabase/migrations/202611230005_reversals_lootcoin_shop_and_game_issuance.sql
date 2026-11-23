@@ -39,8 +39,10 @@ begin
   end if;
   if v_reversal.status='held' then return null; end if;
   if v_reversal.provider_status <> 2 or v_reversal.status <> 'reversal_pending'
-    or not v_reversal.signature_valid or v_reversal.original_event_id is null then
-    raise exception 'Event is not an eligible provider reversal';
+    or not v_reversal.signature_valid or v_reversal.original_event_id is null
+    or v_reversal.reconciled_at is null or v_reversal.provider_reversed_at is null
+    or v_reversal.reconciliation_reference is null then
+    raise exception 'Event is not an eligible, reconciled provider reversal';
   end if;
 
   select * into v_original from private.moonetix_reward_events
