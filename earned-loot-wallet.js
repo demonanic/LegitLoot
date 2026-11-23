@@ -24,7 +24,7 @@
     if (!el || !lc) throw new Error("Wallet sections missing");
     if (el.code !== "EL" || lc.code !== "LC") throw new Error("Unexpected wallet currency");
     if (typeof el.unitsLabel !== "string" || !el.unitsLabel.trim()) throw new Error("Invalid Earned Loot label");
-    if (typeof el.availableValueCents !== "string" || typeof el.pendingValueCents !== "string") {
+    if (typeof el.availableValueCents !== "string" || (el.pendingValueCents !== null && typeof el.pendingValueCents !== "string")) {
       throw new Error("Earned Loot value must use integer cent strings");
     }
     const parsed = {
@@ -32,7 +32,7 @@
         availableUnits: unitString(el.availableUnits, "available Earned Loot units"),
         pendingUnits: unitString(el.pendingUnits, "pending Earned Loot units"),
         availableValueCents: integerString(el.availableValueCents, "available Earned Loot value"),
-        pendingValueCents: integerString(el.pendingValueCents, "pending Earned Loot value"),
+        pendingValueCents: el.pendingValueCents === null ? null : integerString(el.pendingValueCents, "pending Earned Loot value"),
         unitsLabel: el.unitsLabel
       },
       lootCoins: {
