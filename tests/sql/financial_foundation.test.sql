@@ -25,6 +25,7 @@ declare
   v_summary jsonb;
   v_failed boolean;
   v_issued uuid;
+  v_movement_id bigint;
 begin
   insert into auth.users(id,email) values(v_user,'owner@test.invalid'),(v_other,'player@test.invalid');
   insert into private.admin_users(user_id,admin_role,is_active) values(v_user,'owner',true);
@@ -223,6 +224,14 @@ begin
       where movement_type='el_to_lc_purchase' and movement_id=v_purchase) <> 100000 then
     raise exception 'EL-to-LC purchase lot movement audit is incomplete';
   end if;
+  select id into v_movement_id from private.earned_loot_lot_movements
+  where movement_type='el_to_lc_purchase' and movement_id=v_purchase limit 1;
+  v_failed:=false;
+  begin
+    update private.earned_loot_lot_movements set value_cents=0 where id=v_movement_id;
+  exception when others then v_failed:=true;
+  end;
+  if not v_failed then raise exception 'Immutable lot movement history was mutable'; end if;
 
   -- Gameplay LC issuance is server-authoritative and idempotent; provider source types are rejected.
   v_issued:=private.issue_game_lootcoins(v_user,'game_milestone','milestone-1',10000);
