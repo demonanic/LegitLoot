@@ -60,7 +60,7 @@
       $("wallet-earned-pending-value").textContent =
         window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.pendingValueCents) + " · estimated value";
       $("wallet-lootcoins-available").textContent =
-        (Number(wallet.lootCoins.availableAtoms) / 10000).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 4 }) + " LC";
+        window.LEGITLOOT_EARNED_WALLET.formatLootCoins(wallet.lootCoins.availableAtoms);
       $("wallet-earned-pending-detail").textContent =
         "Awaiting provider verification and approval. This amount is not available for spending, redemption, or conversion.";
     } catch (error) {
