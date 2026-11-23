@@ -43,6 +43,9 @@ begin
   from private.lootcoin_package_purchases
   where user_id='00000000-0000-4000-8000-000000000001';
   if purchases<>1 then raise exception 'Expected exactly one concurrent package purchase, found %',purchases; end if;
+  if (select count(*) from private.earned_loot_lot_movements where movement_type='el_to_lc_purchase')<>1 then
+    raise exception 'Expected one immutable lot movement for the winning purchase';
+  end if;
   if summary#>>'{earnedLoot,availableUnits}'<>'50'
     or summary#>>'{lootCoins,availableAtoms}'<>'50000' then
     raise exception 'Concurrent purchase produced incorrect balances: %',summary;
