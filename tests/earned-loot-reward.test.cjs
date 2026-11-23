@@ -40,6 +40,12 @@ test("supports up to three decimal reward precision exactly", () => {
   assert.equal(reward.formatEarnedLoot(snapshot.rewardAtoms), "0.375 EL");
 });
 
+test("preserves publisher payout precision without floating-point conversion", () => {
+  const snapshot = reward.createRewardSnapshot({ ...base, payoutUsd: "0.000000000125" });
+  assert.equal(snapshot.payoutUsdRaw, "0.000000000125");
+  assert.equal(snapshot.payoutUsdAtoms, "125");
+});
+
 test("supports conversion rates with more than two decimal places", () => {
   const snapshot = reward.createRewardSnapshot({
     ...base, reward: "1.234", conversionRate: "1.23456789",
