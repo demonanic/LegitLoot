@@ -88,6 +88,15 @@ create table private.journal_entries (
 create index journal_entries_account_created_idx on private.journal_entries(account_id,created_at desc);
 create index journal_entries_transaction_idx on private.journal_entries(transaction_id);
 
+
+create or replace function private.reject_ledger_mutation()
+returns trigger language plpgsql set search_path=''
+as $fn$
+begin
+  raise exception 'Ledger records are immutable; post a compensating transaction';
+end;
+$fn$;
+
 create table private.admin_users (
   user_id uuid primary key references auth.users(id),
   admin_role text not null,
