@@ -33,7 +33,8 @@ as $fn$
 declare
   v_event_id uuid;
   v_existing private.moonetix_reward_events%rowtype;
-  v_original uuid;
+  v_original private.moonetix_reward_events%rowtype;
+  v_original_id uuid;
   v_status text;
 begin
   if p_user_id is null or p_transaction_id is null or trim(p_transaction_id) = ''
@@ -45,12 +46,18 @@ begin
   if p_currency_code <> 'EL' then raise exception 'Moonetix reward currency must be EL'; end if;
 
   if p_status = 2 then
-    select id into v_original
+    select * into v_original
     from private.moonetix_reward_events
-    where provider_transaction_id = p_transaction_id and provider_status = 1;
-    if v_original is null then
+    where provider_transaction_id = p_transaction_id and provider_status = 1
+    for update;
+    if v_original.id is null then
       raise exception 'Reversal arrived without a known original credit';
     end if;
+    if v_original.user_id <> p_user_id or v_original.currency_code <> p_currency_code
+      or v_original.reward_raw <> p_reward_raw then
+      raise exception 'Moonetix reversal does not match the original player reward';
+    end if;
+    v_original_id := v_original.id;
     v_status := case when coalesce(p_signature_valid,false) then 'reversal_pending' else 'rejected' end;
   else
     v_status := case when coalesce(p_signature_valid,false) then 'pending_verification' else 'rejected' end;
@@ -61,7 +68,7 @@ begin
     reward_raw,payout_usd_raw,payload_digest,signature_valid,status,original_event_id
   ) values (
     p_user_id,p_transaction_id,p_event_id,p_status,p_currency_code,
-    p_reward_raw,p_payout_usd_raw,p_payload_digest,coalesce(p_signature_valid,false),v_status,v_original
+    p_reward_raw,p_payout_usd_raw,p_payload_digest,coalesce(p_signature_valid,false),v_status,v_original_id
   )
   on conflict (provider_event_id) do nothing
   returning id into v_event_id;
@@ -118,6 +125,12 @@ begin
   where id=p_reward_event_id
   for update;
   if not found then raise exception 'Moonetix reward event not found'; end if;
+  if v_event.status in ('pending_review','approved') then
+    if v_event.config_version_id is distinct from p_config_version_id then
+      raise exception 'Reward was already reconciled against a different configuration snapshot';
+    end if;
+    return coalesce(v_event.pending_journal_transaction_id,v_event.approval_journal_transaction_id);
+  end if;
   if v_event.provider_status <> 1 or v_event.status <> 'pending_verification'
     or not v_event.signature_valid then
     raise exception 'Event is not eligible for credit reconciliation';
@@ -213,6 +226,9 @@ begin
   select * into v_event from private.moonetix_reward_events
   where id=p_reward_event_id for update;
   if not found then raise exception 'Reward event not found'; end if;
+  if v_event.status = 'approved' and v_event.approval_journal_transaction_id is not null then
+    return v_event.approval_journal_transaction_id;
+  end if;
   if v_event.status <> 'pending_review' or v_event.provider_status <> 1
     or not v_event.signature_valid or v_event.reconciled_at is null
     or v_event.reconciliation_reference is null or v_event.reward_atoms is null
@@ -253,7 +269,7 @@ begin
 
   update private.moonetix_reward_events
   set status='approved',approval_actor=v_actor,approval_at=now(),
-      approval_journal_transaction_id=v_tx
+      approval_journal_transaction_id=v_tx,journal_transaction_id=v_tx
   where id=v_event.id;
 
   insert into private.earned_loot_reward_audit(reward_event_id,actor_user_id,action,reason,metadata)
@@ -285,7 +301,9 @@ begin
 
   select * into v_event from private.moonetix_reward_events
   where id=p_reward_event_id for update;
-  if not found or v_event.status not in ('pending_verification','pending_review') then
+  if not found then raise exception 'Reward event not found'; end if;
+  if v_event.status='rejected' then return v_event.journal_transaction_id; end if;
+  if v_event.status not in ('pending_verification','pending_review') then
     raise exception 'Reward is not eligible for rejection';
   end if;
 
