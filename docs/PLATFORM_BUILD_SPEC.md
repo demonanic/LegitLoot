@@ -7,6 +7,10 @@
 **Business source of truth:** LegitLoot Master Business Model & Living Business Blueprint v1.3 supplied by the owner.  
 **Authorization:** Owner has now explicitly authorized development. This supersedes v1.3's earlier "no development authorized" status for work on the isolated build branch only. It does not authorize paid services, account creation, provider agreements, live money movement, or production deployment.
 
+## Current owner amendment — 2026-11-23
+
+The current player-wallet and reward model is governed by [Earned Loot and LootCoins Owner Amendment](EARNED_LOOT_AND_LOOTCOINS_MODEL.md). That amendment supersedes conflicting earlier descriptions in this build specification, including the former provider-to-LC model and separate player-facing USD Cash wallet. Do not implement this specification's older wallet wording where it conflicts with the current owner amendment.
+
 ## 1. Product definition
 
 LegitLoot is a combined independent games and rewards platform with four public-facing pillars:
