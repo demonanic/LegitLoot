@@ -219,6 +219,10 @@ begin
     or v_summary#>>'{lootCoins,availableAtoms}' <> '50000' then
     raise exception 'EL-to-LC package purchase balances are incorrect';
   end if;
+  if (select coalesce(sum(amount_atoms),0) from private.earned_loot_lot_movements
+      where movement_type='el_to_lc_purchase' and movement_id=v_purchase) <> 100000 then
+    raise exception 'EL-to-LC purchase lot movement audit is incomplete';
+  end if;
 
   -- Gameplay LC issuance is server-authoritative and idempotent; provider source types are rejected.
   v_issued:=private.issue_game_lootcoins(v_user,'game_milestone','milestone-1',10000);
@@ -244,6 +248,10 @@ begin
   perform private.process_moonetix_reversal(v_reversal1,'provider reversal confirmed');
   if (select status from private.moonetix_reward_events where id=v_reversal1) <> 'reversed' then
     raise exception 'Funded reversal was not compensated';
+  end if;
+  if (select coalesce(sum(amount_atoms),0) from private.earned_loot_lot_movements
+      where movement_type='provider_reversal' and movement_id=v_reversal1) <> 250000 then
+    raise exception 'Reversal lot movement audit is incomplete';
   end if;
 
   -- Reversal 2 exceeds unspent EL; it must be held without creating debt.
