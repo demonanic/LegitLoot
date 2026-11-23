@@ -6,12 +6,12 @@ PACKAGE_ID="00000000-0000-4000-8000-000000000002"
 
 set +e
 (
-  psql -v ON_ERROR_STOP=1 -c "select set_config('request.jwt.claim.sub','\${USER_ID}',false); select private.purchase_lootcoin_package('\${PACKAGE_ID}','race-purchase-key-0001');" >/tmp/race-1.log 2>&1
+  psql -v ON_ERROR_STOP=1 -c "select set_config('request.jwt.claim.sub','${USER_ID}',false); select private.purchase_lootcoin_package('${PACKAGE_ID}','race-purchase-key-0001');" >/tmp/race-1.log 2>&1
   echo $? >/tmp/race-1.exit
 ) &
 PID1=$!
 (
-  psql -v ON_ERROR_STOP=1 -c "select set_config('request.jwt.claim.sub','\${USER_ID}',false); select private.purchase_lootcoin_package('\${PACKAGE_ID}','race-purchase-key-0002');" >/tmp/race-2.log 2>&1
+  psql -v ON_ERROR_STOP=1 -c "select set_config('request.jwt.claim.sub','${USER_ID}',false); select private.purchase_lootcoin_package('${PACKAGE_ID}','race-purchase-key-0002');" >/tmp/race-2.log 2>&1
   echo $? >/tmp/race-2.exit
 ) &
 PID2=$!
