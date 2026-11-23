@@ -1,7 +1,14 @@
 (function (root) {
   "use strict";
 
-  const unitString = (value, field) => {\n    if (typeof value !== "string" || !/^(0|[1-9][0-9]*)(?:\\.[0-9]{1,3})?$/.test(value)) {\n      throw new Error("Invalid " + field);\n    }\n    return value;\n  };\n\n  const integerString = (value, field) => {
+  const unitString = (value, field) => {
+    if (typeof value !== "string" || !/^(0|[1-9][0-9]*)(?:\.[0-9]{1,3})?$/.test(value)) {
+      throw new Error("Invalid " + field);
+    }
+    return value;
+  };
+
+  const integerString = (value, field) => {
     if (typeof value !== "string" || !/^(0|[1-9][0-9]*)$/.test(value)) {
       throw new Error("Invalid " + field);
     }
@@ -50,7 +57,14 @@
     return amount.toLocaleString("en-US", { style: "currency", currency: "USD" });
   };
 
-  const formatEarnedLootUnits = (value) => {\n    const valid = unitString(value, "Earned Loot units");\n    const [whole, fraction = ""] = valid.split(".");\n    const trimmed = fraction.replace(/0+$/, "");\n    return BigInt(whole).toLocaleString("en-US") + (trimmed ? "." + trimmed : "");\n  };\n\n  const formatInteger = (value) => {
+  const formatEarnedLootUnits = (value) => {
+    const valid = unitString(value, "Earned Loot units");
+    const [whole, fraction = ""] = valid.split(".");
+    const trimmed = fraction.replace(/0+$/, "");
+    return BigInt(whole).toLocaleString("en-US") + (trimmed ? "." + trimmed : "");
+  };
+
+  const formatInteger = (value) => {
     const n = Number(value);
     if (!Number.isSafeInteger(n)) throw new Error("Unsafe wallet unit amount");
     return n.toLocaleString("en-US");
