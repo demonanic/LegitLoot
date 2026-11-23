@@ -39,8 +39,10 @@ begin
   -- Callback receipt alone must not credit available EL.
   v_event1:=private.record_moonetix_event(v_user,'mx-tx-1','mx-event-1',1,'EL','250','0.5','digest-1',true);
   v_summary:=public.get_player_wallet_summary();
-  if v_summary#>>'{earnedLoot,availableUnits}' <> '0' then
-    raise exception 'Callback alone credited available EL';
+  if v_summary#>>'{earnedLoot,availableUnits}' <> '0'
+    or v_summary#>>'{earnedLoot,pendingUnits}' <> '250'
+    or v_summary#>'{earnedLoot,pendingValueCents}' <> 'null'::jsonb then
+    raise exception 'Callback did not remain pending-only with value withheld';
   end if;
 
   perform private.reconcile_moonetix_credit(v_event1,v_config,'statement-line-1');
