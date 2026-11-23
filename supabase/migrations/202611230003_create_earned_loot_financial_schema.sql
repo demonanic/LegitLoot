@@ -136,8 +136,9 @@ create table if not exists private.moonetix_reward_events (
   rounding_mode_snapshot text check (rounding_mode_snapshot in ('whole','three_decimals')),
   payload_digest text not null,
   signature_valid boolean not null default false,
+  is_test boolean not null default false,
   status text not null default 'pending_verification'
-    check (status in ('pending_verification','pending_review','approved','rejected','reversal_pending','reversed','held')),
+    check (status in ('pending_verification','pending_review','approved','rejected','reversal_pending','reversed','held','test')),
   provider_credited_at timestamptz,
   provider_reversed_at timestamptz,
   reconciled_at timestamptz,
