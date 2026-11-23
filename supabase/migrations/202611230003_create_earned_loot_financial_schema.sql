@@ -51,6 +51,9 @@ begin
     (p_user_id,'cash_withdrawal_reserved','cash_usd','USD',false,1),
     (p_user_id,'cash_paid','cash_usd','USD',false,1),
     (p_user_id,'cash_held','cash_usd','USD',false,1),
+    (p_user_id,'game_credits_available','game_credits','LLC',false,10000),
+    (p_user_id,'game_credits_provisional','game_credits','LLC',false,10000),
+    (p_user_id,'game_credits_deferred','game_credits','LLC',false,10000),
     (p_user_id,'lootcoins_available','game_credits','LC',false,10000),
     -- New EL and LC accounts are separate wallet kinds and start at zero.
     (p_user_id,'earned_loot_pending','earned_loot','EL',false,1000),
