@@ -115,6 +115,12 @@ grant execute on function private.record_moonetix_event(uuid,text,text,integer,t
 create or replace function private.reconcile_moonetix_credit(
   p_reward_event_id uuid,
   p_config_version_id bigint,
+  p_report_transaction_id text,
+  p_report_user_id uuid,
+  p_report_reward_raw text,
+  p_report_payout_usd_raw text,
+  p_report_status text,
+  p_provider_credited_at timestamptz,
   p_reconciliation_reference text
 )
 returns uuid
@@ -137,8 +143,9 @@ begin
   for update;
   if not found then raise exception 'Moonetix reward event not found'; end if;
   if v_event.status in ('pending_review','approved') then
-    if v_event.config_version_id is distinct from p_config_version_id then
-      raise exception 'Reward was already reconciled against a different configuration snapshot';
+    if v_event.config_version_id is distinct from p_config_version_id
+      or v_event.provider_credited_at is distinct from p_provider_credited_at then
+      raise exception 'Reward was already reconciled against different provider/configuration facts';
     end if;
     return coalesce(v_event.pending_journal_transaction_id,v_event.approval_journal_transaction_id);
   end if;
@@ -146,8 +153,18 @@ begin
     or not v_event.signature_valid then
     raise exception 'Event is not eligible for credit reconciliation';
   end if;
-  if p_reconciliation_reference is null or trim(p_reconciliation_reference) = '' then
-    raise exception 'Provider reconciliation reference is required';
+  if p_reconciliation_reference is null or trim(p_reconciliation_reference) = ''
+    or p_provider_credited_at is null then
+    raise exception 'Provider credited timestamp and reconciliation reference are required';
+  end if;
+  if p_report_status <> 'credited'
+    or p_report_transaction_id is distinct from v_event.provider_transaction_id
+    or p_report_user_id is distinct from v_event.user_id
+    or p_report_reward_raw is null
+    or p_report_reward_raw::numeric <> v_event.reward_raw::numeric
+    or p_report_payout_usd_raw is null
+    or p_report_payout_usd_raw::numeric <> v_event.payout_usd_raw::numeric then
+    raise exception 'Moonetix Reporting API record does not match the signed postback';
   end if;
 
   select * into v_config
@@ -155,6 +172,10 @@ begin
   where id=p_config_version_id and is_verified=true;
   if not found then raise exception 'Verified Moonetix configuration snapshot required'; end if;
   if v_config.currency_code <> 'EL' then raise exception 'Provider currency mismatch'; end if;
+  if p_provider_credited_at < v_config.effective_from
+    or (v_config.effective_to is not null and p_provider_credited_at >= v_config.effective_to) then
+    raise exception 'Configuration snapshot was not effective when Moonetix credited the event';
+  end if;
   if v_config.rounding_mode='whole' and position('.' in v_event.reward_raw)>0 then
     raise exception 'Fractional reward conflicts with whole-number provider rounding snapshot';
   end if;
@@ -200,6 +221,7 @@ begin
       conversion_rate_snapshot=v_config.conversion_rate,
       bonus_percent_snapshot=v_config.bonus_percent,
       rounding_mode_snapshot=v_config.rounding_mode,
+      provider_credited_at=p_provider_credited_at,
       reconciled_at=now(),
       reconciliation_reference=p_reconciliation_reference,
       pending_journal_transaction_id=v_tx,
@@ -213,8 +235,71 @@ begin
   return v_tx;
 end;
 $fn$;
-revoke all on function private.reconcile_moonetix_credit(uuid,bigint,text) from public,anon,authenticated;
-grant execute on function private.reconcile_moonetix_credit(uuid,bigint,text) to service_role;
+revoke all on function private.reconcile_moonetix_credit(uuid,bigint,text,uuid,text,text,text,timestamptz,text) from public,anon,authenticated;
+grant execute on function private.reconcile_moonetix_credit(uuid,bigint,text,uuid,text,text,text,timestamptz,text) to service_role;
+
+create or replace function private.reconcile_moonetix_reversal(
+  p_reversal_event_id uuid,
+  p_report_transaction_id text,
+  p_report_user_id uuid,
+  p_report_reward_raw text,
+  p_report_status text,
+  p_provider_reversed_at timestamptz,
+  p_reconciliation_reference text
+)
+returns void
+language plpgsql
+security definer
+set search_path = ''
+as $fn$
+declare
+  v_event private.moonetix_reward_events%rowtype;
+  v_original private.moonetix_reward_events%rowtype;
+begin
+  select * into v_event from private.moonetix_reward_events
+  where id=p_reversal_event_id for update;
+  if not found then raise exception 'Moonetix reversal event not found'; end if;
+  if v_event.status='reversal_pending' and v_event.reconciled_at is not null then
+    if v_event.provider_reversed_at is distinct from p_provider_reversed_at then
+      raise exception 'Reversal was already reconciled against a different provider timestamp';
+    end if;
+    return;
+  end if;
+  if v_event.provider_status<>2 or v_event.status<>'reversal_pending'
+    or not v_event.signature_valid or v_event.original_event_id is null then
+    raise exception 'Event is not eligible for reversal reconciliation';
+  end if;
+  if p_report_status<>'reversed'
+    or p_report_transaction_id is distinct from v_event.provider_transaction_id
+    or p_report_user_id is distinct from v_event.user_id
+    or p_report_reward_raw is null
+    or p_report_reward_raw::numeric<>v_event.reward_raw::numeric
+    or p_provider_reversed_at is null
+    or p_reconciliation_reference is null or trim(p_reconciliation_reference)='' then
+    raise exception 'Moonetix Reporting API reversal does not match the signed postback';
+  end if;
+
+  select * into v_original from private.moonetix_reward_events
+  where id=v_event.original_event_id for update;
+  if not found or v_original.provider_credited_at is null
+    or p_provider_reversed_at<v_original.provider_credited_at then
+    raise exception 'Original provider credit or reversal timestamp is invalid';
+  end if;
+
+  update private.moonetix_reward_events
+  set provider_reversed_at=p_provider_reversed_at,
+      reconciled_at=now(),
+      reconciliation_reference=p_reconciliation_reference
+  where id=v_event.id;
+  insert into private.earned_loot_reward_audit(reward_event_id,action,reason,metadata)
+  values(v_event.id,'reversal_reconciled',p_reconciliation_reference,
+    jsonb_build_object('provider_reversed_at',p_provider_reversed_at,'original_event_id',v_original.id));
+end;
+$fn$;
+revoke all on function private.reconcile_moonetix_reversal(uuid,text,uuid,text,text,timestamptz,text)
+  from public,anon,authenticated;
+grant execute on function private.reconcile_moonetix_reversal(uuid,text,uuid,text,text,timestamptz,text)
+  to service_role;
 
 create or replace function private.approve_moonetix_reward(p_reward_event_id uuid,p_reason text)
 returns uuid
