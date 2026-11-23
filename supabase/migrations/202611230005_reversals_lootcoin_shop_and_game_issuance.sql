@@ -34,9 +34,7 @@ begin
   select * into v_reversal from private.moonetix_reward_events
   where id=p_reversal_event_id for update;
   if not found then raise exception 'Reversal event not found'; end if;
-  if v_reversal.status='reversed' and v_reversal.journal_transaction_id is not null then
-    return v_reversal.journal_transaction_id;
-  end if;
+  if v_reversal.status='reversed' then return v_reversal.journal_transaction_id; end if;
   if v_reversal.status='held' then return null; end if;
   if v_reversal.provider_status <> 2 or v_reversal.status <> 'reversal_pending'
     or not v_reversal.signature_valid or v_reversal.original_event_id is null
