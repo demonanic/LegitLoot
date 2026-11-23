@@ -112,7 +112,7 @@ end;
 $fn$;
 revoke all on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean,boolean)
   from public,anon,authenticated;
-grant execute on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean)
+grant execute on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean,boolean)
   to service_role;
 
 create or replace function public.record_moonetix_postback(
@@ -139,7 +139,7 @@ as $fn$
 $fn$;
 revoke all on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean,boolean)
   from public,anon,authenticated;
-grant execute on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean)
+grant execute on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean,boolean)
   to service_role;
 
 create or replace function private.reconcile_moonetix_credit(
