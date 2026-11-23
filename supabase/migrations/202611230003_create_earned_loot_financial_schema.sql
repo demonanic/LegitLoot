@@ -37,22 +37,26 @@ security definer
 set search_path = ''
 as $fn$
 begin
+  if p_user_id is null then
+    raise exception 'User id is required';
+  end if;
+
   insert into private.ledger_accounts(
-    owner_user_id,account_code,wallet_kind,currency_code,currency_scale,is_system
+    owner_user_id,account_code,wallet_kind,currency_code,is_system,currency_scale
   )
   values
-    (p_user_id,'cash_pending','cash_usd','USD',1,false),
-    (p_user_id,'cash_available','cash_usd','USD',1,false),
-    (p_user_id,'cash_withdrawal_reserved','cash_usd','USD',1,false),
-    (p_user_id,'cash_paid','cash_usd','USD',1,false),
-    (p_user_id,'cash_held','cash_usd','USD',1,false),
-    (p_user_id,'game_credits_available','game_credits','LC',10000,false),
-    (p_user_id,'game_credits_provisional','game_credits','LC',10000,false),
-    (p_user_id,'game_credits_deferred','game_credits','LC',10000,false),
-    (p_user_id,'earned_loot_pending','earned_loot','EL',1000,false),
-    (p_user_id,'earned_loot_available','earned_loot','EL',1000,false),
-    (p_user_id,'earned_loot_held','earned_loot','EL',1000,false),
-    (p_user_id,'loot_coins_available','loot_coins','LC',10000,false)
+    -- Preserve the existing legacy accounts exactly; do not reinterpret their balances.
+    (p_user_id,'cash_pending','cash_usd','USD',false,1),
+    (p_user_id,'cash_available','cash_usd','USD',false,1),
+    (p_user_id,'cash_withdrawal_reserved','cash_usd','USD',false,1),
+    (p_user_id,'cash_paid','cash_usd','USD',false,1),
+    (p_user_id,'cash_held','cash_usd','USD',false,1),
+    (p_user_id,'lootcoins_available','game_credits','LC',false,10000),
+    -- New EL and LC accounts are separate wallet kinds and start at zero.
+    (p_user_id,'earned_loot_pending','earned_loot','EL',false,1000),
+    (p_user_id,'earned_loot_available','earned_loot','EL',false,1000),
+    (p_user_id,'earned_loot_held','earned_loot','EL',false,1000),
+    (p_user_id,'loot_coins_available','loot_coins','LC',false,10000)
   on conflict (owner_user_id,account_code,wallet_kind) do nothing;
 end;
 $fn$;
