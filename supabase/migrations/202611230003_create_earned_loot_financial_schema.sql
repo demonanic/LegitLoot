@@ -70,7 +70,7 @@ select private.create_player_ledger_accounts(u.id) from auth.users u;
 create table if not exists private.moonetix_reward_config_versions (
   id bigint generated always as identity primary key,
   currency_code text not null check (currency_code = 'EL'),
-  conversion_rate numeric(12,2) not null check (conversion_rate > 0),
+  conversion_rate numeric(20,8) not null check (conversion_rate > 0),
   split_percent smallint not null check (split_percent between 1 and 100),
   bonus_percent smallint not null default 0 check (bonus_percent between 0 and 500),
   rounding_mode text not null check (rounding_mode in ('whole','three_decimals')),
