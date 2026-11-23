@@ -295,7 +295,7 @@ begin
   select * into v_event from private.moonetix_reward_events
   where id=p_reversal_event_id for update;
   if not found then raise exception 'Moonetix reversal event not found'; end if;
-  if v_event.status='reversal_pending' and v_event.reconciled_at is not null then
+  if v_event.status in ('reversal_pending','reversed','held') and v_event.reconciled_at is not null then
     if v_event.provider_reversed_at is distinct from p_provider_reversed_at
       or v_event.reconciliation_reference is distinct from p_reconciliation_reference
       or p_report_status is distinct from 'reversed'
