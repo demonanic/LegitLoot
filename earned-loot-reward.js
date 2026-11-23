@@ -36,7 +36,7 @@
   // This function never applies the split again.
   function createRewardSnapshot(input) {
     if (!input || typeof input !== "object") throw new Error("Reward event is required");
-    if (typeof input.currency !== "string" || !/^[A-Za-z0-9 ]{1,10}$/.test(input.currency)) {
+    if (input.currency !== "EL") {
       throw new Error("Invalid Moonetix currency");
     }
     const splitPercent = parsePercent(input.splitPercent, "split percentage", 100);
