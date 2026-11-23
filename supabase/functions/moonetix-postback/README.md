@@ -6,7 +6,7 @@
 
 When the Moonetix app is created, the Postback URL should include these exact macros:
 
-\`https://<staging-project-ref>.supabase.co/functions/v1/moonetix-postback?user={user_id}&tx={transaction_id}&event={event_id}&status={status}&reward={reward}&payout={payout}&currency={currency}&hash={hash}&app_id={app_id}\`
+\`https://<staging-project-ref>.supabase.co/functions/v1/moonetix-postback?user={user_id}&tx={transaction_id}&event={event_id}&status={status}&reward={reward}&payout={payout}&currency={currency}&hash={hash}\`
 
 Use the actual staging Supabase project URL only after the Edge Function has been reviewed and deployed. The currency configured in Moonetix must be \`EL\`.
 
@@ -29,5 +29,6 @@ Never put these values in Git, browser code, a mobile bundle, or a chat message.
 - Conflicting duplicate event IDs fail.
 - Database errors return 503 so Moonetix retries.
 - Status 2 must match a previously recorded credit transaction and exact player reward.
+- Test transaction IDs beginning with `test_` are recorded as test-only and cannot be reconciled or approved.
 
 The separate reconciliation process must match callback records against the Moonetix Reporting API before approval. Approval remains owner/authorized-admin gated.
