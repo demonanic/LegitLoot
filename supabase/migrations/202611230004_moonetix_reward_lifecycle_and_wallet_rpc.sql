@@ -112,6 +112,32 @@ revoke all on function private.record_moonetix_event(uuid,text,text,integer,text
 grant execute on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean)
   to service_role;
 
+create or replace function public.record_moonetix_postback(
+  p_user_id uuid,
+  p_transaction_id text,
+  p_event_id text,
+  p_status integer,
+  p_currency_code text,
+  p_reward_raw text,
+  p_payout_usd_raw text,
+  p_payload_digest text,
+  p_signature_valid boolean
+)
+returns uuid
+language sql
+security definer
+set search_path = ''
+as $fn$
+  select private.record_moonetix_event(
+    p_user_id,p_transaction_id,p_event_id,p_status,p_currency_code,
+    p_reward_raw,p_payout_usd_raw,p_payload_digest,p_signature_valid
+  );
+$fn$;
+revoke all on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean)
+  from public,anon,authenticated;
+grant execute on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean)
+  to service_role;
+
 create or replace function private.reconcile_moonetix_credit(
   p_reward_event_id uuid,
   p_config_version_id bigint,
