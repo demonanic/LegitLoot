@@ -87,11 +87,11 @@ Deno.serve(async (request: Request) => {
   const expectedSecret = Deno.env.get("MOONETIX_RECONCILE_SECRET");
   const suppliedSecret = request.headers.get("x-reconcile-secret") ?? "";
   const apiKey = Deno.env.get("MOONETIX_API_KEY");
-  const timeZone = Deno.env.get("MOONETIX_TIMEZONE") ?? "UTC";
+  const timeZone = Deno.env.get("MOONETIX_TIMEZONE");
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 
-  if (!expectedSecret || !apiKey || !supabaseUrl || !serviceRoleKey) {
+  if (!expectedSecret || !apiKey || !timeZone || !supabaseUrl || !serviceRoleKey) {
     return new Response("Reconciliation service is not configured", { status: 503 });
   }
   if (!safeEqual(expectedSecret, suppliedSecret)) {
@@ -184,7 +184,8 @@ Deno.serve(async (request: Request) => {
     return new Response("Reconciliation failed; retry later", { status: 503 });
   }
 
-  if (totals.failedRecords > 0) {
+  if (totals.failedRecords > 0 || totals.missingCreditPostbacks > 0
+    || totals.missingVerifiedConfigs > 0 || totals.missingReversalPostbacks > 0) {
     console.error("Moonetix reconciliation has unmatched records", totals);
     return new Response(JSON.stringify(totals), {
       status: 207,
