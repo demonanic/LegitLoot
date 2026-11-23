@@ -34,6 +34,10 @@ begin
   select * into v_reversal from private.moonetix_reward_events
   where id=p_reversal_event_id for update;
   if not found then raise exception 'Reversal event not found'; end if;
+  if v_reversal.status='reversed' and v_reversal.journal_transaction_id is not null then
+    return v_reversal.journal_transaction_id;
+  end if;
+  if v_reversal.status='held' then return null; end if;
   if v_reversal.provider_status <> 2 or v_reversal.status <> 'reversal_pending'
     or not v_reversal.signature_valid or v_reversal.original_event_id is null then
     raise exception 'Event is not an eligible provider reversal';
@@ -168,23 +172,21 @@ begin
     raise exception 'A valid idempotency key is required';
   end if;
 
+  select * into v_existing from private.lootcoin_package_purchases
+  where idempotency_key=p_idempotency_key for update;
+  if found then
+    if v_existing.user_id<>v_user or v_existing.package_id<>p_package_id then
+      raise exception 'Purchase idempotency key reused with a different request';
+    end if;
+    return v_existing.id;
+  end if;
+
   select * into v_package from private.lootcoin_packages
   where id=p_package_id for update;
   if not found or not v_package.is_enabled
     or v_package.starts_at>now()
     or (v_package.ends_at is not null and v_package.ends_at<=now()) then
     raise exception 'LootCoins package is unavailable';
-  end if;
-
-  select * into v_existing from private.lootcoin_package_purchases
-  where idempotency_key=p_idempotency_key for update;
-  if found then
-    if v_existing.user_id<>v_user or v_existing.package_id<>p_package_id
-      or v_existing.el_price_atoms<>v_package.el_price_atoms
-      or v_existing.lc_amount_atoms<>v_package.lc_amount_atoms then
-      raise exception 'Purchase idempotency key reused with a different request';
-    end if;
-    return v_existing.id;
   end if;
 
   if v_package.max_purchases_per_user is not null and (
