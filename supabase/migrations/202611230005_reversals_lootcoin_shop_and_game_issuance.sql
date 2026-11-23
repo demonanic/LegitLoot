@@ -142,6 +142,9 @@ begin
     set remaining_atoms=remaining_atoms-v_take,
         remaining_value_cents=remaining_value_cents-v_value_take
     where id=v_lot.id;
+    insert into private.earned_loot_lot_movements(
+      lot_id,user_id,movement_type,movement_id,amount_atoms,value_cents
+    ) values(v_lot.id,v_original.user_id,'provider_reversal',v_reversal.id,v_take,v_value_take);
     v_remaining := v_remaining-v_take;
   end loop;
 
@@ -288,6 +291,9 @@ begin
     set remaining_atoms=remaining_atoms-v_take,
         remaining_value_cents=remaining_value_cents-v_value_take
     where id=v_lot.id;
+    insert into private.earned_loot_lot_movements(
+      lot_id,user_id,movement_type,movement_id,amount_atoms,value_cents
+    ) values(v_lot.id,v_user,'el_to_lc_purchase',v_purchase_id,v_take,v_value_take);
     v_value_consumed:=v_value_consumed+v_value_take;
     v_remaining:=v_remaining-v_take;
   end loop;
