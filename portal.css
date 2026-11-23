@@ -68,3 +68,13 @@
   .mobile-dock span{font:800 7px "DM Mono",monospace;letter-spacing:0}
   .mobile-dock a.active{color:#c8ff19;text-shadow:0 0 10px #c8ff1988}
 }
+
+/* Earned Loot wallet */
+.earned-wallet-grid .earned-wallet{border-color:#8e6b32;background:linear-gradient(145deg,#241d17,#15131a)}
+.earned-wallet-grid .earned-wallet strong{color:#f4c66a}
+.earned-wallet-grid .earned-wallet>span{display:block;font:700 22px var(--display);color:#f4c66a;margin:2px 0 10px}
+.earned-status-grid{grid-template-columns:minmax(0,1fr);margin-top:12px}
+.earned-status-grid article{border-color:#80612f;background:#201a17}
+.earned-status-grid b{color:#f4c66a}
+.earned-status-grid p{color:var(--muted);font-size:12px;margin:10px 0 0}
+#wallet-earned-pending-value{color:#e5c27c}
