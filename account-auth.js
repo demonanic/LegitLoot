@@ -64,7 +64,7 @@
       $("wallet-earned-pending").textContent =
         window.LEGITLOOT_EARNED_WALLET.formatEarnedLootUnits(wallet.earnedLoot.pendingUnits) + " " + wallet.earnedLoot.unitsLabel;
       $("wallet-earned-pending-value").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.pendingValueCents) + " · estimated value";
+        wallet.earnedLoot.pendingValueCents === null ? "Value pending provider reconciliation" : window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.pendingValueCents) + " · estimated value";
       $("wallet-lootcoins-available").textContent =
         window.LEGITLOOT_EARNED_WALLET.formatLootCoins(wallet.lootCoins.availableAtoms);
       $("wallet-earned-pending-detail").textContent =
