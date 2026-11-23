@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { parseWallet, formatUsd, formatInteger } = require("../earned-loot-wallet.js");
+const { parseWallet, formatUsd, formatInteger, formatLootCoins } = require("../earned-loot-wallet.js");
 
 const valid = () => ({
   contractVersion: 1,
@@ -68,4 +68,11 @@ test("formats exact cents and integer wallet units", () => {
   assert.equal(formatInteger("1250"), "1,250");
   assert.throws(() => formatUsd("9007199254740992"));
   assert.throws(() => formatInteger("1.2"));
+});
+
+test("formats LootCoins from exact integer atoms without floating-point rounding", () => {
+  assert.equal(formatLootCoins("123450000"), "12,345 LC");
+  assert.equal(formatLootCoins("123456"), "12.3456 LC");
+  assert.equal(formatLootCoins("0"), "0 LC");
+  assert.throws(() => formatLootCoins("-1"));
 });
