@@ -62,3 +62,12 @@ jobs:
           done
       - name: Run financial lifecycle integration tests
         run: psql -v ON_ERROR_STOP=1 -f tests/sql/financial_foundation.test.sql
+
+  edge-function-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno check supabase/functions/moonetix-postback/index.ts
