@@ -470,6 +470,152 @@ $fn$;
 revoke all on function private.reject_moonetix_reward(uuid,text) from public,anon;
 grant execute on function private.reject_moonetix_reward(uuid,text) to authenticated;
 
+create or replace function public.reconcile_moonetix_credit_report(
+  p_report_transaction_id text,
+  p_report_user_id text,
+  p_report_reward_raw text,
+  p_report_payout_usd_raw text,
+  p_provider_credited_at timestamptz,
+  p_report_reference text
+)
+returns text
+language plpgsql
+security definer
+set search_path = ''
+as $fn$
+declare
+  v_event private.moonetix_reward_events%rowtype;
+  v_config_id bigint;
+begin
+  if p_report_transaction_id is null or p_report_user_id is null
+    or p_report_reward_raw is null or p_report_payout_usd_raw is null
+    or p_provider_credited_at is null or p_report_reference is null then
+    raise exception 'Incomplete Moonetix Reporting API credit record';
+  end if;
+
+  select * into v_event from private.moonetix_reward_events
+  where provider_transaction_id=p_report_transaction_id
+    and provider_status=1
+  for update;
+
+  if not found then
+    insert into private.moonetix_reconciliation_gaps(
+      provider_transaction_id,provider_status,user_id,reward_raw,payout_usd_raw,
+      provider_credited_at,report_reference,reason
+    ) values (
+      p_report_transaction_id,'credited',p_report_user_id,p_report_reward_raw,p_report_payout_usd_raw,
+      p_provider_credited_at,p_report_reference,'missing_credit_postback'
+    )
+    on conflict(provider_transaction_id,provider_status) do update
+      set user_id=excluded.user_id,reward_raw=excluded.reward_raw,payout_usd_raw=excluded.payout_usd_raw,
+          provider_credited_at=excluded.provider_credited_at,report_reference=excluded.report_reference,
+          reason=excluded.reason,last_seen_at=now(),resolved_at=null,resolution=null;
+    return 'missing_credit_postback';
+  end if;
+
+  if v_event.user_id::text is distinct from p_report_user_id
+    or v_event.reward_raw::numeric is distinct from p_report_reward_raw::numeric
+    or v_event.payout_usd_raw::numeric is distinct from p_report_payout_usd_raw::numeric then
+    raise exception 'Reporting API credit does not match the stored callback';
+  end if;
+
+  select id into v_config_id
+  from private.moonetix_reward_config_versions
+  where is_verified=true and currency_code='EL'
+    and effective_from<=p_provider_credited_at
+    and (effective_to is null or p_provider_credited_at<effective_to);
+  if v_config_id is null then
+    insert into private.moonetix_reconciliation_gaps(
+      provider_transaction_id,provider_status,user_id,reward_raw,payout_usd_raw,
+      provider_credited_at,report_reference,reason
+    ) values (
+      p_report_transaction_id,'credited',p_report_user_id,p_report_reward_raw,p_report_payout_usd_raw,
+      p_provider_credited_at,p_report_reference,'verified_config_missing_for_credited_at'
+    )
+    on conflict(provider_transaction_id,provider_status) do update
+      set report_reference=excluded.report_reference,reason=excluded.reason,last_seen_at=now(),
+          resolved_at=null,resolution=null;
+    return 'verified_config_missing';
+  end if;
+
+  perform private.reconcile_moonetix_credit(
+    v_event.id,v_config_id,p_report_transaction_id,v_event.user_id,
+    p_report_reward_raw,p_report_payout_usd_raw,'credited',p_provider_credited_at,p_report_reference
+  );
+
+  update private.moonetix_reconciliation_gaps
+  set resolved_at=now(),resolution='matched_and_reconciled',last_seen_at=now()
+  where provider_transaction_id=p_report_transaction_id and provider_status='credited';
+  return 'reconciled';
+end;
+$fn$;
+revoke all on function public.reconcile_moonetix_credit_report(text,text,text,text,timestamptz,text)
+  from public,anon,authenticated;
+grant execute on function public.reconcile_moonetix_credit_report(text,text,text,text,timestamptz,text)
+  to service_role;
+
+create or replace function public.reconcile_moonetix_reversal_report(
+  p_report_transaction_id text,
+  p_report_user_id text,
+  p_report_reward_raw text,
+  p_provider_reversed_at timestamptz,
+  p_report_reference text
+)
+returns text
+language plpgsql
+security definer
+set search_path = ''
+as $fn$
+declare
+  v_event private.moonetix_reward_events%rowtype;
+begin
+  if p_report_transaction_id is null or p_report_user_id is null
+    or p_report_reward_raw is null or p_provider_reversed_at is null
+    or p_report_reference is null then
+    raise exception 'Incomplete Moonetix Reporting API reversal record';
+  end if;
+
+  select * into v_event from private.moonetix_reward_events
+  where provider_transaction_id=p_report_transaction_id
+    and provider_status=2
+  for update;
+
+  if not found then
+    insert into private.moonetix_reconciliation_gaps(
+      provider_transaction_id,provider_status,user_id,reward_raw,payout_usd_raw,
+      provider_reversed_at,report_reference,reason
+    ) values (
+      p_report_transaction_id,'reversed',p_report_user_id,p_report_reward_raw,'0',
+      p_provider_reversed_at,p_report_reference,'missing_reversal_postback'
+    )
+    on conflict(provider_transaction_id,provider_status) do update
+      set user_id=excluded.user_id,reward_raw=excluded.reward_raw,
+          provider_reversed_at=excluded.provider_reversed_at,report_reference=excluded.report_reference,
+          reason=excluded.reason,last_seen_at=now(),resolved_at=null,resolution=null;
+    return 'missing_reversal_postback';
+  end if;
+
+  if v_event.user_id::text is distinct from p_report_user_id
+    or v_event.reward_raw::numeric is distinct from p_report_reward_raw::numeric then
+    raise exception 'Reporting API reversal does not match the stored callback';
+  end if;
+
+  perform private.reconcile_moonetix_reversal(
+    v_event.id,p_report_transaction_id,v_event.user_id,p_report_reward_raw,
+    'reversed',p_provider_reversed_at,p_report_reference
+  );
+
+  update private.moonetix_reconciliation_gaps
+  set resolved_at=now(),resolution='matched_and_reconciled',last_seen_at=now()
+  where provider_transaction_id=p_report_transaction_id and provider_status='reversed';
+  return 'reconciled';
+end;
+$fn$;
+revoke all on function public.reconcile_moonetix_reversal_report(text,text,text,timestamptz,text)
+  from public,anon,authenticated;
+grant execute on function public.reconcile_moonetix_reversal_report(text,text,text,timestamptz,text)
+  to service_role;
+
 create or replace function public.get_player_wallet_summary()
 returns jsonb
 language plpgsql
