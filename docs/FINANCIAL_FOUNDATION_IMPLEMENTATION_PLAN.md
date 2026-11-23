@@ -18,6 +18,31 @@
 - Append-only journal/audit history; reversals are compensating records. No negative available EL or LC and no automatic player debt.
 - Payouts, withdrawals, identity checks, provider activation, and production changes remain separately gated by owner approval.
 
+## Moonetix contract verified against publisher documentation
+
+The official Moonetix Rewards and currency documentation states:
+
+- `{payout}` is the publisher's USD payout for the step.
+- `{reward}` is already in the publisher's configured user currency after conversion rate, user split, bonus, and rounding.
+- The wall displays the configured reward, and the server must credit `{reward}` exactly as received; it must not convert or split it again.
+- Each offer step is its own credit/postback. A multi-step offer is the sum of its rounded steps.
+- A status 2 reversal carries the same positive `{reward}` as the original credit.
+- Currency setting changes apply only to later credited steps. Existing credits and their reversals retain the original reward.
+- Moonetix supports whole-number rounding or up to three decimals. The selected setting determines the smallest provider reward precision; do not assume it before the offerwall is created.
+
+Implementation consequence:
+- Preserve raw `reward` and `payout` decimal strings exactly as received after signature verification.
+- Store the event-time currency name, conversion rate, split percentage, bonus percentage, and rounding mode when available from the provider configuration snapshot.
+- Convert the exact provider reward to internal integer EL atoms only through a versioned scale configuration matching the active Moonetix currency setup. For up-to-three-decimal rewards, provider amount precision is at most 0.001 currency units; whole-number mode uses integer units.
+- The provider reward already includes the 50% user split and any bonus. No second split is permitted.
+- Cash-equivalent display must use the event's stored conversion-rate/configuration snapshot, not today's settings. Bonuses increase the user's reward for the same publisher payout and must remain visible in the event snapshot.
+- Moonetix status 1 means the advertiser has reported a credited step; it does not mean the publisher's monthly USD settlement has already been paid. Keep event verification and publisher cash settlement as separate accounting facts.
+
+References:
+- https://docs.moonetix.com/rewards
+- https://docs.moonetix.com/postbacks
+- https://moonetix.com/academy/publisher-basics/set-up-app-currency
+
 ## Seven implementation steps
 
 ### 1. Journal integrity
