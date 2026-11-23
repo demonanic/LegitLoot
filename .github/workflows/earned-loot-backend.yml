@@ -68,6 +68,10 @@ jobs:
           done
       - name: Run financial lifecycle integration tests
         run: psql -v ON_ERROR_STOP=1 -f tests/sql/financial_foundation.test.sql
+      - name: Seed concurrency fixture
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/concurrency_setup.sql
+      - name: Stress concurrent EL-to-LC purchases
+        run: bash tests/sql/concurrency_test.sh
 
   edge-function-check:
     runs-on: ubuntu-latest
