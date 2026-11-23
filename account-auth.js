@@ -73,6 +73,7 @@
     $("player-email").textContent = user.email || "Authenticated player";
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
     await loadWalletSummary();
+    await loadDeletionStatus();
     try {
       const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
       if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
@@ -80,6 +81,79 @@
       console.warn("LegitLoot profile display lookup failed:", error);
     }
   };
+  // Account deletion (AUTH-03): 7-day cancellable wait, then server-side processing.
+  // The server requires a sign-in within the last 10 minutes, so the password is re-checked first.
+  // Three distinct server states: pending (in the 7-day wait, cancellable), blocked (wait over,
+  // held for an unpaid cash balance or open payout request; cancellable) and data_cleared
+  // (personal data cleared; the sign-in removal step is still to run; not cancellable).
+  const BLOCKED_TEXT = {
+    cash_balance_owner_decision: "your account still holds unpaid cash, and how that is handled hasn't been decided yet",
+    open_payout_request: "you have a payout request that is still open",
+  };
+  const deletionText = (info) => {
+    if (info.status === "pending") {
+      return "Your account is scheduled for deletion on " + new Date(info.scheduledFor).toLocaleString() + ". Until then you can cancel.";
+    }
+    if (info.status === "blocked") {
+      const why = BLOCKED_TEXT[info.blockedReason] || "it needs a manual check";
+      return "Your deletion is on hold because " + why + ". Nothing has been deleted. You can cancel the request below.";
+    }
+    return "Your personal data has been cleared. The final step, removing your sign-in, is still running. No further action is needed.";
+  };
+  const showDeletion = (info) => {
+    const open = !!info && ["pending", "blocked", "data_cleared"].includes(info.status);
+    $("deletion-request").hidden = open;
+    $("deletion-scheduled").hidden = !open;
+    if (open) {
+      $("deletion-scheduled").dataset.state = info.status;
+      $("deletion-scheduled-text").textContent = deletionText(info);
+      $("deletion-cancel").hidden = info.status === "data_cleared";
+    }
+  };
+  const loadDeletionStatus = async () => {
+    try {
+      const { data, error } = await client.rpc("account_deletion_status");
+      if (error) throw error;
+      showDeletion(data);
+    } catch (error) {
+      console.warn("LegitLoot deletion status failed:", error);
+    }
+  };
+  $("deletion-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector("button[type=submit]");
+    if ($("deletion-confirm").value !== "DELETE") {
+      showMessage("NOT DELETED", "Type DELETE in capitals to confirm.", true);
+      return;
+    }
+    button.disabled = true;
+    try {
+      const { data: userData } = await client.auth.getUser();
+      const email = userData?.user?.email;
+      if (!email) throw new Error("Sign in again to delete your account.");
+      const { error: authError } = await client.auth.signInWithPassword({ email, password: $("deletion-password").value });
+      if (authError) throw new Error("That password didn't match. Nothing was deleted.");
+      const { data, error } = await client.rpc("request_account_deletion");
+      if (error) throw error;
+      $("deletion-form").reset();
+      showDeletion(data);
+      showMessage("DELETION SCHEDULED", "Your account will be deleted in 7 days. Sign in before then and choose Cancel deletion to keep it.");
+    } catch (error) {
+      showMessage("NOT DELETED", error.message || "Please try again.", true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+  $("deletion-cancel").addEventListener("click", async () => {
+    try {
+      const { error } = await client.rpc("cancel_account_deletion");
+      if (error) throw error;
+      showDeletion(null);
+      showMessage("DELETION CANCELLED", "Your account will not be deleted.");
+    } catch (error) {
+      showMessage("CANCEL FAILED", error.message || "Please try again.", true);
+    }
+  });
   $("signin-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     const button = event.currentTarget.querySelector("button[type=submit]");
