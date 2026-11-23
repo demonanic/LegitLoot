@@ -44,7 +44,7 @@ begin
   end if;
   v_failed:=false;
   begin
-    perform private.reconcile_moonetix_credit(v_test_event,v_config,'test_tx_1',v_user,'999','1','credited',now(),'test-report');
+    perform public.reconcile_moonetix_credit_report('test_tx_1',v_user::text,'999','1',now(),'test-report');
   exception when others then v_failed:=true;
   end;
   if not v_failed then raise exception 'Moonetix test transaction was eligible for reconciliation'; end if;
@@ -60,11 +60,11 @@ begin
 
   v_failed:=false;
   begin
-    perform private.reconcile_moonetix_credit(v_event1,v_config,'mx-tx-1',v_user,'250','0.6','credited',now()-interval '1 hour','bad-report-line');
+    perform public.reconcile_moonetix_credit_report('mx-tx-1',v_user::text,'250','0.6',now()-interval '1 hour','bad-report-line');
   exception when others then v_failed:=true;
   end;
   if not v_failed then raise exception 'Mismatched Reporting API payout was accepted'; end if;
-  perform private.reconcile_moonetix_credit(v_event1,v_config,'mx-tx-1',v_user,'250','0.5','credited',now()-interval '1 hour','statement-line-1');
+  perform public.reconcile_moonetix_credit_report('mx-tx-1',v_user::text,'250','0.5',now()-interval '1 hour','statement-line-1');
   v_summary:=public.get_player_wallet_summary();
   if v_summary#>>'{earnedLoot,availableUnits}' <> '0'
     or v_summary#>>'{earnedLoot,pendingUnits}' <> '250' then
@@ -79,6 +79,21 @@ begin
     or v_summary#>>'{earnedLoot,pendingUnits}' <> '0'
     or v_summary#>>'{earnedLoot,availableValueCents}' <> '25' then
     raise exception 'Approved wallet summary is incorrect';
+  end if;
+
+  -- Reporting API transactions with no matching callback are tracked, never auto-credited.
+  if public.reconcile_moonetix_credit_report(
+    'missing-credit-tx',v_user::text,'5','0.01',now(),'missing-credit-report'
+  ) <> 'missing_credit_postback' then
+    raise exception 'Missing credit postback was not recorded as a gap';
+  end if;
+  if public.reconcile_moonetix_reversal_report(
+    'missing-reversal-tx',v_user::text,'5','0.01',now(),'missing-reversal-report'
+  ) <> 'missing_reversal_postback' then
+    raise exception 'Missing reversal postback was not recorded as a gap';
+  end if;
+  if (select count(*) from private.moonetix_reconciliation_gaps) <> 2 then
+    raise exception 'Reporting API reconciliation gaps were not retained';
   end if;
 
   -- A duplicate callback is safe; a conflicting payload under the same event ID fails.
@@ -180,7 +195,7 @@ begin
   returning id into v_config2;
 
   v_event2:=private.record_moonetix_event(v_user,'mx-tx-2','mx-event-2',1,'EL','300','0.5','digest-2',true);
-  perform private.reconcile_moonetix_credit(v_event2,v_config2,'mx-tx-2',v_user,'300','0.5','credited',now()+interval '1 minute','statement-line-2');
+  perform public.reconcile_moonetix_credit_report('mx-tx-2',v_user::text,'300','0.5',now()+interval '1 minute','statement-line-2');
   perform private.approve_moonetix_reward(v_event2,'owner approval');
   if (select split_percent_snapshot from private.moonetix_reward_events where id=v_event1) <> 50
     or (select split_percent_snapshot from private.moonetix_reward_events where id=v_event2) <> 60 then
@@ -219,11 +234,11 @@ begin
   v_reversal1:=private.record_moonetix_event(v_user,'mx-tx-1','mx-event-1-reversal',2,'EL','250','0.5','digest-reversal-1',true);
   v_failed:=false;
   begin
-    perform private.reconcile_moonetix_reversal(v_reversal1,'mx-tx-1',v_user,'125','reversed',now()+interval '2 hours','bad-reversal-report');
+    perform public.reconcile_moonetix_reversal_report('mx-tx-1',v_user::text,'125','0.5',now()+interval '2 hours','bad-reversal-report');
   exception when others then v_failed:=true;
   end;
   if not v_failed then raise exception 'Mismatched Reporting API reversal was accepted'; end if;
-  perform private.reconcile_moonetix_reversal(v_reversal1,'mx-tx-1',v_user,'250','reversed',now()+interval '2 hours','report-reversal-1');
+  perform public.reconcile_moonetix_reversal_report('mx-tx-1',v_user::text,'250','0.5',now()+interval '2 hours','report-reversal-1');
   perform private.process_moonetix_reversal(v_reversal1,'provider reversal confirmed');
   if (select status from private.moonetix_reward_events where id=v_reversal1) <> 'reversed' then
     raise exception 'Funded reversal was not compensated';
@@ -231,7 +246,7 @@ begin
 
   -- Reversal 2 exceeds unspent EL; it must be held without creating debt.
   v_reversal2:=private.record_moonetix_event(v_user,'mx-tx-2','mx-event-2-reversal',2,'EL','300','0.5','digest-reversal-2',true);
-  perform private.reconcile_moonetix_reversal(v_reversal2,'mx-tx-2',v_user,'300','reversed',now()+interval '3 hours','report-reversal-2');
+  perform public.reconcile_moonetix_reversal_report('mx-tx-2',v_user::text,'300','0.5',now()+interval '3 hours','report-reversal-2');
   perform private.process_moonetix_reversal(v_reversal2,'excess provider reversal');
   if (select status from private.moonetix_reward_events where id=v_reversal2) <> 'held' then
     raise exception 'Excess reversal was not held';
@@ -243,7 +258,7 @@ begin
 
   -- A different authenticated player sees only their own wallet and cannot approve.
   v_event3:=private.record_moonetix_event(v_other,'mx-tx-3','mx-event-3',1,'EL','100','0.2','digest-3',true);
-  perform private.reconcile_moonetix_credit(v_event3,v_config2,'mx-tx-3',v_other,'100','0.2','credited',now()+interval '2 minutes','statement-line-3');
+  perform public.reconcile_moonetix_credit_report('mx-tx-3',v_other::text,'100','0.2',now()+interval '2 minutes','statement-line-3');
   perform set_config('request.jwt.claim.sub',v_other::text,true);
   v_failed:=false;
   begin
