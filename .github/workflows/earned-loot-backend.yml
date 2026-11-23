@@ -1,0 +1,21 @@
+name: Earned Loot backend contract tests
+
+on:
+  pull_request:
+    paths:
+      - "earned-loot-reward.js"
+      - "tests/earned-loot-reward.test.cjs"
+      - ".github/workflows/earned-loot-backend.yml"
+  push:
+    branches:
+      - "feature/earned-loot-ledger-backend"
+
+jobs:
+  moonetix-reward-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/earned-loot-reward.test.cjs
