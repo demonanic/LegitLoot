@@ -68,7 +68,7 @@ begin
   end if;
 
   v_fingerprint := encode(
-    digest(
+    extensions.digest(
       convert_to(
         jsonb_build_object(
           'event_type', p_event_type,
