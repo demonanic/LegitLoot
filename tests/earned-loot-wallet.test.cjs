@@ -30,6 +30,15 @@ test("accepts canonical Earned Loot and LootCoins wallet contract", () => {
   assert.equal(parsed.lootCoins.availableAtoms, "2400000");
 });
 
+test("accepts unknown pending value while provider reconciliation is outstanding", () => {
+  const raw = valid();
+  raw.earnedLoot.pendingUnits = "2.500";
+  raw.earnedLoot.pendingValueCents = null;
+  const parsed = parseWallet(raw);
+  assert.equal(parsed.earnedLoot.pendingUnits, "2.500");
+  assert.equal(parsed.earnedLoot.pendingValueCents, null);
+});
+
 test("accepts fractional Earned Loot units to thousandth precision", () => {
   const raw = valid();
   raw.earnedLoot.availableUnits = "1.375";
