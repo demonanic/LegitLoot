@@ -47,13 +47,48 @@ begin
 
   select * into v_original from private.moonetix_reward_events
   where id=v_reversal.original_event_id for update;
-  if not found or v_original.status <> 'approved' then
-    raise exception 'Original reward is not approved; reversal requires manual hold review';
-  end if;
+  if not found then raise exception 'Original reward event not found'; end if;
   if v_original.user_id <> v_reversal.user_id
     or v_original.reward_raw <> v_reversal.reward_raw
     or v_original.reward_atoms is null then
-    raise exception 'Reversal does not match the approved original reward';
+    raise exception 'Reversal does not match the original reward';
+  end if;
+
+  -- A provider can reverse before the owner approves a pending reward.
+  -- In that case, reject the pending reward and close the reversal without any player debit.
+  if v_original.status in ('pending_verification','pending_review','rejected') then
+    if v_original.status in ('pending_verification','pending_review') then
+      if v_original.pending_journal_transaction_id is not null then
+        perform private.reject_moonetix_reward(
+          v_original.id,'Provider reversed before owner approval: '||p_reason
+        );
+      else
+        update private.moonetix_reward_events
+        set status='rejected',rejection_reason='Provider reversed before owner approval: '||p_reason,
+            approval_actor=v_actor,approval_at=now()
+        where id=v_original.id;
+        insert into private.earned_loot_reward_audit(reward_event_id,actor_user_id,action,reason,metadata)
+        values(v_original.id,v_actor,'rejected_before_approval',p_reason,
+          jsonb_build_object('reversal_event_id',v_reversal.id));
+      end if;
+    end if;
+
+    insert into private.earned_loot_reversal_cases(
+      original_reward_event_id,reversal_event_id,requested_atoms,available_atoms_at_review,status,reason
+    ) values (
+      v_original.id,v_reversal.id,v_original.reward_atoms,0,'closed_no_debt',p_reason
+    )
+    on conflict(reversal_event_id) do update set status='closed_no_debt',reason=excluded.reason;
+
+    update private.moonetix_reward_events set status='reversed' where id=v_reversal.id;
+    insert into private.earned_loot_reward_audit(reward_event_id,actor_user_id,action,reason,metadata)
+    values(v_reversal.id,v_actor,'reversal_closed_uncredited',p_reason,
+      jsonb_build_object('original_event_id',v_original.id));
+    return null;
+  end if;
+
+  if v_original.status <> 'approved' then
+    raise exception 'Original reward is held and requires separate review';
   end if;
 
   select id into v_available_account from private.ledger_accounts
