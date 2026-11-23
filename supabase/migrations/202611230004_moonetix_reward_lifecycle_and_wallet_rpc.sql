@@ -36,6 +36,7 @@ declare
   v_original private.moonetix_reward_events%rowtype;
   v_original_id uuid;
   v_status text;
+  v_reward_atoms bigint;
 begin
   if p_user_id is null or p_transaction_id is null or trim(p_transaction_id) = ''
     or p_event_id is null or trim(p_event_id) = ''
@@ -44,6 +45,14 @@ begin
   end if;
   if p_status not in (1,2) then raise exception 'Unsupported Moonetix status'; end if;
   if p_currency_code <> 'EL' then raise exception 'Moonetix reward currency must be EL'; end if;
+
+  if p_status = 1 and coalesce(p_signature_valid,false) then
+    if p_reward_raw is null or trunc(p_reward_raw::numeric*1000) <> p_reward_raw::numeric*1000
+      or p_reward_raw::numeric*1000 > 9223372036854775807 then
+      raise exception 'Moonetix reward cannot be represented safely in EL atoms';
+    end if;
+    v_reward_atoms := (p_reward_raw::numeric*1000)::bigint;
+  end if;
 
   if p_status = 2 then
     select * into v_original
@@ -65,10 +74,10 @@ begin
 
   insert into private.moonetix_reward_events(
     user_id,provider_transaction_id,provider_event_id,provider_status,currency_code,
-    reward_raw,payout_usd_raw,payload_digest,signature_valid,status,original_event_id
+    reward_raw,payout_usd_raw,reward_atoms,payload_digest,signature_valid,status,original_event_id
   ) values (
     p_user_id,p_transaction_id,p_event_id,p_status::smallint,p_currency_code,
-    p_reward_raw,p_payout_usd_raw,p_payload_digest,coalesce(p_signature_valid,false),v_status,v_original_id
+    p_reward_raw,p_payout_usd_raw,v_reward_atoms,p_payload_digest,coalesce(p_signature_valid,false),v_status,v_original_id
   )
   on conflict (provider_event_id) do nothing
   returning id into v_event_id;
@@ -349,6 +358,8 @@ declare
   v_lc_available bigint;
   v_el_value_cents bigint;
   v_pending_value_cents bigint;
+  v_unverified_pending_atoms bigint;
+  v_unpriced_pending_count bigint;
 begin
   if v_user is null then raise exception 'Authentication required'; end if;
 
@@ -381,10 +392,23 @@ begin
   from private.earned_loot_lots
   where user_id=v_user and remaining_atoms>0;
 
+  select coalesce(sum(reward_atoms),0)
+  into v_unverified_pending_atoms
+  from private.moonetix_reward_events
+  where user_id=v_user and status='pending_verification'
+    and provider_status=1 and signature_valid=true;
+
+  v_el_pending := v_el_pending + v_unverified_pending_atoms;
+
   select coalesce(sum(cash_equivalent_cents),0)
   into v_pending_value_cents
   from private.moonetix_reward_events
   where user_id=v_user and status='pending_review' and provider_status=1;
+
+  select count(*) into v_unpriced_pending_count
+  from private.moonetix_reward_events
+  where user_id=v_user and status='pending_verification'
+    and provider_status=1 and signature_valid=true and cash_equivalent_cents is null;
 
   if v_el_available < 0 or v_el_pending < 0 or v_lc_available < 0 then
     raise exception 'Wallet ledger invariant failed';
@@ -397,7 +421,7 @@ begin
       'availableUnits',trim_scale(v_el_available::numeric/1000)::text,
       'pendingUnits',trim_scale(v_el_pending::numeric/1000)::text,
       'availableValueCents',v_el_value_cents::text,
-      'pendingValueCents',v_pending_value_cents::text
+      'pendingValueCents',case when v_unpriced_pending_count>0 then null else v_pending_value_cents::text end
     ),
     'lootCoins',jsonb_build_object(
       'code','LC','availableAtoms',v_lc_available::text,
