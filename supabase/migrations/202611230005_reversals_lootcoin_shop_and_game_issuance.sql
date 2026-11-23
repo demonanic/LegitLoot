@@ -217,7 +217,9 @@ begin
   order by id for update;
 
   select coalesce(sum(case when direction='credit' then amount else -amount end),0)
-  into v_balance from private.journal_entries where account_id=v_el_account;
+  into v_balance from private.journal_entries e
+  join private.journal_transactions t on t.id=e.transaction_id
+  where e.account_id=v_el_account and t.status='posted';
   if v_balance<v_package.el_price_atoms then raise exception 'Insufficient available Earned Loot'; end if;
 
   select coalesce(sum(remaining_atoms),0) into v_lot_total
