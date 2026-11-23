@@ -9,6 +9,7 @@ declare
   v_event1 uuid;
   v_event2 uuid;
   v_event3 uuid;
+  v_test_event uuid;
   v_reversal1 uuid;
   v_reversal2 uuid;
   v_purchase uuid;
@@ -35,6 +36,18 @@ begin
   returning id into v_config;
 
   perform set_config('request.jwt.claim.sub',v_user::text,true);
+
+  -- Moonetix's test-postback transaction IDs must never become player rewards.
+  v_test_event:=private.record_moonetix_event(v_user,'test_tx_1','test_event_1',1,'EL','999','1','test-digest',true,true);
+  if (select status from private.moonetix_reward_events where id=v_test_event) <> 'test' then
+    raise exception 'Moonetix test callback was not isolated';
+  end if;
+  v_failed:=false;
+  begin
+    perform private.reconcile_moonetix_credit(v_test_event,v_config,'test_tx_1',v_user,'999','1','credited',now(),'test-report');
+  exception when others then v_failed:=true;
+  end;
+  if not v_failed then raise exception 'Moonetix test transaction was eligible for reconciliation'; end if;
 
   -- Callback receipt alone must not credit available EL.
   v_event1:=private.record_moonetix_event(v_user,'mx-tx-1','mx-event-1',1,'EL','250','0.5','digest-1',true);
