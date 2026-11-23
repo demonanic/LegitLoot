@@ -28,8 +28,8 @@
     return decimalParts(reward, 3, "Moonetix reward", false).atoms.toString();
   }
 
-  function payoutToUsdMicros(payout) {
-    return decimalParts(payout, 6, "Moonetix payout").atoms.toString();
+  function payoutToUsdAtoms(payout) {
+    return decimalParts(payout, 12, "Moonetix payout").atoms.toString();
   }
 
   // The reward already includes Moonetix's split, bonus, and rounding.
@@ -45,7 +45,7 @@
     if (typeof input.conversionRate !== "string") throw new Error("Conversion rate is required");
     const rate = decimalParts(input.conversionRate, 8, "conversion rate", false);
     const rewardAtoms = rewardToAtoms(input.reward);
-    const payoutMicros = payoutToUsdMicros(input.payoutUsd);
+    const payoutAtoms = payoutToUsdAtoms(input.payoutUsd);
     const mode = input.roundingMode;
     if (!["whole", "three_decimals"].includes(mode)) throw new Error("Invalid rounding mode");
     if (mode === "whole" && input.reward.includes(".")) {
@@ -72,7 +72,7 @@
       rewardRaw: input.reward,
       rewardAtoms,
       payoutUsdRaw: input.payoutUsd,
-      payoutUsdMicros: payoutMicros,
+      payoutUsdAtoms: payoutAtoms,
       conversionRateRaw: input.conversionRate,
       splitPercent,
       bonusPercent,
@@ -101,7 +101,7 @@
   const api = Object.freeze({
     createRewardSnapshot,
     rewardToAtoms,
-    payoutToUsdMicros,
+    payoutToUsdAtoms,
     validateReversal,
     formatEarnedLoot
   });
