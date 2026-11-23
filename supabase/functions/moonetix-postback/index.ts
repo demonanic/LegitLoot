@@ -2,7 +2,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const encoder = new TextEncoder();
 const decimalReward = /^(0|[1-9][0-9]*)(?:\.[0-9]{1,3})?$/;
-const decimalUsd = /^(0|[1-9][0-9]*)(?:\.[0-9]{1,6})?$/;
+const decimalUsd = /^(0|[1-9][0-9]*)(?:\.[0-9]{1,12})?$/;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 function hexToBytes(hex: string): Uint8Array | null {
