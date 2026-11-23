@@ -153,6 +153,13 @@ begin
     );
   end loop;
 
+  -- A journal transaction may contain exactly one wallet kind/currency.
+  -- EL-to-LC conversion uses linked transactions inside one database transaction.
+  if (select count(distinct wallet_kind) from private.journal_entries
+      where transaction_id = v_transaction_id) <> 1 then
+    raise exception 'A journal transaction cannot mix wallet kinds';
+  end if;
+
   -- Every wallet/currency pair in a transaction must balance independently.
   for v_currency, v_wallet in
     select distinct currency_code, wallet_kind
