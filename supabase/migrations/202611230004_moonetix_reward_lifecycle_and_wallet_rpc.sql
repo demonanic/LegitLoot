@@ -89,6 +89,8 @@ begin
     or v_existing.provider_transaction_id is distinct from p_transaction_id
     or v_existing.user_id is distinct from p_user_id
     or v_existing.provider_status is distinct from p_status
+    or v_existing.signature_valid is distinct from coalesce(p_signature_valid,false)
+    or v_existing.currency_code is distinct from p_currency_code
     or v_existing.reward_raw is distinct from p_reward_raw
     or v_existing.payout_usd_raw is distinct from p_payout_usd_raw then
     raise exception 'Moonetix event ID reused with conflicting payload';
