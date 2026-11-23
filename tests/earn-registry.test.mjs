@@ -37,6 +37,19 @@ test("Offerwall.GG is absent; CPAGrip remains testing with no launch endpoint", 
   assert.equal(byId.cpagrip.launch, null);
 });
 
+test("retired provider is absent from every public player page", () => {
+  for (const file of ["index.html", "earn.html", "rewards.html", "account.html", "trust.html", "how-it-works.html"]) {
+    const html = readFileSync(new URL(`../${file}`, import.meta.url), "utf8").toLowerCase();
+    assert.doesNotMatch(html, /offerwall\.gg|offerwall-gg|offerwall-verification/);
+  }
+});
+
+test("retired wall launcher is an inert HTTP 410 endpoint", () => {
+  const launcher = readFileSync(new URL("../supabase/functions/offerwall-gg-wall-url/index.ts", import.meta.url), "utf8");
+  assert.match(launcher, /status:\s*410/);
+  assert.doesNotMatch(launcher, /createClient|OFFERWALL_GG_SECRET|offerwall\.gg\/wall/);
+});
+
 test("launch blocks only allow https origins and name a server function", () => {
   for (const p of providers.filter((p) => p.launch)) {
     assert.match(p.launch.functionName, /^[a-z0-9-]+$/);
