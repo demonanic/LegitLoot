@@ -40,6 +40,14 @@ test("supports up to three decimal reward precision exactly", () => {
   assert.equal(reward.formatEarnedLoot(snapshot.rewardAtoms), "0.375 EL");
 });
 
+test("supports conversion rates with more than two decimal places", () => {
+  const snapshot = reward.createRewardSnapshot({
+    ...base, reward: "1.234", conversionRate: "1.23456789",
+    payoutUsd: "1.000000", roundingMode: "three_decimals"
+  });
+  assert.equal(snapshot.cashEquivalentCents, "100");
+});
+
 test("uses integer arithmetic for cash-equivalent rounding", () => {
   const snapshot = reward.createRewardSnapshot({ ...base, reward: "16.65", conversionRate: "100", roundingMode: "three_decimals" });
   assert.equal(snapshot.cashEquivalentCents, "17");
