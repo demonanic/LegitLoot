@@ -144,7 +144,13 @@ begin
   if not found then raise exception 'Moonetix reward event not found'; end if;
   if v_event.status in ('pending_review','approved') then
     if v_event.config_version_id is distinct from p_config_version_id
-      or v_event.provider_credited_at is distinct from p_provider_credited_at then
+      or v_event.provider_credited_at is distinct from p_provider_credited_at
+      or v_event.reconciliation_reference is distinct from p_reconciliation_reference
+      or p_report_status is distinct from 'credited'
+      or p_report_transaction_id is distinct from v_event.provider_transaction_id
+      or p_report_user_id is distinct from v_event.user_id
+      or p_report_reward_raw is null or p_report_reward_raw::numeric <> v_event.reward_raw::numeric
+      or p_report_payout_usd_raw is null or p_report_payout_usd_raw::numeric <> v_event.payout_usd_raw::numeric then
       raise exception 'Reward was already reconciled against different provider/configuration facts';
     end if;
     return coalesce(v_event.pending_journal_transaction_id,v_event.approval_journal_transaction_id);
@@ -260,8 +266,13 @@ begin
   where id=p_reversal_event_id for update;
   if not found then raise exception 'Moonetix reversal event not found'; end if;
   if v_event.status='reversal_pending' and v_event.reconciled_at is not null then
-    if v_event.provider_reversed_at is distinct from p_provider_reversed_at then
-      raise exception 'Reversal was already reconciled against a different provider timestamp';
+    if v_event.provider_reversed_at is distinct from p_provider_reversed_at
+      or v_event.reconciliation_reference is distinct from p_reconciliation_reference
+      or p_report_status is distinct from 'reversed'
+      or p_report_transaction_id is distinct from v_event.provider_transaction_id
+      or p_report_user_id is distinct from v_event.user_id
+      or p_report_reward_raw is null or p_report_reward_raw::numeric <> v_event.reward_raw::numeric then
+      raise exception 'Reversal was already reconciled against different provider facts';
     end if;
     return;
   end if;
