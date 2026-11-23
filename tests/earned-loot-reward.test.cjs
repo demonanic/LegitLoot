@@ -52,6 +52,7 @@ test("rejects unsupported precision, exponent notation, invalid rates, and inval
   assert.throws(() => reward.createRewardSnapshot({ ...base, splitPercent: 0 }));
   assert.throws(() => reward.createRewardSnapshot({ ...base, splitPercent: 101 }));
   assert.throws(() => reward.createRewardSnapshot({ ...base, bonusPercent: 501 }));
+  assert.throws(() => reward.createRewardSnapshot({ ...base, currency: "LC" }));
 });
 
 test("reversal must match the original transaction and exact stored reward", () => {
