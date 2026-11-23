@@ -23,7 +23,8 @@ create or replace function private.record_moonetix_event(
   p_reward_raw text,
   p_payout_usd_raw text,
   p_payload_digest text,
-  p_signature_valid boolean
+  p_signature_valid boolean,
+  p_is_test boolean default false
 )
 returns uuid
 language plpgsql
@@ -46,7 +47,7 @@ begin
   if p_status not in (1,2) then raise exception 'Unsupported Moonetix status'; end if;
   if p_currency_code <> 'EL' then raise exception 'Moonetix reward currency must be EL'; end if;
 
-  if p_status = 1 and coalesce(p_signature_valid,false) then
+  if p_status = 1 and coalesce(p_signature_valid,false) and not coalesce(p_is_test,false) then
     if p_reward_raw is null or trunc(p_reward_raw::numeric*1000) <> p_reward_raw::numeric*1000
       or p_reward_raw::numeric*1000 > 9223372036854775807 then
       raise exception 'Moonetix reward cannot be represented safely in EL atoms';
@@ -71,13 +72,14 @@ begin
   else
     v_status := case when coalesce(p_signature_valid,false) then 'pending_verification' else 'rejected' end;
   end if;
+  if coalesce(p_is_test,false) then v_status := 'test'; end if;
 
   insert into private.moonetix_reward_events(
     user_id,provider_transaction_id,provider_event_id,provider_status,currency_code,
-    reward_raw,payout_usd_raw,reward_atoms,payload_digest,signature_valid,status,original_event_id
+    reward_raw,payout_usd_raw,reward_atoms,payload_digest,signature_valid,status,original_event_id,is_test
   ) values (
     p_user_id,p_transaction_id,p_event_id,p_status::smallint,p_currency_code,
-    p_reward_raw,p_payout_usd_raw,v_reward_atoms,p_payload_digest,coalesce(p_signature_valid,false),v_status,v_original_id
+    p_reward_raw,p_payout_usd_raw,v_reward_atoms,p_payload_digest,coalesce(p_signature_valid,false),v_status,v_original_id,coalesce(p_is_test,false)
   )
   on conflict (provider_event_id) do nothing
   returning id into v_event_id;
@@ -99,6 +101,7 @@ begin
     or v_existing.user_id is distinct from p_user_id
     or v_existing.provider_status is distinct from p_status
     or v_existing.signature_valid is distinct from coalesce(p_signature_valid,false)
+    or v_existing.is_test is distinct from coalesce(p_is_test,false)
     or v_existing.currency_code is distinct from p_currency_code
     or v_existing.reward_raw is distinct from p_reward_raw
     or v_existing.payout_usd_raw is distinct from p_payout_usd_raw then
@@ -107,7 +110,7 @@ begin
   return v_existing.id;
 end;
 $fn$;
-revoke all on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean)
+revoke all on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean,boolean)
   from public,anon,authenticated;
 grant execute on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean)
   to service_role;
@@ -121,7 +124,8 @@ create or replace function public.record_moonetix_postback(
   p_reward_raw text,
   p_payout_usd_raw text,
   p_payload_digest text,
-  p_signature_valid boolean
+  p_signature_valid boolean,
+  p_is_test boolean default false
 )
 returns uuid
 language sql
@@ -130,10 +134,10 @@ set search_path = ''
 as $fn$
   select private.record_moonetix_event(
     p_user_id,p_transaction_id,p_event_id,p_status,p_currency_code,
-    p_reward_raw,p_payout_usd_raw,p_payload_digest,p_signature_valid
+    p_reward_raw,p_payout_usd_raw,p_payload_digest,p_signature_valid,p_is_test
   );
 $fn$;
-revoke all on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean)
+revoke all on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean,boolean)
   from public,anon,authenticated;
 grant execute on function public.record_moonetix_postback(uuid,text,text,integer,text,text,text,text,boolean)
   to service_role;
@@ -181,7 +185,7 @@ begin
     end if;
     return coalesce(v_event.pending_journal_transaction_id,v_event.approval_journal_transaction_id);
   end if;
-  if v_event.provider_status <> 1 or v_event.status <> 'pending_verification'
+  if v_event.is_test or v_event.provider_status <> 1 or v_event.status <> 'pending_verification'
     or not v_event.signature_valid then
     raise exception 'Event is not eligible for credit reconciliation';
   end if;
@@ -302,7 +306,7 @@ begin
     end if;
     return;
   end if;
-  if v_event.provider_status<>2 or v_event.status<>'reversal_pending'
+  if v_event.is_test or v_event.provider_status<>2 or v_event.status<>'reversal_pending'
     or not v_event.signature_valid or v_event.original_event_id is null then
     raise exception 'Event is not eligible for reversal reconciliation';
   end if;
