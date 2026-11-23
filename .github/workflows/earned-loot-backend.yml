@@ -15,7 +15,7 @@ on:
       - "supabase/functions/moonetix-postback/**"
       - "supabase/functions/moonetix-reporting-reconcile/**"
       - "supabase/config.toml"
-      - "supabase/migrations/20261123000*.sql"
+      - "supabase/migrations/202611231121*.sql"
       - ".github/workflows/earned-loot-backend.yml"
   push:
     branches:
@@ -62,7 +62,7 @@ jobs:
         run: psql -v ON_ERROR_STOP=1 -f tests/sql/bootstrap.sql
       - name: Apply migrations to disposable PostgreSQL
         run: |
-          for migration in supabase/migrations/20261123000*.sql; do
+          for migration in supabase/migrations/202611231121*.sql; do
             echo "Applying $migration"
             psql -v ON_ERROR_STOP=1 -f "$migration"
           done
