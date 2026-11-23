@@ -91,6 +91,31 @@ create unique index if not exists moonetix_one_open_config_version
   on private.moonetix_reward_config_versions((true))
   where effective_to is null;
 
+
+create or replace function private.prevent_moonetix_config_overlap()
+returns trigger
+language plpgsql
+set search_path = ''
+as $fn$
+begin
+  if exists (
+    select 1 from private.moonetix_reward_config_versions c
+    where c.id is distinct from new.id
+      and tstzrange(c.effective_from,c.effective_to,'[)')
+          && tstzrange(new.effective_from,new.effective_to,'[)')
+  ) then
+    raise exception 'Moonetix reward configuration effective periods cannot overlap';
+  end if;
+  return new;
+end;
+$fn$;
+revoke all on function private.prevent_moonetix_config_overlap() from public,anon,authenticated;
+drop trigger if exists moonetix_config_no_overlap on private.moonetix_reward_config_versions;
+create trigger moonetix_config_no_overlap
+before insert or update of effective_from,effective_to
+on private.moonetix_reward_config_versions
+for each row execute function private.prevent_moonetix_config_overlap();
+
 -- Every provider event is stored with the exact raw decimal strings Moonetix sent.
 -- The reward field already includes the provider's split, bonus, and rounding.
 create table if not exists private.moonetix_reward_events (
