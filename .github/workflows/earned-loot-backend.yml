@@ -8,13 +8,15 @@ on:
       - "account-auth.js"
       - "tests/earned-loot-reward.test.cjs"
       - "tests/earned-loot-wallet.test.cjs"
+      - "tests/sql/**"
+      - "supabase/migrations/20261123000*.sql"
       - ".github/workflows/earned-loot-backend.yml"
   push:
     branches:
       - "feature/earned-loot-ledger-backend"
 
 jobs:
-  moonetix-reward-contract:
+  node-contracts:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -22,3 +24,41 @@ jobs:
         with:
           node-version: "22"
       - run: node --test tests/earned-loot-reward.test.cjs tests/earned-loot-wallet.test.cjs
+      - run: node --check account-auth.js
+
+  postgres-migrations:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: legitloot_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d legitloot_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: legitloot_test
+      PGUSER: postgres
+      PGPASSWORD: test_password
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Bootstrap minimal Supabase-compatible test schema
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/bootstrap.sql
+      - name: Apply migrations to disposable PostgreSQL
+        run: |
+          for migration in supabase/migrations/20261123000*.sql; do
+            echo "Applying $migration"
+            psql -v ON_ERROR_STOP=1 -f "$migration"
+          done
+      - name: Run financial lifecycle integration tests
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/financial_foundation.test.sql
