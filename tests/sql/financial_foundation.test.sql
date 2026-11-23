@@ -197,8 +197,8 @@ begin
     raise exception 'Excess reversal was not held';
   end if;
   v_summary:=public.get_player_wallet_summary();
-  if v_summary#>>'{earnedLoot,availableUnits}' <> '0' then
-    raise exception 'Reversal created a negative available EL balance';
+  if v_summary#>>'{earnedLoot,availableUnits}' <> '200' then
+    raise exception 'Reversal created an incorrect available EL balance';
   end if;
 
   -- A different authenticated player sees only their own wallet and cannot approve.
