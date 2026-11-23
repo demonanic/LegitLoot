@@ -18,7 +18,7 @@ create or replace function private.record_moonetix_event(
   p_user_id uuid,
   p_transaction_id text,
   p_event_id text,
-  p_status smallint,
+  p_status integer,
   p_currency_code text,
   p_reward_raw text,
   p_payout_usd_raw text,
@@ -67,7 +67,7 @@ begin
     user_id,provider_transaction_id,provider_event_id,provider_status,currency_code,
     reward_raw,payout_usd_raw,payload_digest,signature_valid,status,original_event_id
   ) values (
-    p_user_id,p_transaction_id,p_event_id,p_status,p_currency_code,
+    p_user_id,p_transaction_id,p_event_id,p_status::smallint,p_currency_code,
     p_reward_raw,p_payout_usd_raw,p_payload_digest,coalesce(p_signature_valid,false),v_status,v_original_id
   )
   on conflict (provider_event_id) do nothing
@@ -98,7 +98,7 @@ begin
   return v_existing.id;
 end;
 $fn$;
-revoke all on function private.record_moonetix_event(uuid,text,text,smallint,text,text,text,text,boolean)
+revoke all on function private.record_moonetix_event(uuid,text,text,integer,text,text,text,text,boolean)
   from public,anon,authenticated;
 grant execute on function private.record_moonetix_event(uuid,text,text,smallint,text,text,text,text,boolean)
   to service_role;
