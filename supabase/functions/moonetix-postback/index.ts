@@ -4,6 +4,7 @@ const encoder = new TextEncoder();
 const decimalReward = /^(0|[1-9][0-9]*)(?:\.[0-9]{1,3})?$/;
 const decimalUsd = /^(0|[1-9][0-9]*)(?:\.[0-9]{1,12})?$/;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const providerIdPattern = /^[A-Za-z0-9_-]{1,160}$/;
 
 function hexToBytes(hex: string): Uint8Array | null {
   if (!/^[0-9a-f]{64}$/i.test(hex)) return null;
@@ -60,7 +61,7 @@ Deno.serve(async (request: Request) => {
   const currency = url.searchParams.get("currency") ?? "";
   const givenHash = url.searchParams.get("hash") ?? "";
 
-  if (!tx || tx.length > 160 || !uuidPattern.test(userId) || !eventId || eventId.length > 160
+  if (!providerIdPattern.test(tx) || !uuidPattern.test(userId) || !providerIdPattern.test(eventId)
     || !["1", "2"].includes(status) || !decimalReward.test(reward)
     || !decimalUsd.test(payout) || currency !== "EL" || !givenHash) {
     return new Response("Invalid postback parameters", { status: 400 });
