@@ -64,7 +64,7 @@ begin
       raise exception 'Reversal arrived without a known original credit';
     end if;
     if v_original.user_id <> p_user_id or v_original.currency_code <> p_currency_code
-      or v_original.reward_raw <> p_reward_raw then
+      or v_original.reward_raw::numeric <> p_reward_raw::numeric then
       raise exception 'Moonetix reversal does not match the original player reward';
     end if;
     v_original_id := v_original.id;
