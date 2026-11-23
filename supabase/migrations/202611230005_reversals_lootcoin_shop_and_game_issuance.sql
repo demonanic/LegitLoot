@@ -47,7 +47,7 @@ begin
   where id=v_reversal.original_event_id for update;
   if not found then raise exception 'Original reward event not found'; end if;
   if v_original.user_id <> v_reversal.user_id
-    or v_original.reward_raw <> v_reversal.reward_raw
+    or v_original.reward_raw::numeric <> v_reversal.reward_raw::numeric
     or v_original.reward_atoms is null then
     raise exception 'Reversal does not match the original reward';
   end if;
