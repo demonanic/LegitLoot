@@ -45,6 +45,12 @@ begin
     raise exception 'Callback did not remain pending-only with value withheld';
   end if;
 
+  v_failed:=false;
+  begin
+    perform private.reconcile_moonetix_credit(v_event1,v_config,'mx-tx-1',v_user,'250','0.6','credited',now()-interval '1 hour','bad-report-line');
+  exception when others then v_failed:=true;
+  end;
+  if not v_failed then raise exception 'Mismatched Reporting API payout was accepted'; end if;
   perform private.reconcile_moonetix_credit(v_event1,v_config,'mx-tx-1',v_user,'250','0.5','credited',now()-interval '1 hour','statement-line-1');
   v_summary:=public.get_player_wallet_summary();
   if v_summary#>>'{earnedLoot,availableUnits}' <> '0'
@@ -141,6 +147,17 @@ begin
   end;
   if not v_failed then raise exception 'Mixed EL/LC journal transaction was accepted'; end if;
 
+  -- Overlapping configuration windows must be rejected.
+  v_failed:=false;
+  begin
+    insert into private.moonetix_reward_config_versions(
+      currency_code,conversion_rate,split_percent,bonus_percent,rounding_mode,
+      effective_from,dashboard_reference,verified_by,verified_at,is_verified
+    ) values('EL',1000,55,0,'whole',now()-interval '1 hour','overlap-config',v_user,now(),true);
+  exception when others then v_failed:=true;
+  end;
+  if not v_failed then raise exception 'Overlapping Moonetix config period was accepted'; end if;
+
   -- Change split to 60%; the first event remains at 50%, the next uses 60%.
   update private.moonetix_reward_config_versions set effective_to=now() where id=v_config;
   insert into private.moonetix_reward_config_versions(
@@ -187,6 +204,12 @@ begin
 
   -- Reversal 1 fits the unspent EL balance and posts a compensating journal entry.
   v_reversal1:=private.record_moonetix_event(v_user,'mx-tx-1','mx-event-1-reversal',2,'EL','250','0.5','digest-reversal-1',true);
+  v_failed:=false;
+  begin
+    perform private.reconcile_moonetix_reversal(v_reversal1,'mx-tx-1',v_user,'125','reversed',now()+interval '2 hours','bad-reversal-report');
+  exception when others then v_failed:=true;
+  end;
+  if not v_failed then raise exception 'Mismatched Reporting API reversal was accepted'; end if;
   perform private.reconcile_moonetix_reversal(v_reversal1,'mx-tx-1',v_user,'250','reversed',now()+interval '2 hours','report-reversal-1');
   perform private.process_moonetix_reversal(v_reversal1,'provider reversal confirmed');
   if (select status from private.moonetix_reward_events where id=v_reversal1) <> 'reversed' then
