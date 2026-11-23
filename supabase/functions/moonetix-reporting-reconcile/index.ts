@@ -129,6 +129,7 @@ Deno.serve(async (request: Request) => {
         if (pageCount > 100) throw new Error("Moonetix report exceeded the safe page limit");
 
         for (const conversion of page.conversions) {
+          if (conversion.transaction_id?.startsWith("test_")) continue;
           if (!conversion.transaction_id || !conversion.user_id || conversion.status !== item.status) {
             totals.failedRecords++;
             continue;
