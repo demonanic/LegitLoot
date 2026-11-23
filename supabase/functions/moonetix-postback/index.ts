@@ -31,10 +31,11 @@ async function verifyPostback(
     false,
     ["verify"],
   );
+  const signatureBuffer = new Uint8Array(signature).buffer;
   return await crypto.subtle.verify(
     "HMAC",
     key,
-    signature,
+    signatureBuffer,
     encoder.encode(tx + ":" + userId + ":" + reward + ":" + status),
   );
 }
