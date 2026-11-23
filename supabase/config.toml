@@ -3,3 +3,6 @@
 # Moonetix's HMAC-SHA256 signature before any service-role database call.
 [functions.moonetix-postback]
 verify_jwt = false
+
+[functions.moonetix-reporting-reconcile]
+verify_jwt = false
