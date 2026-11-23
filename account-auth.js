@@ -1,10 +1,17 @@
 (() => {
   const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
-  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   const $ = (id) => document.getElementById(id);
+  const status = $("auth-status");
+  // Preview and localhost hosts must never initialize the production Supabase client.
+  if (window.location.hostname !== "legitloot.site") {
+    if (status) status.innerHTML = "<b>PREVIEW ACCOUNT DISABLED</b><p>Wallet preview is available here, but authentication is disabled on preview hosts to protect production accounts.</p>";
+    const panel = $("auth-panel");
+    if (panel) panel.hidden = true;
+    return;
+  }
+  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   if (!client) {
-    const status = $("auth-status");
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
     return;
   }
