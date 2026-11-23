@@ -59,7 +59,6 @@ Deno.serve(async (request: Request) => {
   const payout = url.searchParams.get("payout") ?? "";
   const currency = url.searchParams.get("currency") ?? "";
   const givenHash = url.searchParams.get("hash") ?? "";
-  const appId = url.searchParams.get("app_id") ?? "";
 
   if (!tx || tx.length > 160 || !uuidPattern.test(userId) || !eventId || eventId.length > 160
     || !["1", "2"].includes(status) || !decimalReward.test(reward)
@@ -70,13 +69,9 @@ Deno.serve(async (request: Request) => {
   const secret = Deno.env.get("MOONETIX_POSTBACK_KEY");
   const supabaseUrl = Deno.env.get("SUPABASE_URL");
   const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const expectedAppId = Deno.env.get("MOONETIX_APP_ID");
 
   if (!secret || !supabaseUrl || !serviceRoleKey) {
     return new Response("Postback service is not configured", { status: 503 });
-  }
-  if (expectedAppId && appId !== expectedAppId) {
-    return new Response("Unknown Moonetix app", { status: 403 });
   }
 
   let valid = false;
@@ -88,7 +83,7 @@ Deno.serve(async (request: Request) => {
   if (!valid) return new Response("Invalid signature", { status: 403 });
 
   const payloadDigest = await digestPayload([
-    tx, userId, eventId, status, reward, payout, currency, appId,
+    tx, userId, eventId, status, reward, payout, currency,
   ]);
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -104,6 +99,7 @@ Deno.serve(async (request: Request) => {
     p_payout_usd_raw: payout,
     p_payload_digest: payloadDigest,
     p_signature_valid: true,
+    p_is_test: tx.startsWith("test_"),
   });
 
   if (error) {
