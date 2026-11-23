@@ -198,7 +198,7 @@ create table if not exists private.moonetix_reconciliation_gaps (
   id bigint generated always as identity primary key,
   provider_transaction_id text not null,
   provider_status text not null check (provider_status in ('credited','reversed')),
-  user_id uuid references auth.users(id) on delete restrict,
+  user_id text,
   reward_raw text not null,
   payout_usd_raw text not null,
   provider_credited_at timestamptz,
