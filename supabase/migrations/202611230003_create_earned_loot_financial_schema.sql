@@ -194,6 +194,24 @@ create index if not exists earned_loot_lots_user_fifo_idx
   on private.earned_loot_lots(user_id,created_at,id)
   where remaining_atoms > 0;
 
+create table if not exists private.moonetix_reconciliation_gaps (
+  id bigint generated always as identity primary key,
+  provider_transaction_id text not null,
+  provider_status text not null check (provider_status in ('credited','reversed')),
+  user_id uuid references auth.users(id) on delete restrict,
+  reward_raw text not null,
+  payout_usd_raw text not null,
+  provider_credited_at timestamptz,
+  provider_reversed_at timestamptz,
+  report_reference text not null,
+  reason text not null,
+  first_seen_at timestamptz not null default now(),
+  last_seen_at timestamptz not null default now(),
+  resolved_at timestamptz,
+  resolution text,
+  unique(provider_transaction_id,provider_status)
+);
+
 create table if not exists private.earned_loot_reward_audit (
   id bigint generated always as identity primary key,
   reward_event_id uuid not null references private.moonetix_reward_events(id) on delete restrict,
