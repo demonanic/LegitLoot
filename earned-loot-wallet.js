@@ -1,7 +1,7 @@
 (function (root) {
   "use strict";
 
-  const integerString = (value, field) => {
+  const unitString = (value, field) => {\n    if (typeof value !== "string" || !/^(0|[1-9][0-9]*)(?:\\.[0-9]{1,3})?$/.test(value)) {\n      throw new Error("Invalid " + field);\n    }\n    return value;\n  };\n\n  const integerString = (value, field) => {
     if (typeof value !== "string" || !/^(0|[1-9][0-9]*)$/.test(value)) {
       throw new Error("Invalid " + field);
     }
@@ -22,8 +22,8 @@
     }
     const parsed = {
       earnedLoot: {
-        availableUnits: integerString(el.availableUnits, "available Earned Loot units"),
-        pendingUnits: integerString(el.pendingUnits, "pending Earned Loot units"),
+        availableUnits: unitString(el.availableUnits, "available Earned Loot units"),
+        pendingUnits: unitString(el.pendingUnits, "pending Earned Loot units"),
         availableValueCents: integerString(el.availableValueCents, "available Earned Loot value"),
         pendingValueCents: integerString(el.pendingValueCents, "pending Earned Loot value"),
         unitsLabel: el.unitsLabel
@@ -50,7 +50,7 @@
     return amount.toLocaleString("en-US", { style: "currency", currency: "USD" });
   };
 
-  const formatInteger = (value) => {
+  const formatEarnedLootUnits = (value) => {\n    const valid = unitString(value, "Earned Loot units");\n    const [whole, fraction = ""] = valid.split(".");\n    const trimmed = fraction.replace(/0+$/, "");\n    return BigInt(whole).toLocaleString("en-US") + (trimmed ? "." + trimmed : "");\n  };\n\n  const formatInteger = (value) => {
     const n = Number(value);
     if (!Number.isSafeInteger(n)) throw new Error("Unsafe wallet unit amount");
     return n.toLocaleString("en-US");
@@ -63,7 +63,7 @@
     return whole.toLocaleString("en-US") + (fraction ? "." + fraction : "") + " LC";
   };
 
-  const api = Object.freeze({ parseWallet, formatUsd, formatInteger, formatLootCoins });
+  const api = Object.freeze({ parseWallet, formatUsd, formatInteger, formatEarnedLootUnits, formatLootCoins });
   root.LEGITLOOT_EARNED_WALLET = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);
