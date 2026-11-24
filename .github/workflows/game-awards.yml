@@ -1,0 +1,65 @@
+name: Game awards tests
+
+on:
+  pull_request:
+    paths:
+      - "game-awards.js"
+      - "game-awards-bridge.js"
+      - "zombies-vs-heavy-metal.html"
+      - "tests/game-awards.test.cjs"
+      - "tests/sql/**"
+      - "supabase/migrations/**"
+      - ".github/workflows/game-awards.yml"
+  push:
+    branches:
+      - "ccr-c6865b94-8zz69v"
+
+jobs:
+  node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/game-awards.test.cjs
+      - run: node --check game-awards-bridge.js
+
+  postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: legitloot_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d legitloot_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: legitloot_test
+      PGUSER: postgres
+      PGPASSWORD: test_password
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Bootstrap minimal Supabase-compatible test schema
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/bootstrap.sql
+      - name: Apply Earned Loot migrations, then game award migrations
+        run: |
+          for migration in supabase/migrations/202611231121*.sql supabase/migrations/*_game_awards_*.sql; do
+            echo "Applying $migration"
+            psql -v ON_ERROR_STOP=1 -f "$migration"
+          done
+      - name: Financial foundation tests still pass
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/financial_foundation.test.sql
+      - name: Game award tests
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/game_awards.test.sql
