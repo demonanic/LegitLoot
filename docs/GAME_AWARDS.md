@@ -5,6 +5,8 @@ Gameplay LootCoins (LC) for milestones and achievements, per the owner amendment
 "server-verified game milestones, achievements, challenges…". This system decides **when** an award is earned.
 The actual LC posting is still done only by `private.issue_game_lootcoins` from the Earned Loot ledger work.
 
+Games: Zombies vs Heavy Metal (`zvhm`) and Rocket 2 Nowhere (`rxt2`).
+
 Status: **draft, not applied anywhere.** Issuance is **off** for every game until the owner turns it on.
 
 ## How it works
@@ -61,6 +63,29 @@ cleared; bosses come every fifth wave (two from wave 20), so 60 s per boss; kill
 
 Total available: 135 LC per player. The scripted balance player falls around wave 20, so the last milestone is a stretch goal.
 
+## Awards (Rocket 2 Nowhere) — LC amounts are proposals for owner review
+
+Stats: best distance in one run, rocks destroyed and close calls (lifetime), runs finished (server-counted).
+The game reports on start, every 20 s of play, and when the ship is destroyed (`games/rocket-2-nowhere/portal.js`).
+Limits: distance at most 300 m/s averaged over the run on the server clock (top speed is 110 m/s; wormholes add 500 m),
+1,200 rocks and 300 close calls a minute; 200 runs a day, 2-hour maximum run.
+
+| Award | Kind | Needs | LC |
+| --- | --- | --- | --- |
+| Liftoff | milestone | 1,000 m in a run (~25 s) | 1 |
+| Escape Velocity | milestone | 5,000 m (~70 s) | 2 |
+| Deep Void | milestone | 15,000 m (~2.6 min) | 5 |
+| Nowhere Bound | milestone | 30,000 m (~5 min) | 10 |
+| Edge of Nowhere | milestone | 60,000 m (~10 min) | 20 |
+| Rock Breaker | achievement | 100 rocks (lifetime) | 1 |
+| Asteroid Miner | achievement | 1,000 rocks | 5 |
+| Belt Clearer | achievement | 5,000 rocks | 15 |
+| Daredevil | achievement | 50 close calls | 2 |
+| Hair's Breadth | achievement | 500 close calls | 10 |
+| Frequent Flyer | achievement | finish 25 runs | 2 |
+
+Total available: 73 LC per player. Issuance is off separately per game.
+
 ## Owner controls (service role / SQL editor)
 
 ```sql
@@ -89,7 +114,7 @@ so a dated challenge on a lifetime metric is met by earlier play too; per-period
 
 1. Insert a `game_award_games` row, its `game_award_metrics` (with rate limits from the game's own timings), and its definitions.
 2. In the game, post `{type: "legitloot:game", version: 1, game, event, stats}` to `https://legitloot.site` after it receives `{type: "legitloot:portal", event: "ready"}`.
-3. On its legitloot.site page, add the Awards button/drawer markup and `game-awards.js` + `game-awards-bridge.js` with `data-game`, `data-frame` and `data-origin`.
+3. On its legitloot.site page, add the Awards button/drawer markup, `game-awards.css`, and `game-awards.js` + `game-awards-bridge.js` with `data-game`, `data-frame` and `data-origin` (the game's origin; `https://legitloot.site` for games hosted on the site, like Rocket 2 Nowhere).
 
 ## Tests
 

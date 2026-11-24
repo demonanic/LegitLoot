@@ -5,7 +5,10 @@ on:
     paths:
       - "game-awards.js"
       - "game-awards-bridge.js"
+      - "game-awards.css"
       - "zombies-vs-heavy-metal.html"
+      - "rocket-2-nowhere.html"
+      - "games/rocket-2-nowhere/**"
       - "tests/game-awards.test.cjs"
       - "tests/sql/**"
       - "supabase/migrations/**"
@@ -24,6 +27,7 @@ jobs:
           node-version: "22"
       - run: node --test tests/game-awards.test.cjs
       - run: node --check game-awards-bridge.js
+      - run: node --check games/rocket-2-nowhere/portal.js
 
   postgres:
     runs-on: ubuntu-latest

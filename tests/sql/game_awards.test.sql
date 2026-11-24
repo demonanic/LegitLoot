@@ -237,6 +237,40 @@ begin
     raise exception 'Retired award shown to guests';
   end if;
 
+  -- Rocket 2 Nowhere: its own catalog, limits and stats, separate from Z.V.H.M.
+  perform set_config('request.jwt.claim.sub','',true);
+  v_cat := public.get_game_awards('rxt2');
+  if v_cat->>'displayName' <> 'Rocket 2 Nowhere' or jsonb_array_length(v_cat->'awards') <> 11
+    or (v_cat->>'issuanceEnabled')::boolean then
+    raise exception 'RXT2 catalog wrong: %', v_cat;
+  end if;
+  perform set_config('request.jwt.claim.sub',v_player::text,true);
+  -- 60 s of play allows up to 18,000 m; 20,000 m is too fast.
+  v_run := public.start_game_run('rxt2','1');
+  update private.game_runs set started_at = now() - interval '60 seconds' where id = v_run;
+  v_res := public.report_game_run(v_run,'{"distance":20000,"rocks_destroyed":10}'::jsonb,true);
+  if (v_res->>'accepted')::boolean or v_res->>'reason' <> 'distance too high for the time played' then
+    raise exception 'RXT2 distance speed limit not applied: %', v_res;
+  end if;
+  -- Z.V.H.M. stat names are not accepted for RXT2.
+  v_run := public.start_game_run('rxt2','1');
+  update private.game_runs set started_at = now() - interval '60 seconds' where id = v_run;
+  v_res := public.report_game_run(v_run,'{"kills":5}'::jsonb,true);
+  if (v_res->>'accepted')::boolean then raise exception 'RXT2 accepted a Z.V.H.M. stat'; end if;
+  -- A plausible 90 s run: 5,200 m, 120 rocks, 12 close calls.
+  v_run := public.start_game_run('rxt2','1');
+  update private.game_runs set started_at = now() - interval '90 seconds' where id = v_run;
+  v_res := public.report_game_run(v_run,'{"distance":5200,"rocks_destroyed":120,"close_calls":12}'::jsonb,true);
+  if not (v_res->>'accepted')::boolean then raise exception 'Plausible RXT2 run rejected: %', v_res; end if;
+  select array_agg(x->>'awardKey' order by x->>'awardKey') is distinct from array['escape-velocity','liftoff','rock-breaker']
+    into v_failed from jsonb_array_elements(v_res->'unlocked') x;
+  if v_failed then raise exception 'RXT2 unlocks wrong: %', v_res; end if;
+  -- Issuance is still off for RXT2 even though Z.V.H.M. is on.
+  if jsonb_array_length(v_res->'issued') <> 0 then raise exception 'RXT2 issued while disabled'; end if;
+  if (select value from private.game_player_metrics where user_id = v_player and game_slug = 'zvhm' and metric = 'kills') <> 350 then
+    raise exception 'RXT2 run changed Z.V.H.M. stats';
+  end if;
+
   raise notice 'Game award integration tests passed';
 end;
 $test$;

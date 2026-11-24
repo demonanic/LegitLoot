@@ -115,6 +115,7 @@ h2{font-size:clamp(28px,7vw,48px)}
   </div>
 </div>
 
+<script src="portal.js?v=1"></script>
 <script>
 {
 const cv=document.getElementById('c'),ctx=cv.getContext('2d'),$=id=>document.getElementById(id);
@@ -124,6 +125,9 @@ const ridgeA=Array.from({length:16},()=>rand(.3,1)),ridgeB=Array.from({length:12
 const SR=13,NEAR=24,WARP=1.1;let lastGateY=280;
 let st='menu',ship,obs=[],pups=[],parts=[],pops=[];
 let dist=0,score=0,mult=1,topMult=1,calls=0,sinceNear=0,speedF=1,warpT=0,slowT=0,shield=0,inv=0,shake=0,nextObs=0,nextPup=0,gridOff=0,t=0,pulse=0,curV=0;
+// Award tracking on legitloot.site's game page (see portal.js). Null when played on its own.
+const portal=window.RXT2_PORTAL?window.RXT2_PORTAL.createPortal(window,'https://legitloot.site','rxt2','1'):null,CK=20;let playT=0,nextCk=CK;
+const runStats=()=>window.RXT2_PORTAL.runStats(dist,kills,calls);
 let best=0;try{best=+(localStorage.getItem('rxt2Best')||localStorage.getItem('neonThrustBest'))||0}catch(e){}
 let bullets=[],rockets=[],fireT=0,rocketT=0,runScrap=0,kills=0,bank=0,upg={rate:0,dmg:0,rkt:0};
 try{bank=+(localStorage.getItem('rxt2Scrap')||localStorage.getItem('ntScrap'))||0;Object.assign(upg,JSON.parse(localStorage.getItem('rxt2Upg')||localStorage.getItem('ntUpg')||'{}'))}catch(e){}
@@ -205,7 +209,7 @@ function closeCall(){
 function hit(o){
   if(shield>0){shield=0;inv=1.2;o.dead=true;mult=Math.max(1,mult/2);shake=10;
     burst(o.k==='a'?o.x:o.x+12,o.k==='a'?o.y:ship.y,['#c8ff3d','#fff','#ff2bd6']);pop('SHIELD DOWN','#c8ff3d');tone(220,.3,'sawtooth',.1,80);return}
-  ship.dead=true;st='over';shake=18;burst(ship.x,ship.y,['#ff2bd6','#22f0ff','#fff','#c8ff3d'],70,380);
+  ship.dead=true;st='over';if(portal)portal.end(runStats());shake=18;burst(ship.x,ship.y,['#ff2bd6','#22f0ff','#fff','#c8ff3d'],70,380);
   tone(160,.6,'sawtooth',.14,40);tone(90,.8,'triangle',.14,30);
   const isNew=score>best;if(isNew){best=Math.floor(score);try{localStorage.setItem('rxt2Best',best)}catch(e){}}
   const earned=runScrap+Math.floor(dist/100);bank+=earned;save();
@@ -242,6 +246,7 @@ function update(dt){
   for(const p of parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.life-=dt}parts=parts.filter(p=>p.life>0);
   for(const p of pops){p.y-=40*dt;p.life-=dt*.9}pops=pops.filter(p=>p.life>0);
   if(st!=='play'){gridOff+=dt*140;curV=140;return}
+  playT+=dt;if(portal&&playT>=nextCk){nextCk+=CK;portal.checkpoint(runStats())}
   let ws=slowT>0?.4:1;slowT=Math.max(0,slowT-dt);inv-=dt;
   speedF+=(1-speedF)*dt*.12;
   if(warpT>0){warpT-=dt;ws=3.2}
@@ -413,7 +418,7 @@ $('mute').addEventListener('click',()=>{initAudio();muted=!muted;$('mute').class
 
 function start(){
   initAudio();if(ac&&ac.state==='suspended')ac.resume();
-  reset();st='play';$('menu').hidden=true;$('over').hidden=true;$('hud').hidden=false;
+  reset();st='play';playT=0;nextCk=CK;if(portal)portal.start();$('menu').hidden=true;$('over').hidden=true;$('hud').hidden=false;
 }
 $('start').addEventListener('click',start);$('retry').addEventListener('click',start);
 function renderHangar(){

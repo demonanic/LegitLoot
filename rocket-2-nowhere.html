@@ -25,16 +25,24 @@
   .stage iframe { display: block; width: 100%; height: 100%; border: 0; }
   @media (max-width: 420px) { .title { display: none; } }
 </style>
+<link rel="stylesheet" href="game-awards.css?v=1">
 </head>
 <body>
   <header class="bar">
     <a class="brand" href="games.html" aria-label="Back to LegitLoot games"><img src="assets/legitloot-mark.svg" alt=""><span>LEGIT<span class="acid">LOOT</span></span></a>
     <span class="title">Rocket 2 Nowhere<span class="tag">Early access</span></span>
+    <button id="awards-btn" type="button" aria-controls="awards-drawer" aria-expanded="false" hidden>Awards<span id="awards-count"></span></button>
     <button id="full" type="button" hidden>Full screen</button>
     <a class="btn" href="games.html">Exit</a>
   </header>
   <main class="stage">
     <iframe id="game" src="games/rocket-2-nowhere/index.html" title="Rocket 2 Nowhere" allow="fullscreen; autoplay" allowfullscreen></iframe>
+    <div id="awards-toast" class="awards-toast" role="status" aria-live="polite" hidden></div>
+    <aside id="awards-drawer" class="awards-drawer" aria-label="Awards" hidden>
+      <header><h2>Awards</h2><button type="button" data-close>Close</button></header>
+      <p id="awards-note"></p>
+      <ul id="awards-list"></ul>
+    </aside>
   </main>
   <script>
     (function () {
@@ -47,5 +55,8 @@
       });
     })();
   </script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="game-awards.js?v=1"></script>
+  <script src="game-awards-bridge.js?v=1" data-game="rxt2" data-frame="game" data-origin="https://legitloot.site"></script>
 </body>
 </html>
