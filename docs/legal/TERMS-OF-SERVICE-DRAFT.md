@@ -1,8 +1,8 @@
 # LegitLoot Terms of Service — Draft for Legal Review
 
-**Status:** Working draft only. Not approved for publication or reliance.  
-**Draft date:** November 24, 2026  
-**Operator:** LegitLoot is currently operated by an individual operator. The operator's legal name and a service address must be inserted before publication.  
+**Status:** Working draft only. Not approved for publication or reliance.
+**Draft date:** November 24, 2026
+**Operator:** LegitLoot is currently operated by an individual operator. The operator's legal name and a service address must be inserted before publication.
 **Proposed governing law:** North Carolina, United States.
 
 > This draft is a planning document, not legal advice and not a final agreement. Have a North Carolina attorney review it and confirm the operator identity, dispute provisions, consumer disclosures, and all services before publication. Do not activate signup or rewards based solely on this draft.
