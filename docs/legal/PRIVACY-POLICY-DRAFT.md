@@ -1,8 +1,8 @@
 # LegitLoot Privacy Notice — Draft for Legal Review
 
-**Status:** Working draft only. Not approved for publication or reliance.  
-**Draft date:** November 24, 2026  
-**Operator:** Individual operator (legal name and notice address to be inserted).  
+**Status:** Working draft only. Not approved for publication or reliance.
+**Draft date:** November 24, 2026
+**Operator:** Individual operator (legal name and notice address to be inserted).
 **Proposed jurisdiction:** North Carolina, United States.
 
 > This is a planning draft, not legal advice or a complete representation of every data flow. Before publication, verify actual production telemetry, hosting/CDN logs, email delivery, analytics, game integrations, provider contracts, retention settings, and legal obligations with qualified counsel. Do not collect date of birth or invite outside testers until the final notice accurately describes the implemented data practices.
