@@ -16,10 +16,14 @@ function validDob(value: unknown): value is string {
   const d = new Date(value + "T00:00:00.000Z");
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === value;
 }
-function ageOnToday(dob: string, today = new Date()): number {
+function northCarolinaDate(now = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).format(now);
+}
+function ageOnDate(dob: string, today: string): number {
   const [year, month, day] = dob.split("-").map(Number);
-  let age = today.getUTCFullYear() - year;
-  if (today.getUTCMonth() + 1 < month || (today.getUTCMonth() + 1 === month && today.getUTCDate() < day)) age--;
+  const [todayYear, todayMonth, todayDay] = today.split("-").map(Number);
+  let age = todayYear - year;
+  if (todayMonth < month || (todayMonth === month && todayDay < day)) age--;
   return age;
 }
 
@@ -48,7 +52,7 @@ Deno.serve(async (req: Request) => {
   if (password.length < 10 || password.length > 128) return json({ error: "Password must be at least 10 characters." }, 400);
   if (!displayName || displayName.length > 40) return json({ error: "Display name is required (maximum 40 characters)." }, 400);
   if (!validDob(dob)) return json({ error: "Enter a valid date of birth." }, 400);
-  if (ageOnToday(dob) < 18) return json({ error: "You must be at least 18 years old to create a LegitLoot account." }, 403);
+  if (dob > northCarolinaDate() || ageOnDate(dob, northCarolinaDate()) < 18) return json({ error: "You must be at least 18 years old to create a LegitLoot account." }, 403);
   if (body.acceptTerms !== true || body.acceptPrivacy !== true) return json({ error: "You must accept the Terms and acknowledge the Privacy Notice." }, 400);
   if (body.termsVersion !== termsVersion || body.privacyVersion !== privacyVersion) return json({ error: "The policy versions have changed. Refresh and review the current documents." }, 409);
 
