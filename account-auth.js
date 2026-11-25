@@ -18,7 +18,9 @@
   }
   const dobInput = $("signup-dob");
   if (dobInput) {
-    dobInput.max = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+    const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+    const part = (type) => parts.find((item) => item.type === type)?.value || "";
+    dobInput.max = `${part("year")}-${part("month")}-${part("day")}`;
   }
   const status = $("auth-status");
   const authPanel = $("auth-panel");
