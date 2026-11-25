@@ -102,17 +102,20 @@
     const button = event.currentTarget.querySelector("button[type=submit]");
     button.disabled = true;
     try {
-      const { data, error } = await client.auth.signUp({
-        email: $("signup-email").value.trim(),
-        password: $("signup-password").value,
-        options: {
-          data: { display_name: $("signup-name").value.trim() },
-          emailRedirectTo: window.location.origin + "/account.html"
+      const { data, error } = await client.functions.invoke("signup-with-consent", {
+        body: {
+          email: $("signup-email").value.trim(),
+          password: $("signup-password").value,
+          displayName: $("signup-name").value.trim(),
+          dateOfBirth: $("signup-dob").value,
+          acceptTerms: $("signup-terms").checked,
+          acceptPrivacy: $("signup-privacy").checked,
+          termsVersion: "LL-TERMS-DRAFT-2026-11-24",
+          privacyVersion: "LL-PRIVACY-DRAFT-2026-11-24"
         }
       });
       if (error) throw error;
-      if (data.session && data.user) await showSignedIn(data.user);
-      else showMessage("CHECK YOUR EMAIL", "Your registration was received. Open the confirmation email to activate your account, then return here to sign in.");
+      showMessage("CHECK YOUR EMAIL", data?.message || "If registration is enabled, check your email for a confirmation link.");
     } catch (error) {
       showMessage("ACCOUNT NOT CREATED", error.message || "Please try again.", true);
     } finally {
