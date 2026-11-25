@@ -33,7 +33,8 @@ Deno.serve(async (req: Request) => {
   const termsVersion = Deno.env.get("LEGITLOOT_TERMS_VERSION");
   const privacyVersion = Deno.env.get("LEGITLOOT_PRIVACY_VERSION");
   const signupEnabled = Deno.env.get("LEGITLOOT_SIGNUP_ENABLED") === "true";
-  if (!url || !anonKey || !serviceKey || !termsVersion || !privacyVersion || !signupEnabled) {
+  const emailRedirectUrl = Deno.env.get("LEGITLOOT_EMAIL_REDIRECT_URL");
+  if (!url || !anonKey || !serviceKey || !termsVersion || !privacyVersion || !emailRedirectUrl || !signupEnabled) {
     return json({ error: "Account registration is temporarily unavailable." }, 503);
   }
 
@@ -55,7 +56,7 @@ Deno.serve(async (req: Request) => {
   const admin = createClient(url, serviceKey, { auth: { persistSession: false, autoRefreshToken: false }, db: { schema: "private" } });
   const { data, error } = await publicClient.auth.signUp({
     email, password,
-    options: { data: { display_name: displayName }, emailRedirectTo: new URL("/account.html", req.headers.get("origin") || "https://legitloot.site").toString() },
+    options: { data: { display_name: displayName }, emailRedirectTo: emailRedirectUrl },
   });
   if (error || !data.user || (data.user.identities && data.user.identities.length === 0)) {
     return json({ error: "Registration could not be completed. Check the email address or try signing in." }, 400);
@@ -66,7 +67,7 @@ Deno.serve(async (req: Request) => {
     user_id: userId, date_of_birth: dob, age_eligible: true, age_policy_version: "18-plus-v1",
   });
   if (ageError) {
-    await publicClient.auth.admin.deleteUser(userId).catch(() => undefined);
+    await admin.auth.admin.deleteUser(userId).catch(() => undefined);
     return json({ error: "Registration could not be securely completed. Please try again." }, 503);
   }
   const { error: consentError } = await admin.from("account_policy_acceptances").insert([
@@ -75,7 +76,7 @@ Deno.serve(async (req: Request) => {
   ]);
   if (consentError) {
     await admin.from("account_age_verifications").delete().eq("user_id", userId);
-    await publicClient.auth.admin.deleteUser(userId).catch(() => undefined);
+    await admin.auth.admin.deleteUser(userId).catch(() => undefined);
     return json({ error: "Registration could not be securely completed. Please try again." }, 503);
   }
   return json({ requiresEmailConfirmation: !data.session, message: data.session ? "Account created." : "Check your email to confirm your account." }, 201);
