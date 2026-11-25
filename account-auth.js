@@ -16,6 +16,10 @@
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
     return;
   }
+  const dobInput = $("signup-dob");
+  if (dobInput) {
+    dobInput.max = new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+  }
   const status = $("auth-status");
   const authPanel = $("auth-panel");
   const playerPanel = $("player-panel");
