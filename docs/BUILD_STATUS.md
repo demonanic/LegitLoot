@@ -34,6 +34,8 @@
 - No automated browser, accessibility, signup, database integration or end-to-end tests have run.
 - The badger mascot asset has not yet been integrated into the homepage; existing provisional woman illustration is still present and should be replaced by the approved badger artwork. The mysterious punk character should remain secondary promotional art.
 
+> **Current owner decision supersedes this historical status note:** the 2026-11-23 [Earned Loot and LootCoins Owner Amendment](EARNED_LOOT_AND_LOOTCOINS_MODEL.md) is authoritative for current wallet and provider-reward rules. The older cash/game-credit split, provider-to-LC reward model, and separate player-facing cash wallet below are historical and must not be used for new implementation.
+
 ## Business model guardrails
 
 - 50% cash / 50% game-credit split of the player reward pool.
