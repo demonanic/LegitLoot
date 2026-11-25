@@ -7,7 +7,6 @@ create table if not exists private.account_age_verifications (
   age_eligible boolean not null,
   age_policy_version text not null,
   verified_at timestamptz not null default now(),
-  constraint account_age_dob_not_future check (date_of_birth <= current_date),
   constraint account_age_policy_version_nonempty check (length(trim(age_policy_version)) between 1 and 64)
 );
 
@@ -33,14 +32,5 @@ grant select, insert, update, delete on private.account_age_verifications to ser
 grant select, insert on private.account_policy_acceptances to service_role;
 grant usage, select on sequence private.account_policy_acceptances_id_seq to service_role;
 
-create or replace function private.prevent_policy_acceptance_mutation()
-returns trigger language plpgsql as $$
-begin
-  raise exception 'Policy acceptance records are append-only';
-end;
-$$;
-
-drop trigger if exists account_policy_acceptances_no_update on private.account_policy_acceptances;
-create trigger account_policy_acceptances_no_update
-before update or delete on private.account_policy_acceptances
-for each row execute function private.prevent_policy_acceptance_mutation();
+-- Browser roles have no table privileges. Service-role code inserts consent rows only.
+-- No row trigger is used so account deletion can cascade according to the retention policy.
