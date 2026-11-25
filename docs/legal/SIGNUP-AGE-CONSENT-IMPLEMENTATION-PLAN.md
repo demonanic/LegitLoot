@@ -1,7 +1,7 @@
 # Signup, 18+ Gate, and Consent — Staging Implementation Plan
 
-**Target:** LegitLoot staging only  
-**Branch:** `staging/signup-age-consent`  
+**Target:** LegitLoot staging only
+**Branch:** `staging/signup-age-consent`
 **Policy decisions:** 18+; individual operator for now; proposed North Carolina governing law; separate Terms acceptance and Privacy acknowledgement.
 
 ## Required behavior
