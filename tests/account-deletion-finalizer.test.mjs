@@ -44,6 +44,17 @@ test("migration keeps the private schema private and exposes only service-role j
   }
 });
 
+test("finalizer erases user metadata before irreversible soft deletion", () => {
+  assert.match(functionSource, /auth\.admin\.getUserById/);
+  assert.match(functionSource, /Object\.keys\(currentMetadata\)/);
+  assert.match(functionSource, /\[key, null\]/);
+  assert.match(functionSource, /auth\.admin\.updateUserById/);
+  assert.ok(
+    functionSource.indexOf("updateUserById") < functionSource.indexOf("deleteUser"),
+    "user metadata must be cleared before the Auth identity is soft-deleted",
+  );
+});
+
 test("deletion finalizer retains SQL processing, soft delete, and completion", () => {
   assert.match(functionSource, /process_account_deletion_job/);
   assert.match(functionSource, /deleteUser\([\s\S]*?true,\s*\)/);
