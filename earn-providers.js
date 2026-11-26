@@ -57,6 +57,23 @@
 
   const providers = Object.freeze([
     Object.freeze({
+      id: "moonetix",
+      kind: "provider",
+      name: "Moonetix",
+      symbol: "◈",
+      categories: Object.freeze(["offerwall"]),
+      kicker: "Offerwall · Reward partner",
+      description: "Offers from Moonetix. Completion rewards remain pending verification and provider reconciliation before they can be approved.",
+      state: "testing",
+      stateDetail: "Controlled testing only. Signed link generation is being tested; this provider is not open for reward earning.",
+      testLaunch: true,
+      launch: Object.freeze({
+        functionName: "moonetix-wall-url",
+        allowedOrigins: Object.freeze(["https://wall.moonetix.com"]),
+        pathPrefix: "/"
+      })
+    }),
+    Object.freeze({
       id: "cpagrip",
       kind: "provider",
       name: "CPAGrip",

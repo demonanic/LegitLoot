@@ -3,7 +3,11 @@
   // staging-only: fail closed unless the config is explicitly the staging
   // project, so a preview can never register or sign in against production.
   const STAGING_PROJECT_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
-  const STAGING_PREVIEW_HOSTS = new Set(["staging-auth-03-earnedloot-i.legitloot-preview.pages.dev"]);
+  const STAGING_PREVIEW_HOSTS = new Set([
+    "staging-auth-03-earnedloot-i.legitloot-preview.pages.dev",
+    "feature-moonetix-offerwall-l.legitloot-preview.pages.dev",
+    "feature-moonetix-offerwall-l.legitloot.pages.dev"
+  ]);
   const config = window.LEGITLOOT_SUPABASE_CONFIG;
   const $ = (id) => document.getElementById(id);
   if (!config || config.environment !== "staging" || config.url !== STAGING_PROJECT_URL || !config.publishableKey || !STAGING_PREVIEW_HOSTS.has(window.location.hostname)) {
