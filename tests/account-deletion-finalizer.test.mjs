@@ -7,7 +7,7 @@ const functionSource = readFileSync(
   "utf8",
 );
 const migrationSource = readFileSync(
-  new URL("../supabase/migrations/20261122010000_account_deletion.sql", import.meta.url),
+  new URL("../supabase/migrations/20261126010000_auth_03_account_deletion.sql", import.meta.url),
   "utf8",
 );
 
