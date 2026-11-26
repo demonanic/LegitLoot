@@ -6,6 +6,13 @@ on:
       - "earned-loot-reward.js"
       - "earned-loot-wallet.js"
       - "account-auth.js"
+      - "account.html"
+      - "supabase-config.js"
+      - "tests/account-deletion.test.mjs"
+      - "tests/account-deletion-finalizer.test.mjs"
+      - "supabase/functions/account-deletion-finalizer/**"
+      - "supabase/migrations/20261126010000_auth_03_account_deletion.sql"
+      - "supabase/migrations/20261126020000_auth_03_account_export.sql"
       - "tests/earned-loot-reward.test.cjs"
       - "tests/earned-loot-wallet.test.cjs"
       - "tests/sql/**"
@@ -29,7 +36,8 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: node --test tests/earned-loot-reward.test.cjs tests/earned-loot-wallet.test.cjs
+      - run: npm install --no-save --package-lock=false @electric-sql/pglite@0.6.0
+      - run: node --test tests/earned-loot-reward.test.cjs tests/earned-loot-wallet.test.cjs tests/account-deletion.test.mjs tests/account-deletion-finalizer.test.mjs
       - run: node --check account-auth.js
 
   postgres-migrations:
@@ -80,4 +88,4 @@ jobs:
       - uses: denoland/setup-deno@v2
         with:
           deno-version: v2.x
-      - run: deno check supabase/functions/moonetix-postback/index.ts supabase/functions/moonetix-reporting-reconcile/index.ts
+      - run: deno check supabase/functions/moonetix-postback/index.ts supabase/functions/moonetix-reporting-reconcile/index.ts supabase/functions/account-deletion-finalizer/index.ts
