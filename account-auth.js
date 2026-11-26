@@ -3,9 +3,10 @@
   // staging-only: fail closed unless the config is explicitly the staging
   // project, so a preview can never register or sign in against production.
   const STAGING_PROJECT_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
+  const STAGING_PREVIEW_HOSTS = new Set(["staging-auth-03-earnedloot-i.legitloot-preview.pages.dev"]);
   const config = window.LEGITLOOT_SUPABASE_CONFIG;
   const $ = (id) => document.getElementById(id);
-  if (!config || config.environment !== "staging" || config.url !== STAGING_PROJECT_URL || !config.publishableKey) {
+  if (!config || config.environment !== "staging" || config.url !== STAGING_PROJECT_URL || !config.publishableKey || !STAGING_PREVIEW_HOSTS.has(window.location.hostname)) {
     const status = $("auth-status");
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>This build is not configured for the isolated staging environment. No account actions are available.</p>";
     return;
@@ -78,7 +79,9 @@
     playerPanel.hidden = false;
     $("player-email").textContent = user.email || "Authenticated player";
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
+    $("player-email").dataset.email = user.email || "";
     await loadWalletSummary();
+    await loadDeletionStatus();
     try {
       const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
       if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
@@ -160,6 +163,60 @@
       button.disabled = false;
     }
   });
+
+  const deletionPanel = $("account-deletion-panel");
+  const deletionText = $("deletion-scheduled-text");
+  const deletionCancel = $("deletion-cancel");
+  const deletionRequest = $("deletion-request");
+  const deletionExport = $("account-export");
+  const showDeletion = (state) => {
+    const value = state || {status:"none"};
+    if (deletionPanel) deletionPanel.hidden = false;
+    if (!deletionText) return;
+    deletionText.textContent = "";
+    if (value.status === "pending") {
+      deletionText.textContent = "Your account is scheduled for deletion on " + (value.scheduledFor ? new Date(value.scheduledFor).toLocaleString() : "the date shown in your account status") + ". You can cancel during the 7-day waiting period.";
+      if (deletionCancel) deletionCancel.hidden = false;
+      if (deletionRequest) deletionRequest.hidden = true;
+    } else if (value.status === "blocked") {
+      deletionText.textContent = value.blockedReason === "cash_balance_owner_decision" ? "Your account deletion is on hold because your account still holds an unpaid cash balance. No funds were moved or forfeited. You may cancel this request." : "Your account deletion is on hold because an open payout request must be resolved. You may cancel this request.";
+      if (deletionCancel) deletionCancel.hidden = false;
+      if (deletionRequest) deletionRequest.hidden = true;
+    } else if (value.status === "data_cleared" || value.status === "completed") {
+      deletionText.textContent = "Your personal data has been cleared. This account cannot be restored.";
+      if (deletionCancel) deletionCancel.hidden = true;
+      if (deletionRequest) deletionRequest.hidden = true;
+    } else {
+      deletionText.textContent = "You can request account deletion. A recent sign-in is required. Deletion includes a 7-day cancellation period; unpaid cash or open payout requests stop processing.";
+      if (deletionCancel) deletionCancel.hidden = true;
+      if (deletionRequest) deletionRequest.hidden = false;
+    }
+  };
+  const loadDeletionStatus = async () => {
+    try { const {data,error}=await client.rpc("account_deletion_status"); if(error) throw error; showDeletion(data); }
+    catch(error){ showMessage("ACCOUNT STATUS UNAVAILABLE","Your account is signed in, but deletion status could not be loaded.",true); }
+  };
+  if (deletionRequest) deletionRequest.addEventListener("submit",async(event)=>{
+    event.preventDefault(); const btn=deletionRequest.querySelector("button[type=submit]");btn.disabled=true;
+    try {
+      const email=$("player-email").dataset.email || $("signin-email").value.trim() || $("signup-email").value.trim();
+      const password=$("deletion-password").value;
+      if(!email || !password) throw new Error("Enter your account email and password to confirm this request.");
+      const {error:reauthError}=await client.auth.signInWithPassword({email,password});if(reauthError)throw new Error("Reauthentication failed. Check your password.");
+      const {data,error}=await client.rpc("request_account_deletion");if(error)throw error;
+      showDeletion(data);deletionRequest.reset();showMessage("DELETION REQUESTED","Your request has a 7-day cancellation period.");
+    }catch(error){showMessage("REQUEST NOT SUBMITTED",error.message||"Please try again.",true);}
+    finally{btn.disabled=false;}
+  });
+  if(deletionCancel) deletionCancel.addEventListener("click",async()=>{
+    deletionCancel.disabled=true;try{const {data,error}=await client.rpc("cancel_account_deletion");if(error)throw error;if(data?.cancelled){showDeletion({status:"none"});showMessage("REQUEST CANCELLED","Your account deletion request was cancelled.");}else showMessage("NOT CANCELLED","No cancellable request was found.",true);}
+    catch(error){showMessage("CANCELLATION FAILED",error.message||"Please try again.",true);}finally{deletionCancel.disabled=false;}
+  });
+  if(deletionExport) deletionExport.addEventListener("click",async()=>{
+    deletionExport.disabled=true;try{const {data,error}=await client.rpc("export_account_data");if(error)throw error;const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="legitloot-account-export.json";a.click();window.setTimeout(()=>URL.revokeObjectURL(url),1000);showMessage("EXPORT READY","Your account data export was downloaded.");}
+    catch(error){showMessage("EXPORT FAILED",error.message||"Please try again.",true);}finally{deletionExport.disabled=false;}
+  });
+
   $("signout-button").addEventListener("click", async () => {
     try {
       const { error } = await client.auth.signOut();
