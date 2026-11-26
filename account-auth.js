@@ -99,6 +99,34 @@
       console.warn("LegitLoot profile display lookup failed:", error);
     }
   };
+  // AUTH-03e: read-only export. The server scopes every query to auth.uid().
+  $("export-data").addEventListener("click", async () => {
+    const button = $("export-data");
+    button.disabled = true;
+    try {
+      const { data, error } = await client.rpc("export_account_data");
+      if (error) throw error;
+      if (!data || typeof data !== "object" || Array.isArray(data)) {
+        throw new Error("The account export returned an invalid response.");
+      }
+      const file = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(file);
+      const anchor = document.createElement("a");
+      anchor.href = url;
+      anchor.download = "legitloot-account-export-" + new Date().toISOString().slice(0, 10) + ".json";
+      anchor.hidden = true;
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+      showMessage("DATA EXPORT READY", "Your account data has been downloaded as a JSON file.");
+    } catch (error) {
+      showMessage("DATA EXPORT FAILED", error.message || "Please try again.", true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+
   // AUTH-03: seven-day cancellable deletion request; unpaid cash and open payouts remain owner-review holds.
   const BLOCKED_TEXT = {
     cash_balance_owner_decision: "your account still holds an unpaid cash balance that needs owner review",
