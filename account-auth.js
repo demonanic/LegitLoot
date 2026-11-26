@@ -43,36 +43,38 @@
     });
   };
   document.querySelectorAll("[data-auth-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.authTab)));
-  const setWalletUnavailable = (fields) => {
-    fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
-    const gameDetail = $("wallet-lootcoins-detail");
-    if (gameDetail) gameDetail.textContent = "The wallet summary could not be loaded. No balances were changed. Please try again later.";
+  const setWalletUnavailable = () => {
+    ["wallet-lootcoins-available","wallet-earnedloot-available","wallet-earnedloot-pending","wallet-earnedloot-value"].forEach((id) => {
+      const el = $(id); if (el) el.textContent = "Unavailable";
+    });
+    const detail = $("wallet-lootcoins-detail");
+    if (detail) detail.textContent = "The wallet summary could not be loaded. No balances were changed. Please try again later.";
   };
   const loadWalletSummary = async () => {
-    // Only the Legit Coins balance is shown to players. Any cash fields the
-    // server still returns are deliberately ignored (cash is deferred; spec §0.1).
-    const fields = ["wallet-lootcoins-available"];
+    const fields = ["wallet-lootcoins-available","wallet-earnedloot-available","wallet-earnedloot-pending","wallet-earnedloot-value"];
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Loading…"; });
     let timeoutId;
     try {
-      const request = client.rpc("get_wallet_summary");
-      const timeout = new Promise((_, reject) => {
-        timeoutId = window.setTimeout(() => reject(new Error("Wallet request timed out")), 12000);
-      });
+      const request = client.rpc("get_player_wallet_summary");
+      const timeout = new Promise((_, reject) => { timeoutId = window.setTimeout(() => reject(new Error("Wallet request timed out")), 12000); });
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
-      // Shape differs by environment; see wallet-summary.js.
-      const wallet = window.LEGITLOOT_WALLET;
-      if (!wallet) throw new Error("Wallet parser did not load");
-      $("wallet-lootcoins-available").textContent = wallet.formatLegitCoins(wallet.parseLegitCoins(data));
-      $("wallet-lootcoins-detail").textContent = "Legit Coins will come only from verified in-game milestones, weekly challenges and seasonal events. None are awarded yet. LC are not cash, not transferable and not withdrawable.";
+      if (!data || !data.earnedLoot || !data.lootCoins) throw new Error("Unexpected wallet response");
+      const fmt = (value, max = 3) => Number(value).toLocaleString("en-US", {maximumFractionDigits:max});
+      $("wallet-earnedloot-available").textContent = fmt(data.earnedLoot.availableUnits ?? "0");
+      $("wallet-earnedloot-pending").textContent = fmt(data.earnedLoot.pendingUnits ?? "0");
+      const cents = data.earnedLoot.availableValueCents;
+      $("wallet-earnedloot-value").textContent = cents == null ? "Not available" : "$" + fmt(Number(cents)/100,2);
+      const lcAtoms = BigInt(data.lootCoins.availableAtoms ?? "0");
+      $("wallet-lootcoins-available").textContent = fmt(Number(lcAtoms)/10000,4);
+      $("wallet-lootcoins-detail").textContent = "LC are non-cash, non-transferable platform utility units. They cannot be withdrawn or converted back into Earned Loot.";
+      const pendingValue = $("wallet-earnedloot-pending-value");
+      if (pendingValue) pendingValue.textContent = data.earnedLoot.pendingValueCents == null ? "Value pending verification" : "$" + fmt(Number(data.earnedLoot.pendingValueCents)/100,2);
     } catch (error) {
       console.error("LegitLoot wallet summary failed:", error);
-      showMessage("WALLET SUMMARY UNAVAILABLE", "Your account is signed in, but the secure wallet summary did not load. No balances have been changed. Please try again later.", true);
-      setWalletUnavailable(fields);
-    } finally {
-      if (timeoutId) window.clearTimeout(timeoutId);
-    }
+      showMessage("WALLET SUMMARY UNAVAILABLE", "The secure wallet summary did not load. No balances were changed. Please try again later.", true);
+      setWalletUnavailable();
+    } finally { if (timeoutId) window.clearTimeout(timeoutId); }
   };
   const showSignedIn = async (user) => {
     authPanel.hidden = true;
