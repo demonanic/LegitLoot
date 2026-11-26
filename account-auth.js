@@ -1,8 +1,8 @@
 (() => {
   const STAGING_PROJECT_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
   const STAGING_PREVIEW_HOSTS = new Set([
-    "staging-auth-03-earnedloot-integration.legitloot-preview.pages.dev",
-    "staging-auth-03-earnedloot-integration.legitloot.pages.dev"
+    "staging-auth-03-earnedloot-i.legitloot-preview.pages.dev",
+    "staging-auth-03-earnedloot-i.legitloot.pages.dev"
   ]);
   const config = window.LEGITLOOT_SUPABASE_CONFIG;
   const $ = (id) => document.getElementById(id);
