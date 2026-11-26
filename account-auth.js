@@ -79,7 +79,9 @@
     playerPanel.hidden = false;
     $("player-email").textContent = user.email || "Authenticated player";
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
-    $("player-email").dataset.email = user.email || "";\n    await loadWalletSummary();\n    await loadDeletionStatus();
+    $("player-email").dataset.email = user.email || "";
+    await loadWalletSummary();
+    await loadDeletionStatus();
     try {
       const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
       if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
