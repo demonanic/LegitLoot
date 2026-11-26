@@ -68,9 +68,31 @@ Deno.serve(async (request: Request) => {
       }
 
       if (status === "data_cleared") {
-        // Supabase soft deletion does not invalidate already-issued JWTs.
-        // The deletion migration must keep profile/wallet access guarded until
-        // those short-lived access tokens expire; ledger history is retained.
+        // User metadata lives in auth.users.raw_user_meta_data and is separate
+        // from public.profiles. Remove every user-editable metadata key first.
+        // A retry after a completed soft-delete skips this step.
+        const { data: authData, error: lookupError } = await supabase.auth.admin.getUserById(
+          deletion.user_id,
+        );
+        if (lookupError && !/not found|deleted/i.test(lookupError.message)) {
+          throw lookupError;
+        }
+        if (authData?.user && !authData.user.deleted_at) {
+          const currentMetadata = authData.user.user_metadata ?? {};
+          const clearedMetadata = Object.fromEntries(
+            Object.keys(currentMetadata).map((key) => [key, null]),
+          );
+          if (Object.keys(clearedMetadata).length > 0) {
+            const { error: metadataError } = await supabase.auth.admin.updateUserById(
+              deletion.user_id,
+              { user_metadata: clearedMetadata },
+            );
+            if (metadataError) throw metadataError;
+          }
+        }
+
+        // Soft deletion invalidates refresh sessions, but previously issued JWTs
+        // remain valid until expiry. SQL profile/wallet guards close sensitive reads.
         const { error: deleteError } = await supabase.auth.admin.deleteUser(
           deletion.user_id,
           true,
