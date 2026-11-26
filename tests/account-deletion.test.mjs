@@ -326,40 +326,143 @@ test("account export returns only the authenticated player's profile, wallets an
   await assert.rejects(db.query("select public.export_account_data()"), /permission denied/);
 });
 
-test("account page offers deletion with a typed confirmation, password check and cancel", () => {
+test("account page retains signup and consent while backend deletion/export remains isolated", () => {
   const html = read("account.html");
   const js = read("account-auth.js");
-  assert.match(html, /id="deletion-form"/);
-  assert.match(html, /7-day waiting period/);
-  assert.match(html, /pattern="DELETE"/);
-  assert.match(html, /type="password" autocomplete="current-password"/);
-  assert.match(html, /id="deletion-cancel"/);
-  assert.match(js, /client\.rpc\("request_account_deletion"\)/);
-  assert.match(js, /client\.rpc\("cancel_account_deletion"\)/);
-  for (const state of ["pending", "blocked", "data_cleared"]) assert.match(js, new RegExp(`"${state}"`), state);
-  assert.ok(js.indexOf("signInWithPassword({ email, password") < js.indexOf('client.rpc("request_account_deletion")'), "password re-checked before the request");
-  assert.match(js, /client\.auth\.signOut\(\{ scope: "global" \}\)/, "request revokes refresh sessions on all devices");
-  assert.match(html.match(/id="deletion-panel"[\s\S]*?<\/section>/)[0], /unpaid cash balance or open payout request/i);
-});
-
-test("account page exposes the account export action and JSON download", () => {
-  const html = read("account.html");
-  const js = read("account-auth.js");
-  assert.match(html, /id="data-export-panel"/);
-  assert.match(html, /id="export-data"/);
-  assert.match(js, /client\.rpc\("export_account_data"\)/);
-  assert.match(js, /application\/json|type: "application\/json"/);
-  assert.match(js, /legitloot-account-export-/);
-});
-
-test("account registration is closed on the staging account page", () => {
-  const html = read("account.html");
-  const js = read("account-auth.js");
-  assert.doesNotMatch(html, /id="signup-form"|data-auth-tab="signup"/);
-  assert.match(html, /NEW ACCOUNT REGISTRATION IS CLOSED/);
-  assert.doesNotMatch(js, /auth\.signUp/);
+  assert.match(html, /id="signup-form"/);
+  assert.match(html, /id="signup-dob"/);
+  assert.match(html, /id="signup-terms"/);
+  assert.match(html, /id="signup-privacy"/);
+  assert.match(js, /signup-with-consent/);
   assert.match(js, /STAGING_PROJECT_URL/);
   assert.match(js, /STAGING_PREVIEW_HOSTS/);
+  assert.doesNotMatch(html, /NEW ACCOUNT REGISTRATION IS CLOSED/);
+});
+
+test("service-role public wrappers process a due deletion request", { skip }, async () => {
+  const db = await freshDb();
+  const req = await dueRequest(db, A);
+  await db.exec("set role service_role");
+  const rows = (await db.query("select * from public.claim_due_account_deletion_batch()")).rows;
+  assert.ok(rows.some((row) => row.id === req.id));
+  assert.equal((await one(db, "select public.process_account_deletion_job('" + req.id + "') s")).s, "data_cleared");
+  assert.equal((await one(db, "select public.complete_account_deletion_job('" + req.id + "') s")).s, "completed");
+  await db.exec("reset role");
+});
+for (const bucket of ["cash_available", "cash_pending", "cash_withdrawal_reserved", "cash_held"]) {
+  test(`unpaid cash in ${bucket} blocks processing and moves nothing (owner decision pending)`, { skip }, async () => {
+    const db = await freshDb();
+    const req = await dueRequest(db, A);
+    await postCash(db, A, bucket, 900);
+    assert.equal((await one(db, `select private.process_account_deletion('${req.id}') s`)).s, "blocked");
+    assert.equal((await reqOf(db, A)).blocked_reason, "cash_balance_owner_decision");
+    assert.equal((await one(db, `select username from public.profiles where id='${A}'`)).username, "player_a", "nothing cleared");
+    await as(db, A);
+    const st = (await one(db, "select public.account_deletion_status() r")).r;
+    assert.equal(st.status, "blocked");
+    assert.equal(st.blockedReason, "cash_balance_owner_decision");
+    assert.equal((await one(db, "select public.cancel_account_deletion() r")).r.cancelled, true, "blocked request can be cancelled");
+  });
+}
+
+test("cash already paid out does not block deletion", { skip }, async () => {
+  const db = await freshDb();
+  const req = await dueRequest(db, A);
+  await postCash(db, A, "cash_paid", 901);
+  assert.equal((await one(db, `select private.process_account_deletion('${req.id}') s`)).s, "data_cleared");
+});
+
+test("an open payout request blocks processing", { skip }, async () => {
+  const db = await freshDb();
+  const req = await dueRequest(db, A);
+  await db.exec(`insert into private.payout_requests(user_id, amount_minor, idempotency_key) values ('${A}', 500, 'payout-test-1')`);
+  assert.equal((await one(db, `select private.process_account_deletion('${req.id}') s`)).s, "blocked");
+  assert.equal((await reqOf(db, A)).blocked_reason, "open_payout_request");
+});
+
+test("player wallet RPC preserves the Earned Loot and LootCoins contract", { skip }, async () => {
+  const db = await freshDb();
+  await as(db, B);
+  const w = (await one(db, "select public.get_player_wallet_summary() w")).w;
+  assert.equal(w.contractVersion, 1);
+  assert.equal(w.earnedLoot.code, "EL");
+  assert.equal(w.earnedLoot.availableUnits, "0");
+  assert.equal(w.earnedLoot.pendingUnits, "0");
+  assert.equal(w.lootCoins.code, "LC");
+  assert.equal(w.lootCoins.availableAtoms, "0");
+  assert.equal(w.lootCoins.cashValue, null);
+  assert.equal(w.lootCoins.withdrawable, false);
+  assert.equal(w.lootCoins.transferable, false);
+  assert.equal(w.pendingAvailable, false);
+  assert.equal(w.pendingConvertible, false);
+});
+
+test("players cannot call the server-only steps or read the requests table", { skip }, async () => {
+  const db = await freshDb();
+  await as(db, A); await db.query("select public.request_account_deletion()");
+  await asOwner(db); const req = await reqOf(db, A);
+  for (const role of ["authenticated", "anon"]) {
+    await db.exec(`set role ${role}`);
+    await assert.rejects(db.query(`select private.process_account_deletion('${req.id}')`), /permission denied/, role);
+    await assert.rejects(db.query(`select private.complete_account_deletion('${req.id}')`), /permission denied/, role);
+    await assert.rejects(db.query("select * from private.account_deletion_requests"), /permission denied/, role);
+    await db.exec("reset role");
+  }
+  await db.exec("set role anon");
+  await assert.rejects(db.query("select public.request_account_deletion()"), /permission denied/);
+  await db.exec("reset role");
+});
+
+test("account export returns only the authenticated player's profile, wallets and records", { skip }, async () => {
+  const db = await freshDb();
+  await db.exec(`insert into private.game_saves(user_id,game_id,schema_version,save_data)
+    values ('${B}','zz-test',1,'{"lvl":9}');`);
+
+  await as(db, A);
+  const exportA = (await one(db, "select public.export_account_data() data")).data;
+  assert.equal(exportA.exportVersion, 1);
+  assert.equal(exportA.account.email, "a@example.test");
+  assert.equal(exportA.account.username, "player_a");
+  assert.equal(exportA.walletSummary.earnedLoot.unitsLabel.length > 0, true);
+  assert.equal(exportA.walletSummary.lootCoins.cashValue, null);
+  assert.equal(exportA.walletSummary.lootCoins.withdrawable, false);
+  assert.equal(exportA.walletSummary.lootCoins.transferable, false);
+  assert.ok(Array.isArray(exportA.ledgerAccounts));
+  assert.ok(Array.isArray(exportA.ledgerHistory));
+  assert.ok(Array.isArray(exportA.earnedLootLots));
+  assert.ok(Array.isArray(exportA.earnedLootMovements));
+  assert.ok(Array.isArray(exportA.providerRewardEvents));
+  assert.ok(Array.isArray(exportA.lootCoinPurchases));
+  assert.ok(Array.isArray(exportA.payoutRequests));
+  assert.equal(exportA.gameSaves.length, 1);
+  assert.equal(exportA.gameSaves[0].gameId, "zz-test");
+  assert.equal(exportA.gameSaves[0].saveData.lvl, 3);
+  assert.equal(Object.hasOwn(exportA, "userId"), false);
+  assert.equal(Object.hasOwn(exportA, "rawUserMetaData"), false);
+
+  await as(db, B);
+  const exportB = (await one(db, "select public.export_account_data() data")).data;
+  assert.equal(exportB.account.email, "b@example.test");
+  assert.equal(exportB.gameSaves.length, 1);
+  assert.equal(exportB.gameSaves[0].saveData.lvl, 9);
+  assert.notEqual(exportB.account.email, exportA.account.email);
+
+  await asOwner(db);
+  await db.exec("set role anon");
+  await assert.rejects(db.query("select public.export_account_data()"), /permission denied/);
+});
+
+test("account page retains signup and consent while backend deletion/export remains isolated", () => {
+  const html = read("account.html");
+  const js = read("account-auth.js");
+  assert.match(html, /id="signup-form"/);
+  assert.match(html, /id="signup-dob"/);
+  assert.match(html, /id="signup-terms"/);
+  assert.match(html, /id="signup-privacy"/);
+  assert.match(js, /signup-with-consent/);
+  assert.match(js, /STAGING_PROJECT_URL/);
+  assert.match(js, /STAGING_PREVIEW_HOSTS/);
+  assert.doesNotMatch(html, /NEW ACCOUNT REGISTRATION IS CLOSED/);
 });
 
 test("service-role public wrappers process a due deletion request", { skip }, async () => {
