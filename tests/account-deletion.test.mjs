@@ -33,6 +33,26 @@ async function freshDb() {
       created_at timestamptz not null default now(),
       created_by uuid, deactivated_at timestamptz, deactivated_by uuid
     );
+    create table public.game_registry (
+      id text primary key, slug text not null unique, title text not null
+    );
+    create table private.game_saves (
+      user_id uuid not null references auth.users(id),
+      game_id text not null references public.game_registry(id),
+      schema_version integer not null, save_data jsonb not null,
+      primary key(user_id, game_id)
+    );
+    create table private.game_handoff_tickets (
+      id uuid primary key default gen_random_uuid(),
+      user_id uuid not null references auth.users(id),
+      created_at timestamptz not null default now()
+    );
+    create table private.game_events (
+      id uuid primary key default gen_random_uuid(),
+      user_id uuid not null references auth.users(id),
+      event_type text not null default 'test',
+      created_at timestamptz not null default now()
+    );
     create table private.cpagrip_attribution_tokens (
       id uuid primary key default gen_random_uuid(), token_hash text not null unique,
       user_id uuid not null references auth.users(id) on delete restrict,
