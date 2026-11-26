@@ -80,7 +80,7 @@
 
   if (buttons.size === 0) return;
 
-  // Launching is only wired up for active providers.
+  // Active providers and controlled testing providers can launch through their server functions.
   const config = window.LEGITLOOT_SUPABASE_CONFIG;
   const client = config?.url && config?.publishableKey && window.supabase?.createClient
     ? window.supabase.createClient(config.url, config.publishableKey)
@@ -90,7 +90,9 @@
   const syncButtons = () => {
     buttons.forEach(({ provider, button }) => {
       button.disabled = !client;
-      button.textContent = currentUser ? `Open ${provider.name} →` : `Sign in to open ${provider.name} →`;
+      button.textContent = canTestLaunch(provider)
+        ? (currentUser ? `Test ${provider.name} link →` : `Sign in to test ${provider.name} →`)
+        : (currentUser ? `Open ${provider.name} →` : `Sign in to open ${provider.name} →`);
     });
   };
 
@@ -105,6 +107,7 @@
   buttons.forEach(({ provider, button, status }) => {
     button.addEventListener("click", async () => {
       if (!currentUser) {
+        status.textContent = "Please sign in first. Redirecting to account…";
         window.location.href = "account.html";
         return;
       }
@@ -113,7 +116,9 @@
       const { data, error } = await client.functions.invoke(provider.launch.functionName, { body: {} });
       button.disabled = false;
       if (error || typeof data?.wallUrl !== "string") {
-        status.textContent = `${provider.name} is not available right now. Nothing was opened.`;
+        const detail = error?.message || data?.error || "Unknown server response";
+        status.textContent = `${provider.name} launch failed: ${detail}. Nothing was opened.`;
+        syncButtons();
         return;
       }
       let url;
@@ -128,6 +133,7 @@
         status.textContent = "The provider returned an unexpected link. Nothing was opened.";
         return;
       }
+      status.textContent = "Opening Moonetix…";
       window.location.assign(url.toString());
     });
   });
