@@ -4,7 +4,7 @@
 
 ## Earned Loot and provider rewards
 
-Eligible Hustle activities may generate Earned Loot rewards. The amount allocated to a player is based on the eligible provider-reported award and LegitLoot's published reward calculation. The current allocation is 50% to the player and 50% retained by LegitLoot for platform operations. Provider terms, eligibility, and the applicable offer conditions may affect whether a completion qualifies.
+Eligible Hustle activities may generate Earned Loot rewards. The amount allocated to a player is based on the eligible provider-reported award and the reward settings for the offer. LegitLoot's initial Moonetix Split to User setting is 50%; this setting may be changed for future offer credits. The amount shown on the offerwall is the player's reward after the provider's conversion rate, user split, any active bonus, and rounding. LegitLoot credits that player reward as reported by the provider and does not apply a second percentage deduction. Provider terms, eligibility, and the applicable offer conditions may affect whether a completion qualifies. Changes to reward settings apply to future credited steps; previously credited rewards and their matching reversals retain their original amounts.
 
 A provider's completion notice is not final approval. Reported rewards may first appear as pending while LegitLoot verifies the event, checks for duplicate or invalid activity, reconciles provider reporting and settlement, and completes any required review. Verification and settlement times can vary by provider and activity; no fixed processing time is promised unless expressly stated for a particular offer.
 

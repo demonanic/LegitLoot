@@ -14,8 +14,10 @@ LegitLoot has two distinct player-facing balances.
 Earned Loot is the player's redeemable reward balance.
 
 - Earned through eligible Hustle activities, including approved offers, surveys, and tasks.
-- The player receives **50% of the eligible provider award** after the provider event has been validated and approved.
-- The remaining 50% is retained by LegitLoot for operating costs, including hosting, research and development, fraud prevention, maintenance, and unforeseen costs.
+- The initial Moonetix **Split to User** setting is **50%**. Sam may change this provider setting at any time; it is configurable, not hardcoded in LegitLoot.
+- Moonetix calculates the player-facing reward from publisher payout, conversion rate, Split to User, any active bonus, and rounding. Its `{reward}` field is already the player's share in the configured EL currency. LegitLoot records and credits that value exactly as received after validation, reconciliation, and approval; it must never apply another 50% deduction.
+- Moonetix `{payout}` is the publisher's USD earning for the step. The remaining provider economics are retained by LegitLoot for operating costs, subject to any bonus paid from the platform's share.
+- Store the event-time split, conversion rate, bonus, rounding, raw `{reward}`, and raw `{payout}`. Later setting changes affect future credited steps only; historical credits and matching reversals retain their original values.
 - Available Earned Loot may be redeemed for cash under the applicable redemption rules, or spent to purchase LootCoins.
 - Earned Loot is displayed both as EL units and as its corresponding cash-equivalent amount.
 - Pending, unverified, unsettled, or disputed rewards are not available for redemption or conversion.
@@ -41,11 +43,9 @@ The website wallet is authoritative for the player's LC balance.
 
 Moonetix is an earning provider. Its player reward currency must be **Earned Loot**, never LC.
 
-The owner-selected allocation is:
-- **50% to the player's Earned Loot allocation.**
-- **50% retained by LegitLoot.**
+The initial owner-selected Moonetix setting is **50% Split to User**, and Sam may adjust it at any time. The configured split is applied by Moonetix before the offer reward is displayed and before its postback is sent.
 
-The player's share is calculated from the eligible provider award for the completion, using the approved provider-reported amount and documented conversion rules. Do not calculate the player share from an unverified advertised value or silently substitute a different basis. Any ambiguity in Moonetix's actual settlement/reporting fields must be resolved against its publisher documentation before live activation.
+Use the provider's signed `{reward}` field as the player's EL reward and `{payout}` as the publisher USD payout. Do not recalculate the split from the advertised amount and do not halve `{reward}` again. Record the configuration snapshot for audit and historical reporting. The provider's signed reward value, not a locally guessed amount, is authoritative for the player's reward.
 
 Moonetix callbacks may report activity and support validation. A callback alone must not post an available Earned Loot credit. The server must authenticate and validate the event, deduplicate it, record it as pending, reconcile it against provider settlement/verification, and then require authorized approval before moving the player's share to available Earned Loot.
 
@@ -83,7 +83,7 @@ The cash-equivalent label is informational and must not imply instant withdrawal
 
 Pending EL is shown separately and clearly marked unavailable.
 
-The exact provider conversion precision, rounding, and smallest EL unit must be confirmed against Moonetix's publisher configuration and tested for small awards before live activation. Do not round in a way that over-credits rewards or silently erases a valid player allocation.
+Moonetix supports whole-number rewards or up to three decimal places. The internal EL atom scale supports thousandths, but the actual Moonetix conversion rate and rounding selection must be captured from the created app and verified with small-award tests before live activation. Do not round in a way that over-credits rewards or silently erases a valid player allocation.
 
 ## 5. Earned Loot to LootCoins shop
 

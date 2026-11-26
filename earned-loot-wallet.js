@@ -1,6 +1,13 @@
 (function (root) {
   "use strict";
 
+  const unitString = (value, field) => {
+    if (typeof value !== "string" || !/^(0|[1-9][0-9]*)(?:\.[0-9]{1,3})?$/.test(value)) {
+      throw new Error("Invalid " + field);
+    }
+    return value;
+  };
+
   const integerString = (value, field) => {
     if (typeof value !== "string" || !/^(0|[1-9][0-9]*)$/.test(value)) {
       throw new Error("Invalid " + field);
@@ -17,15 +24,15 @@
     if (!el || !lc) throw new Error("Wallet sections missing");
     if (el.code !== "EL" || lc.code !== "LC") throw new Error("Unexpected wallet currency");
     if (typeof el.unitsLabel !== "string" || !el.unitsLabel.trim()) throw new Error("Invalid Earned Loot label");
-    if (typeof el.availableValueCents !== "string" || typeof el.pendingValueCents !== "string") {
+    if (typeof el.availableValueCents !== "string" || (el.pendingValueCents !== null && typeof el.pendingValueCents !== "string")) {
       throw new Error("Earned Loot value must use integer cent strings");
     }
     const parsed = {
       earnedLoot: {
-        availableUnits: integerString(el.availableUnits, "available Earned Loot units"),
-        pendingUnits: integerString(el.pendingUnits, "pending Earned Loot units"),
+        availableUnits: unitString(el.availableUnits, "available Earned Loot units"),
+        pendingUnits: unitString(el.pendingUnits, "pending Earned Loot units"),
         availableValueCents: integerString(el.availableValueCents, "available Earned Loot value"),
-        pendingValueCents: integerString(el.pendingValueCents, "pending Earned Loot value"),
+        pendingValueCents: el.pendingValueCents === null ? null : integerString(el.pendingValueCents, "pending Earned Loot value"),
         unitsLabel: el.unitsLabel
       },
       lootCoins: {
@@ -50,6 +57,13 @@
     return amount.toLocaleString("en-US", { style: "currency", currency: "USD" });
   };
 
+  const formatEarnedLootUnits = (value) => {
+    const valid = unitString(value, "Earned Loot units");
+    const [whole, fraction = ""] = valid.split(".");
+    const trimmed = fraction.replace(/0+$/, "");
+    return BigInt(whole).toLocaleString("en-US") + (trimmed ? "." + trimmed : "");
+  };
+
   const formatInteger = (value) => {
     const n = Number(value);
     if (!Number.isSafeInteger(n)) throw new Error("Unsafe wallet unit amount");
@@ -63,7 +77,7 @@
     return whole.toLocaleString("en-US") + (fraction ? "." + fraction : "") + " LC";
   };
 
-  const api = Object.freeze({ parseWallet, formatUsd, formatInteger, formatLootCoins });
+  const api = Object.freeze({ parseWallet, formatUsd, formatInteger, formatEarnedLootUnits, formatLootCoins });
   root.LEGITLOOT_EARNED_WALLET = api;
   if (typeof module !== "undefined" && module.exports) module.exports = api;
 })(typeof window !== "undefined" ? window : globalThis);
