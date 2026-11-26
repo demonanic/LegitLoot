@@ -10,6 +10,7 @@ let PGlite;
 try { ({ PGlite } = await import("@electric-sql/pglite")); } catch { PGlite = null; }
 
 const MIGRATION = "supabase/migrations/20261126010000_auth_03_account_deletion.sql";
+const EXPORT_MIGRATION = "supabase/migrations/20261126020000_auth_03_account_export.sql";
 const A = "00000000-0000-4000-8000-00000000000a";
 const B = "00000000-0000-4000-8000-00000000000b";
 const now = () => Math.floor(Date.now() / 1000);
@@ -37,10 +38,15 @@ async function freshDb() {
       id text primary key, slug text not null unique, title text not null
     );
     create table private.game_saves (
+      id uuid primary key default gen_random_uuid(),
       user_id uuid not null references auth.users(id),
       game_id text not null references public.game_registry(id),
-      schema_version integer not null, save_data jsonb not null,
-      primary key(user_id, game_id)
+      schema_version integer not null,
+      save_data jsonb not null,
+      revision bigint not null default 1,
+      created_at timestamptz not null default now(),
+      updated_at timestamptz not null default now(),
+      unique(user_id, game_id)
     );
     create table private.game_handoff_tickets (
       id uuid primary key default gen_random_uuid(),
@@ -107,6 +113,18 @@ test("migration is in the migrations folder and states the owner decisions", () 
   assert.doesNotMatch(sql, /delete from auth\.users/, "never hard-deletes the Auth user");
   assert.match(sql, /delete from private\.cpagrip_attribution_tokens/);
   assert.match(sql, /destination_label = 'REDACTED'/);
+});
+
+test("account export is a read-only authenticated RPC with an empty search path", () => {
+  const sql = read(EXPORT_MIGRATION);
+  assert.match(sql, /create or replace function public\.export_account_data\(\)/i);
+  assert.match(sql, /security definer/i);
+  assert.match(sql, /set search_path = ''/i);
+  assert.match(sql, /grant execute on function public\.export_account_data\(\) to authenticated/i);
+  assert.match(sql, /revoke all on function public\.export_account_data\(\) from public, anon, service_role/i);
+  assert.match(sql, /auth\.uid\(\)/);
+  assert.match(sql, /private\.is_account_deleted\(v_user\)/);
+  assert.doesNotMatch(sql, /recipient_ciphertext|raw_user_meta_data|idempotency_key/i);
 });
 
 test("request needs a recent sign-in, schedules 7 days out, and is one per player", { skip }, async () => {
@@ -176,6 +194,7 @@ test("a deleted player's old session is locked out", { skip }, async () => {
   await as(db, A);
   await assert.rejects(db.query("select public.get_player_wallet_summary()"), /Account deleted/);
   await assert.rejects(db.query("select public.get_wallet_summary()"), /Account deleted/);
+  await assert.rejects(db.query("select public.export_account_data()"), /Account deleted/);
   await assert.rejects(db.query("select public.request_account_deletion()"), /Account deleted/);
   assert.equal((await db.query(`select * from public.profiles where id='${A}'`)).rows.length, 0, "profile hidden");
   await as(db, B);
@@ -268,6 +287,45 @@ test("players cannot call the server-only steps or read the requests table", { s
   await db.exec("reset role");
 });
 
+test("account export returns only the authenticated player's profile, wallets and records", { skip }, async () => {
+  const db = await freshDb();
+  await db.exec(`insert into private.game_saves(user_id,game_id,schema_version,save_data)
+    values ('${B}','zz-test',1,'{"lvl":9}');`);
+
+  await as(db, A);
+  const exportA = (await one(db, "select public.export_account_data() data")).data;
+  assert.equal(exportA.exportVersion, 1);
+  assert.equal(exportA.account.email, "a@example.test");
+  assert.equal(exportA.account.username, "player_a");
+  assert.equal(exportA.walletSummary.earnedLoot.unitsLabel.length > 0, true);
+  assert.equal(exportA.walletSummary.lootCoins.cashValue, null);
+  assert.equal(exportA.walletSummary.lootCoins.withdrawable, false);
+  assert.equal(exportA.walletSummary.lootCoins.transferable, false);
+  assert.ok(Array.isArray(exportA.ledgerAccounts));
+  assert.ok(Array.isArray(exportA.ledgerHistory));
+  assert.ok(Array.isArray(exportA.earnedLootLots));
+  assert.ok(Array.isArray(exportA.earnedLootMovements));
+  assert.ok(Array.isArray(exportA.providerRewardEvents));
+  assert.ok(Array.isArray(exportA.lootCoinPurchases));
+  assert.ok(Array.isArray(exportA.payoutRequests));
+  assert.equal(exportA.gameSaves.length, 1);
+  assert.equal(exportA.gameSaves[0].gameId, "zz-test");
+  assert.equal(exportA.gameSaves[0].saveData.lvl, 3);
+  assert.equal(Object.hasOwn(exportA, "userId"), false);
+  assert.equal(Object.hasOwn(exportA, "rawUserMetaData"), false);
+
+  await as(db, B);
+  const exportB = (await one(db, "select public.export_account_data() data")).data;
+  assert.equal(exportB.account.email, "b@example.test");
+  assert.equal(exportB.gameSaves.length, 1);
+  assert.equal(exportB.gameSaves[0].saveData.lvl, 9);
+  assert.notEqual(exportB.account.email, exportA.account.email);
+
+  await asOwner(db);
+  await db.exec("set role anon");
+  await assert.rejects(db.query("select public.export_account_data()"), /permission denied/);
+});
+
 test("account page offers deletion with a typed confirmation, password check and cancel", () => {
   const html = read("account.html");
   const js = read("account-auth.js");
@@ -282,6 +340,16 @@ test("account page offers deletion with a typed confirmation, password check and
   assert.ok(js.indexOf("signInWithPassword({ email, password") < js.indexOf('client.rpc("request_account_deletion")'), "password re-checked before the request");
   assert.match(js, /client\.auth\.signOut\(\{ scope: "global" \}\)/, "request revokes refresh sessions on all devices");
   assert.match(html.match(/id="deletion-panel"[\s\S]*?<\/section>/)[0], /unpaid cash balance or open payout request/i);
+});
+
+test("account page exposes the account export action and JSON download", () => {
+  const html = read("account.html");
+  const js = read("account-auth.js");
+  assert.match(html, /id="data-export-panel"/);
+  assert.match(html, /id="export-data"/);
+  assert.match(js, /client\.rpc\("export_account_data"\)/);
+  assert.match(js, /application\/json|type: "application\/json"/);
+  assert.match(js, /legitloot-account-export-/);
 });
 
 test("account registration is closed on the staging account page", () => {
