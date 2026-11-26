@@ -75,6 +75,10 @@ jobs:
             echo "Applying $migration"
             psql -v ON_ERROR_STOP=1 -f "$migration"
           done
+      - name: Apply and verify LootCoins shop migration
+        run: |
+          psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261126190000_lootcoin_shop_catalog_rpc.sql
+          psql -v ON_ERROR_STOP=1 -f tests/lootcoin-shop.test.sql
       - name: Run financial lifecycle integration tests
         run: psql -v ON_ERROR_STOP=1 -f tests/sql/financial_foundation.test.sql
       - name: Seed concurrency fixture
