@@ -12,6 +12,8 @@
   const stateOf = (provider) => (Object.hasOwn(states, provider.state) ? provider.state : "unavailable");
   const canOpen = (provider) =>
     provider.kind === "provider" && stateOf(provider) === "active" && states.active.canOpen && Boolean(provider.launch?.functionName);
+  const canTestLaunch = (provider) =>
+    provider.kind === "provider" && provider.testLaunch === true && stateOf(provider) === "testing" && Boolean(provider.launch?.functionName);
 
   const el = (tag, className, text) => {
     const node = document.createElement(tag);
@@ -53,8 +55,8 @@
       const status = el("p", "provider-launch-status");
       status.setAttribute("role", "status");
       status.setAttribute("aria-live", "polite");
-      if (canOpen(provider)) {
-        button.textContent = `Sign in to open ${provider.name} →`;
+      if (canOpen(provider) || canTestLaunch(provider)) {
+        button.textContent = canTestLaunch(provider) ? `Test ${provider.name} link →` : `Sign in to open ${provider.name} →`;
         buttons.set(provider.id, { provider, button, status });
       } else {
         button.disabled = true;
@@ -68,10 +70,12 @@
   });
 
   const openCount = providers.filter(canOpen).length;
+  const testCount = providers.filter(canTestLaunch).length;
   if (summary) {
     summary.textContent = openCount === 0
       ? "No earning provider is open to players right now, so nothing here can earn LootCoins yet. Each provider's status is shown on its card."
       : `${openCount} provider${openCount === 1 ? " is" : "s are"} open to signed-in players. LootCoins are credited only by our server after a provider confirms a completion.`;
+    if (openCount === 0 && testCount > 0) summary.textContent += ` ${testCount} provider link is available for controlled testing only.`;
   }
 
   if (buttons.size === 0) return;
