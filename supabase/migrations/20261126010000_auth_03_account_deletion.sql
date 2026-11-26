@@ -5,6 +5,20 @@
 -- Routine choice D5: the delete request needs a sign-in within the last 10 minutes.
 -- Staging lineage only. Production rollout needs the normal release approval.
 --
+-- Required staging-only privacy tables. Do not replay against the older production schema.
+do $guard$
+begin
+  if to_regclass('private.admin_users') is null then
+    raise exception 'This staging migration requires private.admin_users; do not apply to production';
+  end if;
+  if to_regclass('private.cpagrip_attribution_tokens') is null then
+    raise exception 'This staging migration requires private.cpagrip_attribution_tokens';
+  end if;
+  if to_regclass('private.payout_simulator_withdrawals') is null then
+    raise exception 'This staging migration requires private.payout_simulator_withdrawals';
+  end if;
+end;
+$guard$;
 -- Open owner question (dec-deletion-cash): what happens to an unpaid cash balance.
 -- Until Sam decides, processing STOPS (status 'blocked') if the account holds any cash
 -- or has an open payout request. Nothing is forfeited or moved without his decision.
@@ -239,6 +253,12 @@ begin
   update private.ledger_accounts set closed_at = now()
    where owner_user_id = v_req.user_id and closed_at is null;
   delete from private.game_saves where user_id = v_req.user_id;
+  -- Remove user-linked attribution credentials; preserve financial/provider audit rows.
+  delete from private.cpagrip_attribution_tokens where user_id = v_req.user_id;
+  -- Keep simulation accounting history while erasing the user-entered destination label.
+  update private.payout_simulator_withdrawals
+     set destination_label = 'REDACTED'
+   where user_id = v_req.user_id;
   delete from private.game_handoff_tickets where user_id = v_req.user_id;
   delete from private.game_events where user_id = v_req.user_id;
 
