@@ -22,9 +22,9 @@ async function freshDb() {
     create function auth.jwt() returns jsonb language sql stable as $$ select coalesce(nullif(current_setting('request.jwt.claims', true), ''), '{}')::jsonb $$;
     create function auth.uid() returns uuid language sql stable as $$ select nullif(auth.jwt()->>'sub', '')::uuid $$;
     grant usage on schema auth to anon, authenticated;`);
-  const files = ["supabase/bootstrap/initial_schema.sql",
-    ...readdirSync(new URL("supabase/migrations/", root)).sort().map((f) => `supabase/migrations/${f}`)];
-  for (const f of files) await db.exec(read(f).replace(/create extension if not exists pgcrypto;/, ""));
+  await db.exec(read("supabase/bootstrap/initial_schema.sql").replace(/create extension if not exists pgcrypto;/, ""));
+  // These staging-only prerequisites are created after bootstrap but before the guarded
+  // Moonetix staging migrations that require them.
   // Staging-only tables present in the live staging schema but omitted from the base bootstrap.
   await db.exec(`create table private.admin_users (
       user_id uuid primary key references auth.users(id),
@@ -53,6 +53,11 @@ async function freshDb() {
       actor_user_id uuid not null references auth.users(id) on delete restrict,
       unique(user_id,idempotency_key)
     );`);
+
+  const migrations = readdirSync(new URL("supabase/migrations/", root)).sort();
+  for (const file of migrations) {
+    await db.exec(read("supabase/migrations/" + file).replace(/create extension if not exists pgcrypto;/, ""));
+  }
   await db.exec(`insert into auth.users(id, email) values ('${A}', 'a@example.test'), ('${B}', 'b@example.test');
     update public.profiles set username = 'player_a', display_name = 'Player A' where id = '${A}';
     insert into public.game_registry(id, slug, title) values ('zz-test', 'zz-test', 'Test game') on conflict do nothing;
@@ -80,7 +85,7 @@ test("migration is in the migrations folder and states the owner decisions", () 
   assert.match(sql, /interval '7 days'/);
   assert.doesNotMatch(sql, /delete from private\.(journal|ledger|audit)/, "never deletes ledger or audit rows");
   assert.doesNotMatch(sql, /delete from auth\.users/, "never hard-deletes the Auth user");
-  assert.match(sql, /delete from private\\.cpagrip_attribution_tokens/);
+  assert.match(sql, /delete from private\.cpagrip_attribution_tokens/);
   assert.match(sql, /destination_label = 'REDACTED'/);
 });
 
