@@ -1,8 +1,9 @@
-# Supabase Edge Function configuration.
-# The external Moonetix provider cannot present a Supabase JWT; the endpoint verifies
-# Moonetix's HMAC-SHA256 signature before any service-role database call.
+# Staging-only Edge Function settings. Never deploy this configuration to production without review.
 [functions.moonetix-postback]
 verify_jwt = false
 
 [functions.moonetix-reporting-reconcile]
+verify_jwt = false
+
+[functions.account-deletion-finalizer]
 verify_jwt = false
