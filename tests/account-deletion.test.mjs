@@ -251,7 +251,7 @@ test("account page shows distinct pending, blocked and data-cleared states", asy
   const client = { rpc: async () => ({ data: null }), from: () => ({ select: () => ({ eq: () => ({ maybeSingle: async () => ({}) }) }) }),
     auth: { onAuthStateChange() {}, getSession: () => new Promise(() => {}), getUser: async () => ({ data: {} }) } };
   const window = { LEGITLOOT_SUPABASE_CONFIG: { environment: "staging", url: "https://scmnxcsggquwtuyyjnnj.supabase.co", publishableKey: "k" },
-    supabase: { createClient: () => client }, setTimeout, clearTimeout, location: { origin: "https://x", hostname: "staging-auth-03-earnedloot-integration.legitloot-preview.pages.dev" } };
+    supabase: { createClient: () => client }, setTimeout, clearTimeout, location: { origin: "https://x", hostname: "staging-auth-03-earnedloot-i.legitloot-preview.pages.dev" } };
   // Expose showDeletion for the test by appending a hook inside the IIFE.
   const src = read("account-auth.js").replace(/\}\)\(\);\s*$/, "window.__showDeletion = showDeletion;\n})();");
   vm.runInNewContext(src, { window, document, console });
