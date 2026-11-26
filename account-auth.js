@@ -153,7 +153,14 @@
       if (error) throw error;
       $("deletion-form").reset();
       showDeletion(data);
-      showMessage("DELETION SCHEDULED", "Your account is scheduled for deletion in 7 days. Sign in before then and choose Cancel deletion to keep it.");
+      // Revoke refresh tokens across all devices now; the player can sign in again
+      // during the grace period to cancel. Existing access JWTs expire naturally.
+      const { error: signOutError } = await client.auth.signOut({ scope: "global" });
+      if (signOutError) {
+        showMessage("DELETION SCHEDULED", "Your request is scheduled for 7 days, but we could not sign out every device. Sign out manually on other devices. You can sign in again before the scheduled date to cancel deletion.", true);
+      } else {
+        showMessage("DELETION SCHEDULED", "Your request is scheduled for 7 days and your sessions have been signed out. Sign in again before the scheduled date and choose Cancel deletion to keep your account.");
+      }
     } catch (error) {
       showMessage("NOT DELETED", error.message || "Please try again.", true);
     } finally {
