@@ -46,7 +46,7 @@ test("migration keeps the private schema private and exposes only service-role j
 
 test("deletion finalizer retains SQL processing, soft delete, and completion", () => {
   assert.match(functionSource, /process_account_deletion_job/);
-  assert.match(functionSource, /deleteUser\([\s\S]*?true\)/);
+  assert.match(functionSource, /deleteUser\([\s\S]*?true,\s*\)/);
   assert.match(functionSource, /complete_account_deletion_job/);
   assert.match(functionSource, /retry_required/);
   assert.match(functionSource, /status: retryRequired > 0 \? 207 : 200/);
