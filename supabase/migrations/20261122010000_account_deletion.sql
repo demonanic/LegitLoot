@@ -339,3 +339,51 @@ end;
 $fn$;
 revoke all on function private.complete_account_deletion(uuid) from public, anon, authenticated;
 grant execute on function private.complete_account_deletion(uuid) to service_role;
+
+
+-- Public Data API facade for the scheduled job. The private schema stays unexposed;
+-- only service_role can invoke these narrowly scoped RPCs. SECURITY INVOKER preserves
+-- the service_role's underlying grants when accessing private tables/functions.
+create or replace function public.claim_due_account_deletion_batch()
+returns table (
+  id uuid,
+  user_id uuid,
+  status text,
+  scheduled_for timestamptz
+)
+language sql
+stable
+security invoker
+set search_path = ''
+as $fn$
+  select r.id, r.user_id, r.status, r.scheduled_for
+  from private.account_deletion_requests r
+  where r.status in ('pending', 'blocked', 'data_cleared')
+    and r.scheduled_for <= now()
+  order by r.scheduled_for, r.id
+  limit 25;
+$fn$;
+revoke all on function public.claim_due_account_deletion_batch() from public, anon, authenticated;
+grant execute on function public.claim_due_account_deletion_batch() to service_role;
+
+create or replace function public.process_account_deletion_job(p_request_id uuid)
+returns text
+language sql
+security invoker
+set search_path = ''
+as $fn$
+  select private.process_account_deletion(p_request_id);
+$fn$;
+revoke all on function public.process_account_deletion_job(uuid) from public, anon, authenticated;
+grant execute on function public.process_account_deletion_job(uuid) to service_role;
+
+create or replace function public.complete_account_deletion_job(p_request_id uuid)
+returns text
+language sql
+security invoker
+set search_path = ''
+as $fn$
+  select private.complete_account_deletion(p_request_id);
+$fn$;
+revoke all on function public.complete_account_deletion_job(uuid) from public, anon, authenticated;
+grant execute on function public.complete_account_deletion_job(uuid) to service_role;
