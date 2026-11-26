@@ -1,20 +1,28 @@
 (() => {
-  const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
+  // Backend target comes only from supabase-config.js. This build branch is
+  // staging-only: fail closed unless the config is explicitly the staging
+  // project, so a preview can never register or sign in against production.
+  const STAGING_PROJECT_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
+  const config = window.LEGITLOOT_SUPABASE_CONFIG;
   const $ = (id) => document.getElementById(id);
-  const status = $("auth-status");
-  // Preview and localhost hosts must never initialize the production Supabase client.
-  if (window.location.hostname !== "legitloot.site") {
-    if (status) status.innerHTML = "<b>PREVIEW ACCOUNT DISABLED</b><p>Wallet preview is available here, but authentication is disabled on preview hosts to protect production accounts.</p>";
-    const panel = $("auth-panel");
-    if (panel) panel.hidden = true;
+  if (!config || config.environment !== "staging" || config.url !== STAGING_PROJECT_URL || !config.publishableKey) {
+    const status = $("auth-status");
+    if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>This build is not configured for the isolated staging environment. No account actions are available.</p>";
     return;
   }
-  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const client = window.supabase?.createClient(config.url, config.publishableKey);
   if (!client) {
+    const status = $("auth-status");
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
     return;
   }
+  const dobInput = $("signup-dob");
+  if (dobInput) {
+    const parts = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(new Date());
+    const part = (type) => parts.find((item) => item.type === type)?.value || "";
+    dobInput.max = `${part("year")}-${part("month")}-${part("day")}`;
+  }
+  const status = $("auth-status");
   const authPanel = $("auth-panel");
   const playerPanel = $("player-panel");
   const showMessage = (heading, message, isError = false) => {
@@ -34,46 +42,33 @@
     });
   };
   document.querySelectorAll("[data-auth-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.authTab)));
-  const setWalletUnavailable = () => {
-    ["wallet-earned-available", "wallet-earned-value", "wallet-earned-pending",
-      "wallet-earned-pending-value", "wallet-lootcoins-available"].forEach((id) => {
-      const el = $(id);
-      if (el) el.textContent = "Unavailable";
-    });
-    const pending = $("wallet-earned-pending-detail");
-    if (pending) pending.textContent = "The secure wallet summary is not available yet. No balances have been changed.";
+  const setWalletUnavailable = (fields) => {
+    fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
+    const gameDetail = $("wallet-lootcoins-detail");
+    if (gameDetail) gameDetail.textContent = "The wallet summary could not be loaded. No balances were changed. Please try again later.";
   };
   const loadWalletSummary = async () => {
-    const fields = ["wallet-earned-available", "wallet-earned-value", "wallet-earned-pending",
-      "wallet-earned-pending-value", "wallet-lootcoins-available"];
+    // Only the Legit Coins balance is shown to players. Any cash fields the
+    // server still returns are deliberately ignored (cash is deferred; spec §0.1).
+    const fields = ["wallet-lootcoins-available"];
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Loading…"; });
     let timeoutId;
     try {
-      if (!window.LEGITLOOT_EARNED_WALLET) throw new Error("Wallet parser unavailable");
-      const request = client.rpc("get_player_wallet_summary");
+      const request = client.rpc("get_wallet_summary");
       const timeout = new Promise((_, reject) => {
         timeoutId = window.setTimeout(() => reject(new Error("Wallet request timed out")), 12000);
       });
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
-      const wallet = window.LEGITLOOT_EARNED_WALLET.parseWallet(data);
-      $("wallet-earned-available").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatEarnedLootUnits(wallet.earnedLoot.availableUnits) + " " + wallet.earnedLoot.unitsLabel;
-      $("wallet-earned-value").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.availableValueCents);
-      $("wallet-earned-pending").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatEarnedLootUnits(wallet.earnedLoot.pendingUnits) + " " + wallet.earnedLoot.unitsLabel;
-      $("wallet-earned-pending-value").textContent =
-        wallet.earnedLoot.pendingValueCents === null ? "Value pending provider reconciliation" : window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.pendingValueCents) + " · estimated value";
-      $("wallet-lootcoins-available").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatLootCoins(wallet.lootCoins.availableAtoms);
-      $("wallet-earned-pending-detail").textContent =
-        "Awaiting provider verification and approval. This amount is not available for spending, redemption, or conversion.";
+      // Shape differs by environment; see wallet-summary.js.
+      const wallet = window.LEGITLOOT_WALLET;
+      if (!wallet) throw new Error("Wallet parser did not load");
+      $("wallet-lootcoins-available").textContent = wallet.formatLegitCoins(wallet.parseLegitCoins(data));
+      $("wallet-lootcoins-detail").textContent = "Legit Coins will come only from verified in-game milestones, weekly challenges and seasonal events. None are awarded yet. LC are not cash, not transferable and not withdrawable.";
     } catch (error) {
-      console.error("LegitLoot Earned Loot wallet summary failed:", error);
-      showMessage("WALLET SUMMARY UNAVAILABLE",
-        "Your account is signed in, but the new secure wallet service is not connected yet. No balances have been changed.", true);
-      setWalletUnavailable();
+      console.error("LegitLoot wallet summary failed:", error);
+      showMessage("WALLET SUMMARY UNAVAILABLE", "Your account is signed in, but the secure wallet summary did not load. No balances have been changed. Please try again later.", true);
+      setWalletUnavailable(fields);
     } finally {
       if (timeoutId) window.clearTimeout(timeoutId);
     }
@@ -113,17 +108,20 @@
     const button = event.currentTarget.querySelector("button[type=submit]");
     button.disabled = true;
     try {
-      const { data, error } = await client.auth.signUp({
-        email: $("signup-email").value.trim(),
-        password: $("signup-password").value,
-        options: {
-          data: { display_name: $("signup-name").value.trim() },
-          emailRedirectTo: window.location.origin + "/account.html"
+      const { data, error } = await client.functions.invoke("signup-with-consent", {
+        body: {
+          email: $("signup-email").value.trim(),
+          password: $("signup-password").value,
+          displayName: $("signup-name").value.trim(),
+          dateOfBirth: $("signup-dob").value,
+          acceptTerms: $("signup-terms").checked,
+          acceptPrivacy: $("signup-privacy").checked,
+          termsVersion: "LL-TERMS-DRAFT-2026-11-24",
+          privacyVersion: "LL-PRIVACY-DRAFT-2026-11-24"
         }
       });
       if (error) throw error;
-      if (data.session && data.user) await showSignedIn(data.user);
-      else showMessage("CHECK YOUR EMAIL", "Your registration was received. Open the confirmation email to activate your account, then return here to sign in.");
+      showMessage("CHECK YOUR EMAIL", data?.message || "If registration is enabled, check your email for a confirmation link.");
     } catch (error) {
       showMessage("ACCOUNT NOT CREATED", error.message || "Please try again.", true);
     } finally {
