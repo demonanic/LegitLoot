@@ -63,7 +63,7 @@ Deno.serve(async (request: Request) => {
 
   if (!providerIdPattern.test(tx) || !uuidPattern.test(userId) || !providerIdPattern.test(eventId)
     || !["1", "2"].includes(status) || !decimalReward.test(reward)
-    || !decimalUsd.test(payout) || currency !== "EL" || !givenHash) {
+    || !decimalUsd.test(payout) || currency !== "EarnedLoot" || !givenHash) {
     return new Response("Invalid postback parameters", { status: 400 });
   }
 
@@ -84,7 +84,7 @@ Deno.serve(async (request: Request) => {
   if (!valid) return new Response("Invalid signature", { status: 403 });
 
   const payloadDigest = await digestPayload([
-    tx, userId, eventId, status, reward, payout, currency,
+    tx, userId, eventId, status, reward, payout, "EL",
   ]);
   const supabase = createClient(supabaseUrl, serviceRoleKey, {
     auth: { persistSession: false, autoRefreshToken: false },
@@ -95,7 +95,7 @@ Deno.serve(async (request: Request) => {
     p_transaction_id: tx,
     p_event_id: eventId,
     p_status: Number(status),
-    p_currency_code: currency,
+    p_currency_code: "EL",
     p_reward_raw: reward,
     p_payout_usd_raw: payout,
     p_payload_digest: payloadDigest,
