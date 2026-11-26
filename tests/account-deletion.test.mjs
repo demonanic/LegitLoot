@@ -25,6 +25,34 @@ async function freshDb() {
   const files = ["supabase/bootstrap/initial_schema.sql",
     ...readdirSync(new URL("supabase/migrations/", root)).sort().map((f) => `supabase/migrations/${f}`)];
   for (const f of files) await db.exec(read(f).replace(/create extension if not exists pgcrypto;/, ""));
+  // Staging-only tables present in the live staging schema but omitted from the base bootstrap.
+  await db.exec(`create table private.admin_users (
+      user_id uuid primary key references auth.users(id),
+      admin_role text not null,
+      is_active boolean not null default true,
+      created_at timestamptz not null default now(),
+      created_by uuid, deactivated_at timestamptz, deactivated_by uuid
+    );
+    create table private.cpagrip_attribution_tokens (
+      id uuid primary key default gen_random_uuid(), token_hash text not null unique,
+      user_id uuid not null references auth.users(id) on delete restrict,
+      offer_id text, status text not null check (status in ('active','revoked','expired')),
+      created_at timestamptz not null default now(), expires_at timestamptz, revoked_at timestamptz,
+      metadata jsonb not null default '{}'::jsonb
+    );
+    create table private.payout_simulator_withdrawals (
+      id uuid primary key default gen_random_uuid(), user_id uuid not null references auth.users(id) on delete restrict,
+      amount_minor bigint not null check (amount_minor >= 50),
+      currency_code text not null check (currency_code = 'USD'),
+      destination_type text not null check (destination_type in ('paypal','venmo')),
+      destination_label text not null check (length(trim(destination_label)) between 3 and 80),
+      status text not null check (status in ('pending_review','approved','processing','paid','rejected','failed','cancelled')),
+      idempotency_key text not null, decision_reason text,
+      provider_outcome text check (provider_outcome in ('pending','success','failure')),
+      created_at timestamptz not null default now(), decided_at timestamptz, completed_at timestamptz,
+      actor_user_id uuid not null references auth.users(id) on delete restrict,
+      unique(user_id,idempotency_key)
+    );`);
   await db.exec(`insert into auth.users(id, email) values ('${A}', 'a@example.test'), ('${B}', 'b@example.test');
     update public.profiles set username = 'player_a', display_name = 'Player A' where id = '${A}';
     insert into public.game_registry(id, slug, title) values ('zz-test', 'zz-test', 'Test game') on conflict do nothing;
@@ -52,6 +80,8 @@ test("migration is in the migrations folder and states the owner decisions", () 
   assert.match(sql, /interval '7 days'/);
   assert.doesNotMatch(sql, /delete from private\.(journal|ledger|audit)/, "never deletes ledger or audit rows");
   assert.doesNotMatch(sql, /delete from auth\.users/, "never hard-deletes the Auth user");
+  assert.match(sql, /delete from private\\.cpagrip_attribution_tokens/);
+  assert.match(sql, /destination_label = 'REDACTED'/);
 });
 
 test("request needs a recent sign-in, schedules 7 days out, and is one per player", { skip }, async () => {
@@ -89,12 +119,18 @@ test("processing clears personal data, keeps ledger and audit rows, and closes t
   await db.query("select public.request_account_deletion()");
   await asOwner(db);
   await dueNow(db, A);
+  await db.exec(`insert into private.cpagrip_attribution_tokens(token_hash,user_id,status,metadata)
+      values ('test-token-hash-a','${A}','active','{"source":"test"}');
+    insert into private.payout_simulator_withdrawals(user_id,amount_minor,currency_code,destination_type,destination_label,status,idempotency_key,actor_user_id)
+      values ('${A}',500,'USD','paypal','sam.private@example.test','pending_review','deletion-test-a','${A}');`);
   const before = await one(db, "select (select count(*) from private.journal_entries)::int j, (select count(*) from private.ledger_accounts)::int l");
   const req = await reqOf(db, A);
   assert.equal((await one(db, `select private.process_account_deletion('${req.id}') s`)).s, "data_cleared");
   const p = await one(db, `select * from public.profiles where id='${A}'`);
   assert.equal(p.username, null); assert.equal(p.display_name, null); assert.ok(p.deleted_at);
   assert.equal((await one(db, `select count(*)::int n from private.game_saves where user_id='${A}'`)).n, 0);
+  assert.equal((await one(db, `select count(*)::int n from private.cpagrip_attribution_tokens where user_id='${A}'`)).n, 0, "attribution token removed");
+  assert.equal((await one(db, `select destination_label from private.payout_simulator_withdrawals where user_id='${A}'`)).destination_label, "REDACTED", "destination label erased while financial history remains");
   assert.equal((await one(db, `select count(*)::int n from private.ledger_accounts where owner_user_id='${A}' and closed_at is null`)).n, 0);
   const after = await one(db, "select (select count(*) from private.journal_entries)::int j, (select count(*) from private.ledger_accounts)::int l");
   assert.deepEqual(after, before, "no ledger rows added or removed");
