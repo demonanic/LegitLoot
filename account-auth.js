@@ -1,16 +1,23 @@
 (() => {
-  const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
+  const STAGING_PROJECT_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
+  const STAGING_PREVIEW_HOSTS = new Set([
+    "staging-auth-03-earnedloot-integration.legitloot-preview.pages.dev",
+    "staging-auth-03-earnedloot-integration.legitloot.pages.dev"
+  ]);
+  const config = window.LEGITLOOT_SUPABASE_CONFIG;
   const $ = (id) => document.getElementById(id);
   const status = $("auth-status");
-  // Preview and localhost hosts must never initialize the production Supabase client.
-  if (window.location.hostname !== "legitloot.site") {
-    if (status) status.innerHTML = "<b>PREVIEW ACCOUNT DISABLED</b><p>Wallet preview is available here, but authentication is disabled on preview hosts to protect production accounts.</p>";
-    const panel = $("auth-panel");
-    if (panel) panel.hidden = true;
+  // Fail closed everywhere except the exact staging project on its two isolated branch previews.
+  if (!config || config.environment !== "staging" || config.url !== STAGING_PROJECT_URL ||
+      !config.publishableKey || !STAGING_PREVIEW_HOSTS.has(window.location.hostname)) {
+    if (status) status.innerHTML = "<b>STAGING ACCOUNT ACCESS DISABLED</b><p>This account build is restricted to the isolated staging preview. No account actions are available on this host.</p>";
+    const auth = $("auth-panel");
+    const player = $("player-panel");
+    if (auth) auth.hidden = true;
+    if (player) player.hidden = true;
     return;
   }
-  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+  const client = window.supabase?.createClient(config.url, config.publishableKey);
   if (!client) {
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
     return;
@@ -28,7 +35,7 @@
   };
   const switchTab = (tab) => {
     document.querySelectorAll("[data-auth-tab]").forEach((button) => button.classList.toggle("active", button.dataset.authTab === tab));
-    ["signin", "signup", "reset", "recovery"].forEach((name) => {
+    ["signin", "reset", "recovery"].forEach((name) => {
       const form = $(name + "-form");
       form.hidden = name !== tab;
     });
@@ -84,6 +91,7 @@
     $("player-email").textContent = user.email || "Authenticated player";
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
     await loadWalletSummary();
+    await loadDeletionStatus();
     try {
       const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
       if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
@@ -91,6 +99,77 @@
       console.warn("LegitLoot profile display lookup failed:", error);
     }
   };
+  // AUTH-03: seven-day cancellable deletion request; unpaid cash and open payouts remain owner-review holds.
+  const BLOCKED_TEXT = {
+    cash_balance_owner_decision: "your account still holds an unpaid cash balance that needs owner review",
+    open_payout_request: "you have a payout request that is still open"
+  };
+  const deletionText = (info) => {
+    if (info.status === "pending") {
+      return "Your account is scheduled for deletion on " + new Date(info.scheduledFor).toLocaleString() + ". You can cancel before then.";
+    }
+    if (info.status === "blocked") {
+      const why = BLOCKED_TEXT[info.blockedReason] || "it needs a manual review";
+      return "Your deletion is on hold because " + why + ". Nothing has been deleted. You can cancel the request.";
+    }
+    return "Your personal data has been cleared. The final sign-in removal step is still running. No further action is needed.";
+  };
+  const showDeletion = (info) => {
+    const open = !!info && ["pending", "blocked", "data_cleared"].includes(info.status);
+    $("deletion-request").hidden = open;
+    $("deletion-scheduled").hidden = !open;
+    if (open) {
+      $("deletion-scheduled").dataset.state = info.status;
+      $("deletion-scheduled-text").textContent = deletionText(info);
+      $("deletion-cancel").hidden = info.status === "data_cleared";
+    }
+  };
+  const loadDeletionStatus = async () => {
+    try {
+      const { data, error } = await client.rpc("account_deletion_status");
+      if (error) throw error;
+      showDeletion(data);
+    } catch (error) {
+      console.warn("LegitLoot deletion status failed:", error);
+    }
+  };
+  $("deletion-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const button = event.currentTarget.querySelector("button[type=submit]");
+    if ($("deletion-confirm").value !== "DELETE") {
+      showMessage("NOT DELETED", "Type DELETE in capitals to confirm.", true);
+      return;
+    }
+    button.disabled = true;
+    try {
+      const { data: userData } = await client.auth.getUser();
+      const email = userData?.user?.email;
+      if (!email) throw new Error("Sign in again to request account deletion.");
+      const { error: authError } = await client.auth.signInWithPassword({
+        email, password: $("deletion-password").value
+      });
+      if (authError) throw new Error("That password did not match. Nothing was deleted.");
+      const { data, error } = await client.rpc("request_account_deletion");
+      if (error) throw error;
+      $("deletion-form").reset();
+      showDeletion(data);
+      showMessage("DELETION SCHEDULED", "Your account is scheduled for deletion in 7 days. Sign in before then and choose Cancel deletion to keep it.");
+    } catch (error) {
+      showMessage("NOT DELETED", error.message || "Please try again.", true);
+    } finally {
+      button.disabled = false;
+    }
+  });
+  $("deletion-cancel").addEventListener("click", async () => {
+    try {
+      const { error } = await client.rpc("cancel_account_deletion");
+      if (error) throw error;
+      showDeletion(null);
+      showMessage("DELETION CANCELLED", "Your account will not be deleted.");
+    } catch (error) {
+      showMessage("CANCEL FAILED", error.message || "Please try again.", true);
+    }
+  });
   $("signin-form").addEventListener("submit", async (event) => {
     event.preventDefault();
     const button = event.currentTarget.querySelector("button[type=submit]");
@@ -104,28 +183,6 @@
       if (data.user) await showSignedIn(data.user);
     } catch (error) {
       showMessage("SIGN IN FAILED", error.message || "Please try again.", true);
-    } finally {
-      button.disabled = false;
-    }
-  });
-  $("signup-form").addEventListener("submit", async (event) => {
-    event.preventDefault();
-    const button = event.currentTarget.querySelector("button[type=submit]");
-    button.disabled = true;
-    try {
-      const { data, error } = await client.auth.signUp({
-        email: $("signup-email").value.trim(),
-        password: $("signup-password").value,
-        options: {
-          data: { display_name: $("signup-name").value.trim() },
-          emailRedirectTo: window.location.origin + "/account.html"
-        }
-      });
-      if (error) throw error;
-      if (data.session && data.user) await showSignedIn(data.user);
-      else showMessage("CHECK YOUR EMAIL", "Your registration was received. Open the confirmation email to activate your account, then return here to sign in.");
-    } catch (error) {
-      showMessage("ACCOUNT NOT CREATED", error.message || "Please try again.", true);
     } finally {
       button.disabled = false;
     }
