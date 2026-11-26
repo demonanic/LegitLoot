@@ -10,6 +10,7 @@ on:
       - "supabase-config.js"
       - "tests/account-deletion.test.mjs"
       - "tests/account-deletion-finalizer.test.mjs"
+      - "tests/lootcoin-shop.test.sql"
       - "supabase/functions/account-deletion-finalizer/**"
       - "supabase/migrations/20261126010000_auth_03_account_deletion.sql"
       - "supabase/migrations/20261126020000_auth_03_account_export.sql"
@@ -74,6 +75,10 @@ jobs:
             echo "Applying $migration"
             psql -v ON_ERROR_STOP=1 -f "$migration"
           done
+      - name: Apply and verify LootCoins shop migration
+        run: |
+          psql -v ON_ERROR_STOP=1 -f supabase/migrations/20261126190000_lootcoin_shop_catalog_rpc.sql
+          psql -v ON_ERROR_STOP=1 -f tests/lootcoin-shop.test.sql
       - name: Run financial lifecycle integration tests
         run: psql -v ON_ERROR_STOP=1 -f tests/sql/financial_foundation.test.sql
       - name: Seed concurrency fixture

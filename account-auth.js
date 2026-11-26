@@ -60,16 +60,32 @@
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
       if (!data || !data.earnedLoot || !data.lootCoins) throw new Error("Unexpected wallet response");
-      const fmt = (value, max = 3) => Number(value).toLocaleString("en-US", {maximumFractionDigits:max});
-      $("wallet-earnedloot-available").textContent = fmt(data.earnedLoot.availableUnits ?? "0");
-      $("wallet-earnedloot-pending").textContent = fmt(data.earnedLoot.pendingUnits ?? "0");
+      const fmtDecimal = (value) => {
+        const raw = String(value ?? "0").split(".");
+        const whole = BigInt(raw[0] || "0").toLocaleString("en-US");
+        const fraction = (raw[1] || "").replace(/0+$/, "");
+        return whole + (fraction ? "." + fraction : "");
+      };
+      const fmtAtoms = (value, scale) => {
+        const atoms = BigInt(value ?? "0");
+        const divisor = 10n ** BigInt(scale);
+        const whole = (atoms / divisor).toLocaleString("en-US");
+        const fraction = (atoms % divisor).toString().padStart(scale, "0").replace(/0+$/, "");
+        return whole + (fraction ? "." + fraction : "");
+      };
+      const fmtCents = (value) => {
+        const cents = BigInt(value ?? "0");
+        const whole = (cents / 100n).toLocaleString("en-US");
+        return "$" + whole + "." + (cents % 100n).toString().padStart(2, "0");
+      };
+      $("wallet-earnedloot-available").textContent = fmtDecimal(data.earnedLoot.availableUnits ?? "0");
+      $("wallet-earnedloot-pending").textContent = fmtDecimal(data.earnedLoot.pendingUnits ?? "0");
       const cents = data.earnedLoot.availableValueCents;
-      $("wallet-earnedloot-value").textContent = cents == null ? "Not available" : "$" + fmt(Number(cents)/100,2);
-      const lcAtoms = BigInt(data.lootCoins.availableAtoms ?? "0");
-      $("wallet-lootcoins-available").textContent = fmt(Number(lcAtoms)/10000,4);
+      $("wallet-earnedloot-value").textContent = cents == null ? "Not available" : fmtCents(cents);
+      $("wallet-lootcoins-available").textContent = fmtAtoms(data.lootCoins.availableAtoms,4);
       $("wallet-lootcoins-detail").textContent = "LC are non-cash, non-transferable platform utility units. They cannot be withdrawn or converted back into Earned Loot.";
       const pendingValue = $("wallet-earnedloot-pending-value");
-      if (pendingValue) pendingValue.textContent = data.earnedLoot.pendingValueCents == null ? "Value pending verification" : "$" + fmt(Number(data.earnedLoot.pendingValueCents)/100,2);
+      if (pendingValue) pendingValue.textContent = data.earnedLoot.pendingValueCents == null ? "Value pending verification" : fmtCents(data.earnedLoot.pendingValueCents);
     } catch (error) {
       console.error("LegitLoot wallet summary failed:", error);
       showMessage("WALLET SUMMARY UNAVAILABLE", "The secure wallet summary did not load. No balances were changed. Please try again later.", true);
@@ -92,6 +108,7 @@
         const reward = document.createElement("p"); reward.textContent = Number(pkg.lc_amount_atoms / 10000).toLocaleString("en-US") + " LC";
         const button = document.createElement("button"); button.type = "button"; button.className = "filter-chip"; button.textContent = "EXCHANGE";
         button.addEventListener("click", async () => {
+          if (!window.confirm("Exchange " + price.textContent + " for " + reward.textContent + "? This exchange cannot be reversed.")) return;
           button.disabled = true;
           try {
             const { error: purchaseError } = await client.rpc("purchase_lootcoin_package", {p_package_id:pkg.package_id,p_idempotency_key:"lc-shop-"+crypto.randomUUID()});
