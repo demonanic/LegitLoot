@@ -1,10 +1,17 @@
 (() => {
   const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
-  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   const $ = (id) => document.getElementById(id);
+  const status = $("auth-status");
+  // Preview and localhost hosts must never initialize the production Supabase client.
+  if (window.location.hostname !== "legitloot.site") {
+    if (status) status.innerHTML = "<b>PREVIEW ACCOUNT DISABLED</b><p>Wallet preview is available here, but authentication is disabled on preview hosts to protect production accounts.</p>";
+    const panel = $("auth-panel");
+    if (panel) panel.hidden = true;
+    return;
+  }
+  const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   if (!client) {
-    const status = $("auth-status");
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
     return;
   }
@@ -28,50 +35,46 @@
     });
   };
   document.querySelectorAll("[data-auth-tab]").forEach((button) => button.addEventListener("click", () => switchTab(button.dataset.authTab)));
-  const formatUsd = (cents) => {
-    const amount = Number(cents) / 100;
-    return Number.isFinite(amount) ? amount.toLocaleString("en-US", { style: "currency", currency: "USD" }) : "$—";
-  };
-  const setWalletUnavailable = (fields) => {
-    fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Unavailable"; });
-    const gameDetail = $("wallet-lootcoins-detail");
-    const cashDetail = $("wallet-cash-detail");
-    if (gameDetail) gameDetail.textContent = "The wallet summary could not be loaded. Please try again later.";
-    if (cashDetail) cashDetail.textContent = "No wallet values were changed.";
+  const setWalletUnavailable = () => {
+    ["wallet-earned-available", "wallet-earned-value", "wallet-earned-pending",
+      "wallet-earned-pending-value", "wallet-lootcoins-available"].forEach((id) => {
+      const el = $(id);
+      if (el) el.textContent = "Unavailable";
+    });
+    const pending = $("wallet-earned-pending-detail");
+    if (pending) pending.textContent = "The secure wallet summary is not available yet. No balances have been changed.";
   };
   const loadWalletSummary = async () => {
-    const fields = ["wallet-lootcoins-available", "wallet-cash-available", "wallet-cash-pending", "wallet-cash-reserved", "wallet-cash-paid"];
+    const fields = ["wallet-earned-available", "wallet-earned-value", "wallet-earned-pending",
+      "wallet-earned-pending-value", "wallet-lootcoins-available"];
     fields.forEach((id) => { const el = $(id); if (el) el.textContent = "Loading…"; });
     let timeoutId;
     try {
-      const request = client.rpc("get_wallet_summary");
+      if (!window.LEGITLOOT_EARNED_WALLET) throw new Error("Wallet parser unavailable");
+      const request = client.rpc("get_player_wallet_summary");
       const timeout = new Promise((_, reject) => {
         timeoutId = window.setTimeout(() => reject(new Error("Wallet request timed out")), 12000);
       });
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
-      if (!data || !data.lootCoins || !data.cash ||
-          data.lootCoins.available == null ||
-          data.cash.availableCents == null ||
-          data.cash.pendingCents == null ||
-          data.cash.withdrawalReservedCents == null ||
-          data.cash.paidCents == null ||
-          data.cash.heldCents == null) {
-        throw new Error("Wallet summary response was incomplete");
-      }
-      const lootCoinsAtoms = Number(data.lootCoins.available);
-      if (!Number.isFinite(lootCoinsAtoms)) throw new Error("Invalid LootCoins balance");
-      $("wallet-lootcoins-available").textContent = (lootCoinsAtoms / 10000).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 4 }) + " LC";
-      $("wallet-cash-available").textContent = formatUsd(data.cash.availableCents);
-      $("wallet-cash-pending").textContent = formatUsd(data.cash.pendingCents);
-      $("wallet-cash-reserved").textContent = formatUsd(data.cash.withdrawalReservedCents);
-      $("wallet-cash-paid").textContent = formatUsd(data.cash.paidCents);
-      $("wallet-lootcoins-detail").textContent = "LootCoins earned through approved activities. LC is a platform reward currency, not cash and not withdrawable.";
-      $("wallet-cash-detail").textContent = formatUsd(data.cash.heldCents) + " held. Pending provider funds are not available for withdrawal.";
+      const wallet = window.LEGITLOOT_EARNED_WALLET.parseWallet(data);
+      $("wallet-earned-available").textContent =
+        window.LEGITLOOT_EARNED_WALLET.formatInteger(wallet.earnedLoot.availableUnits) + " " + wallet.earnedLoot.unitsLabel;
+      $("wallet-earned-value").textContent =
+        window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.availableValueCents);
+      $("wallet-earned-pending").textContent =
+        window.LEGITLOOT_EARNED_WALLET.formatInteger(wallet.earnedLoot.pendingUnits) + " " + wallet.earnedLoot.unitsLabel;
+      $("wallet-earned-pending-value").textContent =
+        window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.pendingValueCents) + " · estimated value";
+      $("wallet-lootcoins-available").textContent =
+        window.LEGITLOOT_EARNED_WALLET.formatLootCoins(wallet.lootCoins.availableAtoms);
+      $("wallet-earned-pending-detail").textContent =
+        "Awaiting provider verification and approval. This amount is not available for spending, redemption, or conversion.";
     } catch (error) {
-      console.error("LegitLoot wallet summary failed:", error);
-      showMessage("WALLET SUMMARY UNAVAILABLE", "Your account is signed in, but the secure wallet summary did not load. No balances have been changed. Please try again later.", true);
-      setWalletUnavailable(fields);
+      console.error("LegitLoot Earned Loot wallet summary failed:", error);
+      showMessage("WALLET SUMMARY UNAVAILABLE",
+        "Your account is signed in, but the new secure wallet service is not connected yet. No balances have been changed.", true);
+      setWalletUnavailable();
     } finally {
       if (timeoutId) window.clearTimeout(timeoutId);
     }

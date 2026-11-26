@@ -1,0 +1,21 @@
+name: Earned Loot wallet contract tests
+
+on:
+  pull_request:
+    paths:
+      - "earned-loot-wallet.js"
+      - "tests/earned-loot-wallet.test.cjs"
+      - ".github/workflows/earned-loot-wallet.yml"
+  push:
+    branches:
+      - "feature/earned-loot-wallet-foundation"
+
+jobs:
+  wallet-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/earned-loot-wallet.test.cjs

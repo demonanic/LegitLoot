@@ -132,7 +132,13 @@ is superseded by this owner amendment.
 
 Replace the player-facing cash wallet with Earned Loot. Retain only the internal USD accounting needed for provider settlement and cash-redemption obligations. Do not implement a payout rail or enable withdrawals.
 
-## 8. Implementation order and gates
+## 8. Owner approval and balance decisions
+
+- Either the owner or an authorized LegitLoot administrator may approve a Hustle Earned Loot reward. Approval authority must be checked server-side against the current admin/owner role; a client-supplied role is never trusted.
+- A second independent approval is not required in the initial implementation. The architecture should leave room for a future two-approver threshold, but no threshold or second-approval rule is active until Sam defines it.
+- Earned Loot and LootCoins available balances must never become negative. Do not create automatic player debt for ordinary provider reversals. A reversal that would exceed the unspent balance must enter a held/dispute workflow for a separately approved policy.
+
+## 9. Implementation order and gates
 
 1. Update architecture/schema proposal for Earned Loot and LC as separate ledgers, preserving historical records.
 2. Implement pending provider event/reward-allocation records and approval lifecycle without enabling live provider credits.
