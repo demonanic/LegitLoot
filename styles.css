@@ -91,3 +91,5 @@ body:before{
 a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #35e7ff;outline-offset:3px}
 button:disabled{cursor:not-allowed;opacity:.55}
 ::selection{background:#ff35d2;color:#10091e}
+
+.lootcoin-package-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0}.lootcoin-package{border:1px solid var(--line,rgba(255,255,255,.2));padding:16px;border-radius:10px}.lootcoin-package h3{margin:0 0 12px}.lootcoin-package p{margin:6px 0}.lootcoin-package button{margin-top:10px}

@@ -76,6 +76,35 @@
       setWalletUnavailable();
     } finally { if (timeoutId) window.clearTimeout(timeoutId); }
   };
+  const loadLootCoinPackages = async () => {
+    const container = $("lootcoin-shop-packages");
+    if (!container) return;
+    container.textContent = "Loading available exchanges…";
+    try {
+      const { data, error } = await client.rpc("get_active_lootcoin_packages");
+      if (error) throw error;
+      container.textContent = "";
+      if (!Array.isArray(data) || data.length === 0) { container.textContent = "The exchange is temporarily unavailable."; return; }
+      data.forEach((pkg) => {
+        const card = document.createElement("article"); card.className = "lootcoin-package";
+        const title = document.createElement("h3"); title.textContent = pkg.display_name;
+        const price = document.createElement("p"); price.textContent = Number(pkg.el_price_atoms / 1000).toLocaleString("en-US") + " EL";
+        const reward = document.createElement("p"); reward.textContent = Number(pkg.lc_amount_atoms / 10000).toLocaleString("en-US") + " LC";
+        const button = document.createElement("button"); button.type = "button"; button.className = "filter-chip"; button.textContent = "EXCHANGE";
+        button.addEventListener("click", async () => {
+          button.disabled = true;
+          try {
+            const { error: purchaseError } = await client.rpc("purchase_lootcoin_package", {p_package_id:pkg.package_id,p_idempotency_key:"lc-shop-"+crypto.randomUUID()});
+            if (purchaseError) throw purchaseError;
+            showMessage("EXCHANGE COMPLETE","Earned Loot was exchanged for LootCoins. Refreshing wallet balances.");
+            await loadWalletSummary();
+          } catch(error) { showMessage("EXCHANGE NOT COMPLETED",error.message||"Please try again.",true); }
+          finally { button.disabled=false; }
+        });
+        card.append(title,price,reward,button); container.append(card);
+      });
+    } catch(error) { console.error("LootCoins shop unavailable:",error); container.textContent="The exchange is unavailable. No balances were changed."; }
+  };
   const showSignedIn = async (user) => {
     authPanel.hidden = true;
     playerPanel.hidden = false;
@@ -83,6 +112,7 @@
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
     $("player-email").dataset.email = user.email || "";
     await loadWalletSummary();
+    await loadLootCoinPackages();
     await loadDeletionStatus();
     try {
       const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
