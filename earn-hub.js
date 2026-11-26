@@ -106,35 +106,32 @@
 
   buttons.forEach(({ provider, button, status }) => {
     button.addEventListener("click", async () => {
-      if (!currentUser) {
-        status.textContent = "Please sign in first. Redirecting to account…";
-        window.location.href = "account.html";
-        return;
-      }
+      status.textContent = "Checking your sign-in…";
       button.disabled = true;
-      status.textContent = "Generating your secure account-bound link…";
-      const { data, error } = await client.functions.invoke(provider.launch.functionName, { body: {} });
-      button.disabled = false;
-      if (error || typeof data?.wallUrl !== "string") {
-        const detail = error?.message || data?.error || "Unknown server response";
-        status.textContent = `${provider.name} launch failed: ${detail}. Nothing was opened.`;
-        syncButtons();
-        return;
-      }
-      let url;
       try {
-        url = new URL(data.wallUrl);
-      } catch {
-        status.textContent = "The provider returned an invalid link. Nothing was opened.";
-        return;
+        const { data: sessionData, error: sessionError } = await client.auth.getSession();
+        if (sessionError) throw sessionError;
+        const sessionUser = sessionData?.session?.user ?? currentUser;
+        if (!sessionUser) {
+          status.textContent = "You need to sign in first. Opening account page…";
+          window.location.href = new URL("account.html", window.location.href).toString();
+          return;
+        }
+        status.textContent = "Requesting your secure Moonetix link…";
+        const { data, error } = await client.functions.invoke(provider.launch.functionName, { body: {} });
+        if (error) throw error;
+        if (typeof data?.wallUrl !== "string") throw new Error(data?.error || "The link service returned no URL.");
+        const url = new URL(data.wallUrl);
+        const prefix = provider.launch.pathPrefix || "/";
+        if (url.protocol !== "https:" || !provider.launch.allowedOrigins.includes(url.origin) || !url.pathname.startsWith(prefix)) {
+          throw new Error("The provider returned an unexpected link.");
+        }
+        status.textContent = "Link received. Opening Moonetix…";
+        window.location.href = url.toString();
+      } catch (err) {
+        status.textContent = `Moonetix launch error: ${err?.message || "Unknown error"}`;
+        button.disabled = false;
       }
-      const prefix = provider.launch.pathPrefix || "/";
-      if (url.protocol !== "https:" || !provider.launch.allowedOrigins.includes(url.origin) || !url.pathname.startsWith(prefix)) {
-        status.textContent = "The provider returned an unexpected link. Nothing was opened.";
-        return;
-      }
-      status.textContent = "Opening Moonetix…";
-      window.location.assign(url.toString());
     });
   });
 
