@@ -280,6 +280,7 @@ test("account page offers deletion with a typed confirmation, password check and
   assert.match(js, /client\.rpc\("cancel_account_deletion"\)/);
   for (const state of ["pending", "blocked", "data_cleared"]) assert.match(js, new RegExp(`"${state}"`), state);
   assert.ok(js.indexOf("signInWithPassword({ email, password") < js.indexOf('client.rpc("request_account_deletion")'), "password re-checked before the request");
+  assert.match(js, /client\.auth\.signOut\(\{ scope: "global" \}\)/, "request revokes refresh sessions on all devices");
   assert.match(html.match(/id="deletion-panel"[\s\S]*?<\/section>/)[0], /unpaid cash balance or open payout request/i);
 });
 
