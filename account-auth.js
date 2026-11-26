@@ -15,7 +15,6 @@
     if (status) status.innerHTML = "<b>ACCOUNT UNAVAILABLE</b><p>The authentication library could not load. Refresh the page or try again later.</p>";
     return;
   }
-  const status = $("auth-status");
   const authPanel = $("auth-panel");
   const playerPanel = $("player-panel");
   const showMessage = (heading, message, isError = false) => {
@@ -59,13 +58,13 @@
       if (error) throw error;
       const wallet = window.LEGITLOOT_EARNED_WALLET.parseWallet(data);
       $("wallet-earned-available").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatInteger(wallet.earnedLoot.availableUnits) + " " + wallet.earnedLoot.unitsLabel;
+        window.LEGITLOOT_EARNED_WALLET.formatEarnedLootUnits(wallet.earnedLoot.availableUnits) + " " + wallet.earnedLoot.unitsLabel;
       $("wallet-earned-value").textContent =
         window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.availableValueCents);
       $("wallet-earned-pending").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatInteger(wallet.earnedLoot.pendingUnits) + " " + wallet.earnedLoot.unitsLabel;
+        window.LEGITLOOT_EARNED_WALLET.formatEarnedLootUnits(wallet.earnedLoot.pendingUnits) + " " + wallet.earnedLoot.unitsLabel;
       $("wallet-earned-pending-value").textContent =
-        window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.pendingValueCents) + " · estimated value";
+        wallet.earnedLoot.pendingValueCents === null ? "Value pending provider reconciliation" : window.LEGITLOOT_EARNED_WALLET.formatUsd(wallet.earnedLoot.pendingValueCents) + " · estimated value";
       $("wallet-lootcoins-available").textContent =
         window.LEGITLOOT_EARNED_WALLET.formatLootCoins(wallet.lootCoins.availableAtoms);
       $("wallet-earned-pending-detail").textContent =

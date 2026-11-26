@@ -1,6 +1,6 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
-const { parseWallet, formatUsd, formatInteger, formatLootCoins } = require("../earned-loot-wallet.js");
+const { parseWallet, formatUsd, formatInteger, formatEarnedLootUnits, formatLootCoins } = require("../earned-loot-wallet.js");
 
 const valid = () => ({
   contractVersion: 1,
@@ -30,6 +30,26 @@ test("accepts canonical Earned Loot and LootCoins wallet contract", () => {
   assert.equal(parsed.lootCoins.availableAtoms, "2400000");
 });
 
+test("accepts unknown pending value while provider reconciliation is outstanding", () => {
+  const raw = valid();
+  raw.earnedLoot.pendingUnits = "2.500";
+  raw.earnedLoot.pendingValueCents = null;
+  const parsed = parseWallet(raw);
+  assert.equal(parsed.earnedLoot.pendingUnits, "2.500");
+  assert.equal(parsed.earnedLoot.pendingValueCents, null);
+});
+
+test("accepts fractional Earned Loot units to thousandth precision", () => {
+  const raw = valid();
+  raw.earnedLoot.availableUnits = "1.375";
+  raw.earnedLoot.pendingUnits = "0.005";
+  const parsed = parseWallet(raw);
+  assert.equal(parsed.earnedLoot.availableUnits, "1.375");
+  assert.equal(formatEarnedLootUnits(parsed.earnedLoot.availableUnits), "1.375");
+  assert.equal(formatEarnedLootUnits("1250.000"), "1,250");
+  assert.throws(() => formatEarnedLootUnits("1.0001"));
+});
+
 test("rejects legacy wallet response shapes", () => {
   for (const raw of [
     { lootCoins: { available: "1" }, cash: {} },
@@ -40,7 +60,7 @@ test("rejects legacy wallet response shapes", () => {
 });
 
 test("rejects non-integer, negative, and unsafe-looking amount strings", () => {
-  for (const value of ["-1", "1.5", "1e3", "01", 100, null]) {
+  for (const value of ["-1", "1e3", "01", "1.1234", 100, null]) {
     const raw = valid();
     raw.earnedLoot.availableUnits = value;
     assert.throws(() => parseWallet(raw));

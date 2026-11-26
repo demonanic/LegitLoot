@@ -1,0 +1,83 @@
+name: Earned Loot backend contract tests
+
+on:
+  pull_request:
+    paths:
+      - "earned-loot-reward.js"
+      - "earned-loot-wallet.js"
+      - "account-auth.js"
+      - "tests/earned-loot-reward.test.cjs"
+      - "tests/earned-loot-wallet.test.cjs"
+      - "tests/sql/**"
+      - "docs/FINANCIAL_FOUNDATION_IMPLEMENTATION_PLAN.md"
+      - "docs/TERMS_REWARD_DISCLOSURE_DRAFT.md"
+      - "docs/EARNED_LOOT_AND_LOOTCOINS_MODEL.md"
+      - "supabase/functions/moonetix-postback/**"
+      - "supabase/functions/moonetix-reporting-reconcile/**"
+      - "supabase/config.toml"
+      - "supabase/migrations/202611231121*.sql"
+      - ".github/workflows/earned-loot-backend.yml"
+  push:
+    branches:
+      - "feature/earned-loot-ledger-backend"
+
+jobs:
+  node-contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test tests/earned-loot-reward.test.cjs tests/earned-loot-wallet.test.cjs
+      - run: node --check account-auth.js
+
+  postgres-migrations:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: legitloot_test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: test_password
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d legitloot_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      PGHOST: localhost
+      PGPORT: 5432
+      PGDATABASE: legitloot_test
+      PGUSER: postgres
+      PGPASSWORD: test_password
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+      - name: Bootstrap minimal Supabase-compatible test schema
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/bootstrap.sql
+      - name: Apply migrations to disposable PostgreSQL
+        run: |
+          for migration in supabase/migrations/202611231121*.sql; do
+            echo "Applying $migration"
+            psql -v ON_ERROR_STOP=1 -f "$migration"
+          done
+      - name: Run financial lifecycle integration tests
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/financial_foundation.test.sql
+      - name: Seed concurrency fixture
+        run: psql -v ON_ERROR_STOP=1 -f tests/sql/concurrency_setup.sql
+      - name: Stress concurrent EL-to-LC purchases
+        run: bash tests/sql/concurrency_test.sh
+
+  edge-function-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - run: deno check supabase/functions/moonetix-postback/index.ts supabase/functions/moonetix-reporting-reconcile/index.ts
