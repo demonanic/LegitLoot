@@ -324,7 +324,7 @@ test("account page shows distinct pending, blocked and data-cleared states", asy
   assert.equal(els["deletion-cancel"].hidden, false);
 
   show({ status: "blocked", scheduledFor: "2026-11-29T00:00:00Z", blockedReason: "cash_balance_owner_decision" });
-  assert.match(text(), /on hold because your account still holds unpaid cash/);
+  assert.match(text(), /on hold because your account still holds an unpaid cash balance/);
   assert.doesNotMatch(text(), /scheduled for deletion on/, "blocked is not shown as scheduled");
   assert.doesNotMatch(text(), /contact|support|@/i, "no unverified support route offered");
   assert.equal(els["deletion-cancel"].hidden, false);
