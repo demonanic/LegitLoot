@@ -164,8 +164,6 @@ begin
         jsonb_build_object(
           'amountMinor', r.amount_minor::text,
           'currencyCode', r.currency_code,
-          'destinationType', r.destination_type,
-          'recipientHint', r.recipient_hint,
           'status', r.status::text,
           'requestedAt', r.requested_at,
           'processedAt', r.processed_at,
