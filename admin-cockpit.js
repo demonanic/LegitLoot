@@ -203,9 +203,14 @@ async function loadUserDetail(userId) {
       '</td><td>' + esc(tx.status) + '</td><td>' + esc(tx.description) + '</td></tr>'
     ).join("");
     details.innerHTML = '<div class="kv-grid">' + [
-      ["Email", user.email],["Username", user.username],["Display name", user.display_name],
-      ["User ID", user.id],["Registered", user.auth_created_at],["Last sign-in", user.last_sign_in_at],
-      ["Profile updated", user.updated_at],["Profile deleted", user.deleted_at]
+      ["Email",user.email],["Email verification",user.email_confirmed_at ? "Verified" : "Unverified"],
+      ["Username",user.username],["Display name",user.display_name],["User ID",user.id],
+      ["Registered",user.auth_created_at],["Last sign-in",user.last_sign_in_at],
+      ["Age eligibility",user.age_eligible === true ? "Eligible" : user.age_eligible === false ? "Not eligible" : "Not recorded"],
+      ["Terms accepted",user.terms_accepted_at],["Privacy accepted",user.privacy_accepted_at],
+      ["Account deletion status",user.deletion_status || "No request recorded"],
+      ["Active admin role",user.active_admin ? "Yes" : "No"],
+      ["Profile updated",user.updated_at],["Profile deleted",user.deleted_at]
     ].map(([key,value]) => '<div class="kv"><small>' + esc(key) + '</small><b>' + esc(value) + '</b></div>').join("") +
     '</div><h3>Wallet accounts</h3><div class="data"><table class="data-table"><thead><tr><th>Wallet</th><th>Currency</th><th>Account</th><th>Scale</th><th>Status</th></tr></thead><tbody>' +
     (accountRows || '<tr><td colspan="5">No wallet accounts found.</td></tr>') +
