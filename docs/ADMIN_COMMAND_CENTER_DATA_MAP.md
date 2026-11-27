@@ -68,3 +68,15 @@ Map proposed admin modules to confirmed data sources before expanding privileged
 ## Explicit non-authorizations
 
 This mapping does not authorize migrations, deployment of replacement functions, production changes, role/access changes, provider activation, payouts/withdrawals, or any cash/EL/LC ledger mutation.
+
+
+## Current command-center implementation checkpoint (2026-11-27)
+
+- UI shell and responsive navigation are implemented on the isolated P1 branch.
+- Draft overview RPC migration: `20261127023000_admin_cockpit_overview.sql`.
+- Draft Edge Function route: `overview` invokes the RPC with the authenticated actor ID; the SQL independently enforces service-role and active-owner membership.
+- RPC outputs aggregate profile/reward/provider/payout/audit/game counts, payout/provider status breakdowns and user-account journal totals by wallet/currency/scale, excluding system accounts and closed accounts.
+- Overview requests are audit logged within the read RPC transaction.
+- Rollback test: simulated service-role + owner call succeeded; simulated authenticated claim and service-role with invalid actor both rejected. All test-created objects/rows rolled back.
+- Frontend renders overview data if the endpoint is deployed; otherwise it shows an explicit unavailable state. It does not display simulated values.
+- No migration or function deployed to staging/production.
