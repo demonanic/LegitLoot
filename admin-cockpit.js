@@ -121,7 +121,7 @@ async function loadSection(view) {
       target.innerHTML='<h3>Game issuance records</h3>'+renderTable(data.issuance,[{key:"createdAt",label:"Created"},{key:"userId",label:"User ID"},{key:"sourceType",label:"Source"},{key:"sourceEventId",label:"Source ID"},{key:"amountAtoms",label:"LC atoms"},{key:"transactionId",label:"Journal transaction"}])+'<h3>LC journal transactions</h3>'+renderTable(data.transactions,[{key:"createdAt",label:"Created"},{key:"userId",label:"User ID"},{key:"eventType",label:"Event"},{key:"source",label:"Source"},{key:"status",label:"Status"},{key:"reversalOf",label:"Reversal of"},{key:"description",label:"Description"},{key:"entries",label:"Entries"}]);
     }
   }catch(error){
-    target.innerHTML='<div class="empty-state"><b>Read endpoint unavailable</b><p>'+esc(error.message)+' The draft backend is not deployed yet.</p></div>';
+    target.innerHTML='<div class="empty-state"><b>Read endpoint unavailable</b><p>'+esc(error.message)+' No data is fabricated or substituted.</p></div>';
   }
 }
 function setMetric(id, value) { const node = $(id); if (node) node.textContent = value == null ? "—" : fmtNum(value); }
@@ -156,7 +156,7 @@ async function loadOverview() {
     setNotice(warnings.length ? warnings.join(" ") : "Overview loaded from the audited owner-only read endpoint. Values are journal-derived user account totals; cash, EL and LC remain separate.");
   } catch (error) {
     overviewSnapshot = null;
-    setNotice("Overview backend is not yet deployed/available: " + error.message + ". This preview shows no fabricated data.", "warning");
+    setNotice("Overview retrieval failed: " + error.message + ". This preview shows no fabricated data.", "warning");
     ["metric-users","metric-rewards","metric-events","metric-payouts","metric-audit","metric-game","audit-count-inline"].forEach((id) => setMetric(id, null));
     $("wallet-summary").innerHTML = '<p class="muted">Wallet totals are unavailable until the owner-only overview RPC is deployed and verified.</p>';
   }
