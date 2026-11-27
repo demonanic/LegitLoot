@@ -115,7 +115,7 @@
         email: $("signup-email").value.trim(),
         password: $("signup-password").value,
         options: {
-          data: { display_name: $("signup-name").value.trim() },
+          data: { display_name: $("signup-name").value.trim(), terms_version: "0.2-draft", privacy_version: "0.2-draft", terms_accepted: true, privacy_acknowledged: true, policy_consent_recorded_at: new Date().toISOString() },
           emailRedirectTo: window.location.origin + "/account.html"
         }
       });

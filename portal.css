@@ -68,3 +68,5 @@
   .mobile-dock span{font:800 7px "DM Mono",monospace;letter-spacing:0}
   .mobile-dock a.active{color:#c8ff19;text-shadow:0 0 10px #c8ff1988}
 }
+
+.policy-consent{border:1px solid var(--line);border-radius:8px;padding:14px;margin:14px 0;background:var(--panel2)}.policy-consent legend{font:800 11px var(--mono);letter-spacing:.12em;color:var(--pink);padding:0 5px}.policy-consent label{display:flex;align-items:flex-start;gap:9px;margin:12px 0;line-height:1.5}.policy-consent input[type=checkbox]{width:auto;min-width:18px;min-height:18px;margin:2px 0;accent-color:var(--cyan)}.policy-consent a{text-decoration:underline;color:var(--cyan)}
