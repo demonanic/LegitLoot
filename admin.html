@@ -1,0 +1,8 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LegitLoot Admin Cockpit</title><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="admin-cockpit.css"></head>
+<body><main class="shell"><header><p class="eyebrow">LEGITLOOT / INTERNAL</p><h1>Admin Cockpit</h1><p class="sub">Owner-only · Read-only foundation · Staging branch</p></header>
+<section id="auth" class="panel"><h2>Owner sign in</h2><label>Email<input id="email" type="email" autocomplete="username"></label><label>Password<input id="password" type="password" autocomplete="current-password"></label><button id="login">Sign in</button><p id="authmsg" class="message"></p></section>
+<section id="app" hidden><div class="toolbar"><span id="who"></span><button id="logout" class="secondary">Sign out</button></div>
+<section class="panel"><h2>User search</h2><div class="search"><input id="query" placeholder="Email, username, display name, or UUID" minlength="2"><button id="search">Search</button></div><p class="message" id="msg"></p><div id="results"></div></section>
+<section id="detail" class="panel" hidden><h2>User detail</h2><div id="details"></div></section></section>
+<footer>Internal draft. No wallet mutations, payouts, provider activation, or account controls.</footer></main><script type="module" src="admin-cockpit.js"></script></body></html>
