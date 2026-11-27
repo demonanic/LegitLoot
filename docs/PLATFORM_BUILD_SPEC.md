@@ -129,6 +129,40 @@ Each game record has title, description, artwork, launch status, destination URL
 - Do not describe an offer as cash if it pays points, gift cards, tokens, or game credits.
 - No unsupported earning claims, fake scarcity, fake social proof, fabricated user activity, or hidden conditions.
 
+## 8.1 Owner Operations Command Center — expanded requirement (2026-11-27)
+
+The initial owner-only staging portal was reviewed and found too bare-bones: it presented primarily a user search screen. The target is a complete operational command center, not a search page.
+
+### Landing overview
+- Platform activity: registered/new users, active users, signup funnel, retention, earning/completion activity, game engagement, and acquisition trends, only where reliable data or event instrumentation exists.
+- Separate financial/reward summaries: USD cash ledger, EL pending/eligible/approved states, LC circulation and issuance/revocation. Never aggregate different currencies as one balance.
+- Work queues: redemptions, support, reward review, security/risk, reconciliation exceptions.
+- Operational health: provider status, postback/callback volume and failures, system/runtime errors, audit events.
+- Recent event stream with actor, target, time, event type, outcome and source.
+
+### Owner navigation modules
+1. Overview / Command Center.
+2. User Management — searchable directory, profile, auth/verification/consent indicators, account status, activity, restrictions and account history.
+3. Wallet & Ledger — independent USD cash, EL and LC balances; pending vs eligible distinctions; immutable ledger and transaction-source history; LC issuance/revocation/adjustment records.
+4. Redemptions — request queue, eligibility, review detail, decision history and processing state. Payout execution remains disabled until separately approved.
+5. Support & Disputes — inbox, priority, status, assignment, user context, dispute history, internal notes and response history.
+6. Security & Risk — suspicious activity flags, duplicate/abnormal offer patterns, session/account security signals, investigation queues and history.
+7. Website Analytics & Growth — acquisition, signup conversion, retention, offer engagement/completion, games, referral and campaign analytics.
+8. Provider Operations — provider status, offer/catalog, postback/event inbox, callback validation, discrepancies, settlement/reconciliation and provider performance.
+9. Finance & Reconciliation — reserves, cash exposure, provisional-credit exposure, affiliate receivables, operational expenses and realized-profit reporting, preserving separate ledger semantics.
+10. Audit & Administration — privileged action history, actor/target/reason, owner roles/capabilities, access review and configuration visibility.
+
+### Implementation and truth requirements
+- The overview and modules are owner-only, server-authorized, no-store operational reads.
+- Every module must map to a confirmed source, RPC or event stream before it reports numbers. Missing support tickets or web analytics event data must display a truthful "not instrumented / unavailable" state, not placeholder metrics.
+- Separate measured facts, estimates, and unavailable data in labels and UI.
+- No client-side access to private schemas or service-role credentials.
+- Every privileged read/action follows minimum exposure and server-enforced owner/role checks; state-changing actions require explicit capability scopes, reason codes, idempotency/concurrency protections where applicable, and atomic audit logging.
+- Wallet actions must use append-only compensating ledger entries; never edit posted history or directly mutate balances.
+- First usable increment is read-first: command-center shell/navigation, overview backed by actual data, structured user/account display, and structured wallet views. Then add the next modules according to verified data-source availability.
+- Mobile-first responsive behavior and clear structured displays are required; do not render raw JSON blobs as the primary interface.
+- LC, EL and USD cash must never be merged. LC issuance is not permitted through partner offer completion. Payout/withdrawal and identity verification services remain OFF until separate owner approval.
+
 ## 8. Admin, operations and reporting
 
 Admin-only capabilities:
