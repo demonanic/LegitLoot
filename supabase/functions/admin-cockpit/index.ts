@@ -15,6 +15,11 @@ Deno.serve(async(req)=>{
  const admin=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}});
  let body; try{body=await req.json()}catch{return respond({error:"Invalid JSON"},400)}
  const action=body?.action;
+ if(action==="overview"){
+  const {data:result,error}=await admin.rpc("admin_cockpit_overview",{p_actor_user_id:data.user.id});
+  if(error)return respond({error:"Overview retrieval failed"},500);
+  return respond(result);
+ }
  if(action==="search"){
   const search=String(body.search||"").trim();
   if(search.length<2||search.length>120) return respond({error:"Search must be 2–120 characters"},400);
