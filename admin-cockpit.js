@@ -84,7 +84,7 @@ function renderCounts(obj) {
 }
 async function loadSection(view) {
   const mapping={providers:"providers",redemptions:"redemptions",security:"security",audit:"audit",lc:"lc_issuance"};
-  const target=$(view==="lc"?"lc-content":view+"-content");
+  const target=$(view==="lc"?"lc-content":view==="redemptions"?"redemption-content":view+"-content");
   if(!target)return;
   target.innerHTML='<p class="muted">Loading secure read-only data…</p>';
   try{
