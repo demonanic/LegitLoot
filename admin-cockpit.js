@@ -81,10 +81,33 @@ function setNotice(message, kind = "info") {
   node.textContent = message;
 }
 async function loadOverview() {
-  overviewSnapshot = null;
-  ["metric-users","metric-rewards","metric-events","metric-payouts","metric-audit","metric-game","audit-count-inline"].forEach((id) => setMetric(id, null));
-  $("description").textContent = "The command-center overview endpoint is not yet connected. This panel will show verified staging metrics only after its owner-only backend read is implemented and approved for staging.";
-  setNotice("Overview metrics unavailable: the deployed admin-cockpit API currently supports user search and detail only. Wallet balances remain withheld pending ledger reconciliation. No metrics are simulated.", "warning");
+  setNotice("Loading verified staging overview…");
+  try {
+    const result = await api("overview");
+    overviewSnapshot = result;
+    const overview = result.overview || {};
+    setMetric("metric-users", overview.registeredProfiles);
+    setMetric("metric-rewards", overview.rewardAllocations);
+    setMetric("metric-events", overview.providerEvents);
+    setMetric("metric-payouts", overview.payoutRequests);
+    setMetric("metric-audit", overview.auditCount);
+    setMetric("metric-game", overview.gameEventCount);
+    setMetric("audit-count-inline", overview.auditCount);
+    $("description").textContent = "Owner-authorized aggregate staging data. No production metrics implied.";
+    const walletTotals = overview.walletTotals || [];
+    $("wallet-summary").innerHTML = walletTotals.length ? walletTotals.map((w) => {
+      const amount = Number(w.userNetAtoms || 0) / Number(w.scale || 1);
+      const shown = amount.toLocaleString(undefined,{maximumFractionDigits:6});
+      return '<div class="wallet-row"><div><b>' + esc(w.walletKind) + ' / ' + esc(w.currency) + '</b><small>Scale ' + esc(w.scale) + ' · ' + esc(w.accountCount) + ' accounts</small></div><strong>' + esc(shown) + ' ' + esc(w.currency) + '</strong></div>';
+    }).join("") : '<p class="muted">No active user wallet accounts in the verified aggregate.</p>';
+    const warnings = result.dataWarnings || [];
+    setNotice(warnings.length ? warnings.join(" ") : "Overview loaded from the audited owner-only read endpoint. Values are journal-derived user account totals; cash, EL and LC remain separate.");
+  } catch (error) {
+    overviewSnapshot = null;
+    setNotice("Overview backend is not yet deployed/available: " + error.message + ". This preview shows no fabricated data.", "warning");
+    ["metric-users","metric-rewards","metric-events","metric-payouts","metric-audit","metric-game","audit-count-inline"].forEach((id) => setMetric(id, null));
+    $("wallet-summary").innerHTML = '<p class="muted">Wallet totals are unavailable until the owner-only overview RPC is deployed and verified.</p>';
+  }
 }
 async function refreshCurrentView() {
   if (activeView === "overview") return loadOverview();
