@@ -57,9 +57,10 @@ begin
       la.wallet_kind::text as wallet_kind,
       la.currency_code,
       la.currency_scale,
-      coalesce(sum(case je.direction::text when 'credit' then je.amount else -je.amount end),0)::bigint as balance
+      coalesce(sum(case when jt.id is null then 0 else case je.direction::text when 'credit' then je.amount else -je.amount end end),0)::bigint as balance
     from private.ledger_accounts la
     left join private.journal_entries je on je.account_id=la.id
+    left join private.journal_transactions jt on jt.id=je.transaction_id and jt.status::text='posted'
     where la.owner_user_id is not null
       and la.owner_user_id in (select id from matched)
     group by la.owner_user_id,la.wallet_kind,la.currency_code,la.currency_scale
