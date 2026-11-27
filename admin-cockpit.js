@@ -1,6 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const SUPABASE_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
+const OWNER_EMAIL = "manicdemand@gmail.com";
 const SUPABASE_ANON_KEY = "sb_publishable_ukFXb72cBXgcbgJIaQhD5w_NPIR7dGS";
 const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 const $ = (id) => document.getElementById(id);
@@ -48,6 +49,13 @@ function showSession(session) {
 }
 let sessionInitialized = false;
 function syncSession(session) {
+  if (session?.user?.email?.trim().toLowerCase() !== OWNER_EMAIL) {
+    if (session) client.auth.signOut();
+    showSession(null);
+    if (session) $("authmsg").textContent = "This account is not authorized for the Owner Command Center.";
+    sessionInitialized = false;
+    return;
+  }
   showSession(session);
   if (session && !sessionInitialized) {
     sessionInitialized = true;
@@ -61,6 +69,11 @@ client.auth.getSession().then(({ data }) => syncSession(data.session)).catch(() 
 
 $("login").addEventListener("click", async () => {
   $("authmsg").textContent = "";
+  const enteredEmail = $("email").value.trim().toLowerCase();
+  if (enteredEmail !== OWNER_EMAIL) {
+    $("authmsg").textContent = "Access restricted to the designated owner account.";
+    return;
+  }
   $("login").disabled = true;
   try {
     const { error } = await client.auth.signInWithPassword({ email: $("email").value.trim(), password: $("password").value });
