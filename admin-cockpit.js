@@ -61,17 +61,49 @@ function setView(name) {
   activeView = name;
   document.querySelectorAll(".view-panel").forEach((node) => { node.hidden = node.id !== "view-" + name; });
   document.querySelectorAll(".nav-item").forEach((node) => node.classList.toggle("active", node.dataset.view === name));
-  const labels = { overview:"Command Center",users:"User Management",wallets:"Wallets & Ledger",redemptions:"Redemptions",support:"Support",security:"Security & Risk",analytics:"Website Analytics",providers:"Provider Operations",audit:"Audit Log" };
+  const labels = { overview:"Command Center",users:"User Management",wallets:"Wallets & Ledger",redemptions:"Redemptions",support:"Support",security:"Security & Risk",analytics:"Website Analytics",providers:"Provider Operations",audit:"Audit Log",lc:"LC Issuance" };
   $("page-title").textContent = labels[name];
   $("heading").textContent = labels[name];
   $("section-kicker").textContent = "OPERATIONS / " + name.toUpperCase();
   $("sidebar").classList.remove("open");
   if (name === "overview" && !overviewSnapshot) loadOverview();
+  if (["providers","redemptions","security","audit","lc"].includes(name)) loadSection(name);
   if (name === "users") $("query").focus({ preventScroll: true });
 }
 document.querySelectorAll(".nav-item").forEach((button) => button.addEventListener("click", () => setView(button.dataset.view)));
 document.querySelectorAll("[data-open-view]").forEach((button) => button.addEventListener("click", () => setView(button.dataset.openView)));
 
+
+function renderTable(rows, columns) {
+  if (!rows?.length) return '<div class="empty-state"><b>No records</b><p>No matching records exist in the current staging source.</p></div>';
+  return '<div class="data"><table class="data-table"><thead><tr>' + columns.map((c)=>'<th>'+esc(c.label)+'</th>').join("") + '</tr></thead><tbody>' + rows.map((r)=>'<tr>'+columns.map((c)=>'<td>'+esc(r[c.key] == null ? "—" : (typeof r[c.key]==="object" ? JSON.stringify(r[c.key]) : r[c.key]))+'</td>').join("")+'</tr>').join("") + '</tbody></table></div>';
+}
+function renderCounts(obj) {
+  if (!obj || !Object.keys(obj).length) return '<p class="muted">No counts available.</p>';
+  return '<div class="module-grid">'+Object.entries(obj).map(([k,v])=>'<div class="metric-card"><div class="metric-label">'+esc(k)+'</div><div class="metric-value">'+esc(v)+'</div></div>').join("")+'</div>';
+}
+async function loadSection(view) {
+  const mapping={providers:"providers",redemptions:"redemptions",security:"security",audit:"audit",lc:"lc_issuance"};
+  const target=$(view==="lc"?"lc-content":view+"-content");
+  if(!target)return;
+  target.innerHTML='<p class="muted">Loading secure read-only data…</p>';
+  try{
+    const data=await api("section",{section:mapping[view]});
+    if(view==="providers"){
+      target.innerHTML='<h3>Provider registry</h3>'+renderTable(data.providers,[{key:"name",label:"Provider"},{key:"key",label:"Key"},{key:"type",label:"Type"},{key:"status",label:"Status"},{key:"offerCount",label:"Offers"},{key:"eventCount",label:"Events"},{key:"updatedAt",label:"Updated"}])+'<h3>Recent provider events</h3>'+renderTable(data.recentEvents,[{key:"provider",label:"Provider"},{key:"eventType",label:"Event"},{key:"status",label:"Status"},{key:"signatureValid",label:"Signature valid"},{key:"receivedAt",label:"Received"},{key:"rejectionReason",label:"Reason"}]);
+    }else if(view==="redemptions"){
+      target.innerHTML=renderTable(data.requests,[{key:"requestedAt",label:"Requested"},{key:"userId",label:"User ID"},{key:"amountMinor",label:"Amount (minor units)"},{key:"currency",label:"Currency"},{key:"status",label:"Status"},{key:"destinationType",label:"Destination"},{key:"recipientHint",label:"Recipient hint"},{key:"reviewReason",label:"Review"},{key:"decisionReason",label:"Decision"}]);
+    }else if(view==="security"){
+      target.innerHTML='<h3>Provider event status</h3>'+renderCounts(data.providerStatusCounts)+'<h3>Signature-invalid events</h3><div class="metric-card"><div class="metric-label">Signature-invalid count</div><div class="metric-value">'+esc(data.signatureInvalidCount)+'</div></div><h3>Moonetix reward statuses</h3>'+renderCounts(data.moonetixStatusCounts)+'<h3>Account deletion request statuses</h3>'+renderCounts(data.deletionStatusCounts)+'<h3>Flagged provider events</h3>'+renderTable(data.flaggedEvents,[{key:"provider",label:"Provider"},{key:"eventType",label:"Event"},{key:"status",label:"Status"},{key:"signatureValid",label:"Signature valid"},{key:"receivedAt",label:"Received"},{key:"reason",label:"Reason"}])+'<h3>Pending deletion requests</h3>'+renderTable(data.pendingDeletionRequests,[{key:"requestedAt",label:"Requested"},{key:"userId",label:"User ID"},{key:"status",label:"Status"},{key:"scheduledFor",label:"Scheduled"},{key:"blockedReason",label:"Blocked reason"}]);
+    }else if(view==="audit"){
+      target.innerHTML=renderTable(data.events,[{key:"createdAt",label:"Time"},{key:"actorUserId",label:"Actor ID"},{key:"actorType",label:"Actor"},{key:"action",label:"Action"},{key:"targetType",label:"Target"},{key:"targetId",label:"Target ID"},{key:"reason",label:"Reason"}]);
+    }else if(view==="lc"){
+      target.innerHTML='<h3>Game issuance records</h3>'+renderTable(data.issuance,[{key:"createdAt",label:"Created"},{key:"userId",label:"User ID"},{key:"sourceType",label:"Source"},{key:"sourceEventId",label:"Source ID"},{key:"amountAtoms",label:"LC atoms"},{key:"transactionId",label:"Journal transaction"}])+'<h3>LC journal transactions</h3>'+renderTable(data.transactions,[{key:"createdAt",label:"Created"},{key:"userId",label:"User ID"},{key:"eventType",label:"Event"},{key:"source",label:"Source"},{key:"status",label:"Status"},{key:"reversalOf",label:"Reversal of"},{key:"description",label:"Description"},{key:"entries",label:"Entries"}]);
+    }
+  }catch(error){
+    target.innerHTML='<div class="empty-state"><b>Read endpoint unavailable</b><p>'+esc(error.message)+' The draft backend is not deployed yet.</p></div>';
+  }
+}
 function setMetric(id, value) { const node = $(id); if (node) node.textContent = value == null ? "—" : fmtNum(value); }
 function setNotice(message, kind = "info") {
   const node = $("notice");
