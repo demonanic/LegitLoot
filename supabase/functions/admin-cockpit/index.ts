@@ -20,6 +20,14 @@ Deno.serve(async(req)=>{
   if(error)return respond({error:"Overview retrieval failed"},500);
   return respond(result);
  }
+ if(action==="section"){
+  const section=String(body.section||"").trim();
+  const allowed=["providers","redemptions","security","audit","lc_issuance"];
+  if(!allowed.includes(section)) return respond({error:"Unsupported section"},400);
+  const {data:result,error}=await admin.rpc("admin_cockpit_section",{p_actor_user_id:data.user.id,p_section:section});
+  if(error)return respond({error:"Section retrieval failed"},500);
+  return respond(result);
+ }
  if(action==="search"){
   const search=String(body.search||"").trim();
   if(search.length<2||search.length>120) return respond({error:"Search must be 2–120 characters"},400);
