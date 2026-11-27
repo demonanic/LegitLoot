@@ -186,10 +186,41 @@ async function refreshCurrentView() {
     const query = $("query").value.trim();
     if (query.length >= 2) return searchUsers();
   }
+  if (activeView === "wallets") return searchWalletUsers();
   if (["providers","redemptions","security","audit","lc"].includes(activeView)) return loadSection(activeView);
   setNotice("This module is currently read-only or awaiting a verified data source.");
 }
 
+$("wallet-search").addEventListener("click", searchWalletUsers);
+$("wallet-query").addEventListener("keydown", (event) => { if (event.key === "Enter") searchWalletUsers(); });
+async function searchWalletUsers() {
+  const query = $("wallet-query").value.trim(), msg = $("wallet-msg"), target = $("wallet-results");
+  msg.textContent = ""; target.replaceChildren();
+  if (query.length < 2) { msg.textContent = "Enter at least two characters."; return; }
+  $("wallet-search").disabled = true; msg.textContent = "Searching…";
+  try {
+    const response = await api("search", { search: query });
+    const rows = response.results || [];
+    msg.textContent = rows.length + (rows.length === 1 ? " account found" : " accounts found");
+    if (!rows.length) { target.innerHTML = '<div class="empty-state"><b>No matching account</b><p>Try another identifier.</p></div>'; return; }
+    target.innerHTML = rows.map(u => '<article class="result"><strong>'+esc(u.displayName||u.username||"(No profile name)")+'</strong><div>'+esc(u.email||"No email")+'</div><small>'+esc(u.userId)+'</small><div class="result-actions"><button class="secondary-button" data-wallet-user="'+esc(u.userId)+'">Inspect ledger →</button></div></article>').join("");
+    target.querySelectorAll("[data-wallet-user]").forEach(b=>b.addEventListener("click",()=>loadWalletDetail(b.dataset.walletUser)));
+  } catch(error) { msg.textContent=error.message; }
+  finally { $("wallet-search").disabled=false; }
+}
+async function loadWalletDetail(userId) {
+  const target=$("wallet-results"); target.insertAdjacentHTML("beforeend",'<p class="muted">Loading ledger detail…</p>');
+  try {
+    const data=await api("detail",{userId}), accounts=data.accounts||[], txs=data.recentLedgerActivity||[];
+    const rows=accounts.map(a=>{
+      const amount=Number(a.balanceAtoms||0)/Number(a.scale||1);
+      return '<tr><td>'+esc(a.walletKind)+'</td><td>'+esc(a.currency)+'</td><td>'+esc(a.accountCode)+'</td><td>'+esc(amount.toLocaleString(undefined,{maximumFractionDigits:6}))+'</td><td>'+esc(a.scale)+'</td><td>'+esc(a.closedAt?"Closed":"Open")+'</td></tr>';
+    }).join("");
+    const entries=txs.flatMap(t=>(t.entries||[]).map(e=>({time:t.created_at,event:t.event_type,source:t.source_system,status:t.status,description:t.description,account:e.accountCode,wallet:e.walletKind,currency:e.currency,direction:e.direction,amount:Number(e.amountAtoms||0)})));
+    const hist=entries.map(e=>'<tr><td>'+esc(e.time)+'</td><td>'+esc(e.event)+'</td><td>'+esc(e.status)+'</td><td>'+esc(e.account||"—")+'</td><td>'+esc(e.wallet)+'</td><td>'+esc(e.currency)+'</td><td>'+esc(e.direction)+'</td><td>'+esc(e.amount.toLocaleString())+'</td><td>'+esc(e.source||"—")+'</td><td>'+esc(e.description||"—")+'</td></tr>').join("");
+    target.innerHTML='<section class="panel"><h3>Ledger accounts</h3>'+renderTable(accounts.map(a=>({walletKind:a.walletKind,currency:a.currency,accountCode:a.accountCode,balance:Number(a.balanceAtoms||0)/Number(a.scale||1),scale:a.scale,status:a.closedAt?"Closed":"Open"})),[{key:"walletKind",label:"Wallet"},{key:"currency",label:"Currency"},{key:"accountCode",label:"Bucket"},{key:"balance",label:"Posted balance"},{key:"scale",label:"Scale"},{key:"status",label:"Status"}])+'<h3>Posted journal entry history</h3>'+ (hist?'<div class="data"><table class="data-table"><thead><tr><th>Time</th><th>Event</th><th>Status</th><th>Bucket</th><th>Wallet</th><th>Currency</th><th>Direction</th><th>Atoms</th><th>Source</th><th>Description</th></tr></thead><tbody>'+hist+'</tbody></table></div>':'<div class="empty-state"><b>No posted ledger entries</b></div>')+'</section>';
+  } catch(error) { target.insertAdjacentHTML("beforeend",'<div class="empty-state"><b>Ledger detail unavailable</b><p>'+esc(error.message)+'</p></div>'); }
+}
 $("search").addEventListener("click", searchUsers);
 $("query").addEventListener("keydown", (event) => { if (event.key === "Enter") searchUsers(); });
 async function searchUsers() {
