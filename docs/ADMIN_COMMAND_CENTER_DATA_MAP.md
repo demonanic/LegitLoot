@@ -91,3 +91,16 @@ This mapping does not authorize migrations, deployment of replacement functions,
 - UI containers and table renderers are prepared for these sections. Until the Edge Function/migration deployment, the UI reports unavailable rather than fabricate.
 - Rollback test ran the RPC for providers, redemptions, security, audit and LC issuance with simulated owner/service-role; no errors. Transaction rolled back.
 - Support tickets and web analytics remain unconnected/unavailable; user account suspend/ban controls are not implemented because no verified source or owner-approved control contract is established.
+
+
+## Account status detail extension — draft (2026-11-27)
+
+- Draft replacement migration `20261127025000_admin_user_status_detail.sql` extends owner-only user detail with email confirmation, age eligibility boolean only (no DOB), Terms/Privacy acceptance timestamps, latest account-deletion status and active-admin indicator.
+- User details UI renders these indicators. It does not expose date of birth or implement suspend/ban controls; no verified account-restriction source is mapped yet.
+- Rollback test with an active owner and non-owner target succeeded and returned structured status plus account/ledger detail. Test transaction rolled back.
+
+## Wallet totals separation correction
+
+- Overview wallet totals are grouped by `account_code` as well as wallet/currency/scale so available, pending, held, paid, provisional, deferred and reserved balances are not collapsed together.
+- The current 86,000 EL atom balance is specifically in `earned_loot_pending`, not available EL; scale is 1,000. This is a pending reward, not a cash or LC balance.
+- Updated overview migration was rollback-tested; test result included the account-code-separated aggregates.
