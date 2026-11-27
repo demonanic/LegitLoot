@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
-const allowedOrigin=(origin:string)=>origin==="https://legitloot.site"||origin==="https://www.legitloot.site"||/^https:\/\/[a-z0-9-]+\.legitloot\.pages\.dev$/i.test(origin);
+const allowedOrigin=(origin:string)=>origin==="https://legitloot.site"||origin==="https://www.legitloot.site"||/^https:\/\/[a-z0-9-]+\.(?:legitloot|legitloot-preview)\.pages\.dev$/i.test(origin);
 const corsFor=(origin:string|null)=>({ ...(origin&&allowedOrigin(origin)?{"Access-Control-Allow-Origin":origin}:{}), "Access-Control-Allow-Headers":"authorization, apikey, content-type", "Access-Control-Allow-Methods":"POST, OPTIONS", "Vary":"Origin" });
 const respond=(body:unknown,status=200,origin:string|null=null)=>new Response(JSON.stringify(body),{status,headers:{...corsFor(origin),"Content-Type":"application/json","Cache-Control":"no-store"}});
 Deno.serve(async(req)=>{
