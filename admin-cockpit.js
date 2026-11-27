@@ -81,25 +81,10 @@ function setNotice(message, kind = "info") {
   node.textContent = message;
 }
 async function loadOverview() {
-  setNotice("Loading verified staging overview…");
-  try {
-    const result = await api("overview");
-    overviewSnapshot = result;
-    const overview = result.overview || {};
-    setMetric("metric-users", overview.registeredProfiles);
-    setMetric("metric-rewards", overview.rewardAllocations);
-    setMetric("metric-events", overview.providerEvents);
-    setMetric("metric-payouts", overview.payoutRequests);
-    setMetric("metric-audit", overview.auditCount);
-    setMetric("metric-game", overview.gameEventCount);
-    setMetric("audit-count-inline", overview.auditCount);
-    $("description").textContent = "Staging snapshot from owner-authorized server queries. No live production KPIs are implied.";
-    setNotice(result.dataWarnings?.length ? result.dataWarnings.join(" ") : "Overview loaded. Wallet totals remain withheld until the account/journal reconciliation rule is verified.");
-  } catch (error) {
-    overviewSnapshot = null;
-    setNotice(error.message, "error");
-    ["metric-users","metric-rewards","metric-events","metric-payouts","metric-audit","metric-game","audit-count-inline"].forEach((id) => setMetric(id, null));
-  }
+  overviewSnapshot = null;
+  ["metric-users","metric-rewards","metric-events","metric-payouts","metric-audit","metric-game","audit-count-inline"].forEach((id) => setMetric(id, null));
+  $("description").textContent = "The command-center overview endpoint is not yet connected. This panel will show verified staging metrics only after its owner-only backend read is implemented and approved for staging.";
+  setNotice("Overview metrics unavailable: the deployed admin-cockpit API currently supports user search and detail only. Wallet balances remain withheld pending ledger reconciliation. No metrics are simulated.", "warning");
 }
 async function refreshCurrentView() {
   if (activeView === "overview") return loadOverview();
