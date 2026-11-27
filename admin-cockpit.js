@@ -1,6 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 const SUPABASE_URL="https://scmnxcsggquwtuyyjnnj.supabase.co";
-const SUPABASE_ANON_KEY="REPLACE_WITH_PROJECT_PUBLISHABLE_KEY";
+const SUPABASE_ANON_KEY="sb_publishable_ukFXb72cBXgcbgJIaQhD5w_NPIR7dGS";
 const client=createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
 const $=id=>document.getElementById(id);
 const auth=$("auth"),app=$("app"),msg=$("msg"),results=$("results"),detail=$("detail"),details=$("details");
