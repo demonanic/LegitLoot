@@ -13,7 +13,10 @@ let overviewSnapshot = null;
 
 async function api(action, payload = {}) {
   const { data: { session } } = await client.auth.getSession();
-  if (!session?.access_token) throw new Error("Session expired. Sign in again.");
+  if (!session?.access_token) {
+    showSession(null);
+    throw new Error("Your session is no longer available. Please sign in again.");
+  }
   const response = await fetch(SUPABASE_URL + "/functions/v1/admin-cockpit", {
     method: "POST",
     headers: { Authorization: "Bearer " + session.access_token, "Content-Type": "application/json", apikey: SUPABASE_ANON_KEY },
@@ -22,7 +25,14 @@ async function api(action, payload = {}) {
   });
   let body;
   try { body = await response.json(); } catch { throw new Error("The admin service returned an invalid response."); }
-  if (!response.ok) throw new Error(body?.error || "Admin request failed (" + response.status + ").");
+  if (!response.ok) {
+    if (response.status === 401) {
+      await client.auth.signOut();
+      throw new Error("Your session expired. Please sign in again.");
+    }
+    if (response.status === 403) throw new Error(body?.error || "Access denied. This account is not authorized for admin data.");
+    throw new Error(body?.error || "Admin request failed (" + response.status + ").");
+  }
   return body;
 }
 function showSession(session) {
@@ -36,8 +46,18 @@ function showSession(session) {
     if (details) details.replaceChildren();
   }
 }
-client.auth.onAuthStateChange((_event, session) => showSession(session));
-client.auth.getSession().then(({ data }) => showSession(data.session));
+let sessionInitialized = false;
+function syncSession(session) {
+  showSession(session);
+  if (session && !sessionInitialized) {
+    sessionInitialized = true;
+    setView(activeView);
+  } else if (!session) {
+    sessionInitialized = false;
+  }
+}
+client.auth.onAuthStateChange((_event, session) => syncSession(session));
+client.auth.getSession().then(({ data }) => syncSession(data.session)).catch(() => syncSession(null));
 
 $("login").addEventListener("click", async () => {
   $("authmsg").textContent = "";
@@ -56,7 +76,7 @@ $("refresh").addEventListener("click", () => refreshCurrentView());
 $("close-detail").addEventListener("click", () => { detail.hidden = true; details.replaceChildren(); });
 
 function setView(name) {
-  const valid = ["overview","users","wallets","redemptions","support","security","analytics","providers","audit"];
+  const valid = ["overview","users","wallets","redemptions","support","security","analytics","providers","audit","lc"];
   if (!valid.includes(name)) name = "overview";
   activeView = name;
   document.querySelectorAll(".view-panel").forEach((node) => { node.hidden = node.id !== "view-" + name; });
@@ -147,6 +167,7 @@ async function refreshCurrentView() {
     const query = $("query").value.trim();
     if (query.length >= 2) return searchUsers();
   }
+  if (["providers","redemptions","security","audit","lc"].includes(activeView)) return loadSection(activeView);
   setNotice("This module is currently read-only or awaiting a verified data source.");
 }
 
@@ -222,4 +243,4 @@ async function loadUserDetail(userId) {
   }
 }
 
-setView("overview");
+// The initial view is loaded only after Supabase has resolved the session.
