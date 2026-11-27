@@ -130,7 +130,7 @@ async function loadOverview() {
     $("wallet-summary").innerHTML = walletTotals.length ? walletTotals.map((w) => {
       const amount = Number(w.userNetAtoms || 0) / Number(w.scale || 1);
       const shown = amount.toLocaleString(undefined,{maximumFractionDigits:6});
-      return '<div class="wallet-row"><div><b>' + esc(w.walletKind) + ' / ' + esc(w.currency) + '</b><small>Scale ' + esc(w.scale) + ' · ' + esc(w.accountCount) + ' accounts</small></div><strong>' + esc(shown) + ' ' + esc(w.currency) + '</strong></div>';
+      return '<div class="wallet-row"><div><b>' + esc(w.walletKind) + ' / ' + esc(w.currency) + ' / ' + esc(w.accountCode) + '</b><small>Scale ' + esc(w.scale) + ' · ' + esc(w.accountCount) + ' accounts</small></div><strong>' + esc(shown) + ' ' + esc(w.currency) + '</strong></div>';
     }).join("") : '<p class="muted">No active user wallet accounts in the verified aggregate.</p>';
     const warnings = result.dataWarnings || [];
     setNotice(warnings.length ? warnings.join(" ") : "Overview loaded from the audited owner-only read endpoint. Values are journal-derived user account totals; cash, EL and LC remain separate.");
