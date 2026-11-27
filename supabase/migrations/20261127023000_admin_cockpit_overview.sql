@@ -30,9 +30,12 @@ begin
       count(*) account_count
     from private.ledger_accounts la
     left join (
-      select account_id,
-        sum(case direction::text when 'credit' then amount else -amount end)::bigint net_atoms
-      from private.journal_entries group by account_id
+      select je.account_id,
+        sum(case je.direction::text when 'credit' then je.amount else -je.amount end)::bigint net_atoms
+      from private.journal_entries je
+      join private.journal_transactions jt on jt.id=je.transaction_id
+      where jt.status::text='posted'
+      group by je.account_id
     ) e on e.account_id=la.id
     where la.is_system=false and la.owner_user_id is not null and la.closed_at is null
     group by la.wallet_kind,la.currency_code,la.currency_scale,la.account_code
