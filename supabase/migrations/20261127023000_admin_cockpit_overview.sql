@@ -25,7 +25,7 @@ begin
   end if;
 
   with wallet_totals as (
-    select la.wallet_kind::text wallet_kind,la.currency_code,la.currency_scale,
+    select la.wallet_kind::text wallet_kind,la.currency_code,la.currency_scale,la.account_code,
       sum(coalesce(e.net_atoms,0))::bigint user_net_atoms,
       count(*) account_count
     from private.ledger_accounts la
@@ -35,7 +35,7 @@ begin
       from private.journal_entries group by account_id
     ) e on e.account_id=la.id
     where la.is_system=false and la.owner_user_id is not null and la.closed_at is null
-    group by la.wallet_kind,la.currency_code,la.currency_scale
+    group by la.wallet_kind,la.currency_code,la.currency_scale,la.account_code
   ),
   payout_statuses as (
     select status::text status,count(*)::int count
@@ -58,9 +58,9 @@ begin
       'payoutStatusCounts',coalesce((select jsonb_object_agg(status,count) from payout_statuses),'{}'::jsonb),
       'providerStatusCounts',coalesce((select jsonb_object_agg(status,count) from provider_statuses),'{}'::jsonb),
       'walletTotals',coalesce((select jsonb_agg(jsonb_build_object(
-        'walletKind',wallet_kind,'currency',currency_code,'scale',currency_scale,
+        'walletKind',wallet_kind,'currency',currency_code,'scale',currency_scale,'accountCode',account_code,
         'userNetAtoms',user_net_atoms,'accountCount',account_count
-      ) order by wallet_kind,currency_code,currency_scale) from wallet_totals),'[]'::jsonb)
+      ) order by wallet_kind,currency_code,currency_scale,account_code) from wallet_totals),'[]'::jsonb)
     )
   ) into v_result;
 
