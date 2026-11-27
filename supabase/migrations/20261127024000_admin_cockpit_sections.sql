@@ -113,14 +113,19 @@ begin
           'direction',je.direction::text,'amountAtoms',je.amount
         ) order by je.id) from private.journal_entries je where je.transaction_id=t.id),'[]'::jsonb)
       ) order by t.created_at desc) from (
-        select distinct jt.* from private.journal_transactions jt
-        join private.journal_entries je on je.transaction_id=jt.id
-        join private.ledger_accounts la on la.id=je.account_id
-        where (la.wallet_kind::text='loot_coins' and la.currency_code='LC')
-          or (la.wallet_kind::text='game_credits' and la.currency_code='LC')
+        select jt.*,
+          (select la.owner_user_id from private.journal_entries je
+            join private.ledger_accounts la on la.id=je.account_id
+            where je.transaction_id=jt.id and la.owner_user_id is not null limit 1) user_id
+        from private.journal_transactions jt
+        where jt.id in (
+          select je.transaction_id from private.journal_entries je
+          join private.ledger_accounts la on la.id=je.account_id
+          where (la.wallet_kind::text='loot_coins' and la.currency_code='LC')
+             or (la.wallet_kind::text='game_credits' and la.currency_code='LC')
+        )
         order by jt.created_at desc limit 100
-      ) t join private.journal_entries e on e.transaction_id=t.id
-        join private.ledger_accounts la on la.id=e.account_id and la.owner_user_id is not null),'[]'::jsonb)
+      ) t),'[]'::jsonb)
     ) into v_result;
   end if;
 
