@@ -80,3 +80,14 @@ This mapping does not authorize migrations, deployment of replacement functions,
 - Rollback test: simulated service-role + owner call succeeded; simulated authenticated claim and service-role with invalid actor both rejected. All test-created objects/rows rolled back.
 - Frontend renders overview data if the endpoint is deployed; otherwise it shows an explicit unavailable state. It does not display simulated values.
 - No migration or function deployed to staging/production.
+
+
+## Operational read-only section endpoints — draft (2026-11-27)
+
+- Draft SQL RPC `admin_cockpit_section(actor, section)` supports provider registry/events, redemption request history (recipient ciphertext excluded), security signal counts and flagged provider events, pending account-deletion requests, audit history, and game LC issuance/LC journal transaction trace.
+- Whitelisted section names are enforced in SQL; service-role claim and active owner membership are independently required.
+- Read requests insert an audit record inside the RPC.
+- Draft Edge Function route `section` only accepts the five whitelisted section keys and calls the SQL RPC.
+- UI containers and table renderers are prepared for these sections. Until the Edge Function/migration deployment, the UI reports unavailable rather than fabricate.
+- Rollback test ran the RPC for providers, redemptions, security, audit and LC issuance with simulated owner/service-role; no errors. Transaction rolled back.
+- Support tickets and web analytics remain unconnected/unavailable; user account suspend/ban controls are not implemented because no verified source or owner-approved control contract is established.
