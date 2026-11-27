@@ -158,15 +158,21 @@ async function loadOverview() {
     setMetric("metric-audit", overview.auditCount);
     setMetric("metric-game", overview.gameEventCount);
     setMetric("audit-count-inline", overview.auditCount);
-    $("description").textContent = "Owner-authorized aggregate staging data. No production metrics implied.";
+    $("description").textContent = "Owner-authorized staging snapshot. Currency ledgers and reward states remain separate; only posted journal entries are included.";
     const walletTotals = overview.walletTotals || [];
     $("wallet-summary").innerHTML = walletTotals.length ? walletTotals.map((w) => {
       const amount = Number(w.userNetAtoms || 0) / Number(w.scale || 1);
       const shown = amount.toLocaleString(undefined,{maximumFractionDigits:6});
-      return '<div class="wallet-row"><div><b>' + esc(w.walletKind) + ' / ' + esc(w.currency) + ' / ' + esc(w.accountCode) + '</b><small>Scale ' + esc(w.scale) + ' · ' + esc(w.accountCount) + ' accounts</small></div><strong>' + esc(shown) + ' ' + esc(w.currency) + '</strong></div>';
+      const bucket = String(w.accountCode || "");
+      const status = bucket.endsWith("_pending") ? "Pending" :
+        bucket.endsWith("_held") ? "Held" :
+        bucket.endsWith("_provisional") || bucket.endsWith("_deferred") ? "Provisional / deferred" :
+        bucket.endsWith("_reserved") ? "Reserved" :
+        bucket.endsWith("_paid") ? "Paid" : "Available / other";
+      return '<div class="wallet-row"><div><b>' + esc(w.currency) + ' · ' + esc(status) + '</b><small>' + esc(w.walletKind) + ' / ' + esc(bucket) + ' · scale ' + esc(w.scale) + ' · ' + esc(w.accountCount) + ' accounts</small></div><strong>' + esc(shown) + ' ' + esc(w.currency) + '</strong></div>';
     }).join("") : '<p class="muted">No active user wallet accounts in the verified aggregate.</p>';
     const warnings = result.dataWarnings || [];
-    setNotice(warnings.length ? warnings.join(" ") : "Overview loaded from the audited owner-only read endpoint. Values are journal-derived user account totals; cash, EL and LC remain separate.");
+    setNotice(warnings.length ? warnings.join(" ") : "Overview loaded from the audited owner-only read endpoint. Values are posted-journal-derived user account totals; cash, EL and LC remain separate, with pending and held buckets labeled independently.");
   } catch (error) {
     overviewSnapshot = null;
     setNotice("Overview retrieval failed: " + error.message + ". This preview shows no fabricated data.", "warning");
