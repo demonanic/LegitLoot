@@ -45,10 +45,10 @@ begin
            p.username, p.display_name, p.deleted_at, p.updated_at
     from auth.users u
     left join public.profiles p on p.id = u.id
-    where u.id::text ilike '%' || v_term || '%'
-       or coalesce(u.email,'') ilike '%' || v_term || '%'
-       or coalesce(p.username,'') ilike '%' || v_term || '%'
-       or coalesce(p.display_name,'') ilike '%' || v_term || '%'
+    where position(lower(v_term) in lower(u.id::text)) > 0
+       or position(lower(v_term) in lower(coalesce(u.email,''))) > 0
+       or position(lower(v_term) in lower(coalesce(p.username,''))) > 0
+       or position(lower(v_term) in lower(coalesce(p.display_name,''))) > 0
     order by u.created_at desc
     limit v_limit
   ),
@@ -57,7 +57,7 @@ begin
       la.wallet_kind::text as wallet_kind,
       la.currency_code,
       la.currency_scale,
-      sum(case je.direction::text when 'credit' then je.amount else -je.amount end)::bigint as balance
+      coalesce(sum(case je.direction::text when 'credit' then je.amount else -je.amount end),0)::bigint as balance
     from private.ledger_accounts la
     left join private.journal_entries je on je.account_id=la.id
     where la.owner_user_id is not null
