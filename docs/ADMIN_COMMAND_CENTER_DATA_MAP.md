@@ -104,3 +104,11 @@ This mapping does not authorize migrations, deployment of replacement functions,
 - Overview wallet totals are grouped by `account_code` as well as wallet/currency/scale so available, pending, held, paid, provisional, deferred and reserved balances are not collapsed together.
 - The current 86,000 EL atom balance is specifically in `earned_loot_pending`, not available EL; scale is 1,000. This is a pending reward, not a cash or LC balance.
 - Updated overview migration was rollback-tested; test result included the account-code-separated aggregates.
+
+
+## Wallet display correctness patch — 2026-11-27
+
+- Admin overview, user search, and user detail wallet aggregates include only journal entries attached to transactions with status `posted`. Non-posted entries are excluded consistently.
+- Wallet categories are rendered as separate currency buckets with explicit Pending, Held, Provisional/Deferred, Reserved, Paid, or Available/other labels derived from the persisted account code. No currency is combined with another.
+- The current staging sample was read-only reconciled: the only posted transaction is a Moonetix pending EL event. It credits 86,000 EL atoms to a test user's `earned_loot_pending` account and debits the platform issuance account by the same amount; the transaction balances to zero. At the configured scale of 1,000 atoms per EL, this is 86 pending EL, not available EL or USD cash. No user cash or LC entries were present in the inspected sample.
+- This sample-level reconciliation is not a complete historical accounting attestation; dashboard labels remain bucket-specific and read-only.
