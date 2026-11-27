@@ -1,8 +1,63 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>LegitLoot Admin Cockpit</title><meta name="robots" content="noindex,nofollow"><link rel="stylesheet" href="admin-cockpit.css"></head>
-<body><main class="shell"><header><p class="eyebrow">LEGITLOOT / INTERNAL</p><h1>Admin Cockpit</h1><p class="sub">Owner-only · Read-only foundation · Staging branch</p></header>
-<section id="auth" class="panel"><h2>Owner sign in</h2><label>Email<input id="email" type="email" autocomplete="username"></label><label>Password<input id="password" type="password" autocomplete="current-password"></label><button id="login">Sign in</button><p id="authmsg" class="message"></p></section>
-<section id="app" hidden><div class="toolbar"><span id="who"></span><button id="logout" class="secondary">Sign out</button></div>
-<section class="panel"><h2>User search</h2><div class="search"><input id="query" placeholder="Email, username, display name, or UUID" minlength="2"><button id="search">Search</button></div><p class="message" id="msg"></p><div id="results"></div></section>
-<section id="detail" class="panel" hidden><h2>User detail</h2><div id="details"></div></section></section>
-<footer>Internal draft. No wallet mutations, payouts, provider activation, or account controls.</footer></main><script type="module" src="admin-cockpit.js"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b0712">
+<title>LegitLoot — Owner Command Center</title><link rel="stylesheet" href="admin-cockpit.css">
+</head>
+<body>
+<div class="app-frame">
+<aside class="sidebar" id="sidebar">
+<a class="brand" href="#overview"><span class="brand-mark">LL</span><span><b>LEGITLOOT</b><small>OWNER CONTROL</small></span></a>
+<div class="side-label">COMMAND</div>
+<nav class="nav" aria-label="Owner navigation">
+<button class="nav-item active" data-view="overview"><span>▦</span> Overview</button>
+<button class="nav-item" data-view="users"><span>♙</span> Users</button>
+<button class="nav-item" data-view="wallets"><span>◈</span> Wallets & Ledger</button>
+<button class="nav-item" data-view="redemptions"><span>⇧</span> Redemptions <i class="nav-state">LOCKED</i></button>
+<button class="nav-item" data-view="support"><span>✉</span> Support <i class="nav-state">UNWIRED</i></button>
+<button class="nav-item" data-view="security"><span>⬡</span> Security & Risk</button>
+<button class="nav-item" data-view="analytics"><span>⌁</span> Analytics <i class="nav-state">UNWIRED</i></button>
+<button class="nav-item" data-view="providers"><span>⇄</span> Providers</button>
+<button class="nav-item" data-view="audit"><span>≡</span> Audit Log</button>
+</nav>
+<div class="sidebar-foot"><span class="status-dot"></span> STAGING ENVIRONMENT<br><small>Read-only command center</small></div>
+</aside>
+<main class="main">
+<header class="topbar"><button id="menu" class="icon-button mobile-only" aria-label="Open navigation">☰</button><div class="crumb"><span>LEGITLOOT</span><b>/</b><strong id="page-title">Command Center</strong></div><div class="top-actions"><span class="env-pill">STAGING / READ ONLY</span><span id="who" class="who"></span><button id="logout" class="text-button">Sign out</button></div></header>
+<section id="auth" class="auth-screen"><div class="auth-card"><div class="brand-mark large">LL</div><p class="eyebrow">LEGITLOOT / INTERNAL</p><h1>Owner<br><em>Command Center</em></h1><p class="muted">Restricted operations console. Authorized owner access only.</p><label>Email<input id="email" type="email" autocomplete="username" placeholder="Owner email"></label><label>Password<input id="password" type="password" autocomplete="current-password" placeholder="Password"></label><button id="login" class="primary-button">Authenticate <span>→</span></button><p id="authmsg" class="message" role="status"></p><small class="muted">All access is server-authorized and audited.</small></div></section>
+<section id="app" hidden>
+<div class="page-head"><div><p class="eyebrow" id="section-kicker">OPERATIONS / LIVE SNAPSHOT</p><h1 id="heading">Command Center</h1><p id="description" class="muted">A verified snapshot of platform operations. Unavailable sources are identified, never simulated.</p></div><button id="refresh" class="secondary-button">↻ Refresh data</button></div>
+<div id="notice" class="notice" hidden></div>
+<div id="view-overview" class="view-panel">
+<div class="section-title"><h2>Platform overview</h2><span class="live-label"><i></i> STAGING DATA</span></div>
+<div class="metric-grid">
+<article class="metric-card"><div class="metric-label">Registered profiles</div><div id="metric-users" class="metric-value">—</div><div class="metric-foot">Current profile records</div></article>
+<article class="metric-card"><div class="metric-label">Reward allocations</div><div id="metric-rewards" class="metric-value">—</div><div class="metric-foot">Provider reward records</div></article>
+<article class="metric-card"><div class="metric-label">Provider events</div><div id="metric-events" class="metric-value">—</div><div class="metric-foot">Callback/event records</div></article>
+<article class="metric-card"><div class="metric-label">Payout requests</div><div id="metric-payouts" class="metric-value">—</div><div class="metric-foot">Read-only request count</div></article>
+</div>
+<div class="two-column">
+<section class="panel"><div class="panel-heading"><div><p class="eyebrow">FINANCIAL INTEGRITY</p><h2>Wallet monitoring</h2></div><span class="lock-tag">READ ONLY</span></div><div id="wallet-summary" class="wallet-stack"><p class="muted">Wallet values are withheld until ledger reconciliation is confirmed.</p></div><div class="inline-warning">Account aggregates and journal entries require reconciliation before balances can be certified.</div><button class="link-button" data-open-view="wallets">Open wallet explorer →</button></section>
+<section class="panel"><div class="panel-heading"><div><p class="eyebrow">OPERATIONAL HEALTH</p><h2>System queues</h2></div><span class="lock-tag">SNAPSHOT</span></div><div class="queue-list"><div><span>Admin audit records</span><b id="metric-audit">—</b></div><div><span>Game events</span><b id="metric-game">—</b></div><div><span>Support tickets</span><b class="unknown">Not instrumented</b></div><div><span>Website product analytics</span><b class="unknown">Not instrumented</b></div></div></section>
+</div>
+<section class="panel"><div class="panel-heading"><div><p class="eyebrow">OWNER WORKSPACE</p><h2>Operational modules</h2></div></div><div class="module-grid">
+<button class="module-tile" data-open-view="users"><span>♙</span><b>User management</b><small>Profiles, account details and status</small></button>
+<button class="module-tile" data-open-view="wallets"><span>◈</span><b>Wallet & ledger</b><small>Cash, EL, LC and journal traceability</small></button>
+<button class="module-tile" data-open-view="providers"><span>⇄</span><b>Provider operations</b><small>Events, callbacks and reconciliation</small></button>
+<button class="module-tile" data-open-view="audit"><span>≡</span><b>Audit trail</b><small>Privileged activity and access history</small></button>
+</div></section>
+</div>
+<div id="view-users" class="view-panel" hidden><section class="panel"><div class="panel-heading"><div><p class="eyebrow">ACCOUNT DIRECTORY</p><h2>Find a user</h2></div></div><div class="search"><input id="query" placeholder="Email, username, display name or user ID" minlength="2"><button id="search" class="primary-button">Search</button></div><p id="msg" class="message" role="status"></p><div id="results"></div></section><section id="detail" class="panel" hidden><div class="panel-heading"><div><p class="eyebrow">ACCOUNT RECORD</p><h2>User details</h2></div><button id="close-detail" class="secondary-button">Close</button></div><div id="details"></div></section></div>
+<div id="view-wallets" class="view-panel" hidden><section class="panel"><p class="eyebrow">LEDGER INTEGRITY</p><h2>Wallet & ledger explorer</h2><div class="inline-warning">Balance totals are withheld. Account aggregates and posted journal net currently disagree.</div><p class="muted">Each currency is independent. No cash-to-LC conversion or partner-issued LC is presented here.</p><div class="wallet-explain"><div><b>USD Cash</b><span>cash_usd / USD</span><small>Journal net: $0.00 in the current staging snapshot</small></div><div><b>EarnedLoot (EL)</b><span>earned_loot / EL</span><small>Account and journal totals differ. Reconciliation required.</small></div><div><b>Legit Coins (LC)</b><span>loot_coins / LC</span><small>Separate LC ledger; issuance/reversal traceability to follow.</small></div></div></section></div>
+<div id="view-redemptions" class="view-panel" hidden><section class="panel"><p class="eyebrow">REDEMPTION OPERATIONS</p><h2>Redemption requests</h2><div class="lock-banner">PAYOUT WORKFLOW LOCKED</div><p class="muted">Request visibility can be added after the read model is verified. Approval, processing, withdrawals and payout-provider activation remain disabled until separately authorized by the owner.</p></section></div>
+<div id="view-support" class="view-panel" hidden><section class="panel"><p class="eyebrow">CUSTOMER OPERATIONS</p><h2>Support inbox</h2><div class="empty-state"><b>No support source connected</b><p>A support-ticket table or connected helpdesk source was not found in the inspected staging inventory. No fabricated tickets are shown.</p></div></section></div>
+<div id="view-security" class="view-panel" hidden><section class="panel"><p class="eyebrow">TRUST & SAFETY</p><h2>Security and risk</h2><p class="muted">Risk signals require a reviewed ruleset and evidence before being treated as security flags.</p><div class="empty-state"><b>No unified risk case queue confirmed</b><p>Provider validation events and audit records exist, but they are not yet a reviewed fraud-case workflow.</p></div></section></div>
+<div id="view-analytics" class="view-panel" hidden><section class="panel"><p class="eyebrow">GROWTH INTELLIGENCE</p><h2>Website analytics</h2><div class="empty-state"><b>Analytics not configured</b><p>Cloudflare Pages Web Analytics tag/token are not configured on the inspected Pages project. Product funnel and retention events also need an approved event source.</p></div></section></div>
+<div id="view-providers" class="view-panel" hidden><section class="panel"><p class="eyebrow">EARNING NETWORK</p><h2>Provider operations</h2><div class="empty-state"><b>Provider data source mapped</b><p>Providers, provider events, offers and Moonetix reward events exist. A secured, owner-gated provider dashboard endpoint is not yet part of this cockpit API. Provider activation controls are omitted.</p></div></section></div>
+<div id="view-audit" class="view-panel" hidden><section class="panel"><p class="eyebrow">ACCOUNTABILITY</p><h2>Admin audit trail</h2><p class="muted">Current staging audit count: <b id="audit-count-inline">—</b>. Full event detail requires an owner-gated endpoint.</p><div class="empty-state"><b>Audit data source verified</b><p>Audit rows are written by privileged SQL functions. This UI does not directly query private schema tables.</p></div></section></div>
+<footer class="app-footer">LEGITLOOT / INTERNAL OPERATIONS <span>Staging only · Read-only build · No payout execution</span></footer>
+</section>
+</main></div>
+<script type="module" src="admin-cockpit.js"></script>
+</body></html>
