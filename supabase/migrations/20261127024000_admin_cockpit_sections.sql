@@ -105,7 +105,7 @@ begin
         select * from private.game_lootcoin_issuance order by created_at desc limit 100
       ) i),'[]'::jsonb),
       'transactions',coalesce((select jsonb_agg(jsonb_build_object(
-        'id',t.id,'userId',la.owner_user_id,'eventType',t.event_type,'source',t.source_system,
+        'id',t.id,'userId',t.user_id,'eventType',t.event_type,'source',t.source_system,
         'sourceEventId',t.source_event_id,'status',t.status::text,
         'reversalOf',t.reversal_of,'description',t.description,'createdAt',t.created_at,
         'entries',coalesce((select jsonb_agg(jsonb_build_object(
