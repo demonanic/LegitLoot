@@ -38,7 +38,7 @@ begin
       ) order by e.created_at) from private.reward_dispute_events e where e.dispute_id=d.id),'[]'::jsonb)
     ) order by d.created_at) from private.reward_disputes d where d.user_id=v_user),'[]'::jsonb),
     'accountDeletionRequests', coalesce((select jsonb_agg(jsonb_build_object(
-      'status,r.status,'requestedAt',r.requested_at,'scheduledFor',r.scheduled_for,
+      'status',r.status,'requestedAt',r.requested_at,'scheduledFor',r.scheduled_for,
       'cancelledAt',r.cancelled_at,'blockedReason',r.blocked_reason,
       'dataClearedAt',r.data_cleared_at,'completedAt',r.completed_at
     ) order by r.requested_at) from private.account_deletion_requests r where r.user_id=v_user),'[]'::jsonb),
