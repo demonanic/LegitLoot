@@ -50,8 +50,9 @@
       });
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
-      if (!data || !data.gameCredits || !data.cash ||
-          data.gameCredits.available == null ||
+      const lcBucket = data?.lootCoins || data?.gameCredits;
+      if (!data || !lcBucket || !data.cash ||
+          lcBucket.available == null ||
           data.cash.availableCents == null ||
           data.cash.pendingCents == null ||
           data.cash.withdrawalReservedCents == null ||
@@ -59,7 +60,7 @@
           data.cash.heldCents == null) {
         throw new Error("Wallet summary response was incomplete");
       }
-      const lootCoinsAtoms = Number(data.gameCredits.available);
+      const lootCoinsAtoms = Number(lcBucket.available);
       if (!Number.isFinite(lootCoinsAtoms)) throw new Error("Invalid LootCoins balance");
       $("wallet-lootcoins-available").textContent = (lootCoinsAtoms / 10000).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 4 }) + " LC";
       $("wallet-cash-available").textContent = formatUsd(data.cash.availableCents);
