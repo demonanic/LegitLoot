@@ -1,6 +1,6 @@
 (() => {
-  const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
+  const SUPABASE_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ukFXb72cBXgcbgJIaQhD5w_NPIR7dGS";
   const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   const $ = (id) => document.getElementById(id);
   if (!client) {
