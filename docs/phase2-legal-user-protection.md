@@ -31,3 +31,10 @@
 
 ## Environment boundary
 Staging only. No production deployment or merge.
+
+## Phase 2 follow-on implementation checkpoint (Nov 27, 2026)
+- Added staging migration for player reward dispute intake, owner-scoped read access and event evidence; the authenticated submission RPC creates the dispute and audit event.
+- Added a retention-policy registry. Retention intervals remain intentionally unset/unapproved; no automatic purge is active because deletion schedules require owner/legal approval and data mapping.
+- Added service-role-only account deletion identity finalization RPC, gated on request status `data_cleared`. This is a foundation; it has not been exercised against an actual user identity.
+- Remaining gaps: scheduled worker to run the 7-day deletion lifecycle and finalize identities; admin dispute review/resolution/appeal UI and service workflow; approved retention periods and enforcement jobs; end-to-end tests of these workflows; legal review.
+- No production actions or account deletion tests were performed.
