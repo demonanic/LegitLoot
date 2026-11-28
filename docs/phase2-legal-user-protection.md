@@ -49,3 +49,9 @@ Staging only. No production deployment or merge.
 - Dispute/admin endpoints and user UI are not end-to-end tested in a signed-in browser; the admin guard negative test passed.
 - Retention schedule enforcement remains blocked by operator/legal approval and mapping of records/subprocessors. Terms/privacy remain drafts requiring legal review and operator approval.
 - No production deploy/merge or real account deletion occurred.
+
+### Verification checkpoint
+- Confirmed on branch: account page contains dispute submission form, dispute list and deletion controls; auth script contains API wiring; admin dispute page uses the admin RPC; scheduled workflow scaffold is present; PR #56 remains open/draft/unmerged.
+- Supabase Security Advisor was rerun. Findings include private-schema RLS-enabled tables without policies (the project's intentional private-schema/privilege approach), 12 callable security-definer functions (review on a function-by-function basis; owner/admin guards and scope controls apply to Phase 2 functions), and leaked-password protection disabled. No performance/health lint findings were returned.
+- Unauthenticated admin queue call is rejected. Signed-in UI/browser integration tests remain unverified.
+- No schedule has been activated because repository secrets cannot be set through the available connection; no automated deletion processing is yet confirmed.
