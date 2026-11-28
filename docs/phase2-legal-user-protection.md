@@ -55,3 +55,28 @@ Staging only. No production deployment or merge.
 - Supabase Security Advisor was rerun. Findings include private-schema RLS-enabled tables without policies (the project's intentional private-schema/privilege approach), 12 callable security-definer functions (review on a function-by-function basis; owner/admin guards and scope controls apply to Phase 2 functions), and leaked-password protection disabled. No performance/health lint findings were returned.
 - Unauthenticated admin queue call is rejected. Signed-in UI/browser integration tests remain unverified.
 - No schedule has been activated because repository secrets cannot be set through the available connection; no automated deletion processing is yet confirmed.
+
+
+## UEP continuation checkpoint — 2026-11-28
+
+- Confirmed staging Supabase project `legitloot-staging` is active/healthy and migrations through `phase2_optimize_dispute_rls_policies` are applied.
+- Confirmed `account-deletion-finalizer` is deployed as v3 and the GitHub Actions scheduled-worker workflow is present. Worker activation/execution is still unverified because the required repository secrets cannot be configured/read through the available connector. No worker run was attempted that could finalize identities.
+- Reviewed deletion processing and public facade SQL: 7-day due-date gate, open payout-request block, unpaid cash bucket gate, idempotent data-cleared/completed handling, game/profile cleanup, user-metadata clearing and soft Auth identity deletion are implemented. The deletion lifecycle is not end-to-end tested; do not process a real account.
+- Reviewed user-linked data inventory across private tables. The retained/erased scope and retention periods remain unresolved owner/legal approval; do not add destructive cleanup or auto-purge rules without that approval.
+- Signed-in dispute submission and admin resolution test remain blocked by Browser Use credit exhaustion. Backend source and admin membership guard were reviewed; prior unauthenticated admin denial test remains documented.
+- Supabase advisor: security reports 29 private RLS/no-policy informational entries and 12 authenticated SECURITY DEFINER functions for individual review (some are intentional RPCs). Performance and health advisor snapshots require further validation/review; current execution could not establish full end-to-end acceptance.
+- Browser-run credits are exhausted, preventing verification of the staging Pages preview, fresh signup/consent capture, account page, dispute flow, deletion status/cancel UI, and the live public legal-page deployment state. Earlier readback showed public Terms/Privacy were placeholders; current deployment state is not independently rechecked.
+- Leaked-password protection remains disabled and requires a dashboard setting change not exposed by the connector.
+- Removed a residential street address from both draft Terms and Privacy on the isolated PR branch (commits `a89a600` and `bcab91a`). This is a privacy minimization correction; legal pages remain drafts and are not published.
+- No production merge/deployment, payout, provider activation, identity-check activation, or irreversible account deletion occurred.
+
+### Remaining acceptance blockers
+1. Staging authenticated E2E signup consent (including email-confirmation path) and consent record verification.
+2. Staging signed-in player dispute submission and admin resolution tests with a verified admin/non-admin test session.
+3. Disposable test-account deletion lifecycle test, including the worker, data clearing, metadata removal, and Auth identity deletion; must be performed only with a verified disposable staging account.
+4. Configure and verify GitHub worker secrets/schedule and successful run, without exposing secret values.
+5. Enable leaked-password protection in staging Auth settings and verify.
+6. Final data/vendor inventory, retention schedule and deletion-scope approval, legal review, operator/business/contact details review and policy approval.
+7. Verify staging preview deployment and public pages before any publication decision.
+
+**Status: In Progress — not accepted/complete.**
