@@ -229,7 +229,7 @@
   $("deletion-cancel-button")?.addEventListener("click",async()=>{
     const {data,error}=await client.rpc("cancel_account_deletion");if(error){showMessage("CANCELLATION FAILED",error.message,true);return;}showMessage("REQUEST CANCELLED","Your deletion request cancellation was processed.");await loadDeletionStatus();
   });
-  $("signout-button").addEventListener("click", async () => {
+  $("export-data-button")?.addEventListener("click", async () => {\n    const button=$("export-data-button"), status=$("export-data-status");\n    button.disabled=true; status.textContent="Preparing your export…";\n    try {\n      const {data,error}=await client.rpc("export_account_data");\n      if(error) throw error;\n      const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});\n      const url=URL.createObjectURL(blob);\n      const link=document.createElement("a"); link.href=url; link.download="legitloot-account-export.json";\n      document.body.append(link); link.click(); link.remove(); URL.revokeObjectURL(url);\n      status.textContent="Your export was prepared and downloaded.";\n    } catch(error) { status.textContent="Export unavailable. Please sign in again and retry."; showMessage("DATA EXPORT FAILED",error.message||"Try again.",true); }\n    finally { button.disabled=false; }\n  });\n  $("signout-button").addEventListener("click", async () => {
     try {
       const { error } = await client.auth.signOut();
       if (error) throw error;
