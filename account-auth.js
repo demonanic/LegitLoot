@@ -82,7 +82,7 @@
     playerPanel.hidden = false;
     $("player-email").textContent = user.email || "Authenticated player";
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
-    await loadWalletSummary();
+    await loadWalletSummary();\n    await loadDisputes();\n    await loadDeletionStatus();
     try {
       const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
       if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
@@ -170,6 +170,35 @@
     } finally {
       button.disabled = false;
     }
+  });
+  const loadDisputes = async () => {
+    const box = $("dispute-status-list"); if (!box) return;
+    box.textContent = "Loading dispute records…";
+    const {data,error}=await client.rpc("get_my_reward_disputes");
+    if(error){box.textContent="Dispute records unavailable.";return;}
+    box.replaceChildren();
+    if(!data?.length){box.textContent="No reward disputes submitted.";return;}
+    data.forEach(d=>{const article=document.createElement("article");article.className="notice-panel";const title=document.createElement("b");title.textContent=d.provider+" · "+d.status;const p=document.createElement("p");p.textContent=d.description;const time=document.createElement("small");time.textContent=new Date(d.createdAt).toLocaleString();article.append(title,p,time);box.append(article);});
+  };
+  const loadDeletionStatus = async () => {
+    const box=$("deletion-status"), cancel=$("deletion-cancel-button"), request=$("deletion-request-button");
+    if(!box)return; const {data,error}=await client.rpc("account_deletion_status");
+    if(error){box.textContent="Deletion status unavailable.";return;}
+    const s=data?.status||"none";
+    box.textContent=s==="none"?"No deletion request active.":("Deletion status: "+s+(data.scheduledFor?" · scheduled "+new Date(data.scheduledFor).toLocaleString():"")+(data.blockedReason?" · blocked: "+data.blockedReason:""));
+    cancel.hidden=!["pending","blocked"].includes(s);request.disabled=["pending","blocked","data_cleared"].includes(s);
+  };
+  $("dispute-form")?.addEventListener("submit",async e=>{
+    e.preventDefault();const b=e.currentTarget.querySelector("button");b.disabled=true;
+    try{const {error}=await client.rpc("submit_reward_dispute",{p_provider:$("dispute-provider").value.trim(),p_offer_reference:$("dispute-reference").value.trim(),p_description:$("dispute-description").value.trim()});if(error)throw error;e.currentTarget.reset();showMessage("DISPUTE SUBMITTED","Your report has been recorded.");await loadDisputes();}
+    catch(error){showMessage("DISPUTE FAILED",error.message||"Try again.",true);}finally{b.disabled=false;}
+  });
+  $("deletion-request-button")?.addEventListener("click",async()=>{
+    if(!confirm("Request account deletion? A seven-day waiting period applies. Cash balances or open payout requests may block processing."))return;
+    const {data,error}=await client.rpc("request_account_deletion");if(error){showMessage("DELETION REQUEST FAILED",error.message,true);return;}showMessage("DELETION REQUEST RECORDED","The seven-day waiting period is scheduled. You may cancel it while pending.");await loadDeletionStatus();
+  });
+  $("deletion-cancel-button")?.addEventListener("click",async()=>{
+    const {data,error}=await client.rpc("cancel_account_deletion");if(error){showMessage("CANCELLATION FAILED",error.message,true);return;}showMessage("REQUEST CANCELLED","Your deletion request cancellation was processed.");await loadDeletionStatus();
   });
   $("signout-button").addEventListener("click", async () => {
     try {
