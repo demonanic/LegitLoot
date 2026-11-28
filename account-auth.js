@@ -197,7 +197,34 @@
   });
   $("deletion-request-button")?.addEventListener("click",async()=>{
     if(!confirm("Request account deletion? A seven-day waiting period applies. Cash balances or open payout requests may block processing."))return;
-    const {data,error}=await client.rpc("request_account_deletion");if(error){showMessage("DELETION REQUEST FAILED",error.message,true);return;}showMessage("DELETION REQUEST RECORDED","The seven-day waiting period is scheduled. You may cancel it while pending.");await loadDeletionStatus();
+    const button=$("deletion-request-button");
+    button.disabled=true;
+    button.textContent="SUBMITTING REQUEST…";
+    try{
+      const {data,error}=await client.rpc("request_account_deletion");
+      if(error){
+        const message=error.message||"Request failed.";
+        if(message.toLowerCase().includes("reauth_required")||message.toLowerCase().includes("sign in again")){
+          await client.auth.signOut();
+          playerPanel.hidden=true;
+          authPanel.hidden=false;
+          $("signin-email").value=$("player-email").textContent.split(" · ").pop()||"";
+          switchTab("signin");
+          showMessage("SIGN IN AGAIN REQUIRED","For account security, deletion requires a fresh sign-in. Sign in again, then retry the deletion request.",true);
+        }else{
+          showMessage("DELETION REQUEST FAILED",message,true);
+          await loadDeletionStatus();
+        }
+        return;
+      }
+      showMessage("DELETION REQUEST RECORDED","The seven-day waiting period is scheduled. You may cancel it while pending.");
+      await loadDeletionStatus();
+    }catch(error){
+      showMessage("DELETION REQUEST FAILED",error.message||"Please retry.",true);
+    }finally{
+      button.textContent="REQUEST ACCOUNT DELETION";
+      button.disabled=false;
+    }
   });
   $("deletion-cancel-button")?.addEventListener("click",async()=>{
     const {data,error}=await client.rpc("cancel_account_deletion");if(error){showMessage("CANCELLATION FAILED",error.message,true);return;}showMessage("REQUEST CANCELLED","Your deletion request cancellation was processed.");await loadDeletionStatus();
