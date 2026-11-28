@@ -80,3 +80,4 @@ Staging only. No production deployment or merge.
 7. Verify staging preview deployment and public pages before any publication decision.
 
 **Status: In Progress — not accepted/complete.**
+- Added a staging-branch-only account data export UI: authenticated user can request the existing owner-scoped `export_account_data()` RPC and download its JSON payload. UI/code are committed on PR #56; browser end-to-end validation remains blocked. The export payload scope should be reviewed against the final data inventory before release.
