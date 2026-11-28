@@ -38,3 +38,14 @@ Staging only. No production deployment or merge.
 - Added service-role-only account deletion identity finalization RPC, gated on request status `data_cleared`. This is a foundation; it has not been exercised against an actual user identity.
 - Remaining gaps: scheduled worker to run the 7-day deletion lifecycle and finalize identities; admin dispute review/resolution/appeal UI and service workflow; approved retention periods and enforcement jobs; end-to-end tests of these workflows; legal review.
 - No production actions or account deletion tests were performed.
+
+## Phase 2 execution update (Nov 27, 2026)
+- Staging migration added dispute API: authenticated owner-only retrieval; admin queue and status/resolution actions gated by active private.admin_users membership; each admin action requires a note and records dispute event plus audit entry.
+- Staging admin guard was verified: unauthenticated SQL-context invocation of admin queue raises `Admin access required`.
+- Account page branch updated with player dispute intake/history and account deletion request/status/cancel UI.
+- New restricted admin dispute page added at `admin-disputes.html`; it relies on server-side active-admin authorization, not client role flags.
+- Added scheduled GitHub Actions workflow scaffold for the existing staging account-deletion finalizer. It requires repository secrets `STAGING_ACCOUNT_DELETION_FUNCTION_URL` and `STAGING_ACCOUNT_DELETION_JOB_SECRET`; these cannot be configured through the available tools, so scheduling is not verified/active until owner configures them.
+- Existing deployed `account-deletion-finalizer` Edge Function uses secret header validation, batch processing, existing deletion processor and soft auth identity deletion. No real identities were processed or deleted.
+- Dispute/admin endpoints and user UI are not end-to-end tested in a signed-in browser; the admin guard negative test passed.
+- Retention schedule enforcement remains blocked by operator/legal approval and mapping of records/subprocessors. Terms/privacy remain drafts requiring legal review and operator approval.
+- No production deploy/merge or real account deletion occurred.
