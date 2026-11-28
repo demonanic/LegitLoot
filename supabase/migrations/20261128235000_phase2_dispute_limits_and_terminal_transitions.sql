@@ -8,6 +8,7 @@ begin
  if length(trim(coalesce(p_provider,'')))<2 or length(trim(p_provider))>120 then raise exception 'Provider must be 2-120 characters'; end if;
  if p_offer_reference is not null and length(trim(p_offer_reference))>200 then raise exception 'Offer reference too long'; end if;
  if length(trim(coalesce(p_description,'')))<10 or length(trim(p_description))>4000 then raise exception 'Description must be 10-4000 characters'; end if;
+ perform pg_advisory_xact_lock(hashtextextended(v_user::text,0));
  select count(*) into v_count from private.reward_disputes where user_id=v_user and created_at >= now()-interval '24 hours';
  if v_count>=3 then raise exception 'Dispute submission limit reached; try again later'; end if;
  insert into private.reward_disputes(user_id,provider,offer_reference,description)
