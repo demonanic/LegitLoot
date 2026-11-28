@@ -108,6 +108,10 @@
   });
   $("signup-form").addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!$("signup-age-consent").checked || !$("signup-policy-consent").checked) {
+      showMessage("CONSENT REQUIRED", "Confirm your age and accept both policies before creating an account.", true);
+      return;
+    }
     const button = event.currentTarget.querySelector("button[type=submit]");
     button.disabled = true;
     try {
@@ -115,7 +119,13 @@
         email: $("signup-email").value.trim(),
         password: $("signup-password").value,
         options: {
-          data: { display_name: $("signup-name").value.trim() },
+          data: {
+            display_name: $("signup-name").value.trim(),
+            age_confirmed: true,
+            terms_version: "1.0-draft",
+            privacy_version: "1.0-draft",
+            consent_user_agent: navigator.userAgent.slice(0, 500)
+          },
           emailRedirectTo: window.location.origin + "/account.html"
         }
       });
