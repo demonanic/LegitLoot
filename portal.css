@@ -68,3 +68,6 @@
   .mobile-dock span{font:800 7px "DM Mono",monospace;letter-spacing:0}
   .mobile-dock a.active{color:#c8ff19;text-shadow:0 0 10px #c8ff1988}
 }
+
+/* Phase 2 signup consent presentation */
+.consent-panel{display:grid;gap:14px;padding:15px;border:1px solid #49336f;border-radius:12px;background:#151027;margin:18px 0}.consent-check{display:flex;align-items:flex-start;gap:10px;line-height:1.6;font-size:14px;color:#e8dcff}.consent-check input{flex:0 0 auto;width:20px;height:20px;margin:3px 0;accent-color:#ff4fd8}.consent-check a{color:#35e7ff;text-decoration:underline}

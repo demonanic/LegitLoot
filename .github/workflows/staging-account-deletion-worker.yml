@@ -1,0 +1,19 @@
+name: Staging Account Deletion Worker
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+jobs:
+  process-deletions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run staging deletion processor
+        env:
+          SUPABASE_FUNCTION_URL: ${{ secrets.STAGING_ACCOUNT_DELETION_FUNCTION_URL }}
+          JOB_SECRET: ${{ secrets.STAGING_ACCOUNT_DELETION_JOB_SECRET }}
+        run: |
+          if [ -z "$SUPABASE_FUNCTION_URL" ] || [ -z "$JOB_SECRET" ]; then
+            echo "Required staging worker secrets are not configured."
+            exit 1
+          fi
+          curl --fail-with-body --silent --show-error -X POST "$SUPABASE_FUNCTION_URL" -H "x-account-deletion-job-secret: $JOB_SECRET" -H "Content-Type: application/json" -d '{}'

@@ -1,6 +1,6 @@
 (() => {
-  const SUPABASE_URL = "https://gkbqderyjcuxnjbsiffb.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_jFPcXIil4Hq1fkJtQ1tYZw_L_SDegFr";
+  const SUPABASE_URL = "https://scmnxcsggquwtuyyjnnj.supabase.co";
+  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_ukFXb72cBXgcbgJIaQhD5w_NPIR7dGS";
   const client = window.supabase?.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
   const $ = (id) => document.getElementById(id);
   if (!client) {
@@ -50,8 +50,9 @@
       });
       const { data, error } = await Promise.race([request, timeout]);
       if (error) throw error;
-      if (!data || !data.lootCoins || !data.cash ||
-          data.lootCoins.available == null ||
+      const lcBucket = data?.lootCoins || data?.gameCredits;
+      if (!data || !lcBucket || !data.cash ||
+          lcBucket.available == null ||
           data.cash.availableCents == null ||
           data.cash.pendingCents == null ||
           data.cash.withdrawalReservedCents == null ||
@@ -59,7 +60,7 @@
           data.cash.heldCents == null) {
         throw new Error("Wallet summary response was incomplete");
       }
-      const lootCoinsAtoms = Number(data.lootCoins.available);
+      const lootCoinsAtoms = Number(lcBucket.available);
       if (!Number.isFinite(lootCoinsAtoms)) throw new Error("Invalid LootCoins balance");
       $("wallet-lootcoins-available").textContent = (lootCoinsAtoms / 10000).toLocaleString("en-US", { minimumFractionDigits: 0, maximumFractionDigits: 4 }) + " LC";
       $("wallet-cash-available").textContent = formatUsd(data.cash.availableCents);
@@ -82,6 +83,8 @@
     $("player-email").textContent = user.email || "Authenticated player";
     showMessage("YOU ARE SIGNED IN", "Your profile is connected. Wallet balances are read from the secure server-side ledger.");
     await loadWalletSummary();
+    await loadDisputes();
+    await loadDeletionStatus();
     try {
       const { data, error } = await client.from("profiles").select("display_name,username").eq("id", user.id).maybeSingle();
       if (!error && data?.display_name) $("player-email").textContent = data.display_name + " · " + (user.email || "");
@@ -108,6 +111,10 @@
   });
   $("signup-form").addEventListener("submit", async (event) => {
     event.preventDefault();
+    if (!$("signup-age-consent").checked || !$("signup-policy-consent").checked) {
+      showMessage("CONSENT REQUIRED", "Confirm your age and accept both policies before creating an account.", true);
+      return;
+    }
     const button = event.currentTarget.querySelector("button[type=submit]");
     button.disabled = true;
     try {
@@ -115,7 +122,13 @@
         email: $("signup-email").value.trim(),
         password: $("signup-password").value,
         options: {
-          data: { display_name: $("signup-name").value.trim() },
+          data: {
+            display_name: $("signup-name").value.trim(),
+            age_confirmed: true,
+            terms_version: "1.0-draft",
+            privacy_version: "1.0-draft",
+            consent_user_agent: navigator.userAgent.slice(0, 500)
+          },
           emailRedirectTo: window.location.origin + "/account.html"
         }
       });
@@ -159,6 +172,76 @@
     } finally {
       button.disabled = false;
     }
+  });
+  const loadDisputes = async () => {
+    const box = $("dispute-status-list"); if (!box) return;
+    box.textContent = "Loading dispute records…";
+    const {data,error}=await client.rpc("get_my_reward_disputes");
+    if(error){box.textContent="Dispute records unavailable.";return;}
+    box.replaceChildren();
+    if(!data?.length){box.textContent="No reward disputes submitted.";return;}
+    data.forEach(d=>{const article=document.createElement("article");article.className="notice-panel";const title=document.createElement("b");title.textContent=d.provider+" · "+d.status;const p=document.createElement("p");p.textContent=d.description;const time=document.createElement("small");time.textContent=new Date(d.createdAt).toLocaleString();article.append(title,p,time);box.append(article);});
+  };
+  const loadDeletionStatus = async () => {
+    const box=$("deletion-status"), cancel=$("deletion-cancel-button"), request=$("deletion-request-button");
+    if(!box)return; const {data,error}=await client.rpc("account_deletion_status");
+    if(error){box.textContent="Deletion status unavailable.";return;}
+    const s=data?.status||"none";
+    box.textContent=s==="none"?"No deletion request active.":("Deletion status: "+s+(data.scheduledFor?" · scheduled "+new Date(data.scheduledFor).toLocaleString():"")+(data.blockedReason?" · blocked: "+data.blockedReason:""));
+    cancel.hidden=!["pending","blocked"].includes(s);request.disabled=["pending","blocked","data_cleared"].includes(s);
+  };
+  $("dispute-form")?.addEventListener("submit",async e=>{
+    e.preventDefault();const b=e.currentTarget.querySelector("button");b.disabled=true;
+    try{const {error}=await client.rpc("submit_reward_dispute",{p_provider:$("dispute-provider").value.trim(),p_offer_reference:$("dispute-reference").value.trim(),p_description:$("dispute-description").value.trim()});if(error)throw error;e.currentTarget.reset();showMessage("DISPUTE SUBMITTED","Your report has been recorded.");await loadDisputes();}
+    catch(error){showMessage("DISPUTE FAILED",error.message||"Try again.",true);}finally{b.disabled=false;}
+  });
+  $("deletion-request-button")?.addEventListener("click",async()=>{
+    if(!confirm("Request account deletion? A seven-day waiting period applies. Cash balances or open payout requests may block processing."))return;
+    const button=$("deletion-request-button");
+    button.disabled=true;
+    button.textContent="SUBMITTING REQUEST…";
+    try{
+      const {data,error}=await client.rpc("request_account_deletion");
+      if(error){
+        const message=error.message||"Request failed.";
+        if(message.toLowerCase().includes("reauth_required")||message.toLowerCase().includes("sign in again")){
+          await client.auth.signOut();
+          playerPanel.hidden=true;
+          authPanel.hidden=false;
+          $("signin-email").value=$("player-email").textContent.split(" · ").pop()||"";
+          switchTab("signin");
+          showMessage("SIGN IN AGAIN REQUIRED","For account security, deletion requires a fresh sign-in. Sign in again, then retry the deletion request.",true);
+        }else{
+          showMessage("DELETION REQUEST FAILED",message,true);
+          await loadDeletionStatus();
+        }
+        return;
+      }
+      showMessage("DELETION REQUEST RECORDED","The seven-day waiting period is scheduled. You may cancel it while pending.");
+      await loadDeletionStatus();
+    }catch(error){
+      showMessage("DELETION REQUEST FAILED",error.message||"Please retry.",true);
+    }finally{
+      button.textContent="REQUEST ACCOUNT DELETION";
+      button.disabled=false;
+    }
+  });
+  $("deletion-cancel-button")?.addEventListener("click",async()=>{
+    const {data,error}=await client.rpc("cancel_account_deletion");if(error){showMessage("CANCELLATION FAILED",error.message,true);return;}showMessage("REQUEST CANCELLED","Your deletion request cancellation was processed.");await loadDeletionStatus();
+  });
+  $("export-data-button")?.addEventListener("click", async () => {
+    const button=$("export-data-button"), status=$("export-data-status");
+    button.disabled=true; status.textContent="Preparing your export…";
+    try {
+      const {data,error}=await client.rpc("export_account_data");
+      if(error) throw error;
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+      const url=URL.createObjectURL(blob);
+      const link=document.createElement("a"); link.href=url; link.download="legitloot-account-export.json";
+      document.body.append(link); link.click(); link.remove(); URL.revokeObjectURL(url);
+      status.textContent="Your export was prepared and downloaded.";
+    } catch(error) { status.textContent="Export unavailable. Please sign in again and retry."; showMessage("DATA EXPORT FAILED",error.message||"Try again.",true); }
+    finally { button.disabled=false; }
   });
   $("signout-button").addEventListener("click", async () => {
     try {
